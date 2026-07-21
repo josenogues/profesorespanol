@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aprende Español | Tu Profesor de Español</title>
+<style>
+:root{--primary:#2563eb;--primary-dark:#1d4ed8;--bg:#f8fafc;--sidebar:#fff;--text:#1e293b;--muted:#64748b;--border:#e2e8f0}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Arial,Helvetica,sans-serif;background:var(--bg);color:var(--text);line-height:1.6}
+a{text-decoration:none;color:inherit}
+.sidebar{position:fixed;left:0;top:0;width:270px;height:100vh;background:#fff;border-right:1px solid var(--border);padding:25px 20px;overflow-y:auto}
+.logo{font-size:24px;font-weight:700;color:var(--primary);margin-bottom:30px}
+.menu-title{font-size:12px;text-transform:uppercase;color:var(--muted);margin:20px 0 10px;font-weight:700}
+.menu-item{margin-bottom:5px}
+.menu-button{width:100%;background:none;border:0;padding:10px;text-align:left;font-size:15px;cursor:pointer;color:var(--text);border-radius:8px}
+.menu-button:hover{background:#eff6ff;color:var(--primary)}
+.submenu{display:none;padding-left:15px}
+.submenu a{display:block;padding:7px 10px;color:var(--muted);font-size:14px;border-radius:6px}
+.submenu a:hover{background:#f1f5f9;color:var(--primary)}
+.menu-item.active .submenu{display:block}
+.main{margin-left:270px;padding:40px;max-width:1200px}
+.language-selector{text-align:right;margin-bottom:30px}
+.language-selector button{border:1px solid var(--border);background:#fff;padding:7px 12px;margin-left:5px;border-radius:6px;cursor:pointer}
+.language-selector button:hover{background:var(--primary);color:#fff}
+.hero{background:#fff;padding:50px;border-radius:20px;display:flex;align-items:center;gap:40px;margin-bottom:50px;border:1px solid var(--border)}
+.profile-image{width:180px;height:180px;border-radius:50%;object-fit:cover;background:#e2e8f0}
+.hero-text h1{font-size:38px;margin-bottom:10px}
+.hero-text h2{color:var(--primary);font-size:22px;margin-bottom:15px}
+.hero-text p{color:var(--muted);max-width:650px;margin-bottom:25px}
+.buttons{display:flex;flex-wrap:wrap;gap:10px}
+.button{padding:12px 20px;border-radius:8px;font-weight:700;transition:.2s}
+.button-primary{background:var(--primary);color:#fff}
+.button-primary:hover{background:var(--primary-dark)}
+.button-secondary{background:#f1f5f9}
+.button-secondary:hover{background:#e2e8f0}
+.section-title{font-size:30px;margin-bottom:25px}
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-bottom:60px}
+.card{background:#fff;padding:25px;border:1px solid var(--border);border-radius:15px;transition:.2s}
+.card:hover{transform:translateY(-3px);box-shadow:0 10px 25px rgba(0,0,0,.05)}
+.card-icon{font-size:35px;margin-bottom:15px}
+.card h3{margin-bottom:10px}
+.card p{color:var(--muted);font-size:15px}
+.resources{background:#fff;padding:35px;border-radius:15px;border:1px solid var(--border);margin-bottom:50px}
+.resource-list{display:grid;grid-template-columns:repeat(2,1fr);gap:15px}
+.resource{padding:15px;background:#f8fafc;border-radius:8px}
+.resource a{color:var(--primary);font-weight:700}
+footer{text-align:center;padding:30px;color:var(--muted);border-top:1px solid var(--border)}
+@media(max-width:900px){
+.sidebar{position:relative;width:100%;height:auto;border-right:0;border-bottom:1px solid var(--border)}
+.main{margin-left:0;padding:25px}
+.hero{flex-direction:column;text-align:center;padding:35px 25px}
+.buttons{justify-content:center}
+.cards{grid-template-columns:1fr}
+.resource-list{grid-template-columns:1fr}
+.language-selector{text-align:center}
+}
+</style>
+</head>
+<body>
+
+<aside class="sidebar">
+<div class="logo">🇪🇸 Aprende Español</div>
+
+<div class="menu-title">Aprender</div>
+
+<div class="menu-item">
+<button class="menu-button">🔤 Verbos ▾</button>
+<div class="submenu">
+<a href="#regulares">Verbos regulares</a>
+<a href="#irregulares">Verbos irregulares</a>
+<a href="#reflexivos">Verbos reflexivos</a>
+<a href="#ser-estar">Ser y estar</a>
+<a href="#haber-tener">Haber y tener</a>
+<a href="#tiempos">Tiempos verbales</a>
+</div>
+</div>
+
+<div class="menu-item">
+<button class="menu-button">📚 Gramática ▾</button>
+<div class="submenu">
+<a href="#articulos">Artículos</a>
+<a href="#genero">Género y número</a>
+<a href="#pronombres">Pronombres</a>
+<a href="#preposiciones">Preposiciones</a>
+<a href="#subjuntivo">Subjuntivo</a>
+</div>
+</div>
+
+<div class="menu-item">
+<button class="menu-button">🗣️ Vocabulario ▾</button>
+<div class="submenu">
+<a href="#cotidiana">Vida cotidiana</a>
+<a href="#viajes">Viajes</a>
+<a href="#trabajo">Trabajo</a>
+<a href="#restaurante">Restaurante</a>
+<a href="#casa">Casa</a>
+</div>
+</div>
+
+<div class="menu-item">
+<button class="menu-button">💬 Expresiones ▾</button>
+<div class="submenu">
+<a href="#expresiones">Expresiones comunes</a>
+<a href="#falsos-amigos">Falsos amigos</a>
+<a href="#modismos">Modismos</a>
+</div>
+</div>
+
+<div class="menu-title">Para estudiantes</div>
+<div class="menu-item"><button class="menu-button">🇮🇹 Español para italianos</button></div>
+<div class="menu-item"><button class="menu-button">🇬🇧 Spanish for English speakers</button></div>
+</aside>
+
+<main class="main">
+<div class="language-selector">
+<button onclick="changeLanguage('es')">🇪🇸 Español</button>
+<button onclick="changeLanguage('it')">🇮🇹 Italiano</button>
+<button onclick="changeLanguage('en')">🇬🇧 English</button>
+</div>
+
+<section class="hero">
+<img src="https://via.placeholder.com/180" alt="Foto del profesor" class="profile-image">
+<div class="hero-text">
+<h1>Hola, soy [TU NOMBRE]</h1>
+<h2>Profesor de español para italianos e ingleses</h2>
+<p>Bienvenido a mi espacio para aprender español. Aquí encontrarás recursos, explicaciones y ejemplos para mejorar tu gramática, vocabulario y comunicación en situaciones reales.</p>
+<div class="buttons">
+<a href="https://preply.com/" target="_blank" class="button button-primary">🎓 Mi perfil de Preply</a>
+<a href="https://calendly.com/" target="_blank" class="button button-secondary">📅 Reservar una clase</a>
+<a href="https://linkedin.com/" target="_blank" class="button button-secondary">💼 LinkedIn</a>
+</div>
+</div>
+</section>
+
+<h2 class="section-title">Aprende español</h2>
+<section class="cards">
+<div class="card"><div class="card-icon">🔤</div><h3>Verbos</h3><p>Aprende a utilizar los verbos españoles y domina los tiempos verbales más importantes.</p></div>
+<div class="card"><div class="card-icon">📚</div><h3>Gramática</h3><p>Explicaciones sencillas de las reglas gramaticales del español.</p></div>
+<div class="card"><div class="card-icon">🗣️</div><h3>Vocabulario</h3><p>Aprende palabras y expresiones útiles para situaciones de la vida real.</p></div>
+<div class="card"><div class="card-icon">🇮🇹</div><h3>Español para italianos</h3><p>Descubre las diferencias entre italiano y español y evita los falsos amigos.</p></div>
+<div class="card"><div class="card-icon">🇬🇧</div><h3>Spanish for English speakers</h3><p>Improve your Spanish with explanations and comparisons designed for English speakers.</p></div>
+<div class="card"><div class="card-icon">💬</div><h3>Expresiones</h3><p>Aprende expresiones, frases hechas y español utilizado en conversaciones reales.</p></div>
+</section>
+
+<section class="resources">
+<h2 class="section-title">Recursos recomendados</h2>
+<div class="resource-list">
+<div class="resource">📖 <a href="#">Guía de los verbos españoles</a></div>
+<div class="resource">🇮🇹 <a href="#">Falsos amigos italiano-español</a></div>
+<div class="resource">🗣️ <a href="#">50 expresiones españolas</a></div>
+<div class="resource">✈️ <a href="#">Español para viajar</a></div>
+</div>
+</section>
+
+<section class="hero">
+<div class="hero-text">
+<h2>¿Quieres mejorar tu español?</h2>
+<p>Si quieres practicar español conmigo, puedes visitar mi perfil de Preply y reservar una clase.</p>
+<div class="buttons">
+<a href="https://preply.com/" target="_blank" class="button button-primary">🎓 Ver mi perfil</a>
+<a href="https://calendly.com/" target="_blank" class="button button-secondary">📅 Reservar una clase</a>
+</div>
+</div>
+</section>
+</main>
+
+<footer>© 2026 [TU NOMBRE] · Profesor de español</footer>
+
+<script>
+document.querySelectorAll(".menu-button").forEach(button=>{
+button.addEventListener("click",()=>button.parentElement.classList.toggle("active"));
+});
+function changeLanguage(language){
+const messages={es:"Idioma seleccionado: Español",it:"Lingua selezionata: Italiano",en:"Selected language: English"};
+alert(messages[language]);
+}
+</script>
+</body>
+</html>
