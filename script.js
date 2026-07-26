@@ -363,7 +363,7 @@ a.closest(".menu-item").classList.add("active","current-section");
 
 // --- Puerta de acceso para alumnos (comprueba el email contra un Google Sheet publicado como CSV) ---
 (function(){
-  const ACCESS_GATE_ENABLED = false; // ponlo en true cuando publiques la web de verdad
+  const ACCESS_GATE_ENABLED = true; // ponlo en true cuando publiques la web de verdad
   const ACCESS_KEY = 'jn_access_granted';
 
   if(!ACCESS_GATE_ENABLED) return;
