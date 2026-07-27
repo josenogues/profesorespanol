@@ -7,6 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
 <link rel="icon" type="image/png" href="favicon.png">
 <link rel="stylesheet" href="styles.css">
 </head>
@@ -17,60 +18,96 @@
 <div class="menu-title">Aprender</div>
 
 <div class="menu-item">
-<button class="menu-button">🔤 Verbos ▾</button>
+<button class="menu-button"><i class="ti ti-abc"></i> Verbos ▾</button>
 <div class="submenu">
-<a href="#" class="track-link" data-base="tiempos-verbales">Tiempos verbales</a>
-<a href="#" class="track-link" data-base="verbos-regulares">Verbos regulares</a>
-<a href="#" class="track-link" data-base="verbos-irregulares">Verbos irregulares</a>
-<a href="#" class="track-link" data-base="verbos-reflexivos">Verbos reflexivos</a>
-<a href="#" class="track-link" data-base="ser-estar">Ser y estar</a>
-<a href="#" class="track-link" data-base="haber-tener">Haber y tener</a>
+<a href="#" class="track-link" data-base="tiempos-verbales">Overview</a>
+<a href="#" class="track-link" data-base="indicativo">Indicativo</a>
+<a href="#" class="track-link" data-base="subjuntivo">Subjuntivo</a>
+<a href="#" class="track-link" data-base="imperativo">Imperativo</a>
+<a href="#" class="track-link" data-base="verbos-regulares">Regulares</a>
+<a href="#" class="track-link" data-base="verbos-irregulares">Irregulares</a>
+<a href="#" class="track-link submenu-sub" data-base="ser-estar">Ser y estar</a>
+<a href="#" class="track-link submenu-sub" data-base="haber-tener">Haber y tener</a>
+<a href="#" class="track-link" data-base="verbos-reflexivos">Reflexivos</a>
+<a href="#" class="track-link" data-base="formas-impersonales">Formas impersonales</a>
 </div>
 </div>
 
 <div class="menu-item">
-<button class="menu-button">📚 Gramática ▾</button>
+<button class="menu-button"><i class="ti ti-books"></i> Gramática ▾</button>
 <div class="submenu">
 <a href="#" class="track-link" data-base="articulos">Artículos</a>
 <a href="#" class="track-link" data-base="genero-numero">Género y número</a>
 <a href="#" class="track-link" data-base="pronombres">Pronombres</a>
 <a href="#" class="track-link" data-base="preposiciones">Preposiciones</a>
-<a href="#" class="track-link" data-base="subjuntivo">Subjuntivo</a>
 </div>
 </div>
 
 <div class="menu-item">
-<button class="menu-button">🗣️ Vocabulario ▾</button>
+<button class="menu-button"><i class="ti ti-language"></i> Vocabulario ▾</button>
 <div class="submenu">
 <a href="#" class="track-link" data-base="vida-cotidiana">Vida cotidiana</a>
 <a href="#" class="track-link" data-base="viajes">Viajes</a>
 <a href="#" class="track-link" data-base="trabajo">Trabajo</a>
 <a href="#" class="track-link" data-base="restaurante">Restaurante</a>
 <a href="#" class="track-link" data-base="casa">Casa</a>
+<a href="#" class="track-link" data-base="comidas-bebidas">Comidas y bebidas</a>
+<a href="#" class="track-link" data-base="deportes">Deportes</a>
+<a href="#" class="track-link" data-base="clima">El clima</a>
 </div>
 </div>
 
 <div class="menu-item">
-<button class="menu-button">💬 Expresiones ▾</button>
+<button class="menu-button"><i class="ti ti-message-2"></i> Expresiones ▾</button>
 <div class="submenu">
 <a href="#" class="track-link" data-base="expresiones-comunes">Expresiones comunes</a>
 <a href="#" class="track-link" data-base="falsos-amigos">Falsos amigos</a>
 <a href="#" class="track-link" data-base="modismos">Modismos</a>
+<a href="#" class="track-link" data-base="la-hora">La hora</a>
+<a href="#" class="track-link" data-base="las-fechas">Las fechas</a>
+<a href="#" class="track-link" data-base="temperatura">Sobre temperatura</a>
+<a href="#" class="track-link" data-base="moverse-ciudad">Moverte por la ciudad</a>
 </div>
 </div>
 
-<div class="menu-item"><a class="menu-button" href="espanol-para-italianos.html">🇮🇹 Español para italianos</a></div>
-<div class="menu-item"><a class="menu-button" href="spanish-for-english-speakers.html">🇬🇧 Spanish for English speakers</a></div>
+<div class="menu-item">
+<button class="menu-button"><i class="ti ti-target"></i> Ejercicios ▾</button>
+<div class="submenu">
+<a href="#" class="track-link" data-base="ejercicios">Todos los ejercicios</a>
+</div>
+</div>
+
+<div class="menu-item track-only" data-track-show="it"><a class="menu-button" href="espanol-para-italianos.html"><i class="ti ti-flag"></i> Attenzione a questi</a></div>
+<div class="menu-item track-only" data-track-show="en"><a class="menu-button" href="spanish-for-english-speakers.html"><i class="ti ti-flag"></i> Watch out for this</a></div>
+
+<div class="sidebar-filler">
+<div class="dot" style="width:70px;height:70px;bottom:10px;left:-10px"></div>
+<div class="dot" style="width:26px;height:26px;bottom:90px;left:60px"></div>
+<div class="dot" style="width:14px;height:14px;bottom:130px;left:110px"></div>
+<div class="dot" style="width:44px;height:44px;bottom:30px;left:140px"></div>
+<div class="dot" style="width:18px;height:18px;bottom:100px;left:190px"></div>
+<div class="dot" style="width:34px;height:34px;bottom:60px;right:-8px"></div>
+<div class="dot" style="width:12px;height:12px;bottom:140px;right:40px"></div>
+<p class="tagline">Poco a poco se llega lejos <i class="ti ti-bolt"></i></p>
+</div>
 </aside>
 
 
 
+
+
+
+
+
+
+
+
 <main class="main">
-<div class="language-selector">
+<div class="page-header"><div class="language-selector">
 <button class="lang-track-btn" data-track="it">🇮🇹 Italiano</button>
-<button class="lang-track-btn" data-track="en">🇬🇧 Inglés</button>
+<button class="lang-track-btn" data-track="en">🇬🇧 English</button>
 </div>
-<div class="breadcrumb"><a href="index.html">Inicio</a> / Gramática / Preposiciones</div>
+<div class="breadcrumb"><a href="index.html"><i class="ti ti-home"></i> Inicio</a> / Gramática / Preposiciones</div></div>
 <section class="grammar-section">
 <span class="eyebrow">Grammar</span>
 <h2>Preposiciones</h2>
@@ -79,16 +116,25 @@
 <div class="table-wrap"><table>
 <thead><tr><th>Preposition</th><th>Main use</th><th>Example</th></tr></thead>
 <tbody>
-<tr><td>a</td><td>direction, time, direct object when it's a person</td><td>Voy a Madrid. A las tres. Vi a Juan.</td></tr>
-<tr><td>de</td><td>origin, possession, material</td><td>Soy de Italia. El libro de Ana. Mesa de madera.</td></tr>
-<tr><td>en</td><td>location, mode of transport, time (month/year)</td><td>Vivo en Roma. Voy en tren. En verano.</td></tr>
-<tr><td>con</td><td>company, instrument</td><td>Voy con mi hermana. Escribo con bolígrafo.</td></tr>
-<tr><td>sin</td><td>absence, without</td><td>Café sin azúcar.</td></tr>
-<tr><td>sobre / en</td><td>on top of something</td><td>El libro está sobre la mesa.</td></tr>
-<tr><td>entre</td><td>between/among</td><td>Entre la silla y la mesa.</td></tr>
-<tr><td>desde / hasta</td><td>from / until (time or place)</td><td>Desde las nueve hasta las cinco.</td></tr>
-<tr><td>hacia</td><td>toward, approximate direction</td><td>Caminamos hacia el centro.</td></tr>
+<tr><td>a <span class="badge-key">essential</span></td><td>direction, time, direct object when it's a person</td><td>Voy a Madrid <em>(I go to Madrid)</em>. A las tres <em>(at three)</em>. Vi a Juan <em>(I saw Juan)</em>.</td></tr>
+<tr><td>de <span class="badge-key">essential</span></td><td>origin, possession, material</td><td>Soy de Italia <em>(I'm from Italy)</em>. El libro de Ana <em>(Ana's book)</em>. Mesa de madera <em>(wooden table)</em>.</td></tr>
+<tr><td>en <span class="badge-key">essential</span></td><td>location, mode of transport, time (month/year)</td><td>Vivo en Roma <em>(I live in Rome)</em>. Voy en tren <em>(I go by train)</em>. En verano <em>(in summer)</em>.</td></tr>
+<tr><td>con <span class="badge-key">essential</span></td><td>company, instrument</td><td>Voy con mi hermana <em>(I go with my sister)</em>. Escribo con bolígrafo <em>(I write with a pen)</em>.</td></tr>
+<tr><td>por / para <span class="badge-key">essential</span></td><td>cause/means · purpose/recipient</td><td>See the dedicated page in "Watch out for this".</td></tr>
+<tr><td>sin</td><td>without</td><td>Café sin azúcar <em>(coffee without sugar)</em>.</td></tr>
+<tr><td>sobre</td><td>on top of something, or "about"</td><td>El libro está sobre la mesa <em>(on the table)</em>. Hablamos sobre el examen <em>(we talk about the exam)</em>.</td></tr>
+<tr><td>bajo</td><td>under (literal or figurative)</td><td>El gato está bajo la mesa <em>(under the table)</em>. Bajo presión <em>(under pressure)</em>.</td></tr>
+<tr><td>entre</td><td>between/among</td><td>Entre la silla y la mesa <em>(between the chair and the table)</em>.</td></tr>
+<tr><td>desde</td><td>starting point (time or place)</td><td>Desde las nueve <em>(since nine)</em>. Desde Madrid <em>(from Madrid)</em>.</td></tr>
+<tr><td>hasta</td><td>ending point (time or place)</td><td>Hasta las cinco <em>(until five)</em>. Hasta Barcelona <em>(as far as Barcelona)</em>.</td></tr>
+<tr><td>hacia</td><td>toward, approximate direction</td><td>Caminamos hacia el centro <em>(we walk toward downtown)</em>.</td></tr>
+<tr><td>durante</td><td>duration of an action</td><td>Durante el verano trabajo mucho <em>(during summer I work a lot)</em>.</td></tr>
+<tr><td>según</td><td>source of information</td><td>Según el profesor, es correcto <em>(according to the teacher)</em>.</td></tr>
+<tr><td>contra</td><td>opposition, contact</td><td>Luchar contra el tiempo <em>(fight against time)</em>. Apoyado contra la pared <em>(leaning against the wall)</em>.</td></tr>
+<tr><td>ante</td><td>formal presence before someone</td><td>Ante el juez <em>(before the judge)</em>. Ante esta situación <em>(faced with this situation)</em>.</td></tr>
+<tr><td>tras</td><td>after, behind (more formal than "después de")</td><td>Tras el examen, descansamos <em>(after the exam, we rest)</em>.</td></tr>
 </tbody></table></div>
+<div class="tip-box"><b>Tip:</b> focus first on <b>a, de, en, con, por, para</b> — they're by far the most frequent. The rest sink in naturally through exposure; no need to memorize the whole list upfront.</div>
 
 <h3>The personal "a"</h3>
 <p class="subtitle" style="margin-bottom:14px">One of the most common traps for English speakers: when the direct object of a verb is a person (or a personified animal/thing), you add "a" before it — something English never does.</p>
@@ -98,9 +144,10 @@
 </div>
 
 <div class="tip-box"><b>Por / para</b> have their own dedicated page inside "Spanish for English speakers" — they're some of the most confusing prepositions of all, so they earned separate treatment.</div>
+<div class="ex-cta"><a href="ejercicios-en.html?tema=preposiciones" class="button button-primary"><i class="ti ti-target"></i> Test yourself with exercises</a></div>
 </section>
 </main>
-<footer>© 2026 Jose Nogues · Profesor de español</footer>
+<footer>© 2026 Jose N. · Profesor de español · <a href="privacidad.html">Privacidad</a></footer>
 <script src="script.js"></script>
 </body>
 </html>

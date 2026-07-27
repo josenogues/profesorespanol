@@ -7,6 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
 <link rel="icon" type="image/png" href="favicon.png">
 <link rel="stylesheet" href="styles.css">
 </head>
@@ -17,62 +18,98 @@
 <div class="menu-title">Aprender</div>
 
 <div class="menu-item">
-<button class="menu-button">🔤 Verbos ▾</button>
+<button class="menu-button"><i class="ti ti-abc"></i> Verbos ▾</button>
 <div class="submenu">
-<a href="#" class="track-link" data-base="tiempos-verbales">Tiempos verbales</a>
-<a href="#" class="track-link" data-base="verbos-regulares">Verbos regulares</a>
-<a href="#" class="track-link" data-base="verbos-irregulares">Verbos irregulares</a>
-<a href="#" class="track-link" data-base="verbos-reflexivos">Verbos reflexivos</a>
-<a href="#" class="track-link" data-base="ser-estar">Ser y estar</a>
-<a href="#" class="track-link" data-base="haber-tener">Haber y tener</a>
+<a href="#" class="track-link" data-base="tiempos-verbales">Overview</a>
+<a href="#" class="track-link" data-base="indicativo">Indicativo</a>
+<a href="#" class="track-link" data-base="subjuntivo">Subjuntivo</a>
+<a href="#" class="track-link" data-base="imperativo">Imperativo</a>
+<a href="#" class="track-link" data-base="verbos-regulares">Regulares</a>
+<a href="#" class="track-link" data-base="verbos-irregulares">Irregulares</a>
+<a href="#" class="track-link submenu-sub" data-base="ser-estar">Ser y estar</a>
+<a href="#" class="track-link submenu-sub" data-base="haber-tener">Haber y tener</a>
+<a href="#" class="track-link" data-base="verbos-reflexivos">Reflexivos</a>
+<a href="#" class="track-link" data-base="formas-impersonales">Formas impersonales</a>
 </div>
 </div>
 
 <div class="menu-item">
-<button class="menu-button">📚 Gramática ▾</button>
+<button class="menu-button"><i class="ti ti-books"></i> Gramática ▾</button>
 <div class="submenu">
 <a href="#" class="track-link" data-base="articulos">Artículos</a>
 <a href="#" class="track-link" data-base="genero-numero">Género y número</a>
 <a href="#" class="track-link" data-base="pronombres">Pronombres</a>
 <a href="#" class="track-link" data-base="preposiciones">Preposiciones</a>
-<a href="#" class="track-link" data-base="subjuntivo">Subjuntivo</a>
 </div>
 </div>
 
 <div class="menu-item">
-<button class="menu-button">🗣️ Vocabulario ▾</button>
+<button class="menu-button"><i class="ti ti-language"></i> Vocabulario ▾</button>
 <div class="submenu">
 <a href="#" class="track-link" data-base="vida-cotidiana">Vida cotidiana</a>
 <a href="#" class="track-link" data-base="viajes">Viajes</a>
 <a href="#" class="track-link" data-base="trabajo">Trabajo</a>
 <a href="#" class="track-link" data-base="restaurante">Restaurante</a>
 <a href="#" class="track-link" data-base="casa">Casa</a>
+<a href="#" class="track-link" data-base="comidas-bebidas">Comidas y bebidas</a>
+<a href="#" class="track-link" data-base="deportes">Deportes</a>
+<a href="#" class="track-link" data-base="clima">El clima</a>
 </div>
 </div>
 
 <div class="menu-item">
-<button class="menu-button">💬 Expresiones ▾</button>
+<button class="menu-button"><i class="ti ti-message-2"></i> Expresiones ▾</button>
 <div class="submenu">
 <a href="#" class="track-link" data-base="expresiones-comunes">Expresiones comunes</a>
 <a href="#" class="track-link" data-base="falsos-amigos">Falsos amigos</a>
 <a href="#" class="track-link" data-base="modismos">Modismos</a>
+<a href="#" class="track-link" data-base="la-hora">La hora</a>
+<a href="#" class="track-link" data-base="las-fechas">Las fechas</a>
+<a href="#" class="track-link" data-base="temperatura">Sobre temperatura</a>
+<a href="#" class="track-link" data-base="moverse-ciudad">Moverte por la ciudad</a>
 </div>
 </div>
 
-<div class="menu-item"><a class="menu-button" href="espanol-para-italianos.html">🇮🇹 Español para italianos</a></div>
-<div class="menu-item"><a class="menu-button" href="spanish-for-english-speakers.html">🇬🇧 Spanish for English speakers</a></div>
+<div class="menu-item">
+<button class="menu-button"><i class="ti ti-target"></i> Ejercicios ▾</button>
+<div class="submenu">
+<a href="#" class="track-link" data-base="ejercicios">Todos los ejercicios</a>
+</div>
+</div>
+
+<div class="menu-item track-only" data-track-show="it"><a class="menu-button" href="espanol-para-italianos.html"><i class="ti ti-flag"></i> Attenzione a questi</a></div>
+<div class="menu-item track-only" data-track-show="en"><a class="menu-button" href="spanish-for-english-speakers.html"><i class="ti ti-flag"></i> Watch out for this</a></div>
+
+<div class="sidebar-filler">
+<div class="dot" style="width:70px;height:70px;bottom:10px;left:-10px"></div>
+<div class="dot" style="width:26px;height:26px;bottom:90px;left:60px"></div>
+<div class="dot" style="width:14px;height:14px;bottom:130px;left:110px"></div>
+<div class="dot" style="width:44px;height:44px;bottom:30px;left:140px"></div>
+<div class="dot" style="width:18px;height:18px;bottom:100px;left:190px"></div>
+<div class="dot" style="width:34px;height:34px;bottom:60px;right:-8px"></div>
+<div class="dot" style="width:12px;height:12px;bottom:140px;right:40px"></div>
+<p class="tagline">Poco a poco se llega lejos <i class="ti ti-bolt"></i></p>
+</div>
 </aside>
 
 
 
 
 
+
+
+
+
+
+
+
+
 <main class="main">
-<div class="language-selector">
+<div class="page-header"><div class="language-selector">
 <button class="lang-track-btn" data-track="it">🇮🇹 Italiano</button>
-<button class="lang-track-btn" data-track="en">🇬🇧 Inglés</button>
+<button class="lang-track-btn" data-track="en">🇬🇧 English</button>
 </div>
-<div class="breadcrumb"><a href="index.html">Inicio</a> / Verbos / Verbos reflexivos</div>
+<div class="breadcrumb"><a href="index.html"><i class="ti ti-home"></i> Inicio</a> / Verbos / Verbos reflexivos</div></div>
 <section class="grammar-section">
 <span class="eyebrow">Verbs</span>
 <h2>Reflexive verbs</h2>
@@ -135,46 +172,10 @@
 </div>
 
 <div class="tip-box"><b>Tip:</b> several reflexive verbs are also stem-changing (acostarse, vestirse, despertarse) — the irregular pattern is exactly the same as the non-reflexive version, you're just adding the reflexive pronoun in front.</div>
-</section>
-<section class="grammar-section">
-<span class="eyebrow">Practice</span>
-<h2>Exercises</h2>
-<div class="exercise-block" data-exid="ref-ex-1" data-answer="me despierto">
-<div class="exercise-kicker"><span>Fill in the blank</span><span class="exercise-done-badge">✓ Completed</span></div>
-<p class="exercise-prompt">I ___ at seven in the morning. <em>(despertarse · present)</em></p>
-<div class="exercise-row"><input type="text" class="exercise-input" placeholder="Write your answer"><button class="exercise-check">Check</button></div>
-<p class="exercise-feedback"></p></div><div class="exercise-block" data-exid="ref-ex-2" data-answer="te llamas">
-<div class="exercise-kicker"><span>Fill in the blank</span><span class="exercise-done-badge">✓ Completed</span></div>
-<p class="exercise-prompt">What's your name? ¿Cómo ___ tú? <em>(llamarse · present)</em></p>
-<div class="exercise-row"><input type="text" class="exercise-input" placeholder="Write your answer"><button class="exercise-check">Check</button></div>
-<p class="exercise-feedback"></p></div><div class="exercise-block" data-exid="ref-ex-3" data-answer="nos lavamos">
-<div class="exercise-kicker"><span>Choose the correct option</span><span class="exercise-done-badge">✓ Completed</span></div>
-<p class="exercise-prompt">Which is the form of <b>lavarse</b> for <b>nosotros</b>?</p>
-<div class="exercise-options"><button class="option-btn" data-value="nos lavamos">nos lavamos</button><button class="option-btn" data-value="nos lavais">nos lavais</button><button class="option-btn" data-value="se lavamos">se lavamos</button></div>
-<p class="exercise-feedback"></p></div><div class="exercise-block" data-exid="ref-ex-4" data-answer="se viste">
-<div class="exercise-kicker"><span>Fill in the blank</span><span class="exercise-done-badge">✓ Completed</span></div>
-<p class="exercise-prompt">She always ___ before going out. <em>(vestirse · present)</em></p>
-<div class="exercise-row"><input type="text" class="exercise-input" placeholder="Write your answer"><button class="exercise-check">Check</button></div>
-<p class="exercise-feedback"></p></div><div class="exercise-block" data-exid="ref-ex-5" data-answer="se acuestan">
-<div class="exercise-kicker"><span>Choose the correct option</span><span class="exercise-done-badge">✓ Completed</span></div>
-<p class="exercise-prompt">Which is the form of <b>acostarse</b> for <b>ellos</b>?</p>
-<div class="exercise-options"><button class="option-btn" data-value="se acuestan">se acuestan</button><button class="option-btn" data-value="se acostan">se acostan</button><button class="option-btn" data-value="se acostean">se acostean</button></div>
-<p class="exercise-feedback"></p></div><div class="exercise-block" data-exid="ref-ex-6" data-answer="me duché">
-<div class="exercise-kicker"><span>Fill in the blank</span><span class="exercise-done-badge">✓ Completed</span></div>
-<p class="exercise-prompt">Last night I ___ very late. <em>(ducharse · preterite)</em></p>
-<div class="exercise-row"><input type="text" class="exercise-input" placeholder="Write your answer"><button class="exercise-check">Check</button></div>
-<p class="exercise-feedback"></p></div><div class="exercise-block" data-exid="ref-ex-7" data-answer="nos levantábamos">
-<div class="exercise-kicker"><span>Fill in the blank</span><span class="exercise-done-badge">✓ Completed</span></div>
-<p class="exercise-prompt">As kids, we used to ___ together every day. <em>(levantarse · imperfect)</em></p>
-<div class="exercise-row"><input type="text" class="exercise-input" placeholder="Write your answer"><button class="exercise-check">Check</button></div>
-<p class="exercise-feedback"></p></div><div class="exercise-block" data-exid="ref-ex-8" data-answer="lavarse">
-<div class="exercise-kicker"><span>Choose the correct option</span><span class="exercise-done-badge">✓ Completed</span></div>
-<p class="exercise-prompt">Which of these verbs does NOT have a stem change?</p>
-<div class="exercise-options"><button class="option-btn" data-value="lavarse">lavarse</button><button class="option-btn" data-value="vestirse">vestirse</button><button class="option-btn" data-value="acostarse">acostarse</button></div>
-<p class="exercise-feedback"></p></div>
+<div class="ex-cta"><a href="ejercicios-en.html?tema=reflexivos" class="button button-primary"><i class="ti ti-target"></i> Test yourself with exercises</a></div>
 </section>
 </main>
-<footer>© 2026 Jose Nogues · Profesor de español</footer>
+<footer>© 2026 Jose N. · Profesor de español · <a href="privacidad.html">Privacidad</a></footer>
 <script src="script.js"></script>
 </body>
 </html>

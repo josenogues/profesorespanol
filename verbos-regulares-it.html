@@ -7,6 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
 <link rel="icon" type="image/png" href="favicon.png">
 <link rel="stylesheet" href="styles.css">
 </head>
@@ -17,66 +18,102 @@
 <div class="menu-title">Aprender</div>
 
 <div class="menu-item">
-<button class="menu-button">🔤 Verbos ▾</button>
+<button class="menu-button"><i class="ti ti-abc"></i> Verbos ▾</button>
 <div class="submenu">
-<a href="#" class="track-link" data-base="tiempos-verbales">Tiempos verbales</a>
-<a href="#" class="track-link" data-base="verbos-regulares">Verbos regulares</a>
-<a href="#" class="track-link" data-base="verbos-irregulares">Verbos irregulares</a>
-<a href="#" class="track-link" data-base="verbos-reflexivos">Verbos reflexivos</a>
-<a href="#" class="track-link" data-base="ser-estar">Ser y estar</a>
-<a href="#" class="track-link" data-base="haber-tener">Haber y tener</a>
+<a href="#" class="track-link" data-base="tiempos-verbales">Overview</a>
+<a href="#" class="track-link" data-base="indicativo">Indicativo</a>
+<a href="#" class="track-link" data-base="subjuntivo">Subjuntivo</a>
+<a href="#" class="track-link" data-base="imperativo">Imperativo</a>
+<a href="#" class="track-link" data-base="verbos-regulares">Regulares</a>
+<a href="#" class="track-link" data-base="verbos-irregulares">Irregulares</a>
+<a href="#" class="track-link submenu-sub" data-base="ser-estar">Ser y estar</a>
+<a href="#" class="track-link submenu-sub" data-base="haber-tener">Haber y tener</a>
+<a href="#" class="track-link" data-base="verbos-reflexivos">Reflexivos</a>
+<a href="#" class="track-link" data-base="formas-impersonales">Formas impersonales</a>
 </div>
 </div>
 
 <div class="menu-item">
-<button class="menu-button">📚 Gramática ▾</button>
+<button class="menu-button"><i class="ti ti-books"></i> Gramática ▾</button>
 <div class="submenu">
 <a href="#" class="track-link" data-base="articulos">Artículos</a>
 <a href="#" class="track-link" data-base="genero-numero">Género y número</a>
 <a href="#" class="track-link" data-base="pronombres">Pronombres</a>
 <a href="#" class="track-link" data-base="preposiciones">Preposiciones</a>
-<a href="#" class="track-link" data-base="subjuntivo">Subjuntivo</a>
 </div>
 </div>
 
 <div class="menu-item">
-<button class="menu-button">🗣️ Vocabulario ▾</button>
+<button class="menu-button"><i class="ti ti-language"></i> Vocabulario ▾</button>
 <div class="submenu">
 <a href="#" class="track-link" data-base="vida-cotidiana">Vida cotidiana</a>
 <a href="#" class="track-link" data-base="viajes">Viajes</a>
 <a href="#" class="track-link" data-base="trabajo">Trabajo</a>
 <a href="#" class="track-link" data-base="restaurante">Restaurante</a>
 <a href="#" class="track-link" data-base="casa">Casa</a>
+<a href="#" class="track-link" data-base="comidas-bebidas">Comidas y bebidas</a>
+<a href="#" class="track-link" data-base="deportes">Deportes</a>
+<a href="#" class="track-link" data-base="clima">El clima</a>
 </div>
 </div>
 
 <div class="menu-item">
-<button class="menu-button">💬 Expresiones ▾</button>
+<button class="menu-button"><i class="ti ti-message-2"></i> Expresiones ▾</button>
 <div class="submenu">
 <a href="#" class="track-link" data-base="expresiones-comunes">Expresiones comunes</a>
 <a href="#" class="track-link" data-base="falsos-amigos">Falsos amigos</a>
 <a href="#" class="track-link" data-base="modismos">Modismos</a>
+<a href="#" class="track-link" data-base="la-hora">La hora</a>
+<a href="#" class="track-link" data-base="las-fechas">Las fechas</a>
+<a href="#" class="track-link" data-base="temperatura">Sobre temperatura</a>
+<a href="#" class="track-link" data-base="moverse-ciudad">Moverte por la ciudad</a>
 </div>
 </div>
 
-<div class="menu-item"><a class="menu-button" href="espanol-para-italianos.html">🇮🇹 Español para italianos</a></div>
-<div class="menu-item"><a class="menu-button" href="spanish-for-english-speakers.html">🇬🇧 Spanish for English speakers</a></div>
+<div class="menu-item">
+<button class="menu-button"><i class="ti ti-target"></i> Ejercicios ▾</button>
+<div class="submenu">
+<a href="#" class="track-link" data-base="ejercicios">Todos los ejercicios</a>
+</div>
+</div>
+
+<div class="menu-item track-only" data-track-show="it"><a class="menu-button" href="espanol-para-italianos.html"><i class="ti ti-flag"></i> Attenzione a questi</a></div>
+<div class="menu-item track-only" data-track-show="en"><a class="menu-button" href="spanish-for-english-speakers.html"><i class="ti ti-flag"></i> Watch out for this</a></div>
+
+<div class="sidebar-filler">
+<div class="dot" style="width:70px;height:70px;bottom:10px;left:-10px"></div>
+<div class="dot" style="width:26px;height:26px;bottom:90px;left:60px"></div>
+<div class="dot" style="width:14px;height:14px;bottom:130px;left:110px"></div>
+<div class="dot" style="width:44px;height:44px;bottom:30px;left:140px"></div>
+<div class="dot" style="width:18px;height:18px;bottom:100px;left:190px"></div>
+<div class="dot" style="width:34px;height:34px;bottom:60px;right:-8px"></div>
+<div class="dot" style="width:12px;height:12px;bottom:140px;right:40px"></div>
+<p class="tagline">Poco a poco se llega lejos <i class="ti ti-bolt"></i></p>
+</div>
 </aside>
 
 
 
 
 
+
+
+
+
+
+
+
+
 <main class="main">
-<div class="language-selector">
+<div class="page-header"><div class="language-selector">
 <button class="lang-track-btn" data-track="it">🇮🇹 Italiano</button>
-<button class="lang-track-btn" data-track="en">🇬🇧 Inglés</button>
+<button class="lang-track-btn" data-track="en">🇬🇧 English</button>
 </div>
-<div class="breadcrumb"><a href="index.html">Inicio</a> / Verbos / Verbos regulares</div>
+<div class="breadcrumb"><a href="index.html"><i class="ti ti-home"></i> Inicio</a> / Verbos / Verbos regulares</div></div>
 <section class="grammar-section">
 <span class="eyebrow">Verbos</span>
 <h2>Verbos regulares</h2>
-<p class="subtitle">I verbi spagnoli si raggruppano in tre coniugazioni in base alla loro terminazione all'infinito (-AR, -ER, -IR). Le terminazioni sono sistematiche. Scegli un tempo per vedere la coniugazione completa.</p>
+<p class="subtitle">I verbi spagnoli si raggruppano in tre coniugazioni in base alla loro terminazione all'infinito (-AR, -ER, -IR). Per la maggior parte dei tempi si toglie la terminazione e si aggiunge la desinenza corretta — tranne futuro e condizionale, che si formano aggiungendo la desinenza direttamente all'<b>infinito completo</b> (hablar<b>é</b>, comer<b>ía</b>). Scegli un tempo per vedere la coniugazione completa.</p>
 <div class="tabs"><button class="tab-btn active" data-tab="t-presente">Presente</button><button class="tab-btn" data-tab="t-pps">Pretérito perfecto simple</button><button class="tab-btn" data-tab="t-imp">Pretérito imperfecto</button><button class="tab-btn" data-tab="t-fut">Futuro simple</button><button class="tab-btn" data-tab="t-cond">Condicional simple</button></div>
 <div class="tab-panel active" id="t-presente">
 <p class="subtitle" style="margin-bottom:14px">Il presente si usa per azioni presenti, abitudini, verità generali.</p>
@@ -104,209 +141,10 @@
 <thead><tr><th>Pronombre</th><th>-AR (hablar)</th><th>-ER (comer)</th><th>-IR (vivir)</th></tr></thead>
 <tbody><tr><td>Yo</td><td>hablar<b>ía</b> <em>(parlerei)</em></td><td>comer<b>ía</b> <em>(mangerei)</em></td><td>vivir<b>ía</b> <em>(vivrei)</em></td></tr><tr><td>Tú</td><td>hablar<b>ías</b> <em>(parleresti)</em></td><td>comer<b>ías</b> <em>(mangeresti)</em></td><td>vivir<b>ías</b> <em>(vivresti)</em></td></tr><tr><td>Él / Ella</td><td>hablar<b>ía</b> <em>(parlerebbe)</em></td><td>comer<b>ía</b> <em>(mangerebbe)</em></td><td>vivir<b>ía</b> <em>(vivrebbe)</em></td></tr><tr><td>Nosotros / -as</td><td>hablar<b>íamos</b> <em>(parleremmo)</em></td><td>comer<b>íamos</b> <em>(mangeremmo)</em></td><td>vivir<b>íamos</b> <em>(vivremmo)</em></td></tr><tr><td>Vosotros / -as</td><td>hablar<b>íais</b> <em>(parlereste)</em></td><td>comer<b>íais</b> <em>(mangereste)</em></td><td>vivir<b>íais</b> <em>(vivreste)</em></td></tr><tr><td>Ellos / Ellas</td><td>hablar<b>ían</b> <em>(parlerebbero)</em></td><td>comer<b>ían</b> <em>(mangerebbero)</em></td><td>vivir<b>ían</b> <em>(vivrebbero)</em></td></tr></tbody></table></div>
 </div>
-</section>
-<section class="grammar-section">
-<span class="eyebrow">Practica</span>
-<h2>Ejercicios</h2>
-<div class="tabs">
-<button class="tab-btn active" data-tab="reg-it-basico">Básico</button>
-<button class="tab-btn" data-tab="reg-it-intermedio">Intermedio</button>
-<button class="tab-btn" data-tab="reg-it-avanzado">Avanzado</button>
-</div><div class="tab-panel active" id="reg-it-basico"><button class="generate-btn" data-panel="reg-it-basico-list" data-track="it" data-level="basico" data-kfill="Rellena el hueco" data-kchoice="Elige la opción correcta" data-ktrans="Traduce">🔄 Generar ejercicios nuevos</button><div class="exercise-list" id="reg-it-basico-list"><div class="exercise-block" data-exid="reg-b-1" data-answer="hablo">
-<div class="exercise-kicker"><span>Rellena el hueco</span><span class="exercise-done-badge">✓ Completado</span></div>
-<p class="exercise-prompt">Yo ___ español todos los días. <em>(hablar · presente)</em></p>
-<div class="exercise-row">
-<input type="text" class="exercise-input" placeholder="Escribe la respuesta">
-<button class="exercise-check">Comprobar</button>
-</div>
-<p class="exercise-feedback"></p>
-</div><div class="exercise-block" data-exid="reg-b-2" data-answer="comes">
-<div class="exercise-kicker"><span>Rellena el hueco</span><span class="exercise-done-badge">✓ Completado</span></div>
-<p class="exercise-prompt">Tú ___ mucha fruta. <em>(comer · presente)</em></p>
-<div class="exercise-row">
-<input type="text" class="exercise-input" placeholder="Escribe la respuesta">
-<button class="exercise-check">Comprobar</button>
-</div>
-<p class="exercise-feedback"></p>
-</div><div class="exercise-block" data-exid="reg-b-3" data-answer="vivimos">
-<div class="exercise-kicker"><span>Rellena el hueco</span><span class="exercise-done-badge">✓ Completado</span></div>
-<p class="exercise-prompt">Nosotros ___ en Barcelona. <em>(vivir · presente)</em></p>
-<div class="exercise-row">
-<input type="text" class="exercise-input" placeholder="Escribe la respuesta">
-<button class="exercise-check">Comprobar</button>
-</div>
-<p class="exercise-feedback"></p>
-</div><div class="exercise-block" data-exid="reg-b-4" data-answer="hablan">
-<div class="exercise-kicker"><span>Elige la opción correcta</span><span class="exercise-done-badge">✓ Completado</span></div>
-<p class="exercise-prompt">¿Cuál es la forma de <b>hablar</b> para <b>ellos</b>?</p>
-<div class="exercise-options"><button class="option-btn" data-value="hablan">hablan</button><button class="option-btn" data-value="hablas">hablas</button><button class="option-btn" data-value="habla">habla</button></div>
-<p class="exercise-feedback"></p>
-</div><div class="exercise-block" data-exid="reg-b-5" data-answer="coméis">
-<div class="exercise-kicker"><span>Elige la opción correcta</span><span class="exercise-done-badge">✓ Completado</span></div>
-<p class="exercise-prompt">¿Cuál es la forma de <b>comer</b> para <b>vosotros</b>?</p>
-<div class="exercise-options"><button class="option-btn" data-value="coméis">coméis</button><button class="option-btn" data-value="comen">comen</button><button class="option-btn" data-value="comemos">comemos</button></div>
-<p class="exercise-feedback"></p>
-</div><div class="exercise-block" data-exid="reg-b-6" data-answer="vivís">
-<div class="exercise-kicker"><span>Rellena el hueco</span><span class="exercise-done-badge">✓ Completado</span></div>
-<p class="exercise-prompt">Vosotros ___ en un piso pequeño. <em>(vivir · presente)</em></p>
-<div class="exercise-row">
-<input type="text" class="exercise-input" placeholder="Escribe la respuesta">
-<button class="exercise-check">Comprobar</button>
-</div>
-<p class="exercise-feedback"></p>
-</div><div class="exercise-block" data-exid="reg-b-7" data-answer="vivo">
-<div class="exercise-kicker"><span>Elige la opción correcta</span><span class="exercise-done-badge">✓ Completado</span></div>
-<p class="exercise-prompt">¿Cuál es la forma de <b>vivir</b> para <b>yo</b>?</p>
-<div class="exercise-options"><button class="option-btn" data-value="vivo">vivo</button><button class="option-btn" data-value="vives">vives</button><button class="option-btn" data-value="vive">vive</button></div>
-<p class="exercise-feedback"></p>
-</div><div class="exercise-block" data-exid="reg-b-8" data-answer="ella habla italiano|habla italiano">
-<div class="exercise-kicker"><span>Traduce</span><span class="exercise-done-badge">✓ Completado</span></div>
-<p class="exercise-prompt">Traduce: <em>«Lei parla italiano»</em></p>
-<div class="exercise-row">
-<input type="text" class="exercise-input" placeholder="Escribe la traducción">
-<button class="exercise-check">Comprobar</button>
-</div>
-<p class="exercise-feedback"></p>
-</div><div class="exercise-block" data-exid="reg-b-9" data-answer="vivimos aquí|nosotros vivimos aquí">
-<div class="exercise-kicker"><span>Traduce</span><span class="exercise-done-badge">✓ Completado</span></div>
-<p class="exercise-prompt">Traduce: <em>«Noi viviamo qui»</em></p>
-<div class="exercise-row">
-<input type="text" class="exercise-input" placeholder="Escribe la traducción">
-<button class="exercise-check">Comprobar</button>
-</div>
-<p class="exercise-feedback"></p>
-</div></div></div>
-<div class="tab-panel" id="reg-it-intermedio"><button class="generate-btn" data-panel="reg-it-intermedio-list" data-track="it" data-level="intermedio" data-kfill="Rellena el hueco" data-kchoice="Elige la opción correcta" data-ktrans="Traduce">🔄 Generar ejercicios nuevos</button><div class="exercise-list" id="reg-it-intermedio-list"><div class="exercise-block" data-exid="reg-i-1" data-answer="hablé">
-<div class="exercise-kicker"><span>Rellena el hueco</span><span class="exercise-done-badge">✓ Completado</span></div>
-<p class="exercise-prompt">Ayer (yo) ___ con mi madre. <em>(hablar · pretérito perfecto simple)</em></p>
-<div class="exercise-row">
-<input type="text" class="exercise-input" placeholder="Escribe la respuesta">
-<button class="exercise-check">Comprobar</button>
-</div>
-<p class="exercise-feedback"></p>
-</div><div class="exercise-block" data-exid="reg-i-2" data-answer="comió">
-<div class="exercise-kicker"><span>Rellena el hueco</span><span class="exercise-done-badge">✓ Completado</span></div>
-<p class="exercise-prompt">Ella ___ una pizza anoche. <em>(comer · pretérito perfecto simple)</em></p>
-<div class="exercise-row">
-<input type="text" class="exercise-input" placeholder="Escribe la respuesta">
-<button class="exercise-check">Comprobar</button>
-</div>
-<p class="exercise-feedback"></p>
-</div><div class="exercise-block" data-exid="reg-i-3" data-answer="hablaba">
-<div class="exercise-kicker"><span>Rellena el hueco</span><span class="exercise-done-badge">✓ Completado</span></div>
-<p class="exercise-prompt">De niño, (yo) ___ español todos los días. <em>(hablar · pretérito imperfecto)</em></p>
-<div class="exercise-row">
-<input type="text" class="exercise-input" placeholder="Escribe la respuesta">
-<button class="exercise-check">Comprobar</button>
-</div>
-<p class="exercise-feedback"></p>
-</div><div class="exercise-block" data-exid="reg-i-4" data-answer="vivieron">
-<div class="exercise-kicker"><span>Elige la opción correcta</span><span class="exercise-done-badge">✓ Completado</span></div>
-<p class="exercise-prompt">¿Cuál es la forma de <b>vivir</b> (pretérito perfecto simple) para <b>ellos</b>?</p>
-<div class="exercise-options"><button class="option-btn" data-value="vivieron">vivieron</button><button class="option-btn" data-value="vivían">vivían</button><button class="option-btn" data-value="vivirán">vivirán</button></div>
-<p class="exercise-feedback"></p>
-</div><div class="exercise-block" data-exid="reg-i-5" data-answer="pretérito imperfecto">
-<div class="exercise-kicker"><span>Elige la opción correcta</span><span class="exercise-done-badge">✓ Completado</span></div>
-<p class="exercise-prompt">¿Qué tiempo describe una acción habitual en el pasado?</p>
-<div class="exercise-options"><button class="option-btn" data-value="pretérito imperfecto">pretérito imperfecto</button><button class="option-btn" data-value="pretérito perfecto simple">pretérito perfecto simple</button><button class="option-btn" data-value="futuro simple">futuro simple</button></div>
-<p class="exercise-feedback"></p>
-</div><div class="exercise-block" data-exid="reg-i-6" data-answer="comíamos">
-<div class="exercise-kicker"><span>Rellena el hueco</span><span class="exercise-done-badge">✓ Completado</span></div>
-<p class="exercise-prompt">Nosotros ___ pizza cada viernes. <em>(comer · pretérito imperfecto)</em></p>
-<div class="exercise-row">
-<input type="text" class="exercise-input" placeholder="Escribe la respuesta">
-<button class="exercise-check">Comprobar</button>
-</div>
-<p class="exercise-feedback"></p>
-</div><div class="exercise-block" data-exid="reg-i-7" data-answer="viviste">
-<div class="exercise-kicker"><span>Rellena el hueco</span><span class="exercise-done-badge">✓ Completado</span></div>
-<p class="exercise-prompt">¿Tú ___ en Madrid el año pasado? <em>(vivir · pretérito perfecto simple)</em></p>
-<div class="exercise-row">
-<input type="text" class="exercise-input" placeholder="Escribe la respuesta">
-<button class="exercise-check">Comprobar</button>
-</div>
-<p class="exercise-feedback"></p>
-</div><div class="exercise-block" data-exid="reg-i-8" data-answer="vivíamos en madrid|nosotros vivíamos en madrid">
-<div class="exercise-kicker"><span>Traduce</span><span class="exercise-done-badge">✓ Completado</span></div>
-<p class="exercise-prompt">Traduce: <em>«Noi vivevamo a Madrid»</em></p>
-<div class="exercise-row">
-<input type="text" class="exercise-input" placeholder="Escribe la traducción">
-<button class="exercise-check">Comprobar</button>
-</div>
-<p class="exercise-feedback"></p>
-</div><div class="exercise-block" data-exid="reg-i-9" data-answer="pretérito perfecto simple">
-<div class="exercise-kicker"><span>Elige la opción correcta</span><span class="exercise-done-badge">✓ Completado</span></div>
-<p class="exercise-prompt"><b>«Hablé»</b> es...</p>
-<div class="exercise-options"><button class="option-btn" data-value="pretérito perfecto simple">pretérito perfecto simple</button><button class="option-btn" data-value="pretérito imperfecto">pretérito imperfecto</button><button class="option-btn" data-value="presente">presente</button></div>
-<p class="exercise-feedback"></p>
-</div></div></div>
-<div class="tab-panel" id="reg-it-avanzado"><button class="generate-btn" data-panel="reg-it-avanzado-list" data-track="it" data-level="avanzado" data-kfill="Rellena el hueco" data-kchoice="Elige la opción correcta" data-ktrans="Traduce">🔄 Generar ejercicios nuevos</button><div class="exercise-list" id="reg-it-avanzado-list"><div class="exercise-block" data-exid="reg-a-1" data-answer="hablaré">
-<div class="exercise-kicker"><span>Rellena el hueco</span><span class="exercise-done-badge">✓ Completado</span></div>
-<p class="exercise-prompt">Mañana (yo) ___ con el profesor. <em>(hablar · futuro simple)</em></p>
-<div class="exercise-row">
-<input type="text" class="exercise-input" placeholder="Escribe la respuesta">
-<button class="exercise-check">Comprobar</button>
-</div>
-<p class="exercise-feedback"></p>
-</div><div class="exercise-block" data-exid="reg-a-2" data-answer="comería">
-<div class="exercise-kicker"><span>Rellena el hueco</span><span class="exercise-done-badge">✓ Completado</span></div>
-<p class="exercise-prompt">Ella ___ más, pero está llena. <em>(comer · condicional simple)</em></p>
-<div class="exercise-row">
-<input type="text" class="exercise-input" placeholder="Escribe la respuesta">
-<button class="exercise-check">Comprobar</button>
-</div>
-<p class="exercise-feedback"></p>
-</div><div class="exercise-block" data-exid="reg-a-3" data-answer="viviremos">
-<div class="exercise-kicker"><span>Rellena el hueco</span><span class="exercise-done-badge">✓ Completado</span></div>
-<p class="exercise-prompt">Nosotros ___ en España el año que viene. <em>(vivir · futuro simple)</em></p>
-<div class="exercise-row">
-<input type="text" class="exercise-input" placeholder="Escribe la respuesta">
-<button class="exercise-check">Comprobar</button>
-</div>
-<p class="exercise-feedback"></p>
-</div><div class="exercise-block" data-exid="reg-a-4" data-answer="condicional simple">
-<div class="exercise-kicker"><span>Elige la opción correcta</span><span class="exercise-done-badge">✓ Completado</span></div>
-<p class="exercise-prompt">¿Qué tiempo se usa para cortesía o hipótesis?</p>
-<div class="exercise-options"><button class="option-btn" data-value="condicional simple">condicional simple</button><button class="option-btn" data-value="futuro simple">futuro simple</button><button class="option-btn" data-value="pretérito imperfecto">pretérito imperfecto</button></div>
-<p class="exercise-feedback"></p>
-</div><div class="exercise-block" data-exid="reg-a-5" data-answer="hablaríais">
-<div class="exercise-kicker"><span>Rellena el hueco</span><span class="exercise-done-badge">✓ Completado</span></div>
-<p class="exercise-prompt">¿Vosotros ___ con él si pudierais? <em>(hablar · condicional simple)</em></p>
-<div class="exercise-row">
-<input type="text" class="exercise-input" placeholder="Escribe la respuesta">
-<button class="exercise-check">Comprobar</button>
-</div>
-<p class="exercise-feedback"></p>
-</div><div class="exercise-block" data-exid="reg-a-6" data-answer="viviría">
-<div class="exercise-kicker"><span>Elige la opción correcta</span><span class="exercise-done-badge">✓ Completado</span></div>
-<p class="exercise-prompt">¿Cuál es la forma de <b>vivir</b> (condicional) para <b>yo</b>?</p>
-<div class="exercise-options"><button class="option-btn" data-value="viviría">viviría</button><button class="option-btn" data-value="viviré">viviré</button><button class="option-btn" data-value="vivía">vivía</button></div>
-<p class="exercise-feedback"></p>
-</div><div class="exercise-block" data-exid="reg-a-7" data-answer="mañana hablaré con el profesor|hablaré con el profesor">
-<div class="exercise-kicker"><span>Traduce</span><span class="exercise-done-badge">✓ Completado</span></div>
-<p class="exercise-prompt">Traduce: <em>«Domani parlerò con l'insegnante»</em></p>
-<div class="exercise-row">
-<input type="text" class="exercise-input" placeholder="Escribe la traducción">
-<button class="exercise-check">Comprobar</button>
-</div>
-<p class="exercise-feedback"></p>
-</div><div class="exercise-block" data-exid="reg-a-8" data-answer="vivirían">
-<div class="exercise-kicker"><span>Rellena el hueco</span><span class="exercise-done-badge">✓ Completado</span></div>
-<p class="exercise-prompt">Ellos ___ en esa casa si tuvieran dinero. <em>(vivir · condicional simple)</em></p>
-<div class="exercise-row">
-<input type="text" class="exercise-input" placeholder="Escribe la respuesta">
-<button class="exercise-check">Comprobar</button>
-</div>
-<p class="exercise-feedback"></p>
-</div><div class="exercise-block" data-exid="reg-a-9" data-answer="futuro compuesto">
-<div class="exercise-kicker"><span>Elige la opción correcta</span><span class="exercise-done-badge">✓ Completado</span></div>
-<p class="exercise-prompt">¿Qué tiempo expresa una acción futura anterior a otra acción futura?</p>
-<div class="exercise-options"><button class="option-btn" data-value="futuro compuesto">futuro compuesto</button><button class="option-btn" data-value="futuro simple">futuro simple</button><button class="option-btn" data-value="condicional simple">condicional simple</button></div>
-<p class="exercise-feedback"></p>
-</div></div></div>
+<div class="ex-cta"><a href="ejercicios-it.html?tema=regulares" class="button button-primary"><i class="ti ti-target"></i> Ponte a prueba con ejercicios</a></div>
 </section>
 </main>
-<footer>© 2026 Jose Nogues · Profesor de español</footer>
+<footer>© 2026 Jose N. · Profesor de español · <a href="privacidad.html">Privacidad</a></footer>
 <script src="script.js"></script>
 </body>
 </html>

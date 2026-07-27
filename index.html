@@ -7,6 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
 <link rel="icon" type="image/png" href="favicon.png">
 <link rel="stylesheet" href="styles.css">
 </head>
@@ -17,96 +18,140 @@
 <div class="menu-title">Aprender</div>
 
 <div class="menu-item">
-<button class="menu-button">🔤 Verbos ▾</button>
+<button class="menu-button"><i class="ti ti-abc"></i> Verbos ▾</button>
 <div class="submenu">
-<a href="#" class="track-link" data-base="tiempos-verbales">Tiempos verbales</a>
-<a href="#" class="track-link" data-base="verbos-regulares">Verbos regulares</a>
-<a href="#" class="track-link" data-base="verbos-irregulares">Verbos irregulares</a>
-<a href="#" class="track-link" data-base="verbos-reflexivos">Verbos reflexivos</a>
-<a href="#" class="track-link" data-base="ser-estar">Ser y estar</a>
-<a href="#" class="track-link" data-base="haber-tener">Haber y tener</a>
+<a href="#" class="track-link" data-base="tiempos-verbales">Overview</a>
+<a href="#" class="track-link" data-base="indicativo">Indicativo</a>
+<a href="#" class="track-link" data-base="subjuntivo">Subjuntivo</a>
+<a href="#" class="track-link" data-base="imperativo">Imperativo</a>
+<a href="#" class="track-link" data-base="verbos-regulares">Regulares</a>
+<a href="#" class="track-link" data-base="verbos-irregulares">Irregulares</a>
+<a href="#" class="track-link submenu-sub" data-base="ser-estar">Ser y estar</a>
+<a href="#" class="track-link submenu-sub" data-base="haber-tener">Haber y tener</a>
+<a href="#" class="track-link" data-base="verbos-reflexivos">Reflexivos</a>
+<a href="#" class="track-link" data-base="formas-impersonales">Formas impersonales</a>
 </div>
 </div>
 
 <div class="menu-item">
-<button class="menu-button">📚 Gramática ▾</button>
+<button class="menu-button"><i class="ti ti-books"></i> Gramática ▾</button>
 <div class="submenu">
 <a href="#" class="track-link" data-base="articulos">Artículos</a>
 <a href="#" class="track-link" data-base="genero-numero">Género y número</a>
 <a href="#" class="track-link" data-base="pronombres">Pronombres</a>
 <a href="#" class="track-link" data-base="preposiciones">Preposiciones</a>
-<a href="#" class="track-link" data-base="subjuntivo">Subjuntivo</a>
 </div>
 </div>
 
 <div class="menu-item">
-<button class="menu-button">🗣️ Vocabulario ▾</button>
+<button class="menu-button"><i class="ti ti-language"></i> Vocabulario ▾</button>
 <div class="submenu">
 <a href="#" class="track-link" data-base="vida-cotidiana">Vida cotidiana</a>
 <a href="#" class="track-link" data-base="viajes">Viajes</a>
 <a href="#" class="track-link" data-base="trabajo">Trabajo</a>
 <a href="#" class="track-link" data-base="restaurante">Restaurante</a>
 <a href="#" class="track-link" data-base="casa">Casa</a>
+<a href="#" class="track-link" data-base="comidas-bebidas">Comidas y bebidas</a>
+<a href="#" class="track-link" data-base="deportes">Deportes</a>
+<a href="#" class="track-link" data-base="clima">El clima</a>
 </div>
 </div>
 
 <div class="menu-item">
-<button class="menu-button">💬 Expresiones ▾</button>
+<button class="menu-button"><i class="ti ti-message-2"></i> Expresiones ▾</button>
 <div class="submenu">
 <a href="#" class="track-link" data-base="expresiones-comunes">Expresiones comunes</a>
 <a href="#" class="track-link" data-base="falsos-amigos">Falsos amigos</a>
 <a href="#" class="track-link" data-base="modismos">Modismos</a>
+<a href="#" class="track-link" data-base="la-hora">La hora</a>
+<a href="#" class="track-link" data-base="las-fechas">Las fechas</a>
+<a href="#" class="track-link" data-base="temperatura">Sobre temperatura</a>
+<a href="#" class="track-link" data-base="moverse-ciudad">Moverte por la ciudad</a>
 </div>
 </div>
 
-<div class="menu-item"><a class="menu-button" href="espanol-para-italianos.html">🇮🇹 Español para italianos</a></div>
-<div class="menu-item"><a class="menu-button" href="spanish-for-english-speakers.html">🇬🇧 Spanish for English speakers</a></div>
+<div class="menu-item">
+<button class="menu-button"><i class="ti ti-target"></i> Ejercicios ▾</button>
+<div class="submenu">
+<a href="#" class="track-link" data-base="ejercicios">Todos los ejercicios</a>
+</div>
+</div>
+
+<div class="menu-item track-only" data-track-show="it"><a class="menu-button" href="espanol-para-italianos.html"><i class="ti ti-flag"></i> Attenzione a questi</a></div>
+<div class="menu-item track-only" data-track-show="en"><a class="menu-button" href="spanish-for-english-speakers.html"><i class="ti ti-flag"></i> Watch out for this</a></div>
+
+<div class="sidebar-filler">
+<div class="dot" style="width:70px;height:70px;bottom:10px;left:-10px"></div>
+<div class="dot" style="width:26px;height:26px;bottom:90px;left:60px"></div>
+<div class="dot" style="width:14px;height:14px;bottom:130px;left:110px"></div>
+<div class="dot" style="width:44px;height:44px;bottom:30px;left:140px"></div>
+<div class="dot" style="width:18px;height:18px;bottom:100px;left:190px"></div>
+<div class="dot" style="width:34px;height:34px;bottom:60px;right:-8px"></div>
+<div class="dot" style="width:12px;height:12px;bottom:140px;right:40px"></div>
+<p class="tagline">Poco a poco se llega lejos <i class="ti ti-bolt"></i></p>
+</div>
 </aside>
 
 
 
 
 
+
+
+
+
+
+
+
+
 <main class="main">
-<div class="language-selector">
+<div class="page-header"><div class="language-selector">
 <button class="lang-track-btn" data-track="it">🇮🇹 Italiano</button>
-<button class="lang-track-btn" data-track="en">🇬🇧 Inglés</button>
-</div>
+<button class="lang-track-btn" data-track="en">🇬🇧 English</button>
+</div></div>
+<div class="deco-wrap hero-deco">
+<div class="blob blob-1"></div>
+<div class="blob blob-2"></div>
 <section class="hero">
 <img src="profile.jpg" alt="Foto de Jose Nogues" class="profile-image">
 <div class="hero-text">
-<h1>Hola, soy Jose Nogues</h1>
-<h2>Profesor de español para italianos e ingleses</h2>
-<p class="hero-bio hero-bio-it" style="display:none">Benvenuto nel mio spazio per imparare lo spagnolo. Qui troverai risorse, spiegazioni ed esempi per migliorare la tua grammatica, il tuo vocabolario e la comunicazione in situazioni reali.</p>
-<p class="hero-bio hero-bio-en" style="display:none">Welcome to my space for learning Spanish. Here you'll find resources, explanations and examples to improve your grammar, vocabulary and communication in real-life situations.</p>
-<p class="hero-bio-translation" style="display:none">Bienvenido a mi espacio para aprender español. Aquí encontrarás recursos, explicaciones y ejemplos para mejorar tu gramática, vocabulario y comunicación en situaciones reales.</p>
-<p class="hero-bio hero-bio-es">Bienvenido a mi espacio para aprender español. Aquí encontrarás recursos, explicaciones y ejemplos para mejorar tu gramática, vocabulario y comunicación en situaciones reales.</p>
+<h1>Hola, soy Jose</h1>
+<h2><span class="i18n" data-es="Profesor de español, con recursos especializados para alumnos que hablen italiano o inglés." data-it="Insegnante di spagnolo, con risorse specializzate per studenti che parlano italiano o inglese." data-en="Spanish teacher, with specialized resources for students who speak Italian or English.">Profesor de español, con recursos especializados para alumnos que hablen italiano o inglés.</span></h2>
+<p class="hero-bio hero-bio-it" style="display:none">Questo è il tuo spazio per praticare e consolidare quello che impari, al tuo ritmo. Qui troverai risorse, spiegazioni ed esercizi per rinforzare la tua grammatica, il tuo vocabolario e la comunicazione — e nelle lezioni su Preply, sfruttiamo il tempo per parlare, risolvere dubbi e approfondire ciò che più ti interessa.</p>
+<p class="hero-bio hero-bio-en" style="display:none">This is your space to practice and reinforce what you learn, at your own pace. Here you'll find resources, explanations, and exercises to strengthen your grammar, vocabulary, and communication — and in your Preply lessons, we make the most of the time to talk, clear up doubts, and dive deeper into whatever matters most to you.</p>
+<p class="hero-bio-translation" style="display:none">Este es tu espacio para practicar y consolidar lo aprendido, a tu ritmo. Aquí encontrarás recursos, explicaciones y ejercicios para reforzar tu gramática, vocabulario y comunicación — y en tus clases de Preply, aprovechamos el tiempo para hablar, resolver dudas y profundizar en lo que más te interese.</p>
+<p class="hero-bio hero-bio-es">Este es tu espacio para practicar y consolidar lo aprendido, a tu ritmo. Aquí encontrarás recursos, explicaciones y ejercicios para reforzar tu gramática, vocabulario y comunicación — y en tus clases de Preply, aprovechamos el tiempo para hablar, resolver dudas y profundizar en lo que más te interese.</p>
 <div class="buttons">
-<a href="https://preply.in/JOSE7IT3614462510?ts=17846445" target="_blank" class="button button-preply">🎓 Mi perfil de Preply</a>
-<a href="PEGA_AQUI_TU_LINK_DE_CALENDLY_O_GOOGLE_CALENDAR" target="_blank" class="button button-secondary">📅 Mira mi disponibilidad</a>
+<a href="https://preply.in/JOSE7IT3614462510?ts=17846445" target="_blank" class="button button-preply"><i class="ti ti-school"></i> Mi perfil de Preply</a>
+<a href="PEGA_AQUI_TU_LINK_DE_CALENDLY_O_GOOGLE_CALENDAR" target="_blank" class="button button-secondary"><i class="ti ti-calendar"></i> Mira mi disponibilidad</a>
 </div>
 </div>
 </section>
+</div>
 
 <section class="stats-bar">
-<div class="stat-card"><div class="stat-number">5.0 ⭐</div><div class="stat-label">Valoración en Preply</div></div>
-<div class="stat-card"><div class="stat-number">+1</div><div class="stat-label">Año enseñando español</div></div>
-<div class="stat-card"><div class="stat-number">2</div><div class="stat-label">Idiomas de apoyo (🇮🇹 🇬🇧)</div></div>
+<div class="stat-card"><div class="stat-number">5.0 ⭐</div><div class="stat-label"><span class="i18n" data-es="Valoración en Preply" data-it="Valutazione su Preply" data-en="Rating on Preply">Valoración en Preply</span></div></div>
+<div class="stat-card"><div class="stat-number">+1</div><div class="stat-label"><span class="i18n" data-es="Año enseñando español" data-it="Anno di insegnamento" data-en="Year teaching Spanish">Año enseñando español</span></div></div>
+<div class="stat-card"><div class="stat-number">2</div><div class="stat-label"><span class="i18n" data-es="Idiomas de apoyo (🇮🇹 🇬🇧)" data-it="Lingue di supporto (🇮🇹 🇬🇧)" data-en="Support languages (🇮🇹 🇬🇧)">Idiomas de apoyo (🇮🇹 🇬🇧)</span></div></div>
 </section>
 
-<h2 class="section-title">Aprende español</h2>
+<h2 class="section-title"><span class="i18n" data-es="Aprende español" data-it="Impara lo spagnolo" data-en="Learn Spanish">Aprende español</span></h2>
 <section class="cards">
-<a class="card-link track-link" href="#" data-base="tiempos-verbales"><div class="card"><div class="card-icon">🔤</div><h3>Verbos</h3><p>Aprende a utilizar los verbos españoles y domina los tiempos verbales más importantes.</p></div></a>
-<a class="card-link track-link" href="#" data-base="articulos"><div class="card"><div class="card-icon">📚</div><h3>Gramática</h3><p>Explicaciones sencillas de las reglas gramaticales del español.</p></div></a>
-<a class="card-link track-link" href="#" data-base="vida-cotidiana"><div class="card"><div class="card-icon">🗣️</div><h3>Vocabulario</h3><p>Aprende palabras y expresiones útiles para situaciones de la vida real.</p></div></a>
-<a class="card-link" href="espanol-para-italianos.html"><div class="card"><div class="card-icon">🇮🇹</div><h3>Español para italianos</h3><p>Descubre las diferencias entre italiano y español y evita los falsos amigos.</p></div></a>
-<a class="card-link" href="spanish-for-english-speakers.html"><div class="card"><div class="card-icon">🇬🇧</div><h3>Spanish for English speakers</h3><p>Improve your Spanish with explanations and comparisons designed for English speakers.</p></div></a>
-<a class="card-link track-link" href="#" data-base="expresiones-comunes"><div class="card"><div class="card-icon">💬</div><h3>Expresiones</h3><p>Aprende expresiones, frases hechas y español utilizado en conversaciones reales.</p></div></a>
+<a class="card-link track-link" href="#" data-base="tiempos-verbales"><div class="card"><div class="card-icon"><i class="ti ti-abc"></i></div><h3><span class="i18n" data-es="Verbos" data-it="Verbi" data-en="Verbs">Verbos</span></h3><p><span class="i18n" data-es="Aprende a utilizar los verbos españoles y domina los tiempos verbales más importantes." data-it="Impara a usare i verbi spagnoli e padroneggia i tempi verbali più importanti." data-en="Learn to use Spanish verbs and master the most important tenses.">Aprende a utilizar los verbos españoles y domina los tiempos verbales más importantes.</span></p></div></a>
+<a class="card-link track-link" href="#" data-base="articulos"><div class="card"><div class="card-icon"><i class="ti ti-books"></i></div><h3><span class="i18n" data-es="Gramática" data-it="Grammatica" data-en="Grammar">Gramática</span></h3><p><span class="i18n" data-es="Explicaciones sencillas de las reglas gramaticales del español." data-it="Spiegazioni semplici delle regole grammaticali dello spagnolo." data-en="Simple explanations of Spanish grammar rules.">Explicaciones sencillas de las reglas gramaticales del español.</span></p></div></a>
+<a class="card-link track-link" href="#" data-base="vida-cotidiana"><div class="card"><div class="card-icon"><i class="ti ti-language"></i></div><h3><span class="i18n" data-es="Vocabulario" data-it="Vocabolario" data-en="Vocabulary">Vocabulario</span></h3><p><span class="i18n" data-es="Aprende palabras y expresiones útiles para situaciones de la vida real." data-it="Impara parole ed espressioni utili per situazioni di vita reale." data-en="Learn useful words and expressions for real-life situations.">Aprende palabras y expresiones útiles para situaciones de la vida real.</span></p></div></a>
+<a class="card-link track-only" data-track-show="it" href="espanol-para-italianos.html"><div class="card"><div class="card-icon"><i class="ti ti-alert-triangle"></i></div><h3>Attenzione a questi</h3><p><span class="i18n" data-es="Los puntos donde los estudiantes italianos siempre se confunden." data-it="I punti dove gli studenti italiani si confondono sempre." data-en="The exact points where Italian speakers always get confused.">Los puntos donde los estudiantes italianos siempre se confunden.</span></p></div></a>
+<a class="card-link track-only" data-track-show="en" href="spanish-for-english-speakers.html"><div class="card"><div class="card-icon"><i class="ti ti-alert-triangle"></i></div><h3>Watch out for this</h3><p><span class="i18n" data-es="Los puntos exactos donde los angloparlantes siempre se confunden." data-it="I punti esatti dove gli anglofoni si confondono sempre." data-en="The exact points where English speakers always get tripped up.">Los puntos exactos donde los angloparlantes siempre se confunden.</span></p></div></a>
+<a class="card-link track-link" href="#" data-base="expresiones-comunes"><div class="card"><div class="card-icon"><i class="ti ti-message-2"></i></div><h3><span class="i18n" data-es="Expresiones" data-it="Espressioni" data-en="Expressions">Expresiones</span></h3><p><span class="i18n" data-es="Aprende expresiones, frases hechas y español utilizado en conversaciones reales." data-it="Impara espressioni, modi di dire e spagnolo usato in conversazioni reali." data-en="Learn expressions, set phrases, and Spanish used in real conversations.">Aprende expresiones, frases hechas y español utilizado en conversaciones reales.</span></p></div></a>
+<a class="card-link track-link" href="#" data-base="ejercicios"><div class="card"><div class="card-icon"><i class="ti ti-target"></i></div><h3><span class="i18n" data-es="Ejercicios" data-it="Esercizi" data-en="Exercises">Ejercicios</span></h3><p><span class="i18n" data-es="Practica todo lo que has aprendido, filtrando por tema o por nivel." data-it="Metti in pratica tutto ciò che hai imparato, filtrando per argomento o livello." data-en="Practice everything you've learned, filtering by topic or level.">Practica todo lo que has aprendido, filtrando por tema o por nivel.</span></p></div></a>
 </section>
 
 
+<div class="deco-wrap">
+<div class="blob blob-1"></div>
+<div class="blob blob-2"></div>
 <section class="reviews-section">
-<h2 class="section-title">Lo que dicen mis alumnos</h2>
+<h2 class="section-title"><span class="i18n" data-es="Lo que dicen mis alumnos" data-it="Cosa dicono i miei studenti" data-en="What my students say">Lo que dicen mis alumnos</span></h2>
 <div class="reviews-grid">
 <div class="review-card">
 <div class="review-head">
@@ -115,7 +160,7 @@
 </div>
 <div class="review-stars">★★★★★</div>
 <p class="review-text">È stata la mia prima lezione con Jose e sono molto soddisfatta. Jose spiega molto chiaramente ed è aperto a ogni domanda.</p>
-<p class="review-source">Reseña de Preply</p>
+<p class="review-source"><span class="i18n" data-es="Reseña de Preply" data-it="Recensione di Preply" data-en="Preply review">Reseña de Preply</span></p>
 </div>
 <div class="review-card">
 <div class="review-head">
@@ -124,23 +169,14 @@
 </div>
 <div class="review-stars">★★★★★</div>
 <p class="review-text">Jose sa come adattarsi al tuo livello e prepara lezioni su misura.</p>
-<p class="review-source">Reseña de Preply</p>
+<p class="review-source"><span class="i18n" data-es="Reseña de Preply" data-it="Recensione di Preply" data-en="Preply review">Reseña de Preply</span></p>
 </div>
 </div>
 </section>
-
-<section class="resources">
-<h2 class="section-title">Recursos recomendados</h2>
-<div class="resource-list">
-<div class="resource">📖 <a href="#">Guía de los verbos españoles</a></div>
-<div class="resource">🇮🇹 <a href="#">Falsos amigos italiano-español</a></div>
-<div class="resource">🗣️ <a href="#">50 expresiones españolas</a></div>
-<div class="resource">✈️ <a href="#">Español para viajar</a></div>
 </div>
-</section>
 
 </main>
-<footer>© 2026 Jose Nogues · Profesor de español</footer>
+<footer>© 2026 Jose N. · Profesor de español · <a href="privacidad.html">Privacidad</a></footer>
 <script src="script.js"></script>
 </body>
 </html>

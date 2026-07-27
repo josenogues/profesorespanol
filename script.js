@@ -44,7 +44,7 @@ a.closest(".menu-item").classList.add("active","current-section");
   const KEY = 'jn_track'; // 'it' o 'en'
 
   function getTrack(){ return localStorage.getItem(KEY); }
-  function setTrack(t){ localStorage.setItem(KEY, t); renderLangButtons(); updateHeroBio(); }
+  function setTrack(t){ localStorage.setItem(KEY, t); renderLangButtons(); updateHeroBio(); applyI18n(); }
 
   function updateHeroBio(){
     const es = document.querySelector('.hero-bio-es');
@@ -57,6 +57,16 @@ a.closest(".menu-item").classList.add("active","current-section");
     if(it) it.style.display = t === 'it' ? '' : 'none';
     if(en) en.style.display = t === 'en' ? '' : 'none';
     if(translation) translation.style.display = t ? '' : 'none';
+  }
+
+  // Motor genérico: cualquier elemento con class="i18n" y data-es/data-it/data-en
+  // cambia de texto según el idioma elegido (si no hay idioma elegido, se queda en español).
+  function applyI18n(){
+    const t = getTrack();
+    document.querySelectorAll('.i18n').forEach(el=>{
+      const val = t === 'it' ? el.dataset.it : t === 'en' ? el.dataset.en : el.dataset.es;
+      if(val) el.textContent = val;
+    });
   }
 
   function goTo(base, track){
@@ -93,6 +103,9 @@ a.closest(".menu-item").classList.add("active","current-section");
     document.querySelectorAll('.lang-track-btn').forEach(btn=>{
       btn.classList.toggle('active', btn.dataset.track === t);
     });
+    document.querySelectorAll('.track-only').forEach(el=>{
+      el.style.display = (!t || el.dataset.trackShow === t) ? '' : 'none';
+    });
   }
 
   document.addEventListener('click', function(e){
@@ -120,6 +133,7 @@ a.closest(".menu-item").classList.add("active","current-section");
 
   renderLangButtons();
   updateHeroBio();
+  applyI18n();
 })();
 
 
@@ -359,11 +373,45 @@ a.closest(".menu-item").classList.add("active","current-section");
     const kFill = btn.dataset.kfill, kChoice = btn.dataset.kchoice, kTrans = btn.dataset.ktrans;
     panel.innerHTML = generateLevel(level, track, kFill, kChoice, kTrans);
   });
+
+  // Variante para el hub de ejercicios: devuelve DATOS (no HTML), para que el motor del hub los renderice y mezcle con otros temas.
+  const LEVEL_MAP = { A1:'basico', A2:'intermedio', B1:'avanzado' };
+  window.generateRegularVerbItems = function(hubLevel, lang){
+    const levelKeys = hubLevel ? [LEVEL_MAP[hubLevel]] : ['basico','intermedio','avanzado'];
+    const items = [];
+    levelKeys.forEach(levelKey => {
+      const cefr = Object.keys(LEVEL_MAP).find(k => LEVEL_MAP[k] === levelKey);
+      const tenses = LEVEL_TENSES[levelKey];
+      const used = new Set();
+      for(let i=0;i<2;i++){
+        let verb, tense, p, key;
+        do { verb = VERBS[Math.floor(Math.random()*VERBS.length)]; tense = tenses[Math.floor(Math.random()*tenses.length)]; p = Math.floor(Math.random()*6); key = verb+tense+p; } while(used.has(key));
+        used.add(key);
+        items.push({ type:'fill', level:cefr, exid:'reg', answer: conjugate(verb, tense, p),
+          prompt: `${SUBJECTS[p]} ___ <em>(${verb} · ${TENSES[tense].label})</em>` });
+      }
+      for(let i=0;i<2;i++){
+        let verb, tense, p, key;
+        do { verb = VERBS[Math.floor(Math.random()*VERBS.length)]; tense = tenses[Math.floor(Math.random()*tenses.length)]; p = Math.floor(Math.random()*6); key = verb+tense+p; } while(used.has(key));
+        used.add(key);
+        const correct = conjugate(verb, tense, p);
+        const wrongPersons = shuffle([0,1,2,3,4,5].filter(x=>x!==p)).slice(0,2);
+        const options = shuffle([correct, conjugate(verb,tense,wrongPersons[0]), conjugate(verb,tense,wrongPersons[1])]);
+        items.push({ type:'choice', level:cefr, exid:'reg', answer: correct, options,
+          prompt: `¿Cuál es la forma de <b>${verb}</b> (${TENSES[tense].label}) para <b>${SUBJECTS[p]}</b>?` });
+      }
+      const bank = TRANSLATE_BANK[lang][levelKey];
+      sample(bank, Math.min(2, bank.length)).forEach(([sentence, answer]) => {
+        items.push({ type:'translate', level:cefr, exid:'reg', answer, prompt: `${lang==='it'?'Traduci':'Translate'}: <em>${sentence}</em>` });
+      });
+    });
+    return items;
+  };
 })();
 
 // --- Puerta de acceso para alumnos (comprueba el email contra un Google Sheet publicado como CSV) ---
 (function(){
-  const ACCESS_GATE_ENABLED = true; // ponlo en true cuando publiques la web de verdad
+  const ACCESS_GATE_ENABLED = false; // ponlo en true cuando publiques la web de verdad
   const ACCESS_KEY = 'jn_access_granted';
 
   if(!ACCESS_GATE_ENABLED) return;
@@ -425,4 +473,107 @@ a.closest(".menu-item").classList.add("active","current-section");
 
   btn.addEventListener('click', attempt);
   input.addEventListener('keydown', e => { if(e.key === 'Enter') attempt(); });
+})();
+
+// --- Hub de ejercicios: filtra por tema o por nivel, y regenera ---
+(function(){
+  if(!window.EXERCISE_HUB_CONFIG) return; // esta página no es el hub de ejercicios
+
+  const cfg = window.EXERCISE_HUB_CONFIG; // { topics: {key:{label, items:[...] , generator?}}, labels:{...} }
+  const container = document.getElementById('ex-hub-container');
+  const topicBtns = document.querySelectorAll('.ex-topic-btn');
+  const levelBtns = document.querySelectorAll('.ex-level-btn');
+  const generateBtn = document.getElementById('ex-hub-generate');
+  let activeTopics = new Set(); // empty = todas
+  let activeLevel = null; // 'A1'|'A2'|'B1'|null
+
+  function kickerFor(type){
+    return type === 'fill' ? cfg.labels.kickerFill : type === 'choice' ? cfg.labels.kickerChoice : cfg.labels.kickerTranslate;
+  }
+
+  function renderItemHTML(item){
+    const kicker = kickerFor(item.type);
+    if(item.type === 'choice'){
+      const opts = item.options.map(o => `<button class="option-btn" data-value="${o}">${o}</button>`).join('');
+      return `<div class="exercise-block" data-exid="${item.exid}" data-answer="${item.answer}">
+<div class="exercise-kicker"><span>${kicker}</span><span class="exercise-done-badge">${cfg.labels.done}</span></div>
+<p class="exercise-prompt">${item.prompt}</p>
+<div class="exercise-options">${opts}</div>
+<p class="exercise-feedback"></p></div>`;
+    }
+    const placeholder = item.type === 'translate' ? cfg.labels.placeholderTranslate : cfg.labels.placeholderFill;
+    return `<div class="exercise-block" data-exid="${item.exid}" data-answer="${item.answer}">
+<div class="exercise-kicker"><span>${kicker}</span><span class="exercise-done-badge">${cfg.labels.done}</span></div>
+<p class="exercise-prompt">${item.prompt}</p>
+<div class="exercise-row"><input type="text" class="exercise-input" placeholder="${placeholder}"><button class="exercise-check">${cfg.labels.check}</button></div>
+<p class="exercise-feedback"></p></div>`;
+  }
+
+  function uid(){ return Math.random().toString(36).slice(2,9); }
+
+  function collectPool(){
+    let pool = [];
+    const topicKeys = activeTopics.size ? [...activeTopics] : Object.keys(cfg.topics);
+    topicKeys.forEach(key => {
+      const topic = cfg.topics[key];
+      if(!topic) return;
+      if(topic.generator && window.generateRegularVerbItems){
+        pool = pool.concat(window.generateRegularVerbItems(activeLevel, cfg.lang));
+      } else if(topic.items){
+        const filtered = activeLevel ? topic.items.filter(i => i.level === activeLevel) : topic.items;
+        pool = pool.concat(filtered);
+      }
+    });
+    return pool;
+  }
+
+  function sample(arr, n){
+    const copy = [...arr];
+    const out = [];
+    while(out.length < n && copy.length){
+      out.push(copy.splice(Math.floor(Math.random()*copy.length),1)[0]);
+    }
+    return out;
+  }
+
+  function render(){
+    const pool = collectPool();
+    const picked = sample(pool, Math.min(12, pool.length));
+    container.innerHTML = picked.map(item => {
+      const withId = Object.assign({}, item, { exid: (item.exid||'ex') + '-' + uid() });
+      return renderItemHTML(withId);
+    }).join('') || `<p class="subtitle">${cfg.labels.empty}</p>`;
+  }
+
+  topicBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const key = btn.dataset.topic;
+      if(activeTopics.has(key)){ activeTopics.delete(key); btn.classList.remove('active'); }
+      else { activeTopics.add(key); btn.classList.add('active'); }
+      render();
+    });
+  });
+
+  levelBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const lvl = btn.dataset.level;
+      if(activeLevel === lvl){ activeLevel = null; }
+      else { activeLevel = lvl; }
+      levelBtns.forEach(b => b.classList.toggle('active', b.dataset.level === activeLevel));
+      render();
+    });
+  });
+
+  if(generateBtn) generateBtn.addEventListener('click', render);
+
+  // preselecciona un tema si se llega desde el botón "ponte a prueba" de una página de contenido
+  const params = new URLSearchParams(location.search);
+  const tema = params.get('tema');
+  if(tema && cfg.topics[tema]){
+    activeTopics.add(tema);
+    const btn = document.querySelector(`.ex-topic-btn[data-topic="${tema}"]`);
+    if(btn) btn.classList.add('active');
+  }
+
+  render();
 })();
