@@ -10,10 +10,17 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
 <link rel="icon" type="image/png" href="favicon.png">
 <link rel="stylesheet" href="styles.css">
+<script>if(localStorage.getItem('jn_theme')==='dark')document.documentElement.setAttribute('data-theme','dark');</script>
 </head>
 <body>
 <aside class="sidebar">
 <a href="index.html" class="logo-header"><img src="logo.png" alt="Jose Nogues - Clases de español" class="logo-img"></a>
+
+<div class="sidebar-search">
+<i class="ti ti-search"></i>
+<input type="text" id="site-search" placeholder="Buscar..." autocomplete="off">
+<div class="search-results" id="search-results"></div>
+</div>
 
 <div class="menu-title"><span class="i18n" data-es="Aprender" data-it="Imparare" data-en="Learn">Aprender</span></div>
 
@@ -110,6 +117,10 @@
 <button class="lang-track-btn" data-track="es">🇪🇸 Español</button>
 <button class="lang-track-btn" data-track="it">🇮🇹 Italiano</button>
 <button class="lang-track-btn" data-track="en">🇬🇧 English</button>
+<label class="theme-switch" title="Modo oscuro">
+<input type="checkbox" id="theme-toggle">
+<span class="theme-switch-track"><i class="ti ti-sun"></i><i class="ti ti-moon"></i><span class="theme-switch-thumb"></span></span>
+</label>
 </div>
 <div class="breadcrumb"><a href="index.html"><i class="ti ti-home"></i> Inicio</a> / Verbos / Ser y estar</div></div>
 <section class="grammar-section">
@@ -215,6 +226,7 @@
 </section>
 </main>
 <footer>© 2026 Jose N. · Profesor de español · <a href="privacidad.html">Privacidad</a></footer>
+<script src="search-index.js"></script>
 <script src="script.js"></script>
 </body>
 </html>

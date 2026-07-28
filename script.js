@@ -418,7 +418,7 @@ a.closest(".menu-item").classList.add("active","current-section");
 
 // --- Puerta de acceso para alumnos (comprueba el email contra un Google Sheet publicado como CSV) ---
 (function(){
-  const ACCESS_GATE_ENABLED = true; // ponlo en true cuando publiques la web de verdad
+  const ACCESS_GATE_ENABLED = false; // ponlo en true cuando publiques la web de verdad
   const ACCESS_KEY = 'jn_access_granted';
 
   if(!ACCESS_GATE_ENABLED) return;
@@ -600,4 +600,92 @@ a.closest(".menu-item").classList.add("active","current-section");
     'Más vale tarde que nunca',
   ];
   el.textContent = REFRANES[Math.floor(Math.random() * REFRANES.length)];
+})();
+
+// --- Modo oscuro ---
+(function(){
+  const checkbox = document.getElementById('theme-toggle');
+  if(!checkbox) return;
+
+  function apply(theme){
+    if(theme === 'dark'){
+      document.documentElement.setAttribute('data-theme','dark');
+      checkbox.checked = true;
+    } else {
+      document.documentElement.removeAttribute('data-theme');
+      checkbox.checked = false;
+    }
+  }
+
+  apply(localStorage.getItem('jn_theme') === 'dark' ? 'dark' : 'light');
+
+  checkbox.addEventListener('change', function(){
+    const next = checkbox.checked ? 'dark' : 'light';
+    localStorage.setItem('jn_theme', next);
+    apply(next);
+  });
+})();
+
+// --- Buscador del menú lateral (busca en el texto real de cada página) ---
+(function(){
+  const input = document.getElementById('site-search');
+  const results = document.getElementById('search-results');
+  if(!input || !results) return;
+  if(!window.SEARCH_INDEX) return; // esta página no cargó el índice
+
+  function normalize(s){
+    return s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
+  }
+
+  function trackOf(url){
+    const m = url.match(/-(it|en|es)\.html$/);
+    return m ? m[1] : null;
+  }
+
+  function snippetAround(text, normText, q){
+    const i = normText.indexOf(q);
+    if(i === -1) return text.slice(0, 90) + '…';
+    const start = Math.max(0, i - 40);
+    const end = Math.min(text.length, i + q.length + 50);
+    return (start > 0 ? '…' : '') + text.slice(start, end) + (end < text.length ? '…' : '');
+  }
+
+  function render(query){
+    const qRaw = query.trim();
+    const q = normalize(qRaw);
+    if(!q){ results.classList.remove('active'); results.innerHTML = ''; return; }
+
+    const currentTrack = localStorage.getItem('jn_track');
+    let matches = window.SEARCH_INDEX.filter(entry => {
+      const t = trackOf(entry.url);
+      // si la página pertenece a un idioma, solo la mostramos si coincide con el elegido (o si no hay ninguno elegido, mostramos todas)
+      if(t && currentTrack && t !== currentTrack) return false;
+      return normalize(entry.title).includes(q) || normalize(entry.text).includes(q);
+    });
+
+    // prioriza coincidencias en el título
+    matches.sort((a, b) => {
+      const aTitle = normalize(a.title).includes(q) ? 0 : 1;
+      const bTitle = normalize(b.title).includes(q) ? 0 : 1;
+      return aTitle - bTitle;
+    });
+    matches = matches.slice(0, 10);
+
+    if(!matches.length){
+      results.innerHTML = '<div class="search-empty">Sin resultados para "' + qRaw + '"</div>';
+    } else {
+      results.innerHTML = matches.map(entry => {
+        const inTitle = normalize(entry.title).includes(q);
+        const snippet = inTitle ? '' : `<span class="search-snippet">${snippetAround(entry.text, normalize(entry.text), q)}</span>`;
+        return `<a href="${entry.url}"><span class="search-title">${entry.title}</span>${snippet}</a>`;
+      }).join('');
+    }
+    results.classList.add('active');
+  }
+
+  input.addEventListener('input', () => render(input.value));
+  input.addEventListener('focus', () => { if(input.value) render(input.value); });
+  document.addEventListener('click', (e) => {
+    if(!e.target.closest('.sidebar-search')){ results.classList.remove('active'); }
+  });
 })();
