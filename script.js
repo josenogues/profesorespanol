@@ -53,10 +53,11 @@ a.closest(".menu-item").classList.add("active","current-section");
     const translation = document.querySelector('.hero-bio-translation');
     if(!es) return; // esta página no tiene presentación bilingüe
     const t = getTrack();
-    es.style.display = t ? 'none' : '';
+    const showTranslated = t === 'it' || t === 'en';
+    es.style.display = showTranslated ? 'none' : '';
     if(it) it.style.display = t === 'it' ? '' : 'none';
     if(en) en.style.display = t === 'en' ? '' : 'none';
-    if(translation) translation.style.display = t ? '' : 'none';
+    if(translation) translation.style.display = showTranslated ? '' : 'none';
   }
 
   // Motor genérico: cualquier elemento con class="i18n" y data-es/data-it/data-en
@@ -78,9 +79,10 @@ a.closest(".menu-item").classList.add("active","current-section");
     overlay.className = 'track-modal-overlay';
     overlay.innerHTML = `
       <div class="track-modal">
-        <h3>¿Tus clases son en italiano o en inglés?</h3>
+        <h3>¿En qué idioma quieres las explicaciones?</h3>
         <p>Así te muestro las explicaciones de verbos adaptadas a tu idioma. Puedes cambiarlo cuando quieras desde el selector de arriba.</p>
         <div class="track-modal-buttons">
+          <button data-track="es">🇪🇸 Español</button>
           <button data-track="it">🇮🇹 Italiano</button>
           <button data-track="en">🇬🇧 Inglés</button>
         </div>
@@ -105,6 +107,9 @@ a.closest(".menu-item").classList.add("active","current-section");
     });
     document.querySelectorAll('.track-only').forEach(el=>{
       el.style.display = (!t || el.dataset.trackShow === t) ? '' : 'none';
+    });
+    document.querySelectorAll('.hide-on-es').forEach(el=>{
+      el.style.display = (t === 'es') ? 'none' : '';
     });
   }
 
@@ -294,7 +299,7 @@ a.closest(".menu-item").classList.add("active","current-section");
 
   function fillHtml(exid, prompt, answer, kicker){
     return `<div class="exercise-block" data-exid="${exid}" data-answer="${answer}">
-<div class="exercise-kicker"><span>${kicker}</span><span class="exercise-done-badge">✓ Completado</span></div>
+<div class="exercise-kicker"><span>${kicker}</span><span class="exercise-done-badge"><i class="ti ti-check"></i> Completado</span></div>
 <p class="exercise-prompt">${prompt}</p>
 <div class="exercise-row"><input type="text" class="exercise-input" placeholder="Escribe la respuesta"><button class="exercise-check">Comprobar</button></div>
 <p class="exercise-feedback"></p></div>`;
@@ -302,14 +307,14 @@ a.closest(".menu-item").classList.add("active","current-section");
   function choiceHtml(exid, prompt, options, answer, kicker){
     const opts = options.map(o => `<button class="option-btn" data-value="${o}">${o}</button>`).join('');
     return `<div class="exercise-block" data-exid="${exid}" data-answer="${answer}">
-<div class="exercise-kicker"><span>${kicker}</span><span class="exercise-done-badge">✓ Completado</span></div>
+<div class="exercise-kicker"><span>${kicker}</span><span class="exercise-done-badge"><i class="ti ti-check"></i> Completado</span></div>
 <p class="exercise-prompt">${prompt}</p>
 <div class="exercise-options">${opts}</div>
 <p class="exercise-feedback"></p></div>`;
   }
   function translateHtml(exid, promptSentence, answer, kicker, verb){
     return `<div class="exercise-block" data-exid="${exid}" data-answer="${answer}">
-<div class="exercise-kicker"><span>${kicker}</span><span class="exercise-done-badge">✓ Completado</span></div>
+<div class="exercise-kicker"><span>${kicker}</span><span class="exercise-done-badge"><i class="ti ti-check"></i> Completado</span></div>
 <p class="exercise-prompt">Traduce: <em>${promptSentence}</em></p>
 <div class="exercise-row"><input type="text" class="exercise-input" placeholder="Escribe la traducción"><button class="exercise-check">Comprobar</button></div>
 <p class="exercise-feedback"></p></div>`;
@@ -400,10 +405,12 @@ a.closest(".menu-item").classList.add("active","current-section");
         items.push({ type:'choice', level:cefr, exid:'reg', answer: correct, options,
           prompt: `¿Cuál es la forma de <b>${verb}</b> (${TENSES[tense].label}) para <b>${SUBJECTS[p]}</b>?` });
       }
-      const bank = TRANSLATE_BANK[lang][levelKey];
-      sample(bank, Math.min(2, bank.length)).forEach(([sentence, answer]) => {
+      const bank = TRANSLATE_BANK[lang] && TRANSLATE_BANK[lang][levelKey];
+      if(bank){
+        sample(bank, Math.min(2, bank.length)).forEach(([sentence, answer]) => {
         items.push({ type:'translate', level:cefr, exid:'reg', answer, prompt: `${lang==='it'?'Traduci':'Translate'}: <em>${sentence}</em>` });
-      });
+        });
+      }
     });
     return items;
   };
@@ -411,7 +418,7 @@ a.closest(".menu-item").classList.add("active","current-section");
 
 // --- Puerta de acceso para alumnos (comprueba el email contra un Google Sheet publicado como CSV) ---
 (function(){
-  const ACCESS_GATE_ENABLED = false; // ponlo en true cuando publiques la web de verdad
+  const ACCESS_GATE_ENABLED = true; // ponlo en true cuando publiques la web de verdad
   const ACCESS_KEY = 'jn_access_granted';
 
   if(!ACCESS_GATE_ENABLED) return;
@@ -576,4 +583,21 @@ a.closest(".menu-item").classList.add("active","current-section");
   }
 
   render();
+})();
+
+// --- Frase motivadora aleatoria del menú lateral ---
+(function(){
+  const el = document.getElementById('tagline-text');
+  if(!el) return;
+  const REFRANES = [
+    'Poco a poco se llega lejos',
+    'El que la sigue, la consigue',
+    'No hay atajo sin trabajo',
+    'Quien no arriesga, no gana',
+    'Practicando se aprende el oficio',
+    'El saber no ocupa lugar',
+    'A quien madruga, Dios le ayuda',
+    'Más vale tarde que nunca',
+  ];
+  el.textContent = REFRANES[Math.floor(Math.random() * REFRANES.length)];
 })();
