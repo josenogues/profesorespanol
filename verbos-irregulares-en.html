@@ -13,6 +13,7 @@
 <script>if(localStorage.getItem('jn_theme')==='dark')document.documentElement.setAttribute('data-theme','dark');</script>
 </head>
 <body data-category="verbos">
+<button id="sidebar-toggle" class="sidebar-toggle" aria-label="Mostrar/ocultar menú"><i class="ti ti-menu-2"></i></button>
 <aside class="sidebar">
 <a href="index.html" class="logo-header"><img src="logo.png" alt="Aprende español con José" class="logo-img"></a>
 
@@ -27,9 +28,9 @@
 <button class="menu-button"><i class="ti ti-microphone cat-verbos"></i> <span class="i18n" data-es="Verbos" data-it="Verbi" data-en="Verbs">Verbos</span> ▾</button>
 <div class="submenu">
 <a href="#" class="track-link" data-base="tiempos-verbales">Overview</a>
-<a href="#" class="track-link" data-base="indicativo"><span class="i18n" data-es="Indicativo" data-it="Indicativo" data-en="Indicativo">Indicativo</span></a>
+<a href="#" class="track-link" data-base="indicativo"><span class="i18n" data-es="Indicativo" data-it="Indicativo" data-en="Indicative">Indicativo</span></a>
 <a href="#" class="track-link" data-base="subjuntivo"><span class="i18n" data-es="Subjuntivo" data-it="Congiuntivo" data-en="Subjunctive">Subjuntivo</span></a>
-<a href="#" class="track-link" data-base="imperativo"><span class="i18n" data-es="Imperativo" data-it="Imperativo" data-en="Imperativo">Imperativo</span></a>
+<a href="#" class="track-link" data-base="imperativo"><span class="i18n" data-es="Imperativo" data-it="Imperativo" data-en="Imperative">Imperativo</span></a>
 <a href="#" class="track-link" data-base="verbos-regulares"><span class="i18n" data-es="Regulares" data-it="Regolari" data-en="Regular">Regulares</span></a>
 <a href="#" class="track-link" data-base="verbos-irregulares"><span class="i18n" data-es="Irregulares" data-it="Irregolari" data-en="Irregular">Irregulares</span></a>
 <a href="#" class="track-link submenu-sub" data-base="ser-estar"><span class="i18n" data-es="Ser y estar" data-it="Ser y estar" data-en="Ser y estar">Ser y estar</span></a>
@@ -132,6 +133,46 @@
 <thead><tr><th>Verb (meaning)</th><th>Pret. Imperfecto</th><th>Pret. Indefinido</th><th>Presente</th><th>Futuro Simple</th><th>Condicional</th></tr></thead>
 <tbody><tr><td><b>hacer</b><br><span style='color:var(--muted);font-weight:400'>to do / make</span></td><td>hacía, hacías, hacía, hacíamos, hacíais, hacían</td><td>hice, hiciste, hizo, hicimos, hicisteis, hicieron</td><td>hago, haces, hace, hacemos, hacéis, hacen</td><td>haré, harás, hará, haremos, haréis, harán</td><td>haría, harías, haría, haríamos, haríais, harían</td></tr><tr><td><b>poder</b><br><span style='color:var(--muted);font-weight:400'>can / to be able to</span></td><td>podía, podías, podía, podíamos, podíais, podían</td><td>pude, pudiste, pudo, pudimos, pudisteis, pudieron</td><td>puedo, puedes, puede, podemos, podéis, pueden</td><td>podré, podrás, podrá, podremos, podréis, podrán</td><td>podría, podrías, podría, podríamos, podríais, podrían</td></tr><tr><td><b>decir</b><br><span style='color:var(--muted);font-weight:400'>to say</span></td><td>decía, decías, decía, decíamos, decíais, decían</td><td>dije, dijiste, dijo, dijimos, dijisteis, dijeron</td><td>digo, dices, dice, decimos, decís, dicen</td><td>diré, dirás, dirá, diremos, diréis, dirán</td><td>diría, dirías, diría, diríamos, diríais, dirían</td></tr><tr><td><b>volver</b><br><span style='color:var(--muted);font-weight:400'>to come back / to go back</span></td><td>volvía, volvías, volvía, volvíamos, volvíais, volvían</td><td>volví, volviste, volvió, volvimos, volvisteis, volvieron</td><td>vuelvo, vuelves, vuelve, volvemos, volvéis, vuelven</td><td>volveré, volverás, volverá, volveremos, volveréis, volverán</td><td>volvería, volverías, volvería, volveríamos, volveríais, volverían</td></tr></tbody></table></div>
 <div class="tip-box"><b>poder</b> and <b>querer</b> are stem-changing verbs: the stem vowel changes in the present tense (puedo, quiero). This is a common pattern in Spanish — the stress shifts when the stem is stressed!</div>
+<div class="topic-block" style="margin-top:30px;padding-top:30px;border-top:1px solid var(--border)">
+<span class="eyebrow">Subjunctive</span>
+<h3 style="font-size:22px;margin:6px 0 10px">Present subjunctive</h3>
+<div class="mini-cards">
+<div class="mini-card"><h4>⭐ Los esenciales</h4><p><strong>Ser:</strong> sea, seas, sea, seamos, seáis, sean<br><strong>Estar:</strong> esté, estés, esté, estemos, estéis, estén<br><strong>Haber:</strong> haya, hayas, haya, hayamos, hayáis, hayan<br><strong>Ir:</strong> vaya, vayas, vaya, vayamos, vayáis, vayan<br><strong>Tener:</strong> tenga, tengas, tenga, tengamos, tengáis, tengan</p></div>
+<div class="mini-card"><h4>⭐ Cambio de raíz (e→ie, o→ue)</h4><p><strong>Querer:</strong> quiera, quieras, quiera, queramos, queráis, quieran<br><strong>Poder:</strong> pueda, puedas, pueda, podamos, podáis, puedan<br><strong>Dormir:</strong> duerma, duermas, duerma, durmamos, durmáis, duerman<br><strong>Pensar:</strong> piense, pienses, piense, pensemos, penséis, piensen<br><strong>Venir:</strong> venga, vengas, venga, vengamos, vengáis, vengan</p></div>
+<div class="mini-card"><h4>⭐ Otros muy usados</h4><p><strong>Hacer:</strong> haga, hagas, haga, hagamos, hagáis, hagan<br><strong>Decir:</strong> diga, digas, diga, digamos, digáis, digan<br><strong>Saber:</strong> sepa, sepas, sepa, sepamos, sepáis, sepan<br><strong>Salir:</strong> salga, salgas, salga, salgamos, salgáis, salgan<br><strong>Poner:</strong> ponga, pongas, ponga, pongamos, pongáis, pongan<br><strong>Ver:</strong> vea, veas, vea, veamos, veáis, vean</p></div>
+</div>
+</div>
+
+<div class="topic-block" style="margin-top:30px;padding-top:30px;border-top:1px solid var(--border)">
+<span class="eyebrow">Subjunctive</span>
+<h3 style="font-size:22px;margin:6px 0 10px">Imperfect subjunctive</h3>
+<div class="mini-cards">
+<div class="mini-card"><h4>⭐ Los esenciales</h4><p><strong>Ser:</strong> fuera, fueras, fuera, fuéramos, fuerais, fueran<br><strong>Estar:</strong> estuviera, estuvieras, estuviera, estuviéramos, estuvierais, estuvieran<br><strong>Haber:</strong> hubiera, hubieras, hubiera, hubiéramos, hubierais, hubieran<br><strong>Ir:</strong> fuera, fueras, fuera, fuéramos, fuerais, fueran<br><strong>Tener:</strong> tuviera, tuvieras, tuviera, tuviéramos, tuvierais, tuvieran</p></div>
+<div class="mini-card"><h4>⭐ Cambio de raíz (e→ie, o→ue)</h4><p><strong>Querer:</strong> quisiera, quisieras, quisiera, quisiéramos, quisierais, quisieran<br><strong>Poder:</strong> pudiera, pudieras, pudiera, pudiéramos, pudierais, pudieran<br><strong>Dormir:</strong> durmiera, durmieras, durmiera, durmiéramos, durmierais, durmieran<br><strong>Pensar:</strong> pensara, pensaras, pensara, pensáramos, pensarais, pensaran<br><strong>Venir:</strong> viniera, vinieras, viniera, viniéramos, vinierais, vinieran</p></div>
+<div class="mini-card"><h4>⭐ Otros muy usados</h4><p><strong>Hacer:</strong> hiciera, hicieras, hiciera, hiciéramos, hicierais, hicieran<br><strong>Decir:</strong> dijera, dijeras, dijera, dijéramos, dijerais, dijeran<br><strong>Saber:</strong> supiera, supieras, supiera, supiéramos, supierais, supieran<br><strong>Salir:</strong> saliera, salieras, saliera, saliéramos, salierais, salieran<br><strong>Poner:</strong> pusiera, pusieras, pusiera, pusiéramos, pusierais, pusieran<br><strong>Ver:</strong> viera, vieras, viera, viéramos, vierais, vieran</p></div>
+</div>
+</div>
+
+<div class="topic-block" style="margin-top:30px;padding-top:30px;border-top:1px solid var(--border)">
+<span class="eyebrow">Compound tenses</span>
+<h3 style="font-size:22px;margin:6px 0 10px">Compound tenses: haber + participle</h3>
+<p class="subtitle" style="margin-bottom:16px">Every compound tense (he hablado, había hablado, habré hablado, haya hablado...) is formed the same way: conjugate <b>haber</b> in the right tense, then add the verb's <b>participle</b>, which never changes. The only thing you need to memorize are the irregular participles:</p>
+<div class="table-wrap"><table>
+<thead><tr><th>Verb</th><th>Irregular participle</th><th>Example</th></tr></thead>
+<tbody>
+<tr><td>hacer</td><td><b>hecho</b></td><td>He hecho la comida.</td></tr>
+<tr><td>decir</td><td><b>dicho</b></td><td>Había dicho la verdad.</td></tr>
+<tr><td>poner</td><td><b>puesto</b></td><td>Habré puesto la mesa.</td></tr>
+<tr><td>ver</td><td><b>visto</b></td><td>Habría visto la película.</td></tr>
+<tr><td>escribir</td><td><b>escrito</b></td><td>Haya escrito ya.</td></tr>
+<tr><td>abrir</td><td><b>abierto</b></td><td>Hubiera abierto la puerta.</td></tr>
+<tr><td>volver</td><td><b>vuelto</b></td><td>Han vuelto tarde.</td></tr>
+<tr><td>romper</td><td><b>roto</b></td><td>Se ha roto el cristal.</td></tr>
+</tbody></table></div>
+<div class="tip-box"><b>Everything else is regular:</b> ser→sido, estar→estado, tener→tenido, querer→querido, poder→podido, dormir→dormido, pensar→pensado, venir→venido, saber→sabido, salir→salido — they follow the normal pattern (-ado / -ido).</div>
+</div>
+
+
 <div class="ex-cta"><a href="ejercicios-en.html?tema=irregulares" class="button button-primary"><i class="ti ti-target"></i> Test yourself with exercises</a></div>
 </section>
 </main>

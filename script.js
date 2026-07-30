@@ -793,7 +793,13 @@ ${qHTML}`;
   let voice = null;
   function pickVoice(){
     const voices = speechSynthesis.getVoices();
-    voice = voices.find(v => v.lang === 'es-ES') || voices.find(v => v.lang && v.lang.startsWith('es')) || null;
+    const esVoices = voices.filter(v => v.lang && v.lang.startsWith('es'));
+    // prioriza voces de red (Google/Microsoft), que suenan mucho más naturales que las locales del sistema
+    voice = esVoices.find(v => v.lang === 'es-ES' && /Google|Microsoft/i.test(v.name))
+         || esVoices.find(v => /Google|Microsoft/i.test(v.name))
+         || esVoices.find(v => v.lang === 'es-ES')
+         || esVoices[0]
+         || null;
   }
   if('speechSynthesis' in window){
     pickVoice();
@@ -824,6 +830,46 @@ ${qHTML}`;
     const text = btn.dataset.text || btn.closest('[data-speak-text]')?.dataset.speakText;
     if(text) window.jnSpeak(text, btn);
   });
+})();
+
+// --- Botón de mostrar/ocultar menú lateral ---
+(function(){
+  const btn = document.getElementById('sidebar-toggle');
+  if(!btn) return;
+  if(localStorage.getItem('jn_sidebar_collapsed') === 'true'){
+    document.body.classList.add('sidebar-collapsed');
+  }
+  btn.addEventListener('click', () => {
+    document.body.classList.toggle('sidebar-collapsed');
+    localStorage.setItem('jn_sidebar_collapsed', document.body.classList.contains('sidebar-collapsed'));
+  });
+})();
+
+// --- Carrusel de reseñas (portada) ---
+(function(){
+  const track = document.getElementById('reviews-track');
+  if(!track) return;
+  const cards = [...track.children];
+  const dotsWrap = document.getElementById('reviews-dots');
+  const prevBtn = document.querySelector('.reviews-prev');
+  const nextBtn = document.querySelector('.reviews-next');
+  let index = 0;
+
+  dotsWrap.innerHTML = cards.map((_, i) => `<button class="dot-btn" data-i="${i}"></button>`).join('');
+  const dots = [...dotsWrap.children];
+
+  function update(){
+    track.style.transform = `translateX(-${index * 100}%)`;
+    dots.forEach((d, i) => d.classList.toggle('active', i === index));
+  }
+  function go(delta){
+    index = (index + delta + cards.length) % cards.length;
+    update();
+  }
+  prevBtn.addEventListener('click', () => go(-1));
+  nextBtn.addEventListener('click', () => go(1));
+  dots.forEach(d => d.addEventListener('click', () => { index = parseInt(d.dataset.i); update(); }));
+  update();
 })();
 
 // --- Buscador del menú lateral (busca en el texto real de cada página) ---

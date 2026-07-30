@@ -13,6 +13,7 @@
 <script>if(localStorage.getItem('jn_theme')==='dark')document.documentElement.setAttribute('data-theme','dark');</script>
 </head>
 <body data-category="verbos">
+<button id="sidebar-toggle" class="sidebar-toggle" aria-label="Mostrar/ocultar menú"><i class="ti ti-menu-2"></i></button>
 <aside class="sidebar">
 <a href="index.html" class="logo-header"><img src="logo.png" alt="Aprende español con José" class="logo-img"></a>
 
@@ -27,9 +28,9 @@
 <button class="menu-button"><i class="ti ti-microphone cat-verbos"></i> <span class="i18n" data-es="Verbos" data-it="Verbi" data-en="Verbs">Verbos</span> ▾</button>
 <div class="submenu">
 <a href="#" class="track-link" data-base="tiempos-verbales">Overview</a>
-<a href="#" class="track-link" data-base="indicativo"><span class="i18n" data-es="Indicativo" data-it="Indicativo" data-en="Indicativo">Indicativo</span></a>
+<a href="#" class="track-link" data-base="indicativo"><span class="i18n" data-es="Indicativo" data-it="Indicativo" data-en="Indicative">Indicativo</span></a>
 <a href="#" class="track-link" data-base="subjuntivo"><span class="i18n" data-es="Subjuntivo" data-it="Congiuntivo" data-en="Subjunctive">Subjuntivo</span></a>
-<a href="#" class="track-link" data-base="imperativo"><span class="i18n" data-es="Imperativo" data-it="Imperativo" data-en="Imperativo">Imperativo</span></a>
+<a href="#" class="track-link" data-base="imperativo"><span class="i18n" data-es="Imperativo" data-it="Imperativo" data-en="Imperative">Imperativo</span></a>
 <a href="#" class="track-link" data-base="verbos-regulares"><span class="i18n" data-es="Regulares" data-it="Regolari" data-en="Regular">Regulares</span></a>
 <a href="#" class="track-link" data-base="verbos-irregulares"><span class="i18n" data-es="Irregulares" data-it="Irregolari" data-en="Irregular">Irregulares</span></a>
 <a href="#" class="track-link submenu-sub" data-base="ser-estar"><span class="i18n" data-es="Ser y estar" data-it="Ser y estar" data-en="Ser y estar">Ser y estar</span></a>
@@ -119,16 +120,16 @@
 
 <h3 style="margin-top:30px">Los tres modos</h3>
 <div class="mini-cards">
-<div class="mini-card"><h4>Indicativo</h4><p>Hechos reales, seguros o probables. El modo más usado en la conversación diaria.</p><div class="ex-cta" style="margin-top:10px"><a href="#" class="button button-secondary track-link" data-base="indicativo">Ver →</a></div></div>
-<div class="mini-card"><h4>Subjuntivo</h4><p>Dudas, deseos, hipótesis, situaciones inciertas. Fundamental para dar matices.</p><div class="ex-cta" style="margin-top:10px"><a href="#" class="button button-secondary track-link" data-base="subjuntivo">Ver →</a></div></div>
-<div class="mini-card"><h4>Imperativo</h4><p>Órdenes, instrucciones y peticiones directas.</p><div class="ex-cta" style="margin-top:10px"><a href="#" class="button button-secondary track-link" data-base="imperativo">Ver →</a></div></div>
+<div class="mini-card" style="border-top:3px solid #3A6FC9"><h4><i class="ti ti-check" style="color:#3A6FC9;margin-right:6px"></i>Indicativo</h4><p>Hechos reales, seguros o probables. El modo más usado en la conversación diaria.</p><div class="ex-cta" style="margin-top:10px"><a href="#" class="button button-secondary track-link" data-base="indicativo">Ver →</a></div></div>
+<div class="mini-card" style="border-top:3px solid #7A6FD1"><h4><i class="ti ti-help" style="color:#7A6FD1;margin-right:6px"></i>Subjuntivo</h4><p>Dudas, deseos, hipótesis, situaciones inciertas. Fundamental para dar matices.</p><div class="ex-cta" style="margin-top:10px"><a href="#" class="button button-secondary track-link" data-base="subjuntivo">Ver →</a></div></div>
+<div class="mini-card" style="border-top:3px solid #D6488F"><h4><i class="ti ti-megaphone" style="color:#D6488F;margin-right:6px"></i>Imperativo</h4><p>Órdenes, instrucciones y peticiones directas.</p><div class="ex-cta" style="margin-top:10px"><a href="#" class="button button-secondary track-link" data-base="imperativo">Ver →</a></div></div>
 </div>
 
 <h3 style="margin-top:30px">Formas no personales y grupos de verbos</h3>
 <div class="mini-cards">
-<div class="mini-card"><h4>Formas impersonales</h4><p>Infinitivo, gerundio, participio — no indican persona ni número.</p><div class="ex-cta" style="margin-top:10px"><a href="#" class="button button-secondary track-link" data-base="formas-impersonales">Ver →</a></div></div>
-<div class="mini-card"><h4>Verbos regulares</h4><p>Siguen un patrón fijo según su terminación (-AR, -ER, -IR).</p><div class="ex-cta" style="margin-top:10px"><a href="#" class="button button-secondary track-link" data-base="verbos-regulares">Ver →</a></div></div>
-<div class="mini-card"><h4>Verbos irregulares</h4><p>No siguen el patrón — incluye ser/estar y haber/tener, los más usados de todos.</p><div class="ex-cta" style="margin-top:10px"><a href="#" class="button button-secondary track-link" data-base="verbos-irregulares">Ver →</a></div></div>
+<div class="mini-card"><h4><i class="ti ti-forms" style="color:#5B9A3B;margin-right:6px"></i>Formas impersonales</h4><p>Infinitivo, gerundio, participio — no indican persona ni número.</p><div class="ex-cta" style="margin-top:10px"><a href="#" class="button button-secondary track-link" data-base="formas-impersonales">Ver →</a></div></div>
+<div class="mini-card"><h4><i class="ti ti-list-check" style="color:#5B9A3B;margin-right:6px"></i>Verbos regulares</h4><p>Siguen un patrón fijo según su terminación (-AR, -ER, -IR).</p><div class="ex-cta" style="margin-top:10px"><a href="#" class="button button-secondary track-link" data-base="verbos-regulares">Ver →</a></div></div>
+<div class="mini-card"><h4><i class="ti ti-alert-triangle" style="color:#D6488F;margin-right:6px"></i>Verbos irregulares</h4><p>No siguen el patrón — incluye ser/estar y haber/tener, los más usados de todos.</p><div class="ex-cta" style="margin-top:10px"><a href="#" class="button button-secondary track-link" data-base="verbos-irregulares">Ver →</a></div></div>
 </div>
 </section>
 </main>

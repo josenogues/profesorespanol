@@ -13,6 +13,7 @@
 <script>if(localStorage.getItem('jn_theme')==='dark')document.documentElement.setAttribute('data-theme','dark');</script>
 </head>
 <body data-category="expresiones">
+<button id="sidebar-toggle" class="sidebar-toggle" aria-label="Mostrar/ocultar menú"><i class="ti ti-menu-2"></i></button>
 <aside class="sidebar">
 <a href="index.html" class="logo-header"><img src="logo.png" alt="Aprende español con José" class="logo-img"></a>
 
@@ -27,9 +28,9 @@
 <button class="menu-button"><i class="ti ti-microphone cat-verbos"></i> <span class="i18n" data-es="Verbos" data-it="Verbi" data-en="Verbs">Verbos</span> ▾</button>
 <div class="submenu">
 <a href="#" class="track-link" data-base="tiempos-verbales">Overview</a>
-<a href="#" class="track-link" data-base="indicativo"><span class="i18n" data-es="Indicativo" data-it="Indicativo" data-en="Indicativo">Indicativo</span></a>
+<a href="#" class="track-link" data-base="indicativo"><span class="i18n" data-es="Indicativo" data-it="Indicativo" data-en="Indicative">Indicativo</span></a>
 <a href="#" class="track-link" data-base="subjuntivo"><span class="i18n" data-es="Subjuntivo" data-it="Congiuntivo" data-en="Subjunctive">Subjuntivo</span></a>
-<a href="#" class="track-link" data-base="imperativo"><span class="i18n" data-es="Imperativo" data-it="Imperativo" data-en="Imperativo">Imperativo</span></a>
+<a href="#" class="track-link" data-base="imperativo"><span class="i18n" data-es="Imperativo" data-it="Imperativo" data-en="Imperative">Imperativo</span></a>
 <a href="#" class="track-link" data-base="verbos-regulares"><span class="i18n" data-es="Regulares" data-it="Regolari" data-en="Regular">Regulares</span></a>
 <a href="#" class="track-link" data-base="verbos-irregulares"><span class="i18n" data-es="Irregulares" data-it="Irregolari" data-en="Irregular">Irregulares</span></a>
 <a href="#" class="track-link submenu-sub" data-base="ser-estar"><span class="i18n" data-es="Ser y estar" data-it="Ser y estar" data-en="Ser y estar">Ser y estar</span></a>
@@ -124,16 +125,16 @@
 <div class="table-wrap"><table>
 <thead><tr><th>Expression</th><th>Meaning</th></tr></thead>
 <tbody>
-<tr><td>No hay de qué</td><td>Reply to "thank you", like "you're welcome"</td></tr>
-<tr><td>¡Qué va!</td><td>Emphatic "no way!"</td></tr>
-<tr><td>Estar en las nubes</td><td>To be distracted, "have your head in the clouds"</td></tr>
-<tr><td>Dar en el clavo</td><td>To hit the nail on the head</td></tr>
-<tr><td>Tomar el pelo</td><td>To pull someone's leg / tease</td></tr>
-<tr><td>Ponerse las pilas</td><td>To get your act together, step it up</td></tr>
-<tr><td>Costar un ojo de la cara</td><td>To cost an arm and a leg</td></tr>
-<tr><td>No tener pelos en la lengua</td><td>To not mince words, speak bluntly</td></tr>
-<tr><td>Meter la pata</td><td>To put your foot in it, make a blunder</td></tr>
-<tr><td>Estar como una cabra</td><td>To be a bit crazy (affectionately)</td></tr>
+<tr><td>No hay de qué <button class="speak-btn" data-text="No hay de qué"><i class="ti ti-volume"></i></button></td><td>Reply to "thank you", like "you're welcome"</td></tr>
+<tr><td>¡Qué va! <button class="speak-btn" data-text="¡Qué va!"><i class="ti ti-volume"></i></button></td><td>Emphatic "no way!"</td></tr>
+<tr><td>Estar en las nubes <button class="speak-btn" data-text="Estar en las nubes"><i class="ti ti-volume"></i></button></td><td>To be distracted, "have your head in the clouds"</td></tr>
+<tr><td>Dar en el clavo <button class="speak-btn" data-text="Dar en el clavo"><i class="ti ti-volume"></i></button></td><td>To hit the nail on the head</td></tr>
+<tr><td>Tomar el pelo <button class="speak-btn" data-text="Tomar el pelo"><i class="ti ti-volume"></i></button></td><td>To pull someone's leg / tease</td></tr>
+<tr><td>Ponerse las pilas <button class="speak-btn" data-text="Ponerse las pilas"><i class="ti ti-volume"></i></button></td><td>To get your act together, step it up</td></tr>
+<tr><td>Costar un ojo de la cara <button class="speak-btn" data-text="Costar un ojo de la cara"><i class="ti ti-volume"></i></button></td><td>To cost an arm and a leg</td></tr>
+<tr><td>No tener pelos en la lengua <button class="speak-btn" data-text="No tener pelos en la lengua"><i class="ti ti-volume"></i></button></td><td>To not mince words, speak bluntly</td></tr>
+<tr><td>Meter la pata <button class="speak-btn" data-text="Meter la pata"><i class="ti ti-volume"></i></button></td><td>To put your foot in it, make a blunder</td></tr>
+<tr><td>Estar como una cabra <button class="speak-btn" data-text="Estar como una cabra"><i class="ti ti-volume"></i></button></td><td>To be a bit crazy (affectionately)</td></tr>
 </tbody></table></div>
 
 <div class="tip-box"><b>How to practice them:</b> don't translate word-for-word — learn each one as a complete block tied to a situation. Some map neatly onto an English idiom (like "an arm and a leg"), but most don't, so don't assume there's always a direct match.</div>

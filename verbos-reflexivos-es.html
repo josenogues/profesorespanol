@@ -13,6 +13,7 @@
 <script>if(localStorage.getItem('jn_theme')==='dark')document.documentElement.setAttribute('data-theme','dark');</script>
 </head>
 <body data-category="verbos">
+<button id="sidebar-toggle" class="sidebar-toggle" aria-label="Mostrar/ocultar menú"><i class="ti ti-menu-2"></i></button>
 <aside class="sidebar">
 <a href="index.html" class="logo-header"><img src="logo.png" alt="Aprende español con José" class="logo-img"></a>
 
@@ -27,9 +28,9 @@
 <button class="menu-button"><i class="ti ti-microphone cat-verbos"></i> <span class="i18n" data-es="Verbos" data-it="Verbi" data-en="Verbs">Verbos</span> ▾</button>
 <div class="submenu">
 <a href="#" class="track-link" data-base="tiempos-verbales">Overview</a>
-<a href="#" class="track-link" data-base="indicativo"><span class="i18n" data-es="Indicativo" data-it="Indicativo" data-en="Indicativo">Indicativo</span></a>
+<a href="#" class="track-link" data-base="indicativo"><span class="i18n" data-es="Indicativo" data-it="Indicativo" data-en="Indicative">Indicativo</span></a>
 <a href="#" class="track-link" data-base="subjuntivo"><span class="i18n" data-es="Subjuntivo" data-it="Congiuntivo" data-en="Subjunctive">Subjuntivo</span></a>
-<a href="#" class="track-link" data-base="imperativo"><span class="i18n" data-es="Imperativo" data-it="Imperativo" data-en="Imperativo">Imperativo</span></a>
+<a href="#" class="track-link" data-base="imperativo"><span class="i18n" data-es="Imperativo" data-it="Imperativo" data-en="Imperative">Imperativo</span></a>
 <a href="#" class="track-link" data-base="verbos-regulares"><span class="i18n" data-es="Regulares" data-it="Regolari" data-en="Regular">Regulares</span></a>
 <a href="#" class="track-link" data-base="verbos-irregulares"><span class="i18n" data-es="Irregulares" data-it="Irregolari" data-en="Irregular">Irregulares</span></a>
 <a href="#" class="track-link submenu-sub" data-base="ser-estar"><span class="i18n" data-es="Ser y estar" data-it="Ser y estar" data-en="Ser y estar">Ser y estar</span></a>
@@ -116,6 +117,12 @@
 <button class="tab-btn active" data-tab="ref-presente">Presente</button>
 <button class="tab-btn" data-tab="ref-pps">Pretérito perfecto simple</button>
 <button class="tab-btn" data-tab="ref-imp">Pretérito imperfecto</button>
+<button class="tab-btn" data-tab="ref-fut">Futuro simple</button>
+<button class="tab-btn" data-tab="ref-cond">Condicional simple</button>
+<button class="tab-btn" data-tab="ref-pretperf">Pretérito perfecto compuesto</button>
+<button class="tab-btn" data-tab="ref-pluscuam">Pluscuamperfecto</button>
+<button class="tab-btn" data-tab="ref-futcomp">Futuro compuesto</button>
+<button class="tab-btn" data-tab="ref-condcomp">Condicional compuesto</button>
 </div>
 
 <div class="tab-panel active" id="ref-presente">
@@ -156,6 +163,87 @@
 <tr><td>Ellos / Ellas</td><td>se duchaban</td></tr>
 </tbody></table></div>
 </div>
+
+
+<div class="tab-panel" id="ref-fut">
+<div class="table-wrap"><table>
+<thead><tr><th>Pronombre</th><th>Verbo</th></tr></thead>
+<tbody>
+<tr><td>Yo</td><td>me ducharé</td></tr>
+<tr><td>Tú</td><td>te ducharás</td></tr>
+<tr><td>Él / Ella</td><td>se duchará</td></tr>
+<tr><td>Nosotros / -as</td><td>nos ducharemos</td></tr>
+<tr><td>Vosotros / -as</td><td>os ducharéis</td></tr>
+<tr><td>Ellos / Ellas</td><td>se ducharán</td></tr>
+</tbody></table></div>
+</div>
+
+<div class="tab-panel" id="ref-cond">
+<div class="table-wrap"><table>
+<thead><tr><th>Pronombre</th><th>Verbo</th></tr></thead>
+<tbody>
+<tr><td>Yo</td><td>me ducharía</td></tr>
+<tr><td>Tú</td><td>te ducharías</td></tr>
+<tr><td>Él / Ella</td><td>se ducharía</td></tr>
+<tr><td>Nosotros / -as</td><td>nos ducharíamos</td></tr>
+<tr><td>Vosotros / -as</td><td>os ducharíais</td></tr>
+<tr><td>Ellos / Ellas</td><td>se ducharían</td></tr>
+</tbody></table></div>
+</div>
+
+
+<div class="tab-panel" id="ref-pretperf">
+<div class="table-wrap"><table>
+<thead><tr><th>Pronombre</th><th>Verbo</th></tr></thead>
+<tbody>
+<tr><td>Yo</td><td>me he duchado</td></tr>
+<tr><td>Tú</td><td>te has duchado</td></tr>
+<tr><td>Él / Ella</td><td>se ha duchado</td></tr>
+<tr><td>Nosotros / -as</td><td>nos hemos duchado</td></tr>
+<tr><td>Vosotros / -as</td><td>os habéis duchado</td></tr>
+<tr><td>Ellos / Ellas</td><td>se han duchado</td></tr>
+</tbody></table></div>
+</div>
+
+<div class="tab-panel" id="ref-pluscuam">
+<div class="table-wrap"><table>
+<thead><tr><th>Pronombre</th><th>Verbo</th></tr></thead>
+<tbody>
+<tr><td>Yo</td><td>me había duchado</td></tr>
+<tr><td>Tú</td><td>te habías duchado</td></tr>
+<tr><td>Él / Ella</td><td>se había duchado</td></tr>
+<tr><td>Nosotros / -as</td><td>nos habíamos duchado</td></tr>
+<tr><td>Vosotros / -as</td><td>os habíais duchado</td></tr>
+<tr><td>Ellos / Ellas</td><td>se habían duchado</td></tr>
+</tbody></table></div>
+</div>
+
+<div class="tab-panel" id="ref-futcomp">
+<div class="table-wrap"><table>
+<thead><tr><th>Pronombre</th><th>Verbo</th></tr></thead>
+<tbody>
+<tr><td>Yo</td><td>me habré duchado</td></tr>
+<tr><td>Tú</td><td>te habrás duchado</td></tr>
+<tr><td>Él / Ella</td><td>se habrá duchado</td></tr>
+<tr><td>Nosotros / -as</td><td>nos habremos duchado</td></tr>
+<tr><td>Vosotros / -as</td><td>os habréis duchado</td></tr>
+<tr><td>Ellos / Ellas</td><td>se habrán duchado</td></tr>
+</tbody></table></div>
+</div>
+
+<div class="tab-panel" id="ref-condcomp">
+<div class="table-wrap"><table>
+<thead><tr><th>Pronombre</th><th>Verbo</th></tr></thead>
+<tbody>
+<tr><td>Yo</td><td>me habría duchado</td></tr>
+<tr><td>Tú</td><td>te habrías duchado</td></tr>
+<tr><td>Él / Ella</td><td>se habría duchado</td></tr>
+<tr><td>Nosotros / -as</td><td>nos habríamos duchado</td></tr>
+<tr><td>Vosotros / -as</td><td>os habríais duchado</td></tr>
+<tr><td>Ellos / Ellas</td><td>se habrían duchado</td></tr>
+</tbody></table></div>
+</div>
+
 
 <h3>Otros verbos reflexivos frecuentes (presente)</h3>
 <div class="mini-cards">

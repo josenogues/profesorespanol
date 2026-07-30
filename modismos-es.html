@@ -13,6 +13,7 @@
 <script>if(localStorage.getItem('jn_theme')==='dark')document.documentElement.setAttribute('data-theme','dark');</script>
 </head>
 <body data-category="expresiones">
+<button id="sidebar-toggle" class="sidebar-toggle" aria-label="Mostrar/ocultar menú"><i class="ti ti-menu-2"></i></button>
 <aside class="sidebar">
 <a href="index.html" class="logo-header"><img src="logo.png" alt="Aprende español con José" class="logo-img"></a>
 
@@ -27,9 +28,9 @@
 <button class="menu-button"><i class="ti ti-microphone cat-verbos"></i> <span class="i18n" data-es="Verbos" data-it="Verbi" data-en="Verbs">Verbos</span> ▾</button>
 <div class="submenu">
 <a href="#" class="track-link" data-base="tiempos-verbales">Overview</a>
-<a href="#" class="track-link" data-base="indicativo"><span class="i18n" data-es="Indicativo" data-it="Indicativo" data-en="Indicativo">Indicativo</span></a>
+<a href="#" class="track-link" data-base="indicativo"><span class="i18n" data-es="Indicativo" data-it="Indicativo" data-en="Indicative">Indicativo</span></a>
 <a href="#" class="track-link" data-base="subjuntivo"><span class="i18n" data-es="Subjuntivo" data-it="Congiuntivo" data-en="Subjunctive">Subjuntivo</span></a>
-<a href="#" class="track-link" data-base="imperativo"><span class="i18n" data-es="Imperativo" data-it="Imperativo" data-en="Imperativo">Imperativo</span></a>
+<a href="#" class="track-link" data-base="imperativo"><span class="i18n" data-es="Imperativo" data-it="Imperativo" data-en="Imperative">Imperativo</span></a>
 <a href="#" class="track-link" data-base="verbos-regulares"><span class="i18n" data-es="Regulares" data-it="Regolari" data-en="Regular">Regulares</span></a>
 <a href="#" class="track-link" data-base="verbos-irregulares"><span class="i18n" data-es="Irregulares" data-it="Irregolari" data-en="Irregular">Irregulares</span></a>
 <a href="#" class="track-link submenu-sub" data-base="ser-estar"><span class="i18n" data-es="Ser y estar" data-it="Ser y estar" data-en="Ser y estar">Ser y estar</span></a>
@@ -114,14 +115,14 @@
 <div class="table-wrap"><table>
 <thead><tr><th>Modismo</th><th>Significado</th></tr></thead>
 <tbody>
-<tr><td>Más vale tarde que nunca</td><td>Es mejor hacer algo tarde que no hacerlo</td></tr>
-<tr><td>No hay mal que por bien no venga</td><td>Incluso lo malo puede traer algo positivo</td></tr>
-<tr><td>A quien madruga, Dios le ayuda</td><td>El esfuerzo temprano trae recompensa</td></tr>
-<tr><td>En boca cerrada no entran moscas</td><td>A veces es mejor callar</td></tr>
-<tr><td>Dime con quién andas y te diré quién eres</td><td>Las compañías dicen mucho de una persona</td></tr>
-<tr><td>Perro que ladra no muerde</td><td>Quien amenaza mucho, rara vez actúa</td></tr>
-<tr><td>Al mal tiempo, buena cara</td><td>Afrontar lo malo con actitud positiva</td></tr>
-<tr><td>Camarón que se duerme, se lo lleva la corriente</td><td>Quien se descuida, pierde su oportunidad</td></tr>
+<tr><td>Más vale tarde que nunca <button class="speak-btn" data-text="Más vale tarde que nunca"><i class="ti ti-volume"></i></button></td><td>Es mejor hacer algo tarde que no hacerlo</td></tr>
+<tr><td>No hay mal que por bien no venga <button class="speak-btn" data-text="No hay mal que por bien no venga"><i class="ti ti-volume"></i></button></td><td>Incluso lo malo puede traer algo positivo</td></tr>
+<tr><td>A quien madruga, Dios le ayuda <button class="speak-btn" data-text="A quien madruga, Dios le ayuda"><i class="ti ti-volume"></i></button></td><td>El esfuerzo temprano trae recompensa</td></tr>
+<tr><td>En boca cerrada no entran moscas <button class="speak-btn" data-text="En boca cerrada no entran moscas"><i class="ti ti-volume"></i></button></td><td>A veces es mejor callar</td></tr>
+<tr><td>Dime con quién andas y te diré quién eres <button class="speak-btn" data-text="Dime con quién andas y te diré quién eres"><i class="ti ti-volume"></i></button></td><td>Las compañías dicen mucho de una persona</td></tr>
+<tr><td>Perro que ladra no muerde <button class="speak-btn" data-text="Perro que ladra no muerde"><i class="ti ti-volume"></i></button></td><td>Quien amenaza mucho, rara vez actúa</td></tr>
+<tr><td>Al mal tiempo, buena cara <button class="speak-btn" data-text="Al mal tiempo, buena cara"><i class="ti ti-volume"></i></button></td><td>Afrontar lo malo con actitud positiva</td></tr>
+<tr><td>Camarón que se duerme, se lo lleva la corriente <button class="speak-btn" data-text="Camarón que se duerme, se lo lleva la corriente"><i class="ti ti-volume"></i></button></td><td>Quien se descuida, pierde su oportunidad</td></tr>
 </tbody></table></div>
 
 <div class="tip-box"><b>Expresiones vs modismos:</b> las de la página "Expresiones comunes" se usan a diario en cualquier conversación informal; estos modismos son más como refranes — se sacan en un momento concreto, casi como una moraleja.</div>
