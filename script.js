@@ -28,7 +28,7 @@ a.closest(".menu-item").classList.add("active","current-section");
 }
 });
 // las de "Verbos" no tienen href real (son track-link con data-base), así que se comparan por patrón base-it.html / base-en.html
-const m = current.match(/^(.+)-(it|en)\.html$/);
+const m = current.match(/^(.+)-(it|en|es)\.html$/);
 if(m){
 document.querySelectorAll(".submenu a.track-link").forEach(a=>{
 if(a.dataset.base === m[1]){
@@ -128,7 +128,7 @@ a.closest(".menu-item").classList.add("active","current-section");
       const t = langBtn.dataset.track;
       setTrack(t);
       const current = location.pathname.split('/').pop() || '';
-      const m = current.match(/^(.+)-(it|en)\.html$/);
+      const m = current.match(/^(.+)-(it|en|es)\.html$/);
       if(m && m[2] !== t){
         window.location.href = m[1] + '-' + t + '.html';
       }
@@ -189,10 +189,43 @@ a.closest(".menu-item").classList.add("active","current-section");
     showFeedback(block, accepted.includes(val));
   }
 
+  function orderAnswerText(block){
+    return [...block.querySelectorAll('.order-answer-area .order-word')].map(w => w.dataset.word).join(' ');
+  }
+
   document.addEventListener('click', function(e){
     const checkBtn = e.target.closest('.exercise-check');
     if(checkBtn){
       checkTextAnswer(checkBtn.closest('.exercise-block'));
+      return;
+    }
+    const bankWord = e.target.closest('.order-word-bank .order-word');
+    if(bankWord){
+      const area = bankWord.closest('.exercise-block').querySelector('.order-answer-area');
+      area.appendChild(bankWord);
+      return;
+    }
+    const answerWord = e.target.closest('.order-answer-area .order-word');
+    if(answerWord){
+      const bank = answerWord.closest('.exercise-block').querySelector('.order-word-bank');
+      bank.appendChild(answerWord);
+      return;
+    }
+    const resetBtn = e.target.closest('.order-reset');
+    if(resetBtn){
+      const block = resetBtn.closest('.exercise-block');
+      const bank = block.querySelector('.order-word-bank');
+      block.querySelectorAll('.order-answer-area .order-word').forEach(w => bank.appendChild(w));
+      block.querySelector('.exercise-feedback').textContent = '';
+      block.querySelector('.exercise-feedback').className = 'exercise-feedback';
+      return;
+    }
+    const orderCheckBtn = e.target.closest('.order-check');
+    if(orderCheckBtn){
+      const block = orderCheckBtn.closest('.exercise-block');
+      const built = orderAnswerText(block).trim().toLowerCase();
+      const correct = block.dataset.answer.trim().toLowerCase();
+      showFeedback(block, built === correct);
       return;
     }
     const optBtn = e.target.closest('.option-btn');
@@ -482,17 +515,25 @@ a.closest(".menu-item").classList.add("active","current-section");
   input.addEventListener('keydown', e => { if(e.key === 'Enter') attempt(); });
 })();
 
-// --- Hub de ejercicios: filtra por tema, o genera una mezcla aleatoria de todo ---
+// --- Hub de ejercicios: elige materia, luego subtema, o mezcla al azar de todo ---
 (function(){
   if(!window.EXERCISE_HUB_CONFIG) return; // esta página no es el hub de ejercicios
 
-  const cfg = window.EXERCISE_HUB_CONFIG; // { topics: {key:{label, items:[...] , generator?}}, labels:{...} }
+  const cfg = window.EXERCISE_HUB_CONFIG; // { categories:[{key,label,color,topics:[...]}], topics:{key:{items,generator?}}, labels:{...} }
   const container = document.getElementById('ex-hub-container');
-  const topicBtns = document.querySelectorAll('.ex-topic-btn');
+  const catBtns = document.querySelectorAll('.ex-cat-card');
+  const pillsWrap = document.getElementById('ex-topic-pills');
+  const step2 = document.getElementById('ex-step2');
   const generateBtn = document.getElementById('ex-hub-generate');
   const mixBtn = document.getElementById('ex-hub-mix');
-  let activeTopics = new Set(); // empty = todas
-  let mixMode = false; // true = mezcla de 20 al azar, ignorando el filtro de temas
+
+  // mapa tema -> categoría, para poder colorear cada resultado aunque venga de la mezcla al azar
+  const topicToCat = {};
+  (cfg.categories || []).forEach(cat => (cat.topics || []).forEach(t => { topicToCat[t] = cat; }));
+
+  let activeCategory = null; // key de la categoría elegida en el paso 1
+  let activeTopics = new Set(); // subtemas activos dentro de esa categoría (vacío = todos los de la categoría)
+  let mixMode = false;
 
   function kickerFor(type){
     return type === 'fill' ? cfg.labels.kickerFill : type === 'choice' ? cfg.labels.kickerChoice : cfg.labels.kickerTranslate;
@@ -501,20 +542,42 @@ a.closest(".menu-item").classList.add("active","current-section");
   function renderItemHTML(item){
     const kicker = kickerFor(item.type);
     const hint = item.hint ? `<p class="exercise-hint">${item.hint}</p>` : '';
+    const cat = item._cat;
+    const catTag = cat ? `<p class="exercise-cat-tag" style="color:${cat.color}">${cat.label}</p>` : '';
+    const borderStyle = cat ? `style="border-left:4px solid ${cat.color}"` : '';
+    if(item.type === 'order'){
+      const words = shuffle([...item.words]);
+      const bank = words.map(w => `<button class="order-word" data-word="${w}">${w}</button>`).join('');
+      return `<div class="exercise-block" ${borderStyle} data-exid="${item.exid}" data-answer="${item.answer}">
+${catTag}<div class="exercise-kicker"><span>${cfg.labels.kickerOrder}</span><span class="exercise-done-badge">${cfg.labels.done}</span></div>
+<p class="exercise-prompt">${item.prompt}</p>${hint}
+<div class="order-answer-area" data-placeholder="${cfg.labels.orderPlaceholder}"></div>
+<div class="order-word-bank">${bank}</div>
+<div class="exercise-row"><button class="order-check">${cfg.labels.check}</button><button class="order-reset">${cfg.labels.orderReset}</button></div>
+<p class="exercise-feedback"></p></div>`;
+    }
     if(item.type === 'choice'){
       const opts = item.options.map(o => `<button class="option-btn" data-value="${o}">${o}</button>`).join('');
-      return `<div class="exercise-block" data-exid="${item.exid}" data-answer="${item.answer}">
-<div class="exercise-kicker"><span>${kicker}</span><span class="exercise-done-badge">${cfg.labels.done}</span></div>
+      return `<div class="exercise-block" ${borderStyle} data-exid="${item.exid}" data-answer="${item.answer}">
+${catTag}<div class="exercise-kicker"><span>${kicker}</span><span class="exercise-done-badge">${cfg.labels.done}</span></div>
 <p class="exercise-prompt">${item.prompt}</p>${hint}
 <div class="exercise-options">${opts}</div>
 <p class="exercise-feedback"></p></div>`;
     }
     const placeholder = item.type === 'translate' ? cfg.labels.placeholderTranslate : cfg.labels.placeholderFill;
-    return `<div class="exercise-block" data-exid="${item.exid}" data-answer="${item.answer}">
-<div class="exercise-kicker"><span>${kicker}</span><span class="exercise-done-badge">${cfg.labels.done}</span></div>
+    return `<div class="exercise-block" ${borderStyle} data-exid="${item.exid}" data-answer="${item.answer}">
+${catTag}<div class="exercise-kicker"><span>${kicker}</span><span class="exercise-done-badge">${cfg.labels.done}</span></div>
 <p class="exercise-prompt">${item.prompt}</p>${hint}
 <div class="exercise-row"><input type="text" class="exercise-input" placeholder="${placeholder}"><button class="exercise-check">${cfg.labels.check}</button></div>
 <p class="exercise-feedback"></p></div>`;
+  }
+
+  function shuffle(arr){
+    for(let i = arr.length - 1; i > 0; i--){
+      const j = Math.floor(Math.random() * (i + 1));
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
   }
 
   function uid(){ return Math.random().toString(36).slice(2,9); }
@@ -524,11 +587,14 @@ a.closest(".menu-item").classList.add("active","current-section");
     topicKeys.forEach(key => {
       const topic = cfg.topics[key];
       if(!topic) return;
+      const cat = topicToCat[key];
+      let items = [];
       if(topic.generator && window.generateRegularVerbItems){
-        pool = pool.concat(window.generateRegularVerbItems(null, cfg.lang));
+        items = window.generateRegularVerbItems(null, cfg.lang);
       } else if(topic.items){
-        pool = pool.concat(topic.items);
+        items = topic.items;
       }
+      pool = pool.concat(items.map(it => Object.assign({}, it, { _cat: cat })));
     });
     return pool;
   }
@@ -542,60 +608,143 @@ a.closest(".menu-item").classList.add("active","current-section");
     return out;
   }
 
+  let activeReadingLevel = null;
+
+  function pickAndRenderReading(){
+    const pool = (cfg.readings || {})[activeReadingLevel] || [];
+    if(!pool.length){ container.innerHTML = ''; return; }
+    const r = pool[Math.floor(Math.random() * pool.length)];
+    const listenHTML = `<button class="speak-btn speak-btn-all" id="reading-listen-all" data-text="${r.text.replace(/"/g,'&quot;')}"><i class="ti ti-volume"></i> ${cfg.labels.listenAll}</button>`;
+    const qHTML = r.questions.map(q => {
+      const withId = Object.assign({}, q, {
+        exid: 'read-' + uid(),
+        prompt: q[`hint_${cfg.lang}`] || q.prompt,
+        hint: null
+      });
+      return renderItemHTML(withId);
+    }).join('');
+    container.innerHTML = `<div class="reading-card">
+<p class="reading-level-badge">${cfg.labels['level_' + activeReadingLevel] || activeReadingLevel}</p>
+<h3 class="reading-title">${r.title}</h3>
+<p class="reading-paragraph">${r.text}</p>
+${listenHTML}
+</div>
+<p class="ex-step-label" style="margin-top:20px">${cfg.labels.questions}</p>
+${qHTML}`;
+  }
+
+  function renderReadingPicker(){
+    if(!cfg.readings) return;
+    const levels = ['principiante','intermedio','avanzado'];
+    const readingColor = ((cfg.categories || []).find(c => c.key === 'lectura') || {}).color || '#0F6E56';
+    pillsWrap.innerHTML = levels.map(lv =>
+      `<button class="ex-pill" data-level="${lv}">${cfg.labels['level_' + lv] || lv}</button>`
+    ).join('');
+    step2.style.display = '';
+    function markActive(btn){
+      pillsWrap.querySelectorAll('.ex-pill').forEach(b => { b.classList.remove('active'); b.style.background=''; b.style.borderColor=''; });
+      btn.classList.add('active');
+      btn.style.background = readingColor;
+      btn.style.borderColor = readingColor;
+    }
+    pillsWrap.querySelectorAll('.ex-pill').forEach(btn => {
+      btn.addEventListener('click', () => {
+        markActive(btn);
+        activeReadingLevel = btn.dataset.level;
+        pickAndRenderReading();
+      });
+    });
+    // muestra el nivel principiante por defecto
+    activeReadingLevel = levels[0];
+    markActive(pillsWrap.querySelector('.ex-pill'));
+    pickAndRenderReading();
+  }
+
   function render(){
-    const topicKeys = mixMode ? Object.keys(cfg.topics) : (activeTopics.size ? [...activeTopics] : Object.keys(cfg.topics));
+    let topicKeys;
+    if(mixMode){
+      topicKeys = Object.keys(cfg.topics);
+    } else if(activeCategory){
+      const cat = (cfg.categories || []).find(c => c.key === activeCategory);
+      topicKeys = activeTopics.size ? [...activeTopics] : (cat ? cat.topics : []);
+    } else {
+      topicKeys = [];
+    }
     const count = mixMode ? 20 : 12;
     const pool = collectPool(topicKeys);
     const picked = sample(pool, Math.min(count, pool.length));
     container.innerHTML = picked.map(item => {
       const withId = Object.assign({}, item, { exid: (item.exid||'ex') + '-' + uid() });
       return renderItemHTML(withId);
-    }).join('') || `<p class="subtitle">${cfg.labels.empty}</p>`;
+    }).join('') || (topicKeys.length ? '' : `<p class="subtitle">${cfg.labels.empty}</p>`);
   }
 
-  topicBtns.forEach(btn => {
-    btn.addEventListener('click', () => {
-      mixMode = false;
-      if(mixBtn) mixBtn.classList.remove('active');
-      const key = btn.dataset.topic;
-      if(activeTopics.has(key)){ activeTopics.delete(key); btn.classList.remove('active'); }
-      else { activeTopics.add(key); btn.classList.add('active'); }
-      render();
+  function renderPills(){
+    const cat = (cfg.categories || []).find(c => c.key === activeCategory);
+    if(!cat){ step2.style.display = 'none'; return; }
+    pillsWrap.innerHTML = cat.topics.map(key => {
+      const label = cfg.topicLabels[key] || key;
+      const active = activeTopics.has(key);
+      return `<button class="ex-pill${active ? ' active' : ''}" data-topic="${key}" style="${active ? `background:${cat.color};border-color:${cat.color}` : ''}">${label}</button>`;
+    }).join('');
+    step2.style.display = '';
+    pillsWrap.querySelectorAll('.ex-pill').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const key = btn.dataset.topic;
+        if(activeTopics.has(key)) activeTopics.delete(key); else activeTopics.add(key);
+        renderPills();
+        render();
+      });
     });
+  }
+
+  function selectCategory(key){
+    mixMode = false;
+    if(mixBtn) mixBtn.classList.remove('active');
+    activeCategory = key;
+    activeTopics.clear();
+    catBtns.forEach(b => b.classList.toggle('active', b.dataset.cat === key));
+    if(key === 'lectura'){
+      renderReadingPicker();
+    } else {
+      renderPills();
+      render();
+    }
+  }
+
+  catBtns.forEach(btn => {
+    btn.addEventListener('click', () => selectCategory(btn.dataset.cat));
   });
 
   if(mixBtn){
     mixBtn.addEventListener('click', () => {
       mixMode = true;
+      activeCategory = null;
       activeTopics.clear();
-      topicBtns.forEach(b => b.classList.remove('active'));
+      catBtns.forEach(b => b.classList.remove('active'));
+      step2.style.display = 'none';
       mixBtn.classList.add('active');
       render();
     });
   }
 
-  if(generateBtn) generateBtn.addEventListener('click', render);
-
-  document.querySelectorAll('.ex-category-toggle').forEach(btn => {
-    btn.addEventListener('click', () => {
-      btn.closest('.ex-category').classList.toggle('open');
-    });
+  if(generateBtn) generateBtn.addEventListener('click', () => {
+    if(activeCategory === 'lectura' && activeReadingLevel){
+      pickAndRenderReading();
+    } else {
+      render();
+    }
   });
 
   // preselecciona un tema si se llega desde el botón "ponte a prueba" de una página de contenido
   const params = new URLSearchParams(location.search);
   const tema = params.get('tema');
-  if(tema && cfg.topics[tema]){
+  if(tema && cfg.topics[tema] && topicToCat[tema]){
+    selectCategory(topicToCat[tema].key);
     activeTopics.add(tema);
-    const btn = document.querySelector(`.ex-topic-btn[data-topic="${tema}"]`);
-    if(btn){
-      btn.classList.add('active');
-      const cat = btn.closest('.ex-category');
-      if(cat) cat.classList.add('open');
-    }
+    renderPills();
+    render();
   }
-
-  render();
 })();
 
 // --- Frase motivadora aleatoria del menú lateral ---
@@ -636,6 +785,44 @@ a.closest(".menu-item").classList.add("active","current-section");
     const next = checkbox.checked ? 'dark' : 'light';
     localStorage.setItem('jn_theme', next);
     apply(next);
+  });
+})();
+
+// --- Motor de audio (lee texto en español en voz alta, usando el navegador) ---
+(function(){
+  let voice = null;
+  function pickVoice(){
+    const voices = speechSynthesis.getVoices();
+    voice = voices.find(v => v.lang === 'es-ES') || voices.find(v => v.lang && v.lang.startsWith('es')) || null;
+  }
+  if('speechSynthesis' in window){
+    pickVoice();
+    speechSynthesis.onvoiceschanged = pickVoice;
+  }
+
+  window.jnSpeak = function(text, btn){
+    if(!('speechSynthesis' in window)){
+      if(btn) btn.title = 'Tu navegador no soporta la lectura en voz alta';
+      return;
+    }
+    speechSynthesis.cancel(); // corta cualquier lectura anterior antes de empezar una nueva
+    const utter = new SpeechSynthesisUtterance(text);
+    utter.lang = 'es-ES';
+    if(voice) utter.voice = voice;
+    utter.rate = 0.95;
+    if(btn){
+      btn.classList.add('is-speaking');
+      utter.onend = () => btn.classList.remove('is-speaking');
+      utter.onerror = () => btn.classList.remove('is-speaking');
+    }
+    speechSynthesis.speak(utter);
+  };
+
+  document.addEventListener('click', (e) => {
+    const btn = e.target.closest('.speak-btn');
+    if(!btn) return;
+    const text = btn.dataset.text || btn.closest('[data-speak-text]')?.dataset.speakText;
+    if(text) window.jnSpeak(text, btn);
   });
 })();
 
