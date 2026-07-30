@@ -13,6 +13,7 @@
 <script>if(localStorage.getItem('jn_theme')==='dark')document.documentElement.setAttribute('data-theme','dark');</script>
 </head>
 <body data-category="expresiones">
+<button id="sidebar-toggle" class="sidebar-toggle" aria-label="Mostrar/ocultar menú"><i class="ti ti-menu-2"></i></button>
 <aside class="sidebar">
 <a href="index.html" class="logo-header"><img src="logo.png" alt="Aprende español con José" class="logo-img"></a>
 
@@ -27,9 +28,9 @@
 <button class="menu-button"><i class="ti ti-microphone cat-verbos"></i> <span class="i18n" data-es="Verbos" data-it="Verbi" data-en="Verbs">Verbos</span> ▾</button>
 <div class="submenu">
 <a href="#" class="track-link" data-base="tiempos-verbales">Overview</a>
-<a href="#" class="track-link" data-base="indicativo"><span class="i18n" data-es="Indicativo" data-it="Indicativo" data-en="Indicativo">Indicativo</span></a>
+<a href="#" class="track-link" data-base="indicativo"><span class="i18n" data-es="Indicativo" data-it="Indicativo" data-en="Indicative">Indicativo</span></a>
 <a href="#" class="track-link" data-base="subjuntivo"><span class="i18n" data-es="Subjuntivo" data-it="Congiuntivo" data-en="Subjunctive">Subjuntivo</span></a>
-<a href="#" class="track-link" data-base="imperativo"><span class="i18n" data-es="Imperativo" data-it="Imperativo" data-en="Imperativo">Imperativo</span></a>
+<a href="#" class="track-link" data-base="imperativo"><span class="i18n" data-es="Imperativo" data-it="Imperativo" data-en="Imperative">Imperativo</span></a>
 <a href="#" class="track-link" data-base="verbos-regulares"><span class="i18n" data-es="Regulares" data-it="Regolari" data-en="Regular">Regulares</span></a>
 <a href="#" class="track-link" data-base="verbos-irregulares"><span class="i18n" data-es="Irregulares" data-it="Irregolari" data-en="Irregular">Irregulares</span></a>
 <a href="#" class="track-link submenu-sub" data-base="ser-estar"><span class="i18n" data-es="Ser y estar" data-it="Ser y estar" data-en="Ser y estar">Ser y estar</span></a>
@@ -124,16 +125,16 @@
 <div class="table-wrap"><table>
 <thead><tr><th>Espressione</th><th>Significato</th></tr></thead>
 <tbody>
-<tr><td>No hay de qué</td><td>Risposta a "grazie", come "di niente" (o "prego")</td></tr>
-<tr><td>¡Qué va!</td><td>Negazione enfatica, "macché!"</td></tr>
-<tr><td>Estar en las nubes</td><td>Essere distratto, con la testa fra le nuvole (identica in italiano!)</td></tr>
-<tr><td>Dar en el clavo</td><td>Colpire nel segno</td></tr>
-<tr><td>Tomar el pelo</td><td>Prendere in giro (letteralmente "prendere i capelli")</td></tr>
-<tr><td>Ponerse las pilas</td><td>Darsi una mossa, mettercela tutta</td></tr>
-<tr><td>Costar un ojo de la cara</td><td>Costare un occhio della testa (quasi identica in italiano)</td></tr>
-<tr><td>No tener pelos en la lengua</td><td>Non avere peli sulla lingua (identica in italiano!)</td></tr>
-<tr><td>Meter la pata</td><td>Fare una gaffe, prendere una cantonata</td></tr>
-<tr><td>Estar como una cabra</td><td>Essere un po' matto (con affetto)</td></tr>
+<tr><td>No hay de qué <button class="speak-btn" data-text="No hay de qué"><i class="ti ti-volume"></i></button></td><td>Risposta a "grazie", come "di niente" (o "prego")</td></tr>
+<tr><td>¡Qué va! <button class="speak-btn" data-text="¡Qué va!"><i class="ti ti-volume"></i></button></td><td>Negazione enfatica, "macché!"</td></tr>
+<tr><td>Estar en las nubes <button class="speak-btn" data-text="Estar en las nubes"><i class="ti ti-volume"></i></button></td><td>Essere distratto, con la testa fra le nuvole (identica in italiano!)</td></tr>
+<tr><td>Dar en el clavo <button class="speak-btn" data-text="Dar en el clavo"><i class="ti ti-volume"></i></button></td><td>Colpire nel segno</td></tr>
+<tr><td>Tomar el pelo <button class="speak-btn" data-text="Tomar el pelo"><i class="ti ti-volume"></i></button></td><td>Prendere in giro (letteralmente "prendere i capelli")</td></tr>
+<tr><td>Ponerse las pilas <button class="speak-btn" data-text="Ponerse las pilas"><i class="ti ti-volume"></i></button></td><td>Darsi una mossa, mettercela tutta</td></tr>
+<tr><td>Costar un ojo de la cara <button class="speak-btn" data-text="Costar un ojo de la cara"><i class="ti ti-volume"></i></button></td><td>Costare un occhio della testa (quasi identica in italiano)</td></tr>
+<tr><td>No tener pelos en la lengua <button class="speak-btn" data-text="No tener pelos en la lengua"><i class="ti ti-volume"></i></button></td><td>Non avere peli sulla lingua (identica in italiano!)</td></tr>
+<tr><td>Meter la pata <button class="speak-btn" data-text="Meter la pata"><i class="ti ti-volume"></i></button></td><td>Fare una gaffe, prendere una cantonata</td></tr>
+<tr><td>Estar como una cabra <button class="speak-btn" data-text="Estar como una cabra"><i class="ti ti-volume"></i></button></td><td>Essere un po' matto (con affetto)</td></tr>
 </tbody></table></div>
 
 <div class="tip-box"><b>Come esercitarti:</b> non tradurle parola per parola — impara ognuna come un blocco unico, associata a una situazione. Alcune coincidono quasi con l'italiano (come "estar en las nubes"), altre no: non dare per scontato che coincidano sempre.</div>

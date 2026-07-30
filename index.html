@@ -13,6 +13,7 @@
 <script>if(localStorage.getItem('jn_theme')==='dark')document.documentElement.setAttribute('data-theme','dark');</script>
 </head>
 <body>
+<button id="sidebar-toggle" class="sidebar-toggle" aria-label="Mostrar/ocultar menú"><i class="ti ti-menu-2"></i></button>
 <aside class="sidebar">
 <a href="index.html" class="logo-header"><img src="logo.png" alt="Aprende español con José" class="logo-img"></a>
 
@@ -27,9 +28,9 @@
 <button class="menu-button"><i class="ti ti-microphone cat-verbos"></i> <span class="i18n" data-es="Verbos" data-it="Verbi" data-en="Verbs">Verbos</span> ▾</button>
 <div class="submenu">
 <a href="#" class="track-link" data-base="tiempos-verbales">Overview</a>
-<a href="#" class="track-link" data-base="indicativo"><span class="i18n" data-es="Indicativo" data-it="Indicativo" data-en="Indicativo">Indicativo</span></a>
+<a href="#" class="track-link" data-base="indicativo"><span class="i18n" data-es="Indicativo" data-it="Indicativo" data-en="Indicative">Indicativo</span></a>
 <a href="#" class="track-link" data-base="subjuntivo"><span class="i18n" data-es="Subjuntivo" data-it="Congiuntivo" data-en="Subjunctive">Subjuntivo</span></a>
-<a href="#" class="track-link" data-base="imperativo"><span class="i18n" data-es="Imperativo" data-it="Imperativo" data-en="Imperativo">Imperativo</span></a>
+<a href="#" class="track-link" data-base="imperativo"><span class="i18n" data-es="Imperativo" data-it="Imperativo" data-en="Imperative">Imperativo</span></a>
 <a href="#" class="track-link" data-base="verbos-regulares"><span class="i18n" data-es="Regulares" data-it="Regolari" data-en="Regular">Regulares</span></a>
 <a href="#" class="track-link" data-base="verbos-irregulares"><span class="i18n" data-es="Irregulares" data-it="Irregolari" data-en="Irregular">Irregulares</span></a>
 <a href="#" class="track-link submenu-sub" data-base="ser-estar"><span class="i18n" data-es="Ser y estar" data-it="Ser y estar" data-en="Ser y estar">Ser y estar</span></a>
@@ -125,7 +126,7 @@
 <img src="profile.jpg" alt="Foto de Jose Nogues" class="profile-image">
 <div class="hero-text">
 <h1>Hola, soy Jose</h1>
-<h2><span class="i18n" data-es="Profesor de español, con recursos especializados para alumnos que hablen italiano o inglés." data-it="Insegnante di spagnolo, con risorse specializzate per studenti che parlano italiano o inglese." data-en="Spanish teacher, with specialized resources for students who speak Italian or English.">Profesor de español, con recursos especializados para alumnos que hablen italiano o inglés.</span></h2>
+<h2><span class="i18n" data-es="Profesor de español, con recursos especializados para alumnos que hablen italiano o inglés." data-it="Insegnante di spagnolo, con materiale specializzato per studenti che parlano italiano o inglese." data-en="Spanish teacher, with specialized resources for students who speak Italian or English.">Profesor de español, con recursos especializados para alumnos que hablen italiano o inglés.</span></h2>
 <p class="hero-bio hero-bio-it" style="display:none">Questo è il tuo spazio per praticare e consolidare quello che impari, al tuo ritmo. Qui troverai risorse, spiegazioni ed esercizi per rinforzare la tua grammatica, il tuo vocabolario e la comunicazione — e nelle lezioni su Preply, sfruttiamo il tempo per parlare, risolvere dubbi e approfondire ciò che più ti interessa.</p>
 <p class="hero-bio hero-bio-en" style="display:none">This is your space to practice and reinforce what you learn, at your own pace. Here you'll find resources, explanations, and exercises to strengthen your grammar, vocabulary, and communication — and in your Preply lessons, we make the most of the time to talk, clear up doubts, and dive deeper into whatever matters most to you.</p>
 <p class="hero-bio-translation" style="display:none">Este es tu espacio para practicar y consolidar lo aprendido, a tu ritmo. Aquí encontrarás recursos, explicaciones y ejercicios para reforzar tu gramática, vocabulario y comunicación — y en tus clases de Preply, aprovechamos el tiempo para hablar, resolver dudas y profundizar en lo que más te interese.</p>
@@ -151,14 +152,17 @@
 <div class="deco-wrap">
 <section class="reviews-section">
 <h2 class="section-title"><span class="i18n" data-es="Lo que dicen mis alumnos" data-it="Cosa dicono i miei studenti" data-en="What my students say">Lo que dicen mis alumnos</span></h2>
-<div class="reviews-grid">
+<div class="reviews-carousel">
+<button class="reviews-arrow reviews-prev" aria-label="Anterior"><i class="ti ti-chevron-left"></i></button>
+<div class="reviews-track-wrap">
+<div class="reviews-track" id="reviews-track">
 <div class="review-card">
 <div class="review-head">
 <div class="review-avatar">V</div>
 <div><div class="review-name">Violetta</div><div class="review-date">17 julio 2026</div></div>
 </div>
 <div class="review-stars"><span class="star-solid">★★★★★</span></div>
-<p class="review-text">È stata la mia prima lezione con Jose e sono molto soddisfatta. Jose spiega molto chiaramente ed è aperto a ogni domanda.</p>
+<p class="review-text"><span class="i18n" data-es="Fue mi primera clase con Jose y estoy muy satisfecha. Jose explica con mucha claridad y está abierto a cualquier pregunta." data-it="È stata la mia prima lezione con Jose e sono molto soddisfatta. Jose spiega molto chiaramente ed è aperto a ogni domanda." data-en="It was my first lesson with Jose and I am very satisfied. Jose explains very clearly and is open to any question.">È stata la mia prima lezione con Jose e sono molto soddisfatta. Jose spiega molto chiaramente ed è aperto a ogni domanda.</span></p>
 <p class="review-source"><span class="i18n" data-es="Reseña de Preply" data-it="Recensione di Preply" data-en="Preply review">Reseña de Preply</span></p>
 </div>
 <div class="review-card">
@@ -167,7 +171,7 @@
 <div><div class="review-name">Marco</div><div class="review-date">27 junio 2026</div></div>
 </div>
 <div class="review-stars"><span class="star-solid">★★★★★</span></div>
-<p class="review-text">Jose sa come adattarsi al tuo livello e prepara lezioni su misura.</p>
+<p class="review-text"><span class="i18n" data-es="Jose sabe cómo adaptarse a tu nivel y prepara clases a medida." data-it="Jose sa come adattarsi al tuo livello e prepara lezioni su misura." data-en="Jose knows how to adapt to your level and prepares tailor-made lessons.">Jose sa come adattarsi al tuo livello e prepara lezioni su misura.</span></p>
 <p class="review-source"><span class="i18n" data-es="Reseña de Preply" data-it="Recensione di Preply" data-en="Preply review">Reseña de Preply</span></p>
 </div>
 <div class="review-card">
@@ -176,10 +180,14 @@
 <div><div class="review-name">Davide</div><div class="review-date">28 julio 2026</div></div>
 </div>
 <div class="review-stars"><span class="star-solid">★★★★★</span></div>
-<p class="review-text">Sto studiando spagnolo perché presto mi trasferirò per lavoro. José ha creato un percorso su misura, perfettamente adattato alle mie esigenze, soprattutto dal punto di vista commerciale. Sono sicuro che, grazie alle sue lezioni, il mio livello di spagnolo migliorerà notevolmente.</p>
+<p class="review-text"><span class="i18n" data-es="Estoy estudiando español porque pronto me mudaré por trabajo. José ha creado un itinerario a medida, perfectamente adaptado a mis necesidades, sobre todo desde el punto de vista comercial. Estoy seguro de que, gracias a sus clases, mi nivel de español mejorará notablemente." data-it="Sto studiando spagnolo perché presto mi trasferirò per lavoro. José ha creato un percorso su misura, perfettamente adattato alle mie esigenze, soprattutto dal punto di vista commerciale. Sono sicuro che, grazie alle sue lezioni, il mio livello di spagnolo migliorerà notevolmente." data-en="I'm studying Spanish because I'll soon be relocating for work. José created a tailor-made path, perfectly adapted to my needs, especially from a business point of view. I'm confident that, thanks to his lessons, my Spanish will improve significantly.">Sto studiando spagnolo perché presto mi trasferirò per lavoro. José ha creato un percorso su misura, perfettamente adattato alle mie esigenze, soprattutto dal punto di vista commerciale. Sono sicuro che, grazie alle sue lezioni, il mio livello di spagnolo migliorerà notevolmente.</span></p>
 <p class="review-source"><span class="i18n" data-es="Reseña de Preply" data-it="Recensione di Preply" data-en="Preply review">Reseña de Preply</span></p>
 </div>
 </div>
+</div>
+<button class="reviews-arrow reviews-next" aria-label="Siguiente"><i class="ti ti-chevron-right"></i></button>
+</div>
+<div class="reviews-dots" id="reviews-dots"></div>
 </section>
 </div>
 

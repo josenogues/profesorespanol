@@ -13,6 +13,7 @@
 <script>if(localStorage.getItem('jn_theme')==='dark')document.documentElement.setAttribute('data-theme','dark');</script>
 </head>
 <body data-category="verbos">
+<button id="sidebar-toggle" class="sidebar-toggle" aria-label="Mostrar/ocultar menú"><i class="ti ti-menu-2"></i></button>
 <aside class="sidebar">
 <a href="index.html" class="logo-header"><img src="logo.png" alt="Aprende español con José" class="logo-img"></a>
 
@@ -27,9 +28,9 @@
 <button class="menu-button"><i class="ti ti-microphone cat-verbos"></i> <span class="i18n" data-es="Verbos" data-it="Verbi" data-en="Verbs">Verbos</span> ▾</button>
 <div class="submenu">
 <a href="#" class="track-link" data-base="tiempos-verbales">Overview</a>
-<a href="#" class="track-link" data-base="indicativo"><span class="i18n" data-es="Indicativo" data-it="Indicativo" data-en="Indicativo">Indicativo</span></a>
+<a href="#" class="track-link" data-base="indicativo"><span class="i18n" data-es="Indicativo" data-it="Indicativo" data-en="Indicative">Indicativo</span></a>
 <a href="#" class="track-link" data-base="subjuntivo"><span class="i18n" data-es="Subjuntivo" data-it="Congiuntivo" data-en="Subjunctive">Subjuntivo</span></a>
-<a href="#" class="track-link" data-base="imperativo"><span class="i18n" data-es="Imperativo" data-it="Imperativo" data-en="Imperativo">Imperativo</span></a>
+<a href="#" class="track-link" data-base="imperativo"><span class="i18n" data-es="Imperativo" data-it="Imperativo" data-en="Imperative">Imperativo</span></a>
 <a href="#" class="track-link" data-base="verbos-regulares"><span class="i18n" data-es="Regulares" data-it="Regolari" data-en="Regular">Regulares</span></a>
 <a href="#" class="track-link" data-base="verbos-irregulares"><span class="i18n" data-es="Irregulares" data-it="Irregolari" data-en="Irregular">Irregulares</span></a>
 <a href="#" class="track-link submenu-sub" data-base="ser-estar"><span class="i18n" data-es="Ser y estar" data-it="Ser y estar" data-en="Ser y estar">Ser y estar</span></a>
@@ -104,18 +105,18 @@
 </div>
 <section class="grammar-section">
 <span class="eyebrow">Verbos</span>
-<h3 style="font-size:22px;margin:6px 0 10px">Especial atención</h3>
+<h3 style="font-size:22px;margin:6px 0 10px">Especial atención <span class="badge-trap"><i class="ti ti-target"></i> Trappola comune</span></h3>
 <p class="subtitle" style="margin-bottom:16px">Verbos que suelen confundir a un italiano, por parecerse a otros verbos italianos o por no tener un equivalente directo.</p>
 
 <div class="compare-grid" style="grid-template-columns:repeat(2,1fr)">
-<div class="compare-card"><h4>IR / VENIR · LLEVAR / TRAER</h4><ul><li><b>Venir/traer</b> = hacia donde está quien habla; <b>ir/llevar</b> = hacia otro lugar</li><li><i>Ven aquí</i> (verso chi parla) / <i>Voy a tu casa</i> (verso l'ascoltatore)</li><li><i>Traigo el postre</i> (qui) / <i>Llevo el libro a la biblioteca</i> (altrove)</li></ul></div>
-<div class="compare-card"><h4>PEDIR / PREGUNTAR</h4><ul><li><b>Pedir</b> = richiedere un oggetto o favore; <b>preguntar</b> = fare una domanda</li><li><i>Pido un café</i> (richiesta) / <i>Pregunto la hora</i> (domanda)</li></ul></div>
-<div class="compare-card"><h4>DEJAR / DEJAR DE</h4><ul><li><b>Dejar</b> = lasciare (un oggetto, un luogo); <b>dejar de</b> + infinito = smettere di</li><li><i>Dejo el libro aquí</i> / <i>Dejo de fumar</i></li></ul></div>
-<div class="compare-card"><h4>RECORDAR / ACORDARSE (DE)</h4><ul><li><b>Recordar</b> = senza preposizione; <b>acordarse de</b> = con "de" obbligatoria</li><li><i>Recuerdo tu nombre</i> / <i>Me acuerdo de ti</i></li></ul></div>
+<div class="compare-card"><h4>IR / VENIR · LLEVAR / TRAER</h4><ul><li><b>Venir/traer</b> = hacia donde está quien habla; <b>ir/llevar</b> = hacia otro lugar</li><li><i>Ven aquí</i> → <em>Vieni qui</em> (verso chi parla)</li><li><i>Voy a tu casa</i> → <em>Vengo a casa tua</em> (verso l'ascoltatore)</li><li><i>Traigo el postre</i> → <em>Porto il dolce</em> (qui) / <i>Llevo el libro a la biblioteca</i> → <em>Porto il libro in biblioteca</em> (altrove)</li></ul></div>
+<div class="compare-card"><h4>PEDIR / PREGUNTAR</h4><ul><li><b>Pedir</b> = richiedere un oggetto o favore; <b>preguntar</b> = fare una domanda</li><li><i>Pido un café</i> → <em>Chiedo un caffè</em> (richiesta)</li><li><i>Pregunto la hora</i> → <em>Chiedo l'ora</em> (domanda)</li></ul></div>
+<div class="compare-card"><h4>DEJAR / DEJAR DE</h4><ul><li><b>Dejar</b> = lasciare (un oggetto, un luogo); <b>dejar de</b> + infinito = smettere di</li><li><i>Dejo el libro aquí</i> → <em>Lascio il libro qui</em></li><li><i>Dejo de fumar</i> → <em>Smetto di fumare</em></li></ul></div>
+<div class="compare-card"><h4>RECORDAR / ACORDARSE (DE)</h4><ul><li><b>Recordar</b> = senza preposizione; <b>acordarse de</b> = con "de" obbligatoria</li><li><i>Recuerdo tu nombre</i> → <em>Ricordo il tuo nome</em></li><li><i>Me acuerdo de ti</i> → <em>Mi ricordo di te</em></li></ul></div>
 </div>
 
 <div class="topic-block" style="margin-top:30px;padding-top:30px;border-top:1px solid var(--border)">
-<span class="eyebrow">Grammatica essenziale</span>
+<span class="eyebrow">Verbi</span>
 <h4 style="font-size:19px;margin:6px 0 10px">"Diventare" in spagnolo</h4>
 <p class="subtitle" style="margin-bottom:16px">La parola italiana "diventare" ha diverse traduzioni in spagnolo, ognuna con sfumature specifiche.</p>
 <div class="compare-grid" style="grid-template-columns:repeat(2,1fr)">
