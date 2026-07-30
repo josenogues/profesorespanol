@@ -3,16 +3,16 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Watch out for this | Aprende Español con Jose Nogues</title>
+<title>Especial atención (English) | Aprende Español con Jose Nogues</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
 <link rel="icon" type="image/png" href="favicon.png">
 <link rel="stylesheet" href="styles.css">
 <script>if(localStorage.getItem('jn_theme')==='dark')document.documentElement.setAttribute('data-theme','dark');</script>
 </head>
-<body data-category="atencion">
+<body data-category="gramatica">
 <aside class="sidebar">
 <a href="index.html" class="logo-header"><img src="logo.png" alt="Aprende español con José" class="logo-img"></a>
 
@@ -22,7 +22,6 @@
 <div class="search-results" id="search-results"></div>
 </div>
 
-<div class="menu-title"><span class="i18n" data-es="Aprender" data-it="Imparare" data-en="Learn">Aprender</span></div>
 
 <div class="menu-item">
 <button class="menu-button"><i class="ti ti-microphone cat-verbos"></i> <span class="i18n" data-es="Verbos" data-it="Verbi" data-en="Verbs">Verbos</span> ▾</button>
@@ -35,6 +34,8 @@
 <a href="#" class="track-link" data-base="verbos-irregulares"><span class="i18n" data-es="Irregulares" data-it="Irregolari" data-en="Irregular">Irregulares</span></a>
 <a href="#" class="track-link submenu-sub" data-base="ser-estar"><span class="i18n" data-es="Ser y estar" data-it="Ser y estar" data-en="Ser y estar">Ser y estar</span></a>
 <a href="#" class="track-link submenu-sub" data-base="haber-tener"><span class="i18n" data-es="Haber y tener" data-it="Haber y tener" data-en="Haber y tener">Haber y tener</span></a>
+<a href="#" class="track-link track-only" data-track-show="it" data-base="especial-atencion-verbos">Especial atención</a>
+<a href="#" class="track-link track-only" data-track-show="en" data-base="especial-atencion-verbos">Especial atención</a>
 <a href="#" class="track-link" data-base="verbos-reflexivos"><span class="i18n" data-es="Reflexivos" data-it="Riflessivi" data-en="Reflexive">Reflexivos</span></a>
 <a href="#" class="track-link" data-base="formas-impersonales"><span class="i18n" data-es="Formas impersonales" data-it="Forme impersonali" data-en="Non-finite forms">Formas impersonales</span></a>
 </div>
@@ -48,11 +49,13 @@
 <a href="#" class="track-link" data-base="pronombres"><span class="i18n" data-es="Pronombres" data-it="Pronomi" data-en="Pronouns">Pronombres</span></a>
 <a href="#" class="track-link" data-base="preposiciones"><span class="i18n" data-es="Preposiciones" data-it="Preposizioni" data-en="Prepositions">Preposiciones</span></a>
 <a href="#" class="track-link" data-base="fonetica"><span class="i18n" data-es="Fonética" data-it="Fonetica" data-en="Phonetics">Fonética</span></a>
+<a href="#" class="track-link track-only" data-track-show="it" data-base="especial-atencion-gramatica">Especial atención</a>
+<a href="#" class="track-link track-only" data-track-show="en" data-base="especial-atencion-gramatica">Especial atención</a>
 </div>
 </div>
 
 <div class="menu-item">
-<button class="menu-button"><i class="ti ti-abc cat-vocabulario"></i> <span class="i18n" data-es="Vocabulario" data-it="Vocabolario" data-en="Vocabulary">Vocabulario</span> ▾</button>
+<button class="menu-button"><i class="ti ti-tags cat-vocabulario"></i> <span class="i18n" data-es="Vocabulario" data-it="Vocabolario" data-en="Vocabulary">Vocabulario</span> ▾</button>
 <div class="submenu">
 <a href="#" class="track-link" data-base="vida-cotidiana"><span class="i18n" data-es="Vida cotidiana" data-it="Vita quotidiana" data-en="Everyday life">Vida cotidiana</span></a>
 <a href="#" class="track-link" data-base="viajes"><span class="i18n" data-es="Viajes" data-it="Viaggi" data-en="Travel">Viajes</span></a>
@@ -75,6 +78,7 @@
 <a href="#" class="track-link" data-base="las-fechas"><span class="i18n" data-es="Las fechas" data-it="Le date" data-en="Dates">Las fechas</span></a>
 <a href="#" class="track-link" data-base="temperatura"><span class="i18n" data-es="Sobre temperatura" data-it="Sulla temperatura" data-en="About temperature">Sobre temperatura</span></a>
 <a href="#" class="track-link" data-base="moverse-ciudad"><span class="i18n" data-es="Moverte por la ciudad" data-it="Muoversi in città" data-en="Getting around town">Moverte por la ciudad</span></a>
+<a href="#" class="track-link" data-base="conectores"><span class="i18n" data-es="Conectores" data-it="Connettori" data-en="Connectors">Conectores</span></a>
 </div>
 </div>
 
@@ -85,119 +89,30 @@
 </div>
 </div>
 
-<div class="menu-item track-only" data-track-show="it"><a class="menu-button" href="espanol-para-italianos.html"><i class="ti ti-flag cat-atencion"></i> Attenzione a questi</a></div>
-<div class="menu-item track-only" data-track-show="en"><a class="menu-button" href="spanish-for-english-speakers.html"><i class="ti ti-flag cat-atencion"></i> Watch out for this</a></div>
 
 <div class="sidebar-filler">
 <p class="tagline"><span id="tagline-text">Poco a poco se llega lejos</span> <i class="ti ti-bolt"></i></p>
 </div>
 </aside>
-
-
-
-
-
-
-
-
-
-
-
-
-
 <main class="main">
 <div class="page-header"><div class="language-selector">
 <button class="lang-track-btn" data-track="es">🇪🇸 Español</button>
 <button class="lang-track-btn" data-track="it">🇮🇹 Italiano</button>
 <button class="lang-track-btn" data-track="en">🇬🇧 English</button>
-<label class="theme-switch" title="Modo oscuro">
-<input type="checkbox" id="theme-toggle">
-<span class="theme-switch-track"><i class="ti ti-sun"></i><i class="ti ti-moon"></i><span class="theme-switch-thumb"></span></span>
-</label>
 </div>
-<div class="breadcrumb"><a href="index.html"><i class="ti ti-home"></i> Inicio</a> / Watch out for this</div></div>
-<section class="grammar-section attention-page">
-<span class="eyebrow">For English speakers</span>
-<h2><i class="ti ti-alert-triangle"></i> Watch out for this</h2>
-<p class="subtitle">A guide to the trickiest gaps between English and Spanish — the points where English speakers usually get confused.</p>
+<div class="breadcrumb"><a href="index.html"><i class="ti ti-home"></i> Inicio</a> / Gramática / Especial atención</div>
+</div>
+<section class="grammar-section">
+<span class="eyebrow">Gramática</span>
+<h3 style="font-size:22px;margin:6px 0 10px">Especial atención</h3>
+<p class="subtitle" style="margin-bottom:16px">Grammar points English doesn't have a direct equivalent for.</p>
 
-<div class="topic-block">
-<h3>Ser vs Estar <span class="badge-trap"><i class="ti ti-target"></i> Common trap</span></h3>
-<p class="subtitle" style="margin-bottom:16px">English only has one verb "to be". Spanish has two, and picking the wrong one changes the meaning.</p>
 <div class="compare-grid" style="grid-template-columns:repeat(2,1fr)">
-<div class="compare-card"><h4>SER → identity, permanent traits</h4><ul>
-<li><b>Soy americano</b> → I am American (identity)</li>
-<li><b>Es alto</b> → He is tall (characteristic)</li>
-<li><b>Son las tres</b> → It's three o'clock</li>
-</ul></div>
-<div class="compare-card"><h4>ESTAR → state, location, temporary</h4><ul>
-<li><b>Estoy cansado</b> → I am tired (temporary state)</li>
-<li><b>Está en casa</b> → He is at home (location)</li>
-<li><b>¿Cómo estás?</b> → How are you? (current state)</li>
-</ul></div>
-</div>
-<div class="tip-box"><i class="ti ti-alert-triangle"></i> <b>Es listo</b> = he's smart (trait). <b>Está listo</b> = he's ready (state). Same word, different verb, different meaning!</div>
+<div class="compare-card"><h4>No subject pronoun needed</h4><ul><li>The verb ending already shows who's doing the action</li><li><i>Hablo español</i> (not "Yo hablo español") = "I speak Spanish"</li><li>Use "yo", "tú"... only for emphasis or contrast</li></ul></div>
+<div class="compare-card"><h4>Adjective order</h4><ul><li>Most descriptive adjectives go AFTER the noun</li><li><i>la casa blanca</i> = the white house</li><li>Some adjectives change meaning depending on position: <i>un gran hombre</i> (a great man) vs <i>un hombre grande</i> (a big man)</li></ul></div>
 </div>
 
-<div class="topic-block" style="margin-top:30px;padding-top:30px;border-top:1px solid var(--border)">
-<h3>The reverse construction: Gustar</h3>
-<p class="subtitle" style="margin-bottom:16px">"To like" works backwards in Spanish. You don't say "I like X" — literally, "X pleases me".</p>
-<div class="table-wrap"><table>
-<thead><tr><th>English</th><th>Spanish (literal: "X is pleasing to me")</th></tr></thead>
-<tbody>
-<tr><td>I like pizza</td><td>Me gusta la pizza</td></tr>
-<tr><td>I like books</td><td>Me gustan los libros <em>(plural verb because "libros" is plural)</em></td></tr>
-<tr><td>She likes coffee</td><td>Le gusta el café</td></tr>
-</tbody></table></div>
-<div class="tip-box"><b>Key:</b> the verb agrees with the thing being liked, not with the person. "Me gustan" not "yo gusto".</div>
-</div>
-
-<div class="topic-block" style="margin-top:30px;padding-top:30px;border-top:1px solid var(--border)">
-<h3>No subject pronoun needed</h3>
-<p class="subtitle" style="margin-bottom:0">In English you must say "I speak", "she speaks" — the subject is required. In Spanish, the verb ending already tells you who's speaking, so the pronoun is usually dropped: <b>hablo</b> already means "I speak". Using "yo hablo" without a reason to emphasize sounds slightly unnatural, like over-explaining.</p>
-</div>
-
-<div class="topic-block" style="margin-top:30px;padding-top:30px;border-top:1px solid var(--border)">
-<h3>Common false friends</h3>
-<div class="table-wrap"><table>
-<thead><tr><th>Spanish word</th><th>Looks like</th><th>Actually means</th></tr></thead>
-<tbody>
-<tr><td>embarazada</td><td>embarrassed</td><td>pregnant</td></tr>
-<tr><td>actualmente</td><td>actually</td><td>currently</td></tr>
-<tr><td>éxito</td><td>exit</td><td>success</td></tr>
-<tr><td>sensible</td><td>sensible</td><td>sensitive</td></tr>
-<tr><td>realizar</td><td>to realize</td><td>to carry out</td></tr>
-<tr><td>asistir</td><td>to assist</td><td>to attend</td></tr>
-<tr><td>librería</td><td>library</td><td>bookshop</td></tr>
-<tr><td>constipado</td><td>constipated</td><td>having a cold</td></tr>
-</tbody></table></div>
-</div>
-
-<div class="topic-block" style="margin-top:30px;padding-top:30px;border-top:1px solid var(--border)">
-<h3>Por vs Para <span class="badge-trap"><i class="ti ti-target"></i> Common trap</span></h3>
-<p class="subtitle" style="margin-bottom:16px">English uses "for" for both — Spanish splits it into two words with different logic.</p>
-<div class="compare-grid" style="grid-template-columns:repeat(2,1fr)">
-<div class="compare-card"><h4>POR → cause, means, duration, exchange</h4><ul>
-<li><b>Gracias por la ayuda</b> → Thanks for the help (cause)</li>
-<li><b>Voy por la calle</b> → I walk along the street (route/means)</li>
-<li><b>Trabajo por tres horas</b> → I work for three hours (duration)</li>
-<li><b>Lo cambié por otro</b> → I exchanged it for another one</li>
-</ul></div>
-<div class="compare-card"><h4>PARA → purpose, recipient, deadline</h4><ul>
-<li><b>Estudio para aprobar</b> → I study (in order) to pass (purpose)</li>
-<li><b>Este regalo es para ti</b> → This gift is for you (recipient)</li>
-<li><b>Para mañana, listo</b> → Ready by tomorrow (deadline)</li>
-<li><b>Trabajo para una empresa</b> → I work for a company (employer)</li>
-</ul></div>
-</div>
-<div class="tip-box"><i class="ti ti-alert-triangle"></i> <b>Compare:</b> <em>Es para ti</em> = this is for you, meant for you (recipient). <em>Es por ti</em> = this is because of you (cause/reason). Same "for" in English, opposite logic in Spanish.</div>
-</div>
-
-<div class="topic-block" style="margin-top:30px;padding-top:30px;border-top:1px solid var(--border)">
-<h3>Adjectives usually go after the noun</h3>
-<p class="subtitle" style="margin-bottom:0">Unlike English, most Spanish adjectives follow the noun: <b>la casa blanca</b> (the white house), not "la blanca casa". A handful of common adjectives can go before the noun for emphasis or with a slightly different nuance (<em>un gran hombre</em> vs <em>un hombre grande</em>), but that's the exception, not the rule.</p>
-</div>
-<div class="ex-cta"><a href="ejercicios-en.html?tema=atn-ser-estar" class="button button-primary"><i class="ti ti-target"></i> Test yourself with exercises</a></div>
+<div class="ex-cta"><a href="ejercicios-en.html?tema=atn-gramatica" class="button button-primary"><i class="ti ti-target"></i> Test yourself with exercises</a></div>
 </section>
 </main>
 <footer>© 2026 Jose N. · Profesor de español · <a href="privacidad.html">Privacidad</a></footer>
