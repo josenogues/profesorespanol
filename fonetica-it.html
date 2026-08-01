@@ -6,7 +6,7 @@
 <title>Fonética (italiano) | Aprende Español con Jose Nogues</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@400;600;700;800&family=Caveat:wght@700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
 <link rel="icon" type="image/png" href="favicon.png">
 <link rel="stylesheet" href="styles.css">
@@ -35,8 +35,8 @@
 <a href="#" class="track-link" data-base="verbos-irregulares"><span class="i18n" data-es="Irregulares" data-it="Irregolari" data-en="Irregular">Irregulares</span></a>
 <a href="#" class="track-link submenu-sub" data-base="ser-estar"><span class="i18n" data-es="Ser y estar" data-it="Ser y estar" data-en="Ser y estar">Ser y estar</span></a>
 <a href="#" class="track-link submenu-sub" data-base="haber-tener"><span class="i18n" data-es="Haber y tener" data-it="Haber y tener" data-en="Haber y tener">Haber y tener</span></a>
-<a href="#" class="track-link track-only" data-track-show="it" data-base="especial-atencion-verbos">Especial atención</a>
-<a href="#" class="track-link track-only" data-track-show="en" data-base="especial-atencion-verbos">Especial atención</a>
+<a href="#" class="track-link track-only" data-track-show="it" data-base="especial-atencion-verbos">Attenzione a questi</a>
+<a href="#" class="track-link track-only" data-track-show="en" data-base="especial-atencion-verbos">Watch out for this</a>
 <a href="#" class="track-link" data-base="verbos-reflexivos"><span class="i18n" data-es="Reflexivos" data-it="Riflessivi" data-en="Reflexive">Reflexivos</span></a>
 <a href="#" class="track-link" data-base="formas-impersonales"><span class="i18n" data-es="Formas impersonales" data-it="Forme impersonali" data-en="Non-finite forms">Formas impersonales</span></a>
 </div>
@@ -50,8 +50,8 @@
 <a href="#" class="track-link" data-base="pronombres"><span class="i18n" data-es="Pronombres" data-it="Pronomi" data-en="Pronouns">Pronombres</span></a>
 <a href="#" class="track-link" data-base="preposiciones"><span class="i18n" data-es="Preposiciones" data-it="Preposizioni" data-en="Prepositions">Preposiciones</span></a>
 <a href="#" class="track-link" data-base="fonetica"><span class="i18n" data-es="Fonética" data-it="Fonetica" data-en="Phonetics">Fonética</span></a>
-<a href="#" class="track-link track-only" data-track-show="it" data-base="especial-atencion-gramatica">Especial atención</a>
-<a href="#" class="track-link track-only" data-track-show="en" data-base="especial-atencion-gramatica">Especial atención</a>
+<a href="#" class="track-link track-only" data-track-show="it" data-base="especial-atencion-gramatica">Attenzione a questi</a>
+<a href="#" class="track-link track-only" data-track-show="en" data-base="especial-atencion-gramatica">Watch out for this</a>
 </div>
 </div>
 
@@ -84,6 +84,13 @@
 </div>
 
 <div class="menu-item">
+<button class="menu-button"><i class="ti ti-external-link cat-recursos"></i> <span class="i18n" data-es="Recursos" data-it="Risorse" data-en="Resources">Recursos</span> ▾</button>
+<div class="submenu">
+<a href="#" class="track-link" data-base="recursos"><span class="i18n" data-es="Todos los recursos" data-it="Tutte le risorse" data-en="All resources">Todos los recursos</span></a>
+</div>
+</div>
+
+<div class="menu-item">
 <button class="menu-button"><i class="ti ti-pencil cat-ejercicios"></i> <span class="i18n" data-es="Ejercicios" data-it="Esercizi" data-en="Exercises">Ejercicios</span> ▾</button>
 <div class="submenu">
 <a href="#" class="track-link" data-base="ejercicios"><span class="i18n" data-es="Todos los ejercicios" data-it="Tutti gli esercizi" data-en="All exercises">Todos los ejercicios</span></a>
@@ -95,6 +102,12 @@
 <p class="tagline"><span id="tagline-text">Poco a poco se llega lejos</span> <i class="ti ti-bolt"></i></p>
 </div>
 </aside>
+<div class="tab-rail">
+<div class="rail-tab" data-tab-cat="verbos" style="--tab-color:#D6488F"></div>
+<div class="rail-tab" data-tab-cat="gramatica" style="--tab-color:#5B9A3B"></div>
+<div class="rail-tab" data-tab-cat="vocabulario" style="--tab-color:#E8791E"></div>
+<div class="rail-tab" data-tab-cat="expresiones" style="--tab-color:#7A6FD1"></div>
+</div>
 <main class="main">
 <div class="page-header"><div class="language-selector">
 <button class="lang-track-btn" data-track="es">🇪🇸 Español</button>
@@ -116,7 +129,7 @@
 <span class="eyebrow">Suoni</span>
 <h3 style="font-size:22px;margin:6px 0 10px">Le vocali</h3>
 <p class="subtitle" style="margin-bottom:16px">Lo spagnolo ha solo 5 suoni vocalici, e ognuno suona sempre uguale — a differenza dell'italiano, che distingue vocali aperte e chiuse (la "e" di "bene" contro quella di "è"). Impara bene questi 5 suoni e non ci saranno sorprese.</p>
-<div class="table-wrap"><table>
+<div class="table-wrap compact"><table>
 <thead><tr><th>Vocale</th><th>Esempio</th><th></th></tr></thead>
 <tbody>
 <tr><td><b>a</b></td><td>casa</td><td><button class="speak-btn" data-text="casa" title="Ascolta"><i class="ti ti-volume"></i></button></td></tr>
@@ -137,6 +150,20 @@
 <div class="compare-card"><h4>Dittongo</h4><ul><li>Una vocale forte (a, e, o) + una debole (i, u), o due deboli insieme</li><li>Si pronunciano in <b>una sola sillaba</b></li><li><b>bien</b>, <b>cielo</b>, <b>cuatro</b>, <b>ciudad</b></li></ul></div>
 <div class="compare-card"><h4>Trittongo</h4><ul><li>Debole + forte + debole, tutte e tre insieme</li><li>Poco frequente, ma esiste</li><li><b>buey</b>, <b>cambiáis</b>, <b>limpiáis</b></li></ul></div>
 <div class="compare-card"><h4>Iato</h4><ul><li>Due vocali forti insieme, o una debole con accento</li><li>Si separano in <b>sillabe diverse</b></li><li><b>le-o</b>, <b>pa-ís</b>, <b>dí-a</b></li></ul></div>
+</div>
+<div class="topic-block" style="margin-top:30px;padding-top:30px;border-top:1px solid var(--border)">
+<span class="eyebrow">Ortografia</span>
+<h3 style="font-size:22px;margin:6px 0 10px">Le lettere speciali dello spagnolo</h3>
+<p class="subtitle" style="margin-bottom:16px">Lo spagnolo ha suoni e lettere che non esistono in italiano. Ecco le regole essenziali!</p>
+<div class="compare-grid" style="grid-template-columns:repeat(3,1fr)">
+<div class="compare-card"><h4>Doppie lettere</h4><ul><li><b>LL</b> → si pronuncia come una "gi+vocale" morbida: llamar, llave <button class="speak-btn" data-text="llave"><i class="ti ti-volume"></i></button>, pollo (stessa fonetica della "Y")</li><li><b>RR</b> → vibrante forte: perro <button class="speak-btn" data-text="perro"><i class="ti ti-volume"></i></button>, carro, correr</li><li><b>CC</b> → si pronuncia come "cs": acceso, acción, accidente</li></ul></div>
+<div class="compare-card"><h4>La H e la CH</h4><ul><li><b>H</b> → sempre muta: hola <button class="speak-btn" data-text="hola"><i class="ti ti-volume"></i></button>, hombre, haber</li><li><b>CH</b> → CHA, CHE, CHI, CHO, CHU. Esempi: noche <button class="speak-btn" data-text="noche"><i class="ti ti-volume"></i></button>, coche, chico, mucho</li></ul></div>
+<div class="compare-card"><h4>GUE / GUI / GÜE / GÜI</h4><ul><li><b>GUE, GUI</b> → la U è muta: guerra, guiar (si legge GHE, GHI)</li><li><b>GÜE, GÜI</b> → la Ü si pronuncia (con dieresi): pingüino <button class="speak-btn" data-text="pingüino"><i class="ti ti-volume"></i></button></li></ul></div>
+<div class="compare-card"><h4>La Ñ</h4><ul><li>Lettera propria dello spagnolo, si pronuncia come "gn" italiano.</li><li>Esempi: España <button class="speak-btn" data-text="España"><i class="ti ti-volume"></i></button>, año, mañana, señor, niño</li></ul></div>
+<div class="compare-card"><h4>La Q</h4><ul><li><b>QUE, QUI</b> → la U è sempre muta: que, quiero, queso, quince (si legge KE, KI)</li><li>Non esiste QUA o QUO in spagnolo: si scrive cuatro, cuando</li></ul></div>
+<div class="compare-card"><h4>La X</h4><ul><li>Si pronuncia come <i>ks</i> in molte parole: éxito <button class="speak-btn" data-text="éxito"><i class="ti ti-volume"></i></button>, taxi, sexo</li><li>In alcune parole di origine indigena si pronuncia come <i>sc</i> italiano: México, Oaxaca, Texas</li></ul></div>
+<div class="compare-card"><h4>Le altre doppie italiane</h4><ul><li>In spagnolo le doppie italiane quasi sempre si semplificano:</li><li><b>mm → m</b> (grammatica → gramática)</li><li><b>ss → s</b> (possibile → posible)</li><li><b>tt → t</b> (attenzione → atención)</li><li><b>pp → p</b> (appartamento → apartamento)</li></ul></div>
+</div>
 </div>
 <div class="tip-box"><i class="ti ti-alert-triangle"></i> <b>Trucco:</b> se una vocale debole (i, u) porta l'accento vicino a una forte, è sempre iato, non dittongo — per questo "país" si divide pa-ís, con due sillabe, e non si pronuncia tutto insieme.</div>
 
@@ -169,22 +196,8 @@
 </div>
 </div>
 
-<div class="topic-block" style="margin-top:30px;padding-top:30px;border-top:1px solid var(--border)">
-<span class="eyebrow">Ortografia</span>
-<h3 style="font-size:22px;margin:6px 0 10px">Le lettere speciali dello spagnolo</h3>
-<p class="subtitle" style="margin-bottom:16px">Lo spagnolo ha suoni e lettere che non esistono in italiano. Ecco le regole essenziali!</p>
-<div class="compare-grid" style="grid-template-columns:repeat(3,1fr)">
-<div class="compare-card"><h4>Doppie lettere</h4><ul><li><b>LL</b> → si pronuncia come una "gi+vocale" morbida: llamar, llave, pollo (stessa fonetica della "Y")</li><li><b>RR</b> → vibrante forte: perro, carro, correr</li><li><b>CC</b> → si pronuncia come "cs": acceso, acción, accidente</li></ul></div>
-<div class="compare-card"><h4>La H e la CH</h4><ul><li><b>H</b> → sempre muta: hola, hombre, haber</li><li><b>CH</b> → CHA, CHE, CHI, CHO, CHU. Esempi: noche, coche, chico, mucho</li></ul></div>
-<div class="compare-card"><h4>GUE / GUI / GÜE / GÜI</h4><ul><li><b>GUE, GUI</b> → la U è muta: guerra, guiar (si legge GHE, GHI)</li><li><b>GÜE, GÜI</b> → la Ü si pronuncia (con dieresi): pingüino</li></ul></div>
-<div class="compare-card"><h4>La Ñ</h4><ul><li>Lettera propria dello spagnolo, si pronuncia come "gn" italiano.</li><li>Esempi: España, año, mañana, señor, niño</li></ul></div>
-<div class="compare-card"><h4>La Q</h4><ul><li><b>QUE, QUI</b> → la U è sempre muta: que, quiero, queso, quince (si legge KE, KI)</li><li>Non esiste QUA o QUO in spagnolo: si scrive cuatro, cuando</li></ul></div>
-<div class="compare-card"><h4>La X</h4><ul><li>Si pronuncia come <i>ks</i> in molte parole: éxito, taxi, sexo</li><li>In alcune parole di origine indigena si pronuncia come <i>sc</i> italiano: México, Oaxaca, Texas</li></ul></div>
-<div class="compare-card"><h4>Le altre doppie italiane</h4><ul><li>In spagnolo le doppie italiane quasi sempre si semplificano:</li><li><b>mm → m</b> (grammatica → gramática)</li><li><b>ss → s</b> (possibile → posible)</li><li><b>tt → t</b> (attenzione → atención)</li><li><b>pp → p</b> (appartamento → apartamento)</li></ul></div>
-</div>
-</div>
 
-<div class="ex-cta"><a href="ejercicios-it.html?tema=fonetica" class="button button-primary"><i class="ti ti-target"></i> Mettiti alla prova con gli esercizi</a></div>
+<div class="ex-cta"><a href="ejercicios-it.html?tema=fonetica" class="button button-primary"><i class="ti ti-pencil"></i> Mettiti alla prova con gli esercizi</a></div>
 </section>
 </main>
 <footer>© 2026 Jose N. · Profesor de español · <a href="privacidad.html">Privacidad</a></footer>

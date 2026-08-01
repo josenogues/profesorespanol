@@ -6,7 +6,7 @@
 <title>Ser & estar (English) | Aprende Español con Jose Nogues</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@400;600;700;800&family=Caveat:wght@700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
 <link rel="icon" type="image/png" href="favicon.png">
 <link rel="stylesheet" href="styles.css">
@@ -35,8 +35,8 @@
 <a href="#" class="track-link" data-base="verbos-irregulares"><span class="i18n" data-es="Irregulares" data-it="Irregolari" data-en="Irregular">Irregulares</span></a>
 <a href="#" class="track-link submenu-sub" data-base="ser-estar"><span class="i18n" data-es="Ser y estar" data-it="Ser y estar" data-en="Ser y estar">Ser y estar</span></a>
 <a href="#" class="track-link submenu-sub" data-base="haber-tener"><span class="i18n" data-es="Haber y tener" data-it="Haber y tener" data-en="Haber y tener">Haber y tener</span></a>
-<a href="#" class="track-link track-only" data-track-show="it" data-base="especial-atencion-verbos">Especial atención</a>
-<a href="#" class="track-link track-only" data-track-show="en" data-base="especial-atencion-verbos">Especial atención</a>
+<a href="#" class="track-link track-only" data-track-show="it" data-base="especial-atencion-verbos">Attenzione a questi</a>
+<a href="#" class="track-link track-only" data-track-show="en" data-base="especial-atencion-verbos">Watch out for this</a>
 <a href="#" class="track-link" data-base="verbos-reflexivos"><span class="i18n" data-es="Reflexivos" data-it="Riflessivi" data-en="Reflexive">Reflexivos</span></a>
 <a href="#" class="track-link" data-base="formas-impersonales"><span class="i18n" data-es="Formas impersonales" data-it="Forme impersonali" data-en="Non-finite forms">Formas impersonales</span></a>
 </div>
@@ -50,8 +50,8 @@
 <a href="#" class="track-link" data-base="pronombres"><span class="i18n" data-es="Pronombres" data-it="Pronomi" data-en="Pronouns">Pronombres</span></a>
 <a href="#" class="track-link" data-base="preposiciones"><span class="i18n" data-es="Preposiciones" data-it="Preposizioni" data-en="Prepositions">Preposiciones</span></a>
 <a href="#" class="track-link" data-base="fonetica"><span class="i18n" data-es="Fonética" data-it="Fonetica" data-en="Phonetics">Fonética</span></a>
-<a href="#" class="track-link track-only" data-track-show="it" data-base="especial-atencion-gramatica">Especial atención</a>
-<a href="#" class="track-link track-only" data-track-show="en" data-base="especial-atencion-gramatica">Especial atención</a>
+<a href="#" class="track-link track-only" data-track-show="it" data-base="especial-atencion-gramatica">Attenzione a questi</a>
+<a href="#" class="track-link track-only" data-track-show="en" data-base="especial-atencion-gramatica">Watch out for this</a>
 </div>
 </div>
 
@@ -84,6 +84,13 @@
 </div>
 
 <div class="menu-item">
+<button class="menu-button"><i class="ti ti-external-link cat-recursos"></i> <span class="i18n" data-es="Recursos" data-it="Risorse" data-en="Resources">Recursos</span> ▾</button>
+<div class="submenu">
+<a href="#" class="track-link" data-base="recursos"><span class="i18n" data-es="Todos los recursos" data-it="Tutte le risorse" data-en="All resources">Todos los recursos</span></a>
+</div>
+</div>
+
+<div class="menu-item">
 <button class="menu-button"><i class="ti ti-pencil cat-ejercicios"></i> <span class="i18n" data-es="Ejercicios" data-it="Esercizi" data-en="Exercises">Ejercicios</span> ▾</button>
 <div class="submenu">
 <a href="#" class="track-link" data-base="ejercicios"><span class="i18n" data-es="Todos los ejercicios" data-it="Tutti gli esercizi" data-en="All exercises">Todos los ejercicios</span></a>
@@ -95,19 +102,12 @@
 <p class="tagline"><span id="tagline-text">Poco a poco se llega lejos</span> <i class="ti ti-bolt"></i></p>
 </div>
 </aside>
-
-
-
-
-
-
-
-
-
-
-
-
-
+<div class="tab-rail">
+<div class="rail-tab" data-tab-cat="verbos" style="--tab-color:#D6488F"></div>
+<div class="rail-tab" data-tab-cat="gramatica" style="--tab-color:#5B9A3B"></div>
+<div class="rail-tab" data-tab-cat="vocabulario" style="--tab-color:#E8791E"></div>
+<div class="rail-tab" data-tab-cat="expresiones" style="--tab-color:#7A6FD1"></div>
+</div>
 <main class="main">
 <div class="page-header"><div class="language-selector">
 <button class="lang-track-btn" data-track="es">🇪🇸 Español</button>
@@ -120,30 +120,139 @@
 </div>
 <div class="breadcrumb"><a href="index.html"><i class="ti ti-home"></i> Inicio</a> / Verbos / Ser y estar</div></div>
 <section class="grammar-section">
-<span class="eyebrow">Verbs</span><span class="badge-trap"><i class="ti ti-target"></i> Common trap</span>
-<h2>Essential irregular verbs: ser · estar · haber</h2>
-<p class="subtitle">These three verbs are at the heart of Spanish. Before diving into conjugations, here's what each one means:</p>
-<div class="mini-cards">
-<div class="mini-card"><h4>ser — Permanent / Identity "to be"</h4><p>Used for identity, origin, profession, and inherent characteristics.</p></div>
-<div class="mini-card"><h4>estar — Temporary / State "to be"</h4><p>Used for moods, conditions, location, and temporary states.</p></div>
-<div class="mini-card"><h4>haber — Auxiliary "to have"</h4><p>Used to form compound tenses. Also: <b>hay</b> = there is / there are.</p></div>
-</div>
-<div class="table-wrap"><table>
-<thead><tr><th>Verb (meaning)</th><th>Pret. Imperfecto</th><th>Pret. Indefinido</th><th>Presente</th><th>Futuro Simple</th><th>Condicional</th></tr></thead>
-<tbody><tr><td><b>ser</b><br><span style='color:var(--muted);font-weight:400'>to be — permanent</span></td><td>era, eras, era, éramos, erais, eran</td><td>fui, fuiste, fue, fuimos, fuisteis, fueron</td><td>soy, eres, es, somos, sois, son</td><td>seré, serás, será, seremos, seréis, serán</td><td>sería, serías, sería, seríamos, seríais, serían</td></tr><tr><td><b>estar</b><br><span style='color:var(--muted);font-weight:400'>to be — temporary</span></td><td>estaba, estabas, estaba, estábamos, estabais, estaban</td><td>estuve, estuviste, estuvo, estuvimos, estuvisteis, estuvieron</td><td>estoy, estás, está, estamos, estáis, están</td><td>estaré, estarás, estará, estaremos, estaréis, estarán</td><td>estaría, estarías, estaría, estaríamos, estaríais, estarían</td></tr><tr><td><b>haber</b><br><span style='color:var(--muted);font-weight:400'>to have — auxiliary</span></td><td>había, habías, había, habíamos, habíais, habían</td><td>hube, hubiste, hubo, hubimos, hubisteis, hubieron</td><td>he, has, ha, hemos, habéis, han</td><td>habré, habrás, habrá, habremos, habréis, habrán</td><td>habría, habrías, habría, habríamos, habríais, habrían</td></tr></tbody></table></div>
-<div class="tip-box"><b>Ser vs. Estar:</b> Both mean "to be" but are never interchangeable. <em>Ser</em> is for identity (Soy médico — I am a doctor). <em>Estar</em> is for states and location (Estoy cansado — I am tired). Also note: <b>hay</b> (from haber) means "there is / there are" and is one of the most useful words in Spanish!</div>
+<span class="eyebrow">Essential irregular verbs</span><span class="badge-trap"><i class="ti ti-target"></i> Common trap</span>
+<h2>Ser y estar</h2>
+<p class="subtitle">SER = identity, origin, profession, time, permanent characteristics. ESTAR = temporary state, position, emotion, result of an action.</p>
 
-<h3 style="margin-top:30px">Imperativo (commands)</h3>
+<p class="subtitle" style="margin-bottom:16px">Spanish has two verbs for "to be", and they aren't used the same way. Neither is ever used as an auxiliary verb — for that, Spanish always uses HABER.</p>
+<div class="compare-grid" style="grid-template-columns:repeat(2,1fr)">
+<div class="compare-card"><h4>SER → Permanent identity, time, origin</h4><ul><li><b>Soy español</b> → identity</li><li><b>Es rico</b> → permanent trait</li><li><b>Son las tres</b> → time</li><li><b>Es de Roma</b> → origin</li></ul></div>
+<div class="compare-card"><h4>ESTAR → State or location</h4><ul><li><b>Estoy cansado</b> → temporary state</li><li><b>Está en casa</b> → location</li><li><b>Está rico</b> → tastes good, not "rich"</li><li><b>¿Cómo estás?</b> → current state</li></ul></div>
+</div>
+<div class="tip-box"><i class="ti ti-alert-triangle"></i> <b>Watch out!</b> <i>Es listo</i> = he's clever (trait). <i>Está listo</i> = he's ready (state). The meaning changes!</div>
+
+<h3 style="margin-top:30px">Full conjugation tables</h3>
+<div class="tense-group-toggle">
+<button class="group-btn active" data-group="simples">Simple tenses</button>
+<button class="group-btn" data-group="compuestos">Compound tenses</button>
+</div>
+<div class="tabs" data-group="simples">
+<button class="tab-btn active" data-tab="se-ser-ind">Ser · Indicativo</button>
+<button class="tab-btn" data-tab="se-ser-subj">Ser · Subjuntivo</button>
+<button class="tab-btn" data-tab="se-ser-imp">Ser · Imperativo</button>
+<button class="tab-btn" data-tab="se-estar-ind">Estar · Indicativo</button>
+<button class="tab-btn" data-tab="se-estar-subj">Estar · Subjuntivo</button>
+<button class="tab-btn" data-tab="se-estar-imp">Estar · Imperativo</button>
+</div>
+<div class="tabs" data-group="compuestos" style="display:none">
+<button class="tab-btn" data-tab="se-ser-indcomp">Ser · Indicativo</button>
+<button class="tab-btn" data-tab="se-estar-indcomp">Estar · Indicativo</button>
+</div>
+
+<div class="tab-panel" id="se-ser-imp">
 <div class="table-wrap"><table>
-<thead><tr><th>Pronoun</th><th>Ser</th><th>Estar</th></tr></thead>
+<thead><tr><th>Pronoun</th><th>Ser</th></tr></thead>
 <tbody>
-<tr><td>Tú</td><td>sé</td><td>está</td></tr>
-<tr><td>Vosotros / -as</td><td>sed</td><td>estad</td></tr>
-<tr><td>Usted</td><td>sea</td><td>esté</td></tr>
-<tr><td>Ustedes</td><td>sean</td><td>estén</td></tr>
+<tr><td>Tú</td><td>sé (be)</td></tr>
+<tr><td>Vosotros / -as</td><td>sed (be)</td></tr>
+<tr><td>Usted</td><td>sea (be)</td></tr>
+<tr><td>Ustedes</td><td>sean (be)</td></tr>
 </tbody></table></div>
-<div class="tip-box"><i class="ti ti-alert-triangle"></i> <b>Heads up:</b> "sé" (ser command) is written with an accent to distinguish it from "se" (reflexive pronoun).</div>
-<div class="ex-cta"><a href="ejercicios-en.html?tema=ser-estar" class="button button-primary"><i class="ti ti-target"></i> Test yourself with exercises</a></div>
+<div class="tip-box"><i class="ti ti-alert-triangle"></i> <b>Watch out!</b> «sé» (imperative of ser) carries a written accent to distinguish it from «se» (reflexive pronoun).</div>
+</div>
+
+<div class="tab-panel" id="se-estar-imp">
+<div class="table-wrap"><table>
+<thead><tr><th>Pronoun</th><th>Estar</th></tr></thead>
+<tbody>
+<tr><td>Tú</td><td>está (be)</td></tr>
+<tr><td>Vosotros / -as</td><td>estad (be)</td></tr>
+<tr><td>Usted</td><td>esté (be)</td></tr>
+<tr><td>Ustedes</td><td>estén (be)</td></tr>
+</tbody></table></div>
+</div>
+
+<div class="tab-panel active" id="se-ser-ind">
+<div class="table-wrap"><table>
+<thead><tr><th>Pronoun</th><th>Presente</th><th>Pretérito</th><th>Imperfecto</th><th>Futuro</th><th>Condicional</th></tr></thead>
+<tbody>
+<tr><td>Yo</td><td>soy (I am)</td><td>fui (I was)</td><td>era (I was)</td><td>seré (I'll be)</td><td>sería (I'd be)</td></tr>
+<tr><td>Tú</td><td>eres</td><td>fuiste</td><td>eras</td><td>serás</td><td>serías</td></tr>
+<tr><td>Él / Ella</td><td>es</td><td>fue</td><td>era</td><td>será</td><td>sería</td></tr>
+<tr><td>Nosotros / -as</td><td>somos</td><td>fuimos</td><td>éramos</td><td>seremos</td><td>seríamos</td></tr>
+<tr><td>Vosotros / -as</td><td>sois</td><td>fuisteis</td><td>erais</td><td>seréis</td><td>seríais</td></tr>
+<tr><td>Ellos / Ellas</td><td>son</td><td>fueron</td><td>eran</td><td>serán</td><td>serían</td></tr>
+</tbody></table></div>
+<div class="tip-box"><i class="ti ti-alert-triangle"></i> The preterite of SER is identical to that of IR: fui, fuiste, fue… Only context tells you which one it is.</div>
+</div>
+
+<div class="tab-panel" id="se-ser-subj">
+<div class="table-wrap"><table>
+<thead><tr><th>Pronoun</th><th>Presente</th><th>Imperfecto</th><th>Futuro</th></tr></thead>
+<tbody>
+<tr><td>Yo</td><td>sea</td><td>fuera / fuese</td><td>fuere (literary)</td></tr>
+<tr><td>Tú</td><td>seas</td><td>fueras / fueses</td><td>fueres (literary)</td></tr>
+<tr><td>Él / Ella</td><td>sea</td><td>fuera / fuese</td><td>fuere (literary)</td></tr>
+<tr><td>Nosotros / -as</td><td>seamos</td><td>fuéramos / fuésemos</td><td>fuéremos (literary)</td></tr>
+<tr><td>Vosotros / -as</td><td>seáis</td><td>fuerais / fueseis</td><td>fuereis (literary)</td></tr>
+<tr><td>Ellos / Ellas</td><td>sean</td><td>fueran / fuesen</td><td>fueren (literary)</td></tr>
+</tbody></table></div>
+</div>
+
+<div class="tab-panel" id="se-estar-ind">
+<div class="table-wrap"><table>
+<thead><tr><th>Pronoun</th><th>Presente</th><th>Pretérito</th><th>Imperfecto</th><th>Futuro</th><th>Condicional</th></tr></thead>
+<tbody>
+<tr><td>Yo</td><td>estoy</td><td>estuve</td><td>estaba</td><td>estaré</td><td>estaría</td></tr>
+<tr><td>Tú</td><td>estás</td><td>estuviste</td><td>estabas</td><td>estarás</td><td>estarías</td></tr>
+<tr><td>Él / Ella</td><td>está</td><td>estuvo</td><td>estaba</td><td>estará</td><td>estaría</td></tr>
+<tr><td>Nosotros / -as</td><td>estamos</td><td>estuvimos</td><td>estábamos</td><td>estaremos</td><td>estaríamos</td></tr>
+<tr><td>Vosotros / -as</td><td>estáis</td><td>estuvisteis</td><td>estabais</td><td>estaréis</td><td>estaríais</td></tr>
+<tr><td>Ellos / Ellas</td><td>están</td><td>estuvieron</td><td>estaban</td><td>estarán</td><td>estarían</td></tr>
+</tbody></table></div>
+</div>
+
+<div class="tab-panel" id="se-estar-subj">
+<div class="table-wrap"><table>
+<thead><tr><th>Pronoun</th><th>Presente</th><th>Imperfecto</th><th>Futuro</th></tr></thead>
+<tbody>
+<tr><td>Yo</td><td>esté</td><td>estuviera / estuviese</td><td>estuviere (literary)</td></tr>
+<tr><td>Tú</td><td>estés</td><td>estuvieras / estuvieses</td><td>estuvieres (literary)</td></tr>
+<tr><td>Él / Ella</td><td>esté</td><td>estuviera / estuviese</td><td>estuviere (literary)</td></tr>
+<tr><td>Nosotros / -as</td><td>estemos</td><td>estuviéramos / estuviésemos</td><td>estuviéremos (literary)</td></tr>
+<tr><td>Vosotros / -as</td><td>estéis</td><td>estuvierais / estuvieseis</td><td>estuviereis (literary)</td></tr>
+<tr><td>Ellos / Ellas</td><td>estén</td><td>estuvieran / estuviesen</td><td>estuvieren (literary)</td></tr>
+</tbody></table></div>
+</div>
+
+<div class="tab-panel" id="se-ser-indcomp">
+<div class="table-wrap"><table>
+<thead><tr><th>Pronoun</th><th>Pret. perfecto comp.</th><th>Pluscuamperfecto</th><th>Pret. anterior</th><th>Futuro compuesto</th><th>Condicional compuesto</th></tr></thead>
+<tbody>
+<tr><td>Yo</td><td>he sido</td><td>había sido</td><td>hube sido</td><td>habré sido</td><td>habría sido</td></tr>
+<tr><td>Tú</td><td>has sido</td><td>habías sido</td><td>hubiste sido</td><td>habrás sido</td><td>habrías sido</td></tr>
+<tr><td>Él / Ella</td><td>ha sido</td><td>había sido</td><td>hubo sido</td><td>habrá sido</td><td>habría sido</td></tr>
+<tr><td>Nosotros / -as</td><td>hemos sido</td><td>habíamos sido</td><td>hubimos sido</td><td>habremos sido</td><td>habríamos sido</td></tr>
+<tr><td>Vosotros / -as</td><td>habéis sido</td><td>habíais sido</td><td>hubisteis sido</td><td>habréis sido</td><td>habríais sido</td></tr>
+<tr><td>Ellos / Ellas</td><td>han sido</td><td>habían sido</td><td>hubieron sido</td><td>habrán sido</td><td>habrían sido</td></tr>
+</tbody></table></div>
+</div>
+
+<div class="tab-panel" id="se-estar-indcomp">
+<div class="table-wrap"><table>
+<thead><tr><th>Pronoun</th><th>Pret. perfecto comp.</th><th>Pluscuamperfecto</th><th>Pret. anterior</th><th>Futuro compuesto</th><th>Condicional compuesto</th></tr></thead>
+<tbody>
+<tr><td>Yo</td><td>he estado</td><td>había estado</td><td>hube estado</td><td>habré estado</td><td>habría estado</td></tr>
+<tr><td>Tú</td><td>has estado</td><td>habías estado</td><td>hubiste estado</td><td>habrás estado</td><td>habrías estado</td></tr>
+<tr><td>Él / Ella</td><td>ha estado</td><td>había estado</td><td>hubo estado</td><td>habrá estado</td><td>habría estado</td></tr>
+<tr><td>Nosotros / -as</td><td>hemos estado</td><td>habíamos estado</td><td>hubimos estado</td><td>habremos estado</td><td>habríamos estado</td></tr>
+<tr><td>Vosotros / -as</td><td>habéis estado</td><td>habíais estado</td><td>hubisteis estado</td><td>habréis estado</td><td>habríais estado</td></tr>
+<tr><td>Ellos / Ellas</td><td>han estado</td><td>habían estado</td><td>hubieron estado</td><td>habrán estado</td><td>habrían estado</td></tr>
+</tbody></table></div>
+</div>
+
+<div class="ex-cta"><a href="ejercicios-en.html?tema=ser-estar" class="button button-primary"><i class="ti ti-pencil"></i> Test yourself with exercises</a></div>
+
 </section>
 </main>
 <footer>© 2026 Jose N. · Profesor de español · <a href="privacidad.html">Privacidad</a></footer>

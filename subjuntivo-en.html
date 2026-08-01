@@ -6,7 +6,7 @@
 <title>Subjunctive (English) | Aprende Español con Jose Nogues</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@400;600;700;800&family=Caveat:wght@700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
 <link rel="icon" type="image/png" href="favicon.png">
 <link rel="stylesheet" href="styles.css">
@@ -35,8 +35,8 @@
 <a href="#" class="track-link" data-base="verbos-irregulares"><span class="i18n" data-es="Irregulares" data-it="Irregolari" data-en="Irregular">Irregulares</span></a>
 <a href="#" class="track-link submenu-sub" data-base="ser-estar"><span class="i18n" data-es="Ser y estar" data-it="Ser y estar" data-en="Ser y estar">Ser y estar</span></a>
 <a href="#" class="track-link submenu-sub" data-base="haber-tener"><span class="i18n" data-es="Haber y tener" data-it="Haber y tener" data-en="Haber y tener">Haber y tener</span></a>
-<a href="#" class="track-link track-only" data-track-show="it" data-base="especial-atencion-verbos">Especial atención</a>
-<a href="#" class="track-link track-only" data-track-show="en" data-base="especial-atencion-verbos">Especial atención</a>
+<a href="#" class="track-link track-only" data-track-show="it" data-base="especial-atencion-verbos">Attenzione a questi</a>
+<a href="#" class="track-link track-only" data-track-show="en" data-base="especial-atencion-verbos">Watch out for this</a>
 <a href="#" class="track-link" data-base="verbos-reflexivos"><span class="i18n" data-es="Reflexivos" data-it="Riflessivi" data-en="Reflexive">Reflexivos</span></a>
 <a href="#" class="track-link" data-base="formas-impersonales"><span class="i18n" data-es="Formas impersonales" data-it="Forme impersonali" data-en="Non-finite forms">Formas impersonales</span></a>
 </div>
@@ -50,8 +50,8 @@
 <a href="#" class="track-link" data-base="pronombres"><span class="i18n" data-es="Pronombres" data-it="Pronomi" data-en="Pronouns">Pronombres</span></a>
 <a href="#" class="track-link" data-base="preposiciones"><span class="i18n" data-es="Preposiciones" data-it="Preposizioni" data-en="Prepositions">Preposiciones</span></a>
 <a href="#" class="track-link" data-base="fonetica"><span class="i18n" data-es="Fonética" data-it="Fonetica" data-en="Phonetics">Fonética</span></a>
-<a href="#" class="track-link track-only" data-track-show="it" data-base="especial-atencion-gramatica">Especial atención</a>
-<a href="#" class="track-link track-only" data-track-show="en" data-base="especial-atencion-gramatica">Especial atención</a>
+<a href="#" class="track-link track-only" data-track-show="it" data-base="especial-atencion-gramatica">Attenzione a questi</a>
+<a href="#" class="track-link track-only" data-track-show="en" data-base="especial-atencion-gramatica">Watch out for this</a>
 </div>
 </div>
 
@@ -84,6 +84,13 @@
 </div>
 
 <div class="menu-item">
+<button class="menu-button"><i class="ti ti-external-link cat-recursos"></i> <span class="i18n" data-es="Recursos" data-it="Risorse" data-en="Resources">Recursos</span> ▾</button>
+<div class="submenu">
+<a href="#" class="track-link" data-base="recursos"><span class="i18n" data-es="Todos los recursos" data-it="Tutte le risorse" data-en="All resources">Todos los recursos</span></a>
+</div>
+</div>
+
+<div class="menu-item">
 <button class="menu-button"><i class="ti ti-pencil cat-ejercicios"></i> <span class="i18n" data-es="Ejercicios" data-it="Esercizi" data-en="Exercises">Ejercicios</span> ▾</button>
 <div class="submenu">
 <a href="#" class="track-link" data-base="ejercicios"><span class="i18n" data-es="Todos los ejercicios" data-it="Tutti gli esercizi" data-en="All exercises">Todos los ejercicios</span></a>
@@ -95,17 +102,12 @@
 <p class="tagline"><span id="tagline-text">Poco a poco se llega lejos</span> <i class="ti ti-bolt"></i></p>
 </div>
 </aside>
-
-
-
-
-
-
-
-
-
-
-
+<div class="tab-rail">
+<div class="rail-tab" data-tab-cat="verbos" style="--tab-color:#D6488F"></div>
+<div class="rail-tab" data-tab-cat="gramatica" style="--tab-color:#5B9A3B"></div>
+<div class="rail-tab" data-tab-cat="vocabulario" style="--tab-color:#E8791E"></div>
+<div class="rail-tab" data-tab-cat="expresiones" style="--tab-color:#7A6FD1"></div>
+</div>
 <main class="main">
 <div class="page-header"><div class="language-selector">
 <button class="lang-track-btn" data-track="es">🇪🇸 Español</button>
@@ -120,16 +122,43 @@
 <section class="grammar-section">
 <span class="eyebrow">Verbs</span>
 <h2>Subjunctive Mood</h2>
-<p class="subtitle">The subjunctive doesn't state objective facts — it expresses wishes, doubt, emotion, or hypothetical situations. English barely has an equivalent mood anymore (a few fossilized forms like "if I were you"), so this is usually the single biggest adjustment for English speakers.</p>
+<p class="subtitle">The subjunctive doesn't state objective facts — it expresses wishes, doubt, emotion, or hypothetical situations. It has 6 verb tenses: 3 simple and 3 compound. English barely has an equivalent mood anymore (a few fossilized forms like "if I were you"), so this is usually the single biggest adjustment for English speakers.</p>
 
-<h3 style="margin-top:26px">Indicative vs. subjunctive: when to use each</h3>
 <div class="table-wrap"><table>
 <thead><tr><th>Simple tenses</th><th>Compound tenses</th><th>When it's used</th></tr></thead>
 <tbody>
-<tr><td>Presente <em>(cante)</em></td><td>Pretérito perfecto compuesto <em>(haya cantado)</em></td><td>To express doubt, wishes, commands, after "that" / For uncertain present or future actions, doubts about recent ones</td></tr>
-<tr><td>Pretérito imperfecto <em>(cantara/cantase)</em></td><td>Pretérito pluscuamperfecto <em>(hubiera/hubiese cantado)</em></td><td>Past hypotheses, after conditional "if", in subordinate clauses / Hypothetical past actions, unrealized past conditions</td></tr>
-<tr><td>Futuro simple <em>(cantare - literary)</em></td><td>Futuro compuesto <em>(hubiere cantado - literary)</em></td><td>Very rare, future hypotheses in formal or legal language</td></tr>
+<tr><td><b>Presente</b> <em>(cante)</em></td><td><b>Pretérito perfecto compuesto</b> <em>(haya cantado)</em></td><td>To express doubt, wishes, commands, after "that" / For uncertain present or future actions, doubts about recent ones</td></tr>
+<tr><td><b>Pretérito imperfecto</b> <em>(cantara/cantase)</em></td><td><b>Pretérito pluscuamperfecto</b> <em>(hubiera/hubiese cantado)</em></td><td>Past hypotheses, after conditional "if", in subordinate clauses / Hypothetical past actions, unrealized past conditions</td></tr>
+<tr><td><b>Futuro simple</b> <em>(cantare - literary)</em></td><td><b>Futuro compuesto</b> <em>(hubiere cantado - literary)</em></td><td>Very rare, future hypotheses in formal or legal language</td></tr>
 </tbody></table></div>
+
+<h3 style="margin-top:30px">Full conjugation</h3>
+<div class="tense-group-toggle">
+<button class="group-btn active" data-group="simples">Simple tenses</button>
+<button class="group-btn" data-group="compuestos">Compound tenses</button>
+</div>
+<div class="tabs" data-group="simples"><button class="tab-btn active" data-tab="subj-s-presente">Presente</button><button class="tab-btn" data-tab="subj-s-imp">Pretérito Imperfecto</button><button class="tab-btn" data-tab="subj-s-fut">Futuro Simple</button></div>
+<div class="tabs" data-group="compuestos" style="display:none"><button class="tab-btn" data-tab="subj-c-presente">Pretérito Perfecto Compuesto</button><button class="tab-btn" data-tab="subj-c-imp">Pretérito Pluscuamperfecto</button><button class="tab-btn" data-tab="subj-c-fut">Futuro Compuesto</button></div>
+<div class="tab-panel active" id="subj-s-presente">
+<div class="table-wrap"><table><thead><tr><th>Pronoun</th><th>-AR (hablar)</th><th>-ER (comer)</th><th>-IR (vivir)</th></tr></thead>
+<tbody><tr><td>Yo</td><td>habl<b>e</b></td><td>com<b>a</b></td><td>viv<b>a</b></td></tr><tr><td>Tú</td><td>habl<b>es</b></td><td>com<b>as</b></td><td>viv<b>as</b></td></tr><tr><td>Él / Ella</td><td>habl<b>e</b></td><td>com<b>a</b></td><td>viv<b>a</b></td></tr><tr><td>Nosotros / -as</td><td>habl<b>emos</b></td><td>com<b>amos</b></td><td>viv<b>amos</b></td></tr><tr><td>Vosotros / -as</td><td>habl<b>éis</b></td><td>com<b>áis</b></td><td>viv<b>áis</b></td></tr><tr><td>Ellos / Ellas</td><td>habl<b>en</b></td><td>com<b>an</b></td><td>viv<b>an</b></td></tr></tbody></table></div>
+</div><div class="tab-panel" id="subj-c-presente">
+<div class="table-wrap"><table><thead><tr><th>Pronoun</th><th>-AR (hablar)</th><th>-ER (comer)</th><th>-IR (vivir)</th></tr></thead>
+<tbody><tr><td>Yo</td><td>haya hablado</td><td>haya comido</td><td>haya vivido</td></tr><tr><td>Tú</td><td>hayas hablado</td><td>hayas comido</td><td>hayas vivido</td></tr><tr><td>Él / Ella</td><td>haya hablado</td><td>haya comido</td><td>haya vivido</td></tr><tr><td>Nosotros / -as</td><td>hayamos hablado</td><td>hayamos comido</td><td>hayamos vivido</td></tr><tr><td>Vosotros / -as</td><td>hayáis hablado</td><td>hayáis comido</td><td>hayáis vivido</td></tr><tr><td>Ellos / Ellas</td><td>hayan hablado</td><td>hayan comido</td><td>hayan vivido</td></tr></tbody></table></div>
+</div><div class="tab-panel" id="subj-s-imp">
+<div class="table-wrap"><table><thead><tr><th>Pronoun</th><th>-AR (hablar)</th><th>-ER (comer)</th><th>-IR (vivir)</th></tr></thead>
+<tbody><tr><td>Yo</td><td>habl<b>ara</b></td><td>com<b>iera</b></td><td>viv<b>iera</b></td></tr><tr><td>Tú</td><td>habl<b>aras</b></td><td>com<b>ieras</b></td><td>viv<b>ieras</b></td></tr><tr><td>Él / Ella</td><td>habl<b>ara</b></td><td>com<b>iera</b></td><td>viv<b>iera</b></td></tr><tr><td>Nosotros / -as</td><td>habl<b>áramos</b></td><td>com<b>iéramos</b></td><td>viv<b>iéramos</b></td></tr><tr><td>Vosotros / -as</td><td>habl<b>arais</b></td><td>com<b>ierais</b></td><td>viv<b>ierais</b></td></tr><tr><td>Ellos / Ellas</td><td>habl<b>aran</b></td><td>com<b>ieran</b></td><td>viv<b>ieran</b></td></tr></tbody></table></div>
+</div><div class="tab-panel" id="subj-c-imp">
+<div class="table-wrap"><table><thead><tr><th>Pronoun</th><th>-AR (hablar)</th><th>-ER (comer)</th><th>-IR (vivir)</th></tr></thead>
+<tbody><tr><td>Yo</td><td>hubiera hablado</td><td>hubiera comido</td><td>hubiera vivido</td></tr><tr><td>Tú</td><td>hubieras hablado</td><td>hubieras comido</td><td>hubieras vivido</td></tr><tr><td>Él / Ella</td><td>hubiera hablado</td><td>hubiera comido</td><td>hubiera vivido</td></tr><tr><td>Nosotros / -as</td><td>hubiéramos hablado</td><td>hubiéramos comido</td><td>hubiéramos vivido</td></tr><tr><td>Vosotros / -as</td><td>hubierais hablado</td><td>hubierais comido</td><td>hubierais vivido</td></tr><tr><td>Ellos / Ellas</td><td>hubieran hablado</td><td>hubieran comido</td><td>hubieran vivido</td></tr></tbody></table></div>
+</div><div class="tab-panel" id="subj-s-fut">
+<div class="table-wrap"><table><thead><tr><th>Pronoun</th><th>-AR (hablar)</th><th>-ER (comer)</th><th>-IR (vivir)</th></tr></thead>
+<tbody><tr><td>Yo</td><td>habl<b>are</b></td><td>com<b>iere</b></td><td>viv<b>iere</b></td></tr><tr><td>Tú</td><td>habl<b>ares</b></td><td>com<b>ieres</b></td><td>viv<b>ieres</b></td></tr><tr><td>Él / Ella</td><td>habl<b>are</b></td><td>com<b>iere</b></td><td>viv<b>iere</b></td></tr><tr><td>Nosotros / -as</td><td>habl<b>áremos</b></td><td>com<b>iéremos</b></td><td>viv<b>iéremos</b></td></tr><tr><td>Vosotros / -as</td><td>habl<b>areis</b></td><td>com<b>iereis</b></td><td>viv<b>iereis</b></td></tr><tr><td>Ellos / Ellas</td><td>habl<b>aren</b></td><td>com<b>ieren</b></td><td>viv<b>ieren</b></td></tr></tbody></table></div>
+</div><div class="tab-panel" id="subj-c-fut">
+<div class="table-wrap"><table><thead><tr><th>Pronoun</th><th>-AR (hablar)</th><th>-ER (comer)</th><th>-IR (vivir)</th></tr></thead>
+<tbody><tr><td>Yo</td><td>hubiere hablado</td><td>hubiere comido</td><td>hubiere vivido</td></tr><tr><td>Tú</td><td>hubieres hablado</td><td>hubieres comido</td><td>hubieres vivido</td></tr><tr><td>Él / Ella</td><td>hubiere hablado</td><td>hubiere comido</td><td>hubiere vivido</td></tr><tr><td>Nosotros / -as</td><td>hubiéremos hablado</td><td>hubiéremos comido</td><td>hubiéremos vivido</td></tr><tr><td>Vosotros / -as</td><td>hubiereis hablado</td><td>hubiereis comido</td><td>hubiereis vivido</td></tr><tr><td>Ellos / Ellas</td><td>hubieren hablado</td><td>hubieren comido</td><td>hubieren vivido</td></tr></tbody></table></div>
+</div>
+<div class="tip-box"><i class="ti ti-alert-triangle"></i> The imperfect subjunctive has two interchangeable forms: <b>-ra</b> (cantara) and <b>-se</b> (cantase). The future subjunctive is almost exclusively literary or legal today.</div>
 
 <h3>The most common triggers</h3>
 <div class="mini-cards">
@@ -151,32 +180,7 @@
 </tbody></table></div>
 
 <div class="tip-box"><i class="ti ti-alert-triangle"></i> <b>The classic English-speaker mistake:</b> in English you'd say "When he arrives, we'll have dinner" — using the present tense after "when" for a future event. Spanish uses the subjunctive there instead: <em>Cuando llegue</em>, never "cuando llegará". This exact pattern trips up almost every English speaker at some point.</div>
-<div class="ex-cta"><a href="ejercicios-en.html?tema=subjuntivo" class="button button-primary"><i class="ti ti-target"></i> Test yourself with exercises</a></div>
-<h3 style="margin-top:30px">Full conjugation</h3>
-<p class="tab-group-label">Simple tenses</p>
-<div class="tabs"><button class="tab-btn active" data-tab="subj-s-presente">Presente</button><button class="tab-btn" data-tab="subj-s-imp">Pretérito Imperfecto</button><button class="tab-btn" data-tab="subj-s-fut">Futuro Simple</button></div>
-<p class="tab-group-label">Compound tenses</p>
-<div class="tabs"><button class="tab-btn" data-tab="subj-c-presente">Pretérito Perfecto Compuesto</button><button class="tab-btn" data-tab="subj-c-imp">Pretérito Pluscuamperfecto</button><button class="tab-btn" data-tab="subj-c-fut">Futuro Compuesto</button></div>
-<div class="tab-panel active" id="subj-s-presente">
-<div class="table-wrap"><table><thead><tr><th>Pronoun</th><th>-AR (hablar)</th><th>-ER (comer)</th><th>-IR (vivir)</th></tr></thead>
-<tbody><tr><td>Yo</td><td>habl<b>e</b></td><td>com<b>a</b></td><td>viv<b>a</b></td></tr><tr><td>Tú</td><td>habl<b>es</b></td><td>com<b>as</b></td><td>viv<b>as</b></td></tr><tr><td>Él / Ella</td><td>habl<b>e</b></td><td>com<b>a</b></td><td>viv<b>a</b></td></tr><tr><td>Nosotros / -as</td><td>habl<b>emos</b></td><td>com<b>amos</b></td><td>viv<b>amos</b></td></tr><tr><td>Vosotros / -as</td><td>habl<b>éis</b></td><td>com<b>áis</b></td><td>viv<b>áis</b></td></tr><tr><td>Ellos / Ellas</td><td>habl<b>en</b></td><td>com<b>an</b></td><td>viv<b>an</b></td></tr></tbody></table></div>
-</div><div class="tab-panel" id="subj-c-presente">
-<div class="table-wrap"><table><thead><tr><th>Pronoun</th><th>-AR (hablar)</th><th>-ER (comer)</th><th>-IR (vivir)</th></tr></thead>
-<tbody><tr><td>Yo</td><td>haya hablado</td><td>haya comido</td><td>haya vivido</td></tr><tr><td>Tú</td><td>hayas hablado</td><td>hayas comido</td><td>hayas vivido</td></tr><tr><td>Él / Ella</td><td>haya hablado</td><td>haya comido</td><td>haya vivido</td></tr><tr><td>Nosotros / -as</td><td>hayamos hablado</td><td>hayamos comido</td><td>hayamos vivido</td></tr><tr><td>Vosotros / -as</td><td>hayáis hablado</td><td>hayáis comido</td><td>hayáis vivido</td></tr><tr><td>Ellos / Ellas</td><td>hayan hablado</td><td>hayan comido</td><td>hayan vivido</td></tr></tbody></table></div>
-</div><div class="tab-panel" id="subj-s-imp">
-<div class="table-wrap"><table><thead><tr><th>Pronoun</th><th>-AR (hablar)</th><th>-ER (comer)</th><th>-IR (vivir)</th></tr></thead>
-<tbody><tr><td>Yo</td><td>habl<b>ara</b></td><td>com<b>iera</b></td><td>viv<b>iera</b></td></tr><tr><td>Tú</td><td>habl<b>aras</b></td><td>com<b>ieras</b></td><td>viv<b>ieras</b></td></tr><tr><td>Él / Ella</td><td>habl<b>ara</b></td><td>com<b>iera</b></td><td>viv<b>iera</b></td></tr><tr><td>Nosotros / -as</td><td>habl<b>áramos</b></td><td>com<b>iéramos</b></td><td>viv<b>iéramos</b></td></tr><tr><td>Vosotros / -as</td><td>habl<b>arais</b></td><td>com<b>ierais</b></td><td>viv<b>ierais</b></td></tr><tr><td>Ellos / Ellas</td><td>habl<b>aran</b></td><td>com<b>ieran</b></td><td>viv<b>ieran</b></td></tr></tbody></table></div>
-</div><div class="tab-panel" id="subj-c-imp">
-<div class="table-wrap"><table><thead><tr><th>Pronoun</th><th>-AR (hablar)</th><th>-ER (comer)</th><th>-IR (vivir)</th></tr></thead>
-<tbody><tr><td>Yo</td><td>hubiera hablado</td><td>hubiera comido</td><td>hubiera vivido</td></tr><tr><td>Tú</td><td>hubieras hablado</td><td>hubieras comido</td><td>hubieras vivido</td></tr><tr><td>Él / Ella</td><td>hubiera hablado</td><td>hubiera comido</td><td>hubiera vivido</td></tr><tr><td>Nosotros / -as</td><td>hubiéramos hablado</td><td>hubiéramos comido</td><td>hubiéramos vivido</td></tr><tr><td>Vosotros / -as</td><td>hubierais hablado</td><td>hubierais comido</td><td>hubierais vivido</td></tr><tr><td>Ellos / Ellas</td><td>hubieran hablado</td><td>hubieran comido</td><td>hubieran vivido</td></tr></tbody></table></div>
-</div><div class="tab-panel" id="subj-s-fut">
-<div class="table-wrap"><table><thead><tr><th>Pronoun</th><th>-AR (hablar)</th><th>-ER (comer)</th><th>-IR (vivir)</th></tr></thead>
-<tbody><tr><td>Yo</td><td>habl<b>are</b></td><td>com<b>iere</b></td><td>viv<b>iere</b></td></tr><tr><td>Tú</td><td>habl<b>ares</b></td><td>com<b>ieres</b></td><td>viv<b>ieres</b></td></tr><tr><td>Él / Ella</td><td>habl<b>are</b></td><td>com<b>iere</b></td><td>viv<b>iere</b></td></tr><tr><td>Nosotros / -as</td><td>habl<b>áremos</b></td><td>com<b>iéremos</b></td><td>viv<b>iéremos</b></td></tr><tr><td>Vosotros / -as</td><td>habl<b>areis</b></td><td>com<b>iereis</b></td><td>viv<b>iereis</b></td></tr><tr><td>Ellos / Ellas</td><td>habl<b>aren</b></td><td>com<b>ieren</b></td><td>viv<b>ieren</b></td></tr></tbody></table></div>
-</div><div class="tab-panel" id="subj-c-fut">
-<div class="table-wrap"><table><thead><tr><th>Pronoun</th><th>-AR (hablar)</th><th>-ER (comer)</th><th>-IR (vivir)</th></tr></thead>
-<tbody><tr><td>Yo</td><td>hubiere hablado</td><td>hubiere comido</td><td>hubiere vivido</td></tr><tr><td>Tú</td><td>hubieres hablado</td><td>hubieres comido</td><td>hubieres vivido</td></tr><tr><td>Él / Ella</td><td>hubiere hablado</td><td>hubiere comido</td><td>hubiere vivido</td></tr><tr><td>Nosotros / -as</td><td>hubiéremos hablado</td><td>hubiéremos comido</td><td>hubiéremos vivido</td></tr><tr><td>Vosotros / -as</td><td>hubiereis hablado</td><td>hubiereis comido</td><td>hubiereis vivido</td></tr><tr><td>Ellos / Ellas</td><td>hubieren hablado</td><td>hubieren comido</td><td>hubieren vivido</td></tr></tbody></table></div>
-</div>
-<div class="tip-box"><i class="ti ti-alert-triangle"></i> The imperfect subjunctive has two interchangeable forms: <b>-ra</b> (cantara) and <b>-se</b> (cantase). The future subjunctive is almost exclusively literary or legal today.</div>
+<div class="ex-cta"><a href="ejercicios-en.html?tema=subjuntivo" class="button button-primary"><i class="ti ti-pencil"></i> Test yourself with exercises</a></div>
 </section>
 </main>
 <footer>© 2026 Jose N. · Profesor de español · <a href="privacidad.html">Privacidad</a></footer>

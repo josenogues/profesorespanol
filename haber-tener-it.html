@@ -6,7 +6,7 @@
 <title>Haber y tener (italiano) | Aprende Español con Jose Nogues</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@400;600;700;800&family=Caveat:wght@700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
 <link rel="icon" type="image/png" href="favicon.png">
 <link rel="stylesheet" href="styles.css">
@@ -35,8 +35,8 @@
 <a href="#" class="track-link" data-base="verbos-irregulares"><span class="i18n" data-es="Irregulares" data-it="Irregolari" data-en="Irregular">Irregulares</span></a>
 <a href="#" class="track-link submenu-sub" data-base="ser-estar"><span class="i18n" data-es="Ser y estar" data-it="Ser y estar" data-en="Ser y estar">Ser y estar</span></a>
 <a href="#" class="track-link submenu-sub" data-base="haber-tener"><span class="i18n" data-es="Haber y tener" data-it="Haber y tener" data-en="Haber y tener">Haber y tener</span></a>
-<a href="#" class="track-link track-only" data-track-show="it" data-base="especial-atencion-verbos">Especial atención</a>
-<a href="#" class="track-link track-only" data-track-show="en" data-base="especial-atencion-verbos">Especial atención</a>
+<a href="#" class="track-link track-only" data-track-show="it" data-base="especial-atencion-verbos">Attenzione a questi</a>
+<a href="#" class="track-link track-only" data-track-show="en" data-base="especial-atencion-verbos">Watch out for this</a>
 <a href="#" class="track-link" data-base="verbos-reflexivos"><span class="i18n" data-es="Reflexivos" data-it="Riflessivi" data-en="Reflexive">Reflexivos</span></a>
 <a href="#" class="track-link" data-base="formas-impersonales"><span class="i18n" data-es="Formas impersonales" data-it="Forme impersonali" data-en="Non-finite forms">Formas impersonales</span></a>
 </div>
@@ -50,8 +50,8 @@
 <a href="#" class="track-link" data-base="pronombres"><span class="i18n" data-es="Pronombres" data-it="Pronomi" data-en="Pronouns">Pronombres</span></a>
 <a href="#" class="track-link" data-base="preposiciones"><span class="i18n" data-es="Preposiciones" data-it="Preposizioni" data-en="Prepositions">Preposiciones</span></a>
 <a href="#" class="track-link" data-base="fonetica"><span class="i18n" data-es="Fonética" data-it="Fonetica" data-en="Phonetics">Fonética</span></a>
-<a href="#" class="track-link track-only" data-track-show="it" data-base="especial-atencion-gramatica">Especial atención</a>
-<a href="#" class="track-link track-only" data-track-show="en" data-base="especial-atencion-gramatica">Especial atención</a>
+<a href="#" class="track-link track-only" data-track-show="it" data-base="especial-atencion-gramatica">Attenzione a questi</a>
+<a href="#" class="track-link track-only" data-track-show="en" data-base="especial-atencion-gramatica">Watch out for this</a>
 </div>
 </div>
 
@@ -84,6 +84,13 @@
 </div>
 
 <div class="menu-item">
+<button class="menu-button"><i class="ti ti-external-link cat-recursos"></i> <span class="i18n" data-es="Recursos" data-it="Risorse" data-en="Resources">Recursos</span> ▾</button>
+<div class="submenu">
+<a href="#" class="track-link" data-base="recursos"><span class="i18n" data-es="Todos los recursos" data-it="Tutte le risorse" data-en="All resources">Todos los recursos</span></a>
+</div>
+</div>
+
+<div class="menu-item">
 <button class="menu-button"><i class="ti ti-pencil cat-ejercicios"></i> <span class="i18n" data-es="Ejercicios" data-it="Esercizi" data-en="Exercises">Ejercicios</span> ▾</button>
 <div class="submenu">
 <a href="#" class="track-link" data-base="ejercicios"><span class="i18n" data-es="Todos los ejercicios" data-it="Tutti gli esercizi" data-en="All exercises">Todos los ejercicios</span></a>
@@ -95,19 +102,12 @@
 <p class="tagline"><span id="tagline-text">Poco a poco se llega lejos</span> <i class="ti ti-bolt"></i></p>
 </div>
 </aside>
-
-
-
-
-
-
-
-
-
-
-
-
-
+<div class="tab-rail">
+<div class="rail-tab" data-tab-cat="verbos" style="--tab-color:#D6488F"></div>
+<div class="rail-tab" data-tab-cat="gramatica" style="--tab-color:#5B9A3B"></div>
+<div class="rail-tab" data-tab-cat="vocabulario" style="--tab-color:#E8791E"></div>
+<div class="rail-tab" data-tab-cat="expresiones" style="--tab-color:#7A6FD1"></div>
+</div>
 <main class="main">
 <div class="page-header"><div class="language-selector">
 <button class="lang-track-btn" data-track="es">🇪🇸 Español</button>
@@ -126,14 +126,21 @@
 <p class="subtitle" style="margin-bottom:16px">Due verbi che gli italiani confondono spesso. "HABER" è ausiliare o indica esistenza. "TENER" indica possesso o obbligo.</p>
 <div class="compare-grid" style="grid-template-columns:repeat(2,1fr)">
 <div class="compare-card"><h4>HABER → Ausiliare + impersonale</h4><ul><li><b>He comido</b> → Ho mangiato (ausiliare)</li><li><b>Hay un problema</b> → C'è un problema (impersonale)</li><li><b>Hay muchos libros</b> → Ci sono molti libri</li><li><b>Habéis cantado</b> → Avete cantato</li></ul></div>
-<div class="compare-card"><h4>TENER → Possesso e obbligo</h4><ul><li><b>Tengo una máquina</b> → Ho una macchina (possesso)</li><li><b>Debo estudiar</b> → Devo studiare (obbligo)</li><li><b>Tiene frío</b> → Ha freddo (sensazione fisica)</li><li><b>Tengo hambre</b> → Ho fame</li><li>In italiano: <b>dovere</b>. In spagnolo: <b>tener que</b> + infinito.</li></ul></div>
+<div class="compare-card"><h4>TENER → Possesso e obbligo</h4><ul><li><b>Tengo una máquina</b> → Ho una macchina (possesso)</li><li><b>Tiene frío</b> → Ha freddo (sensazione fisica)</li><li><b>Tengo hambre</b> → Ho fame</li><li>In italiano: <b>dovere</b>. In spagnolo: <b>tener que</b> + infinito.</li></ul></div>
 </div>
 <div class="tip-box"><i class="ti ti-alert-triangle"></i> <b>Attenzione!</b> TENERE in italiano non è TENER. Esempio: "Tieni questo" → <i>Sujeta esto</i>; "Ci tengo ad andare" → <i>Quiero ir</i>.</div>
 
 <h3 style="margin-top:30px">Tabelle di coniugazione complete</h3>
-<div class="tabs">
+<div class="tense-group-toggle">
+<button class="group-btn active" data-group="simples">Tiempos simples</button>
+<button class="group-btn" data-group="compuestos">Tiempos compuestos</button>
+</div>
+<div class="tabs" data-group="simples">
 <button class="tab-btn active" data-tab="h-ind">Indicativo</button>
 <button class="tab-btn" data-tab="h-subj">Subjuntivo</button>
+</div>
+<div class="tabs" data-group="compuestos" style="display:none">
+<button class="tab-btn" data-tab="h-indcomp">Indicativo</button>
 </div>
 <div class="tab-panel active" id="h-ind">
 <div class="table-wrap"><table>
@@ -161,7 +168,22 @@
 </tbody></table></div>
 <div class="tip-box">Il Futuro de Subjuntivo è raramente usato nello spagnolo moderno parlato, ed è quasi esclusivamente presente in testi giuridici o letterari antichi.</div>
 </div>
-<div class="ex-cta"><a href="ejercicios-it.html?tema=haber-tener" class="button button-primary"><i class="ti ti-target"></i> Mettiti alla prova con gli esercizi</a></div>
+
+<div class="tab-panel" id="h-indcomp">
+<div class="table-wrap"><table>
+<thead><tr><th>Pronombre</th><th>Pret. perf. compuesto</th><th>Pluscuamperfecto</th><th>Pret. anterior</th><th>Futuro compuesto</th><th>Condicional compuesto</th></tr></thead>
+<tbody>
+<tr><td>Yo</td><td>he habido</td><td>había habido</td><td>hube habido</td><td>habré habido</td><td>habría habido</td></tr>
+<tr><td>Tú</td><td>has habido</td><td>habías habido</td><td>hubiste habido</td><td>habrás habido</td><td>habrías habido</td></tr>
+<tr><td>Él / Ella</td><td>ha habido</td><td>había habido</td><td>hubo habido</td><td>habrá habido</td><td>habría habido</td></tr>
+<tr><td>Nosotros / -as</td><td>hemos habido</td><td>habíamos habido</td><td>hubimos habido</td><td>habremos habido</td><td>habríamos habido</td></tr>
+<tr><td>Vosotros / -as</td><td>habéis habido</td><td>habíais habido</td><td>hubisteis habido</td><td>habréis habido</td><td>habríais habido</td></tr>
+<tr><td>Ellos / Ellas</td><td>han habido</td><td>habían habido</td><td>hubieron habido</td><td>habrán habido</td><td>habrían habido</td></tr>
+</tbody></table></div>
+<div class="tip-box"><i class="ti ti-alert-triangle"></i> Queste forme esistono, ma quasi non si usano nella pratica — <b>haber</b> si usa soprattutto come ausiliare, non nei propri tempi composti.</div>
+</div>
+
+<div class="ex-cta"><a href="ejercicios-it.html?tema=haber-tener" class="button button-primary"><i class="ti ti-pencil"></i> Mettiti alla prova con gli esercizi</a></div>
 </section>
 </main>
 <footer>© 2026 Jose N. · Profesor de español · <a href="privacidad.html">Privacidad</a></footer>

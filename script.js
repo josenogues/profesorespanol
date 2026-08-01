@@ -17,6 +17,24 @@ document.getElementById(btn.dataset.tab).classList.add("active");
 });
 });
 
+// --- Selector de grupo (tiempos simples / compuestos) ---
+document.querySelectorAll(".tense-group-toggle").forEach(toggle=>{
+const groupBtns = toggle.querySelectorAll(".group-btn");
+const section = toggle.closest(".grammar-section") || toggle.parentElement;
+groupBtns.forEach(gbtn=>{
+gbtn.addEventListener("click",()=>{
+groupBtns.forEach(b=>b.classList.remove("active"));
+gbtn.classList.add("active");
+const group = gbtn.dataset.group;
+section.querySelectorAll(".tabs[data-group]").forEach(tabRow=>{
+tabRow.style.display = (tabRow.dataset.group === group) ? "" : "none";
+});
+const firstTab = section.querySelector(`.tabs[data-group="${group}"] .tab-btn`);
+if(firstTab) firstTab.click();
+});
+});
+});
+
 // Resalta el enlace de la página actual en el menú lateral y abre su submenú
 (function(){
 const current=location.pathname.split("/").pop()||"index.html";
@@ -832,6 +850,46 @@ ${qHTML}`;
   });
 })();
 
+// --- Titulo escrito a mano por seccion (traducido segun el idioma activo) ---
+(function(){
+  const header = document.querySelector('.page-header');
+  const cat = document.body.dataset.category;
+  if(!header || !cat) return;
+  const labels = {
+    verbos: {es:'Verbos', it:'Verbi', en:'Verbs'},
+    gramatica: {es:'Gramática', it:'Grammatica', en:'Grammar'},
+    vocabulario: {es:'Vocabulario', it:'Vocabolario', en:'Vocabulary'},
+    expresiones: {es:'Expresiones', it:'Espressioni', en:'Expressions'},
+    atencion: {es:'Especial atención', it:'Attenzione a questi', en:'Watch out for this'}
+  };
+  const l = labels[cat];
+  if(!l) return;
+  const track = localStorage.getItem('jn_track') || 'es';
+  const span = document.createElement('span');
+  span.className = 'handwritten-title i18n';
+  span.dataset.es = l.es; span.dataset.it = l.it; span.dataset.en = l.en;
+  span.textContent = l[track] || l.es;
+  header.insertBefore(span, header.firstChild);
+})();
+
+// --- Alinear las pestañas del navegador con sus secciones reales ---
+(function(){
+  const rail = document.querySelector('.tab-rail');
+  if(!rail) return;
+  function align(){
+    rail.querySelectorAll('.rail-tab').forEach(tab => {
+      const cat = tab.dataset.tabCat;
+      const btn = document.querySelector(`.menu-item > .menu-button:has(.cat-${cat})`);
+      if(!btn) return;
+      const rect = btn.getBoundingClientRect();
+      tab.style.top = (rect.top + rect.height / 2) + 'px';
+    });
+  }
+  align();
+  window.addEventListener('resize', align);
+  setTimeout(align, 300); // por si las fuentes cambian la altura del menú al cargar
+})();
+
 // --- Botón de mostrar/ocultar menú lateral ---
 (function(){
   const btn = document.getElementById('sidebar-toggle');
@@ -850,12 +908,14 @@ ${qHTML}`;
   const track = document.getElementById('reviews-track');
   if(!track) return;
   const cards = [...track.children];
+  const perPage = 2;
+  const pages = Math.ceil(cards.length / perPage);
   const dotsWrap = document.getElementById('reviews-dots');
   const prevBtn = document.querySelector('.reviews-prev');
   const nextBtn = document.querySelector('.reviews-next');
   let index = 0;
 
-  dotsWrap.innerHTML = cards.map((_, i) => `<button class="dot-btn" data-i="${i}"></button>`).join('');
+  dotsWrap.innerHTML = Array.from({length: pages}, (_, i) => `<button class="dot-btn" data-i="${i}"></button>`).join('');
   const dots = [...dotsWrap.children];
 
   function update(){
@@ -863,7 +923,7 @@ ${qHTML}`;
     dots.forEach((d, i) => d.classList.toggle('active', i === index));
   }
   function go(delta){
-    index = (index + delta + cards.length) % cards.length;
+    index = (index + delta + pages) % pages;
     update();
   }
   prevBtn.addEventListener('click', () => go(-1));

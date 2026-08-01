@@ -6,7 +6,7 @@
 <title>Vida cotidiana (español) | Aprende Español con Jose Nogues</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@400;600;700;800&family=Caveat:wght@700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
 <link rel="icon" type="image/png" href="favicon.png">
 <link rel="stylesheet" href="styles.css">
@@ -35,8 +35,8 @@
 <a href="#" class="track-link" data-base="verbos-irregulares"><span class="i18n" data-es="Irregulares" data-it="Irregolari" data-en="Irregular">Irregulares</span></a>
 <a href="#" class="track-link submenu-sub" data-base="ser-estar"><span class="i18n" data-es="Ser y estar" data-it="Ser y estar" data-en="Ser y estar">Ser y estar</span></a>
 <a href="#" class="track-link submenu-sub" data-base="haber-tener"><span class="i18n" data-es="Haber y tener" data-it="Haber y tener" data-en="Haber y tener">Haber y tener</span></a>
-<a href="#" class="track-link track-only" data-track-show="it" data-base="especial-atencion-verbos">Especial atención</a>
-<a href="#" class="track-link track-only" data-track-show="en" data-base="especial-atencion-verbos">Especial atención</a>
+<a href="#" class="track-link track-only" data-track-show="it" data-base="especial-atencion-verbos">Attenzione a questi</a>
+<a href="#" class="track-link track-only" data-track-show="en" data-base="especial-atencion-verbos">Watch out for this</a>
 <a href="#" class="track-link" data-base="verbos-reflexivos"><span class="i18n" data-es="Reflexivos" data-it="Riflessivi" data-en="Reflexive">Reflexivos</span></a>
 <a href="#" class="track-link" data-base="formas-impersonales"><span class="i18n" data-es="Formas impersonales" data-it="Forme impersonali" data-en="Non-finite forms">Formas impersonales</span></a>
 </div>
@@ -50,8 +50,8 @@
 <a href="#" class="track-link" data-base="pronombres"><span class="i18n" data-es="Pronombres" data-it="Pronomi" data-en="Pronouns">Pronombres</span></a>
 <a href="#" class="track-link" data-base="preposiciones"><span class="i18n" data-es="Preposiciones" data-it="Preposizioni" data-en="Prepositions">Preposiciones</span></a>
 <a href="#" class="track-link" data-base="fonetica"><span class="i18n" data-es="Fonética" data-it="Fonetica" data-en="Phonetics">Fonética</span></a>
-<a href="#" class="track-link track-only" data-track-show="it" data-base="especial-atencion-gramatica">Especial atención</a>
-<a href="#" class="track-link track-only" data-track-show="en" data-base="especial-atencion-gramatica">Especial atención</a>
+<a href="#" class="track-link track-only" data-track-show="it" data-base="especial-atencion-gramatica">Attenzione a questi</a>
+<a href="#" class="track-link track-only" data-track-show="en" data-base="especial-atencion-gramatica">Watch out for this</a>
 </div>
 </div>
 
@@ -84,6 +84,13 @@
 </div>
 
 <div class="menu-item">
+<button class="menu-button"><i class="ti ti-external-link cat-recursos"></i> <span class="i18n" data-es="Recursos" data-it="Risorse" data-en="Resources">Recursos</span> ▾</button>
+<div class="submenu">
+<a href="#" class="track-link" data-base="recursos"><span class="i18n" data-es="Todos los recursos" data-it="Tutte le risorse" data-en="All resources">Todos los recursos</span></a>
+</div>
+</div>
+
+<div class="menu-item">
 <button class="menu-button"><i class="ti ti-pencil cat-ejercicios"></i> <span class="i18n" data-es="Ejercicios" data-it="Esercizi" data-en="Exercises">Ejercicios</span> ▾</button>
 <div class="submenu">
 <a href="#" class="track-link" data-base="ejercicios"><span class="i18n" data-es="Todos los ejercicios" data-it="Tutti gli esercizi" data-en="All exercises">Todos los ejercicios</span></a>
@@ -95,6 +102,12 @@
 <p class="tagline"><span id="tagline-text">Poco a poco se llega lejos</span> <i class="ti ti-bolt"></i></p>
 </div>
 </aside>
+<div class="tab-rail">
+<div class="rail-tab" data-tab-cat="verbos" style="--tab-color:#D6488F"></div>
+<div class="rail-tab" data-tab-cat="gramatica" style="--tab-color:#5B9A3B"></div>
+<div class="rail-tab" data-tab-cat="vocabulario" style="--tab-color:#E8791E"></div>
+<div class="rail-tab" data-tab-cat="expresiones" style="--tab-color:#7A6FD1"></div>
+</div>
 <main class="main">
 <div class="page-header"><div class="language-selector">
 <button class="lang-track-btn" data-track="es">🇪🇸 Español</button>
@@ -126,6 +139,14 @@
 </tbody></table></div>
 
 <h3>Expresiones de tiempo y frecuencia</h3>
+<div class="day-timeline">
+<div class="day-timeline-step"><div class="day-timeline-icon" style="background:#FAEEDA"><i class="ti ti-sunrise" style="font-size:20px;color:#A15C0E"></i></div><p>Despertarse</p></div>
+<div class="day-timeline-step"><div class="day-timeline-icon" style="background:#E6F1FB"><i class="ti ti-droplet" style="font-size:20px;color:#0C447C"></i></div><p>Ducharse</p></div>
+<div class="day-timeline-step"><div class="day-timeline-icon" style="background:#FBEAF3"><i class="ti ti-coffee" style="font-size:20px;color:#A02D6C"></i></div><p>Desayunar</p></div>
+<div class="day-timeline-step"><div class="day-timeline-icon" style="background:#EAF3DE"><i class="ti ti-briefcase" style="font-size:20px;color:#3B6D11"></i></div><p>Trabajar</p></div>
+<div class="day-timeline-step"><div class="day-timeline-icon" style="background:#EEEDFE"><i class="ti ti-tools-kitchen-2" style="font-size:20px;color:#4C4399"></i></div><p>Cenar</p></div>
+<div class="day-timeline-step"><div class="day-timeline-icon" style="background:#F1EFE8"><i class="ti ti-moon" style="font-size:20px;color:#5F5E5A"></i></div><p>Dormir</p></div>
+</div>
 <div class="mini-cards">
 <div class="mini-card"><h4>Frecuencia</h4><p>siempre, casi siempre, normalmente, a veces, casi nunca, nunca</p></div>
 <div class="mini-card"><h4>Momento del día</h4><p>por la mañana, al mediodía, por la tarde, por la noche</p></div>
@@ -133,7 +154,7 @@
 </div>
 
 <div class="tip-box"><b>Ejemplo natural:</b> "Normalmente me despierto a las siete, desayuno rápido y voy al trabajo en metro. Los fines de semana me levanto más tarde."</div>
-<div class="ex-cta"><a href="ejercicios-es.html?tema=vida-cotidiana" class="button button-primary"><i class="ti ti-target"></i> Ponte a prueba con ejercicios</a></div>
+<div class="ex-cta"><a href="ejercicios-es.html?tema=vida-cotidiana" class="button button-primary"><i class="ti ti-pencil"></i> Ponte a prueba con ejercicios</a></div>
 </section>
 </main>
 <footer>© 2026 Jose N. · Profesor de español · <a href="privacidad.html">Privacidad</a></footer>
