@@ -937,7 +937,22 @@ ${qHTML}`;
   const input = document.getElementById('site-search');
   const results = document.getElementById('search-results');
   if(!input || !results) return;
-  if(!window.SEARCH_INDEX) return; // esta página no cargó el índice
+
+  // El índice (search-index.js, ~170KB) no se carga hasta que el usuario toca el buscador
+  let indexPromise = null;
+  function loadIndex(){
+    if(!indexPromise){
+      indexPromise = new Promise((resolve, reject) => {
+        if(window.SEARCH_INDEX){ resolve(); return; }
+        const s = document.createElement('script');
+        s.src = 'search-index.js';
+        s.onload = resolve;
+        s.onerror = reject;
+        document.head.appendChild(s);
+      });
+    }
+    return indexPromise;
+  }
 
   function normalize(s){
     return s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
@@ -960,6 +975,7 @@ ${qHTML}`;
     const qRaw = query.trim();
     const q = normalize(qRaw);
     if(!q){ results.classList.remove('active'); results.innerHTML = ''; return; }
+    if(!window.SEARCH_INDEX) return; // aún cargando el índice
 
     const currentTrack = localStorage.getItem('jn_track');
     let matches = window.SEARCH_INDEX.filter(entry => {
@@ -989,8 +1005,8 @@ ${qHTML}`;
     results.classList.add('active');
   }
 
-  input.addEventListener('input', () => render(input.value));
-  input.addEventListener('focus', () => { if(input.value) render(input.value); });
+  input.addEventListener('focus', () => loadIndex().then(() => render(input.value)));
+  input.addEventListener('input', () => loadIndex().then(() => render(input.value)));
   document.addEventListener('click', (e) => {
     if(!e.target.closest('.sidebar-search')){ results.classList.remove('active'); }
   });
