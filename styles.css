@@ -331,6 +331,7 @@ h1 .ti,h2 .ti,h3 .ti{margin-right:8px}
 [data-base="articulos"] .card-icon{color:#5B9A3B}
 [data-base="vida-cotidiana"] .card-icon{color:#E8791E}
 [data-base="expresiones-comunes"] .card-icon{color:#7A6FD1}
+[data-base="recursos"] .card-icon{color:#9aa2c0}
 [data-base="ejercicios"] .card-icon{color:#3A6FC9}
 .card-link.track-only .card-icon{color:#C24A4A}
 
