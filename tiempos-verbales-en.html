@@ -6,7 +6,7 @@
 <title>Overview | Aprende Español con Jose Nogues</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@400;600;700;800&family=Caveat:wght@700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
 <link rel="icon" type="image/png" href="favicon.png">
 <link rel="stylesheet" href="styles.css">
@@ -35,8 +35,8 @@
 <a href="#" class="track-link" data-base="verbos-irregulares"><span class="i18n" data-es="Irregulares" data-it="Irregolari" data-en="Irregular">Irregulares</span></a>
 <a href="#" class="track-link submenu-sub" data-base="ser-estar"><span class="i18n" data-es="Ser y estar" data-it="Ser y estar" data-en="Ser y estar">Ser y estar</span></a>
 <a href="#" class="track-link submenu-sub" data-base="haber-tener"><span class="i18n" data-es="Haber y tener" data-it="Haber y tener" data-en="Haber y tener">Haber y tener</span></a>
-<a href="#" class="track-link track-only" data-track-show="it" data-base="especial-atencion-verbos">Especial atención</a>
-<a href="#" class="track-link track-only" data-track-show="en" data-base="especial-atencion-verbos">Especial atención</a>
+<a href="#" class="track-link track-only" data-track-show="it" data-base="especial-atencion-verbos">Attenzione a questi</a>
+<a href="#" class="track-link track-only" data-track-show="en" data-base="especial-atencion-verbos">Watch out for this</a>
 <a href="#" class="track-link" data-base="verbos-reflexivos"><span class="i18n" data-es="Reflexivos" data-it="Riflessivi" data-en="Reflexive">Reflexivos</span></a>
 <a href="#" class="track-link" data-base="formas-impersonales"><span class="i18n" data-es="Formas impersonales" data-it="Forme impersonali" data-en="Non-finite forms">Formas impersonales</span></a>
 </div>
@@ -50,8 +50,8 @@
 <a href="#" class="track-link" data-base="pronombres"><span class="i18n" data-es="Pronombres" data-it="Pronomi" data-en="Pronouns">Pronombres</span></a>
 <a href="#" class="track-link" data-base="preposiciones"><span class="i18n" data-es="Preposiciones" data-it="Preposizioni" data-en="Prepositions">Preposiciones</span></a>
 <a href="#" class="track-link" data-base="fonetica"><span class="i18n" data-es="Fonética" data-it="Fonetica" data-en="Phonetics">Fonética</span></a>
-<a href="#" class="track-link track-only" data-track-show="it" data-base="especial-atencion-gramatica">Especial atención</a>
-<a href="#" class="track-link track-only" data-track-show="en" data-base="especial-atencion-gramatica">Especial atención</a>
+<a href="#" class="track-link track-only" data-track-show="it" data-base="especial-atencion-gramatica">Attenzione a questi</a>
+<a href="#" class="track-link track-only" data-track-show="en" data-base="especial-atencion-gramatica">Watch out for this</a>
 </div>
 </div>
 
@@ -84,6 +84,13 @@
 </div>
 
 <div class="menu-item">
+<button class="menu-button"><i class="ti ti-external-link cat-recursos"></i> <span class="i18n" data-es="Recursos" data-it="Risorse" data-en="Resources">Recursos</span> ▾</button>
+<div class="submenu">
+<a href="#" class="track-link" data-base="recursos"><span class="i18n" data-es="Todos los recursos" data-it="Tutte le risorse" data-en="All resources">Todos los recursos</span></a>
+</div>
+</div>
+
+<div class="menu-item">
 <button class="menu-button"><i class="ti ti-pencil cat-ejercicios"></i> <span class="i18n" data-es="Ejercicios" data-it="Esercizi" data-en="Exercises">Ejercicios</span> ▾</button>
 <div class="submenu">
 <a href="#" class="track-link" data-base="ejercicios"><span class="i18n" data-es="Todos los ejercicios" data-it="Tutti gli esercizi" data-en="All exercises">Todos los ejercicios</span></a>
@@ -95,19 +102,12 @@
 <p class="tagline"><span id="tagline-text">Poco a poco se llega lejos</span> <i class="ti ti-bolt"></i></p>
 </div>
 </aside>
-
-
-
-
-
-
-
-
-
-
-
-
-
+<div class="tab-rail">
+<div class="rail-tab" data-tab-cat="verbos" style="--tab-color:#D6488F"></div>
+<div class="rail-tab" data-tab-cat="gramatica" style="--tab-color:#5B9A3B"></div>
+<div class="rail-tab" data-tab-cat="vocabulario" style="--tab-color:#E8791E"></div>
+<div class="rail-tab" data-tab-cat="expresiones" style="--tab-color:#7A6FD1"></div>
+</div>
 <main class="main">
 <div class="page-header"><div class="language-selector">
 <button class="lang-track-btn" data-track="es">🇪🇸 Español</button>
@@ -122,26 +122,32 @@
 <section class="grammar-section">
 <span class="eyebrow">Verbs</span>
 <h2>Overview</h2>
-<p class="subtitle">The building blocks of the Spanish verb system. Each block has its own dedicated page with full detail — this is just the map.</p>
+<p class="subtitle">Every Spanish verb is conjugated by combining five grammatical categories: who's speaking (person), how many (number), when (tense), with what attitude (mood), and whether the action is finished or not (aspect). The table below summarizes these five pieces; each block on this page has its own dedicated page with all the details — this is just the general map of the verb system.</p>
 
-<div class="mini-cards">
-<div class="mini-card"><h4>Regular vs. Irregular</h4><p>Most verbs follow predictable patterns based on their ending (–AR, –ER, –IR). Common verbs like <em>ser</em> and <em>ir</em> are irregular — they must be memorized.</p></div>
-<div class="mini-card"><h4>Three moods</h4><p><b>Indicativo</b> (facts) — 10 verb tenses: 5 simple + 5 compound.<br><b>Subjuntivo</b> (doubts &amp; desires) — 6 verb tenses: 3 simple + 3 compound.<br><b>Imperativo</b> (commands).</p></div>
-<div class="mini-card"><h4>Non-finite forms</h4><p><b>Infinitive</b> (hablar), <b>Gerund</b> (hablando), <b>Participle</b> (hablado). These don't conjugate, and are used in compound tenses and periphrases.</p></div>
+<div class="verb-scheme">
+<div class="verb-scheme-grid">
+<div class="verb-scheme-col"><h5>Person</h5><p>First<br>Second<br>Third</p></div>
+<div class="verb-scheme-col"><h5>Number</h5><p>Singular<br>Plural</p></div>
+<div class="verb-scheme-col"><h5>Tense</h5><p>Present<br>Past<br>Future</p></div>
+<div class="verb-scheme-col"><h5>Mood</h5><p>Indicativo<br>Subjunctive<br>Imperativo</p></div>
+<div class="verb-scheme-col"><h5>Aspect</h5><p>Perfective<br>Imperfective</p></div>
+</div>
 </div>
 
 <h3 style="margin-top:30px">The three moods</h3>
-<div class="mini-cards">
-<div class="mini-card"><h4>Indicativo <span style="font-weight:400;color:var(--muted)">(Indicative)</span></h4><p>Real, certain, or likely facts. The most-used mood in everyday conversation.</p><div class="ex-cta" style="margin-top:10px"><a href="#" class="button button-secondary track-link" data-base="indicativo">See →</a></div></div>
-<div class="mini-card"><h4>Subjuntivo <span style="font-weight:400;color:var(--muted)">(Subjunctive)</span></h4><p>Doubts, wishes, hypotheses, uncertain situations. Essential for nuance.</p><div class="ex-cta" style="margin-top:10px"><a href="#" class="button button-secondary track-link" data-base="subjuntivo">See →</a></div></div>
-<div class="mini-card"><h4>Imperativo <span style="font-weight:400;color:var(--muted)">(Imperative)</span></h4><p>Direct commands, instructions, and requests.</p><div class="ex-cta" style="margin-top:10px"><a href="#" class="button button-secondary track-link" data-base="imperativo">See →</a></div></div>
+<div class="mini-cards overview-cards">
+<div class="mini-card"><h4><i class="ti ti-check"></i>Indicativo</h4><p>Real, certain, or likely facts. The most-used mood in everyday conversation.</p><div class="ex-cta" style="margin-top:10px"><a href="#" class="button button-secondary track-link" data-base="indicativo">See →</a></div></div>
+<div class="mini-card"><h4><i class="ti ti-help"></i>Subjuntivo <span style="font-weight:400;color:var(--muted)">(Subjunctive)</span></h4><p>Doubts, wishes, hypotheses, uncertain situations. Essential for nuance.</p><div class="ex-cta" style="margin-top:10px"><a href="#" class="button button-secondary track-link" data-base="subjuntivo">See →</a></div></div>
+<div class="mini-card"><h4><i class="ti ti-bolt"></i>Imperativo</h4><p>Direct commands, instructions, and requests.</p><div class="ex-cta" style="margin-top:10px"><a href="#" class="button button-secondary track-link" data-base="imperativo">See →</a></div></div>
 </div>
 
 <h3 style="margin-top:30px">Non-finite forms and verb groups</h3>
-<div class="mini-cards">
-<div class="mini-card"><h4>Formas impersonales <span style="font-weight:400;color:var(--muted)">(Non-finite forms)</span></h4><p>Infinitive, gerund, participle — they don't show person or number.</p><div class="ex-cta" style="margin-top:10px"><a href="#" class="button button-secondary track-link" data-base="formas-impersonales">See →</a></div></div>
-<div class="mini-card"><h4>Verbos regulares <span style="font-weight:400;color:var(--muted)">(Regular)</span></h4><p>Follow a fixed pattern based on their ending (-AR, -ER, -IR).</p><div class="ex-cta" style="margin-top:10px"><a href="#" class="button button-secondary track-link" data-base="verbos-regulares">See →</a></div></div>
-<div class="mini-card"><h4>Verbos irregulares <span style="font-weight:400;color:var(--muted)">(Irregular)</span></h4><p>Don't follow the pattern — includes ser/estar and haber/tener, the most-used verbs of all.</p><div class="ex-cta" style="margin-top:10px"><a href="#" class="button button-secondary track-link" data-base="verbos-irregulares">See →</a></div></div>
+<div class="mini-cards overview-cards">
+<div class="mini-card"><h4><i class="ti ti-forms"></i>Formas impersonales <span style="font-weight:400;color:var(--muted)">(Non-finite forms)</span></h4><p>Infinitive, gerund, participle — they don't show person or number.</p><div class="ex-cta" style="margin-top:10px"><a href="#" class="button button-secondary track-link" data-base="formas-impersonales">See →</a></div></div>
+<div class="mini-card"><h4><i class="ti ti-list-check"></i>Verbos regulares <span style="font-weight:400;color:var(--muted)">(Regular)</span></h4><p>Follow a fixed pattern based on their ending (-AR, -ER, -IR).</p><div class="ex-cta" style="margin-top:10px"><a href="#" class="button button-secondary track-link" data-base="verbos-regulares">See →</a></div></div>
+<div class="mini-card"><h4><i class="ti ti-alert-triangle"></i>Verbos irregulares <span style="font-weight:400;color:var(--muted)">(Irregular)</span></h4><p>Don't follow the pattern — includes ser/estar and haber/tener, the most-used verbs of all.</p><div class="ex-cta" style="margin-top:10px"><a href="#" class="button button-secondary track-link" data-base="verbos-irregulares">See →</a></div></div>
+<div class="mini-card"><h4><i class="ti ti-refresh"></i>Verbos reflexivos <span style="font-weight:400;color:var(--muted)">(Reflexive)</span></h4><p>They carry a pronoun (me, te, se...) because the action falls back on whoever does it.</p><div class="ex-cta" style="margin-top:10px"><a href="#" class="button button-secondary track-link" data-base="verbos-reflexivos">See →</a></div></div>
+<div class="mini-card"><h4><i class="ti ti-flag"></i>Especial atención</h4><p>The verbs people mix up most — ir/venir, pedir/preguntar, dejar/dejar de, and more.</p><div class="ex-cta" style="margin-top:10px"><a href="#" class="button button-secondary track-link" data-base="especial-atencion-verbos">See →</a></div></div>
 </div>
 </section>
 </main>

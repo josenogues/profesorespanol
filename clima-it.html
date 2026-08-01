@@ -6,7 +6,7 @@
 <title>El clima (italiano) | Aprende Español con Jose Nogues</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
 <link rel="icon" type="image/png" href="favicon.png">
 <link rel="stylesheet" href="styles.css">
@@ -35,8 +35,8 @@
 <a href="#" class="track-link" data-base="verbos-irregulares"><span class="i18n" data-es="Irregulares" data-it="Irregolari" data-en="Irregular">Irregulares</span></a>
 <a href="#" class="track-link submenu-sub" data-base="ser-estar"><span class="i18n" data-es="Ser y estar" data-it="Ser y estar" data-en="Ser y estar">Ser y estar</span></a>
 <a href="#" class="track-link submenu-sub" data-base="haber-tener"><span class="i18n" data-es="Haber y tener" data-it="Haber y tener" data-en="Haber y tener">Haber y tener</span></a>
-<a href="#" class="track-link track-only" data-track-show="it" data-base="especial-atencion-verbos">Especial atención</a>
-<a href="#" class="track-link track-only" data-track-show="en" data-base="especial-atencion-verbos">Especial atención</a>
+<a href="#" class="track-link track-only" data-track-show="it" data-base="especial-atencion-verbos">Attenzione a questi</a>
+<a href="#" class="track-link track-only" data-track-show="en" data-base="especial-atencion-verbos">Watch out for this</a>
 <a href="#" class="track-link" data-base="verbos-reflexivos"><span class="i18n" data-es="Reflexivos" data-it="Riflessivi" data-en="Reflexive">Reflexivos</span></a>
 <a href="#" class="track-link" data-base="formas-impersonales"><span class="i18n" data-es="Formas impersonales" data-it="Forme impersonali" data-en="Non-finite forms">Formas impersonales</span></a>
 </div>
@@ -50,8 +50,8 @@
 <a href="#" class="track-link" data-base="pronombres"><span class="i18n" data-es="Pronombres" data-it="Pronomi" data-en="Pronouns">Pronombres</span></a>
 <a href="#" class="track-link" data-base="preposiciones"><span class="i18n" data-es="Preposiciones" data-it="Preposizioni" data-en="Prepositions">Preposiciones</span></a>
 <a href="#" class="track-link" data-base="fonetica"><span class="i18n" data-es="Fonética" data-it="Fonetica" data-en="Phonetics">Fonética</span></a>
-<a href="#" class="track-link track-only" data-track-show="it" data-base="especial-atencion-gramatica">Especial atención</a>
-<a href="#" class="track-link track-only" data-track-show="en" data-base="especial-atencion-gramatica">Especial atención</a>
+<a href="#" class="track-link track-only" data-track-show="it" data-base="especial-atencion-gramatica">Attenzione a questi</a>
+<a href="#" class="track-link track-only" data-track-show="en" data-base="especial-atencion-gramatica">Watch out for this</a>
 </div>
 </div>
 
@@ -84,6 +84,13 @@
 </div>
 
 <div class="menu-item">
+<button class="menu-button"><i class="ti ti-external-link cat-recursos"></i> <span class="i18n" data-es="Recursos" data-it="Risorse" data-en="Resources">Recursos</span> ▾</button>
+<div class="submenu">
+<a href="#" class="track-link" data-base="recursos"><span class="i18n" data-es="Todos los recursos" data-it="Tutte le risorse" data-en="All resources">Todos los recursos</span></a>
+</div>
+</div>
+
+<div class="menu-item">
 <button class="menu-button"><i class="ti ti-pencil cat-ejercicios"></i> <span class="i18n" data-es="Ejercicios" data-it="Esercizi" data-en="Exercises">Ejercicios</span> ▾</button>
 <div class="submenu">
 <a href="#" class="track-link" data-base="ejercicios"><span class="i18n" data-es="Todos los ejercicios" data-it="Tutti gli esercizi" data-en="All exercises">Todos los ejercicios</span></a>
@@ -95,8 +102,12 @@
 <p class="tagline"><span id="tagline-text">Poco a poco se llega lejos</span> <i class="ti ti-bolt"></i></p>
 </div>
 </aside>
-
-
+<div class="tab-rail">
+<div class="rail-tab" data-tab-cat="verbos" style="--tab-color:#D6488F"></div>
+<div class="rail-tab" data-tab-cat="gramatica" style="--tab-color:#5B9A3B"></div>
+<div class="rail-tab" data-tab-cat="vocabulario" style="--tab-color:#E8791E"></div>
+<div class="rail-tab" data-tab-cat="expresiones" style="--tab-color:#7A6FD1"></div>
+</div>
 <main class="main">
 <div class="page-header"><div class="language-selector">
 <button class="lang-track-btn" data-track="es">🇪🇸 Español</button>
@@ -107,29 +118,39 @@
 <span class="theme-switch-track"><i class="ti ti-sun"></i><i class="ti ti-moon"></i><span class="theme-switch-thumb"></span></span>
 </label>
 </div>
-<div class="breadcrumb"><a href="index.html"><i class="ti ti-home"></i> Inicio</a> / Vocabulario / El clima</div>
+<div class="breadcrumb"><a href="index.html"><i class="ti ti-home"></i> Inicio</a> / Vocabolario / El clima</div>
 </div>
 <section class="grammar-section">
 <span class="eyebrow">Vocabolario</span>
 <h2>El clima</h2>
-<p class="subtitle">Vocabolario del tempo atmosferico e delle stagioni — le espressioni con hacer/estar/tener le trovi nella pagina "Sobre temperatura" delle Espressioni; qui il vocabolario più ampio.</p>
+<p class="subtitle">Vocabolario del tempo atmosferico e delle stagioni. Le espressioni con hacer/estar/tener le trovi nella pagina "Sobre temperatura" delle Espressioni; qui il vocabolario più ampio.</p>
 
+<h3>Las estaciones</h3>
 <div class="mini-cards">
-<div class="mini-card"><h4>Las estaciones</h4><p>la primavera, el verano (estate), el otoño (autunno), el invierno (inverno)</p></div>
-<div class="mini-card"><h4>Fenómenos</h4><p>la lluvia (pioggia), la nieve (neve), el sol, el viento (vento), la niebla (nebbia), la tormenta (temporale)</p></div>
-<div class="mini-card"><h4>El pronóstico</h4><p>el pronóstico del tiempo (le previsioni), soleado (soleggiato), nublado (nuvoloso), lluvioso (piovoso)</p></div>
+<div class="mini-card"><h4>Primavera</h4><p>marzo, abril, mayo — i fiori, le allergie, temperature miti.</p></div>
+<div class="mini-card"><h4>Verano</h4><p>junio, julio, agosto — il caldo, le vacanze, la spiaggia.</p></div>
+<div class="mini-card"><h4>Otoño</h4><p>septiembre, octubre, noviembre — le foglie cadono, inizia il freddo.</p></div>
+<div class="mini-card"><h4>Invierno</h4><p>diciembre, enero, febrero — il freddo, la neve in alcune zone.</p></div>
 </div>
 
-<h3 style="margin-top:30px">Frases útiles</h3>
+<h3 style="margin-top:30px">Vocabolario del clima</h3>
 <div class="table-wrap"><table>
-<thead><tr><th>Spagnolo</th><th>Significato</th></tr></thead>
+<thead><tr><th>Parola</th><th>Significato</th></tr></thead>
 <tbody>
-<tr><td>Va a llover mañana</td><td>Domani pioverà</td></tr>
-<tr><td>Está despejado</td><td>È sereno</td></tr>
-<tr><td>Hay tormenta</td><td>C'è temporale</td></tr>
-<tr><td>El pronóstico dice que...</td><td>Le previsioni dicono che...</td></tr>
+<tr><td>el sol</td><td>il sole</td></tr>
+<tr><td>la nube / las nubes</td><td>la nuvola / le nuvole</td></tr>
+<tr><td>la lluvia / llover</td><td>la pioggia / piovere</td></tr>
+<tr><td>la nieve / nevar</td><td>la neve / nevicare</td></tr>
+<tr><td>granizar / el granizo</td><td>grandinare / la grandine</td></tr>
+<tr><td>el relámpago</td><td>il lampo</td></tr>
+<tr><td>el trueno</td><td>il tuono</td></tr>
+<tr><td>la tormenta</td><td>il temporale</td></tr>
+<tr><td>el arcoíris</td><td>l'arcobaleno</td></tr>
+<tr><td>la niebla</td><td>la nebbia</td></tr>
+<tr><td>el viento</td><td>il vento</td></tr>
 </tbody></table></div>
-<div class="ex-cta"><a href="ejercicios-it.html?tema=clima" class="button button-primary"><i class="ti ti-target"></i> Mettiti alla prova con gli esercizi</a></div>
+
+<div class="ex-cta"><a href="ejercicios-it.html?tema=clima" class="button button-primary"><i class="ti ti-pencil"></i> Mettiti alla prova con gli esercizi</a></div>
 </section>
 </main>
 <footer>© 2026 Jose N. · Profesor de español · <a href="privacidad.html">Privacidad</a></footer>

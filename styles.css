@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@700&display=swap');
 :root{--primary:#3A4570;--primary-dark:#232C4F;--primary-light:#6B76A3;--gold:#f2ab27;--gold-dark:#8a5b0a;--bg:#f4f6fb;--sidebar:#232C4F;--text:#232220;--muted:#6b6963;--border:#e7e5e0;--tint:#EEF0F6;--card-bg:#fff;--table-stripe:#fafafa;--badge-gold-bg:#fff3d6;--attention-bg:#fffaf0;--font-head:'Fredoka',Arial,sans-serif;--font-body:'Nunito',Arial,sans-serif}
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:var(--font-body);background:var(--bg);color:var(--text);line-height:1.65;font-size:17px}
@@ -17,7 +18,7 @@ h1,h2,h3,h4,.logo,.button,.tab-btn,.menu-title{font-family:var(--font-head)}
 .submenu a:hover{background:rgba(255,255,255,.15);color:#fff}
 .menu-item.active .submenu{display:block}
 
-.main{margin-left:270px;padding:40px 40px 40px 74px;max-width:1440px}
+.main{margin-left:294px;padding:40px 40px 40px 74px;max-width:1440px}
 .page-header{background:transparent;margin:0 0 44px;padding:0;border-bottom:0;display:flex;align-items:center;gap:20px;flex-wrap:wrap}
 .page-header .breadcrumb{margin:0;order:1}
 .page-header .language-selector{margin:0 0 0 auto;padding:0;border:0;text-align:right;order:2}
@@ -328,19 +329,19 @@ h1 .ti,h2 .ti,h3 .ti{margin-right:8px}
 [data-base="ejercicios"] .card-icon{color:#3A6FC9}
 .card-link.track-only .card-icon{color:#C24A4A}
 
-/* pestañas de cuaderno en el menú lateral */
-.menu-button,.menu-item > a.menu-button{position:relative}
-.menu-button:has(.cat-verbos)::after,.menu-button:has(.cat-gramatica)::after,.menu-button:has(.cat-vocabulario)::after,.menu-button:has(.cat-expresiones)::after,.menu-button:has(.cat-ejercicios)::after,.menu-button:has(.cat-atencion)::after{
-  content:"";position:absolute;top:50%;transform:translateY(-50%);right:-20px;width:14px;height:28px;border-radius:0 6px 6px 0;box-shadow:2px 1px 4px rgba(0,0,0,.15);transition:.15s
-}
-.menu-button:has(.cat-verbos)::after{background:#D6488F}
-.menu-button:has(.cat-gramatica)::after{background:#5B9A3B}
-.menu-button:has(.cat-vocabulario)::after{background:#E8791E}
-.menu-button:has(.cat-expresiones)::after{background:#7A6FD1}
-.menu-button:has(.cat-ejercicios)::after{background:#3A6FC9}
-.menu-button:has(.cat-atencion)::after{background:#C24A4A}
-.menu-item.active > .menu-button::after,a.menu-button.active::after{width:26px !important;box-shadow:3px 1px 6px rgba(0,0,0,.2) !important}
+/* pestañas de cuaderno, fuera del panel (no desaparecen al esconder el menú) */
 .menu-item{margin-bottom:4px}
+.tab-rail{position:fixed;top:0;left:270px;width:24px;height:100vh;z-index:55;pointer-events:none}
+.rail-tab{position:absolute;left:0;width:14px;height:24px;background:var(--tab-color);opacity:.4;border-radius:0 7px 7px 0;transition:.2s;transform:translateY(-50%)}
+body[data-category="verbos"] .rail-tab[data-tab-cat="verbos"],
+body[data-category="gramatica"] .rail-tab[data-tab-cat="gramatica"],
+body[data-category="vocabulario"] .rail-tab[data-tab-cat="vocabulario"],
+body[data-category="expresiones"] .rail-tab[data-tab-cat="expresiones"],
+body[data-category="atencion"] .rail-tab[data-tab-cat="gramatica"]{
+  opacity:1;width:22px;box-shadow:3px 2px 8px rgba(0,0,0,.22)
+}
+body.sidebar-collapsed .tab-rail{left:0}
+@media(max-width:900px){.tab-rail{display:none}}
 
 /* ---------- Toque de color por sección dentro de cada página ---------- */
 body[data-category="verbos"] .eyebrow{background:#FBEAF3;color:#A02D6C}
@@ -399,8 +400,9 @@ body[data-category="atencion"] .eyebrow{background:#FCEBEB;color:#A32D2D}
 /* ---------- Carrusel de reseñas ---------- */
 .reviews-carousel{display:flex;align-items:center;gap:14px}
 .reviews-track-wrap{overflow:hidden;flex:1}
-.reviews-track{display:flex;transition:transform .35s ease}
-.reviews-track .review-card{flex:0 0 100%;box-sizing:border-box}
+.reviews-track{display:flex;transition:transform .35s ease;gap:16px}
+.reviews-track .review-card{flex:0 0 calc(50% - 8px);box-sizing:border-box}
+@media(max-width:760px){.reviews-track .review-card{flex:0 0 100%}}
 .reviews-arrow{flex-shrink:0;width:40px;height:40px;border-radius:50%;border:1px solid var(--border);background:var(--card-bg);color:var(--text);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:18px;transition:.15s}
 .reviews-arrow:hover{background:var(--primary);color:#fff;border-color:var(--primary)}
 .reviews-dots{display:flex;justify-content:center;gap:8px;margin-top:14px}
@@ -413,17 +415,64 @@ body[data-category="atencion"] .eyebrow{background:#FCEBEB;color:#A32D2D}
 body.sidebar-collapsed .sidebar-toggle{left:18px;color:var(--text)}
 body.sidebar-collapsed .sidebar-toggle:hover{background:var(--tint)}
 body.sidebar-collapsed .sidebar{transform:translateX(-100%)}
-body.sidebar-collapsed .main{margin-left:0}
+body.sidebar-collapsed .main{margin-left:24px}
 .sidebar{transition:transform .25s ease}
 @media(max-width:900px){.sidebar-toggle{display:flex;left:auto;right:18px;color:var(--text)}}
 
 /* ---------- Vida visual para las tarjetas de Vocabulario ---------- */
-body[data-category="vocabulario"] .mini-card{border-left:3px solid #E8791E;background:linear-gradient(135deg,#FBEBD9 0%,var(--card-bg) 40%)}
+body[data-category="vocabulario"] .mini-card{border-left:3px solid #E8791E;background:#FBEBD9}
 body[data-category="vocabulario"] .mini-card h4{color:#A15C0E}
-[data-theme="dark"] body[data-category="vocabulario"] .mini-card{background:linear-gradient(135deg,#2a2013 0%,var(--card-bg) 40%)}
+[data-theme="dark"] body[data-category="vocabulario"] .mini-card{background:#2a2013}
 [data-theme="dark"] body[data-category="vocabulario"] .mini-card h4{color:#E8A85C}
 
 /* ---------- Chips de vocabulario con audio (días, meses...) ---------- */
 .word-chip-grid{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px}
 .word-chip{display:inline-flex;align-items:center;gap:6px;background:var(--card-bg);border:1px solid var(--border);border-radius:20px;padding:6px 8px 6px 14px;font-size:14px;font-weight:600;color:var(--text)}
 .word-chip .speak-btn{width:24px;height:24px;font-size:11px}
+
+/* ---------- Selector de tiempos en dos niveles (simples/compuestos) ---------- */
+.tense-group-toggle{display:flex;gap:8px;margin-bottom:16px;background:var(--tint);padding:4px;border-radius:12px;width:fit-content}
+.group-btn{border:0;background:transparent;padding:9px 20px;border-radius:9px;font-family:var(--font-head);font-weight:700;font-size:14.5px;color:var(--muted);cursor:pointer;transition:.15s}
+.group-btn.active{background:var(--card-bg);color:var(--primary);box-shadow:0 1px 3px rgba(0,0,0,.1)}
+
+/* ---------- Titulo escrito a mano por seccion ---------- */
+.handwritten-title{font-family:'Caveat',cursive;font-weight:700;font-size:34px;color:var(--muted);transform:rotate(-2deg);margin-right:auto;white-space:nowrap}
+body[data-category="verbos"] .handwritten-title{color:#D6488F}
+body[data-category="gramatica"] .handwritten-title{color:#5B9A3B}
+body[data-category="vocabulario"] .handwritten-title{color:#E8791E}
+body[data-category="expresiones"] .handwritten-title{color:#7A6FD1}
+body[data-category="atencion"] .handwritten-title{color:#5B9A3B}
+@media(max-width:900px){.handwritten-title{display:none}}
+
+/* ---------- Espiral decorativa en el borde del menu ---------- */
+
+.sidebar{left:0;border-radius:0}
+
+/* ---------- Esquema del verbo (pagina Overview) ---------- */
+.verb-scheme{margin:20px 0 28px;border-radius:12px;overflow:hidden;border:1px solid var(--border)}
+.verb-scheme-title{background:var(--primary);color:#fff;text-align:center;padding:11px;font-family:var(--font-head);font-weight:700;font-size:15px}
+.verb-scheme-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:1px;background:var(--border)}
+.verb-scheme-col{display:flex;flex-direction:column}
+.verb-scheme-col h5{background:var(--primary);color:#fff;text-align:center;padding:9px;font-size:14px;margin:0}
+.verb-scheme-col p{background:var(--card-bg);padding:12px 10px;font-size:14.5px;color:var(--text);margin:0;text-align:center;line-height:1.8;flex:1}
+@media(max-width:760px){.verb-scheme-grid{grid-template-columns:1fr}}
+
+/* ---------- Linea de tiempo del dia (Vida cotidiana) ---------- */
+.day-timeline{display:flex;position:relative;margin:20px 0 28px;flex-wrap:wrap;gap:14px 0}
+.day-timeline::before{content:"";position:absolute;top:22px;left:40px;right:40px;height:2px;background:var(--border)}
+.day-timeline-step{flex:1;min-width:80px;text-align:center;position:relative}
+.day-timeline-icon{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto;position:relative;z-index:1}
+.day-timeline-step p{margin:8px 0 0;font-size:12px;font-weight:600;color:var(--text)}
+
+/* ---------- Tarjetas fisicamente distintas para "Especial atencion" ---------- */
+.topic-card{background:var(--card-bg);border:1px solid var(--border);border-radius:14px;padding:22px 24px;margin-top:20px;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+
+/* ---------- Recursos (seccion nueva, en predisposicion) ---------- */
+.cat-recursos{color:#9aa2c0}
+
+/* ---------- Tabla compacta (para tablas cortas que no necesitan ocupar todo el ancho) ---------- */
+.table-wrap.compact{max-width:360px}
+
+/* ---------- Overview de Verbos: todas las tarjetas del mismo color de sección ---------- */
+.overview-cards .mini-card{border-top:3px solid #D6488F}
+.overview-cards .mini-card h4 i{color:#D6488F !important;margin-right:6px}

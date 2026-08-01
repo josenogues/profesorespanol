@@ -6,7 +6,7 @@
 <title>Pronouns (English) | Aprende Español con Jose Nogues</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@400;600;700;800&family=Caveat:wght@700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
 <link rel="icon" type="image/png" href="favicon.png">
 <link rel="stylesheet" href="styles.css">
@@ -35,8 +35,8 @@
 <a href="#" class="track-link" data-base="verbos-irregulares"><span class="i18n" data-es="Irregulares" data-it="Irregolari" data-en="Irregular">Irregulares</span></a>
 <a href="#" class="track-link submenu-sub" data-base="ser-estar"><span class="i18n" data-es="Ser y estar" data-it="Ser y estar" data-en="Ser y estar">Ser y estar</span></a>
 <a href="#" class="track-link submenu-sub" data-base="haber-tener"><span class="i18n" data-es="Haber y tener" data-it="Haber y tener" data-en="Haber y tener">Haber y tener</span></a>
-<a href="#" class="track-link track-only" data-track-show="it" data-base="especial-atencion-verbos">Especial atención</a>
-<a href="#" class="track-link track-only" data-track-show="en" data-base="especial-atencion-verbos">Especial atención</a>
+<a href="#" class="track-link track-only" data-track-show="it" data-base="especial-atencion-verbos">Attenzione a questi</a>
+<a href="#" class="track-link track-only" data-track-show="en" data-base="especial-atencion-verbos">Watch out for this</a>
 <a href="#" class="track-link" data-base="verbos-reflexivos"><span class="i18n" data-es="Reflexivos" data-it="Riflessivi" data-en="Reflexive">Reflexivos</span></a>
 <a href="#" class="track-link" data-base="formas-impersonales"><span class="i18n" data-es="Formas impersonales" data-it="Forme impersonali" data-en="Non-finite forms">Formas impersonales</span></a>
 </div>
@@ -50,8 +50,8 @@
 <a href="#" class="track-link" data-base="pronombres"><span class="i18n" data-es="Pronombres" data-it="Pronomi" data-en="Pronouns">Pronombres</span></a>
 <a href="#" class="track-link" data-base="preposiciones"><span class="i18n" data-es="Preposiciones" data-it="Preposizioni" data-en="Prepositions">Preposiciones</span></a>
 <a href="#" class="track-link" data-base="fonetica"><span class="i18n" data-es="Fonética" data-it="Fonetica" data-en="Phonetics">Fonética</span></a>
-<a href="#" class="track-link track-only" data-track-show="it" data-base="especial-atencion-gramatica">Especial atención</a>
-<a href="#" class="track-link track-only" data-track-show="en" data-base="especial-atencion-gramatica">Especial atención</a>
+<a href="#" class="track-link track-only" data-track-show="it" data-base="especial-atencion-gramatica">Attenzione a questi</a>
+<a href="#" class="track-link track-only" data-track-show="en" data-base="especial-atencion-gramatica">Watch out for this</a>
 </div>
 </div>
 
@@ -84,6 +84,13 @@
 </div>
 
 <div class="menu-item">
+<button class="menu-button"><i class="ti ti-external-link cat-recursos"></i> <span class="i18n" data-es="Recursos" data-it="Risorse" data-en="Resources">Recursos</span> ▾</button>
+<div class="submenu">
+<a href="#" class="track-link" data-base="recursos"><span class="i18n" data-es="Todos los recursos" data-it="Tutte le risorse" data-en="All resources">Todos los recursos</span></a>
+</div>
+</div>
+
+<div class="menu-item">
 <button class="menu-button"><i class="ti ti-pencil cat-ejercicios"></i> <span class="i18n" data-es="Ejercicios" data-it="Esercizi" data-en="Exercises">Ejercicios</span> ▾</button>
 <div class="submenu">
 <a href="#" class="track-link" data-base="ejercicios"><span class="i18n" data-es="Todos los ejercicios" data-it="Tutti gli esercizi" data-en="All exercises">Todos los ejercicios</span></a>
@@ -95,17 +102,12 @@
 <p class="tagline"><span id="tagline-text">Poco a poco se llega lejos</span> <i class="ti ti-bolt"></i></p>
 </div>
 </aside>
-
-
-
-
-
-
-
-
-
-
-
+<div class="tab-rail">
+<div class="rail-tab" data-tab-cat="verbos" style="--tab-color:#D6488F"></div>
+<div class="rail-tab" data-tab-cat="gramatica" style="--tab-color:#5B9A3B"></div>
+<div class="rail-tab" data-tab-cat="vocabulario" style="--tab-color:#E8791E"></div>
+<div class="rail-tab" data-tab-cat="expresiones" style="--tab-color:#7A6FD1"></div>
+</div>
 <main class="main">
 <div class="page-header"><div class="language-selector">
 <button class="lang-track-btn" data-track="es">🇪🇸 Español</button>
@@ -134,20 +136,45 @@
 <tr><td><b>ellos/ellas/ustedes</b></td><td><b>los / las</b></td><td><b>les</b></td><td><b>se</b></td></tr>
 </tbody></table></div>
 <div class="tip-box">In Spanish, the subject pronoun (yo, tú, él…) is almost always dropped, because the verb ending already tells you who's speaking: <b>hablo</b> already means "I speak". Unlike English, you don't need "yo hablo" unless you want to add emphasis or avoid ambiguity.</div>
+<div class="tip-box">Notice: of all the object pronouns, only the <b>third person</b> ones (singular and plural: lo/la/le/se, los/las/les) change depending on who or what they refer to. Yo, tú, nosotros and vosotros never change.</div>
 
 <h3>Where they go</h3>
 <div class="mini-cards">
-<div class="mini-card"><h4>Before the conjugated verb</h4><p class="examples">Lo veo. / No te entiendo.</p><p>The most common position.</p></div>
-<div class="mini-card"><h4>Attached to infinitive, gerund, and affirmative commands</h4><p class="examples">Quiero verlo. / Estoy haciéndolo. / ¡Dímelo!</p><p>Written as one single word, sometimes needing a written accent.</p></div>
-<div class="mini-card"><h4>Two pronouns together: indirect + direct</h4><p class="examples">Se lo di. (le + lo → se lo)</p><p>When "le/les" comes right before "lo/la/los/las", it becomes "se".</p></div>
+<div class="mini-card"><h4>Before the conjugated verb</h4><p class="examples">Lo veo. <em>(direct)</em> / No te entiendo. <em>(direct)</em></p><p>The most common position.</p></div>
+<div class="mini-card"><h4>Attached to infinitive, gerund, and affirmative commands</h4><p class="examples">Quiero verlo. <em>(direct)</em> / Estoy haciéndolo. <em>(direct)</em> / ¡Dímelo! <em>(me: indirect, lo: direct)</em></p><p>Written as one single word, sometimes needing a written accent.</p></div>
+<div class="mini-card"><h4>Two pronouns together: indirect + direct</h4><p class="examples">Se lo di. <em>(se=le: indirect, lo: direct)</em></p><p>When "le/les" comes right before "lo/la/los/las", it becomes "se".</p></div>
 </div>
 
 <h3>Possessives and demonstratives</h3>
-<div class="mini-cards">
-<div class="mini-card"><h4>Possessives</h4><p>mi/mis, tu/tus, su/sus, nuestro/a/os/as, vuestro/a/os/as, su/sus</p><p>They agree in number (and sometimes gender) with the thing owned, not with the owner: <em>nuestra casa</em>, <em>nuestros libros</em>. And unlike some languages, no article goes in front: <em>mi libro</em>, never "the my book".</p></div>
-<div class="mini-card"><h4>Demonstratives</h4><p>este/esta (near me), ese/esa (near you), aquel/aquella (far from both of us)</p><p>English only has "this/that", but Spanish has a three-way distance system — "ese" (near the listener) vs "aquel" (far from everyone) is the distinction that doesn't map onto English.</p></div>
+<div class="compare-grid" style="grid-template-columns:repeat(2,1fr)">
+<div class="compare-card">
+<h4>Possessives</h4>
+<div class="table-wrap"><table>
+<thead><tr><th>Pronoun</th><th>Form(s)</th></tr></thead>
+<tbody>
+<tr><td>yo</td><td><b>mi</b> / <b>mis</b></td></tr>
+<tr><td>tú</td><td><b>tu</b> / <b>tus</b></td></tr>
+<tr><td>él / ella / usted</td><td><b>su</b> / <b>sus</b></td></tr>
+<tr><td>nosotros/as</td><td><b>nuestro/a</b> / <b>nuestros/as</b></td></tr>
+<tr><td>vosotros/as</td><td><b>vuestro/a</b> / <b>vuestros/as</b></td></tr>
+<tr><td>ellos/ellas/ustedes</td><td><b>su</b> / <b>sus</b></td></tr>
+</tbody></table></div>
+<p style="margin-top:12px;font-size:14px">They agree with the thing owned, not the owner: <em>nuestra casa</em>, <em>nuestros libros</em>. And no article goes in front: <em>mi libro</em>, never "the my book".</p>
 </div>
-<div class="ex-cta"><a href="ejercicios-en.html?tema=pronombres" class="button button-primary"><i class="ti ti-target"></i> Test yourself with exercises</a></div>
+<div class="compare-card">
+<h4>Demonstratives</h4>
+<div class="table-wrap"><table>
+<thead><tr><th>Distance</th><th>Masc.</th><th>Fem.</th><th>Neuter</th></tr></thead>
+<tbody>
+<tr><td>Near me</td><td><b>este</b> / estos</td><td><b>esta</b> / estas</td><td><b>esto</b></td></tr>
+<tr><td>Near you</td><td><b>ese</b> / esos</td><td><b>esa</b> / esas</td><td><b>eso</b></td></tr>
+<tr><td>Far from both</td><td><b>aquel</b> / aquellos</td><td><b>aquella</b> / aquellas</td><td><b>aquello</b></td></tr>
+</tbody></table></div>
+<p style="margin-top:12px;font-size:14px">Spanish distinguishes three distances; English only has two ("this/that").</p>
+</div>
+</div>
+
+<div class="ex-cta"><a href="ejercicios-en.html?tema=pronombres" class="button button-primary"><i class="ti ti-pencil"></i> Test yourself with exercises</a></div>
 </section>
 </main>
 <footer>© 2026 Jose N. · Profesor de español · <a href="privacidad.html">Privacidad</a></footer>

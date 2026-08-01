@@ -6,7 +6,7 @@
 <title>Verbos irregulares (español) | Aprende Español con Jose Nogues</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@400;600;700;800&family=Caveat:wght@700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
 <link rel="icon" type="image/png" href="favicon.png">
 <link rel="stylesheet" href="styles.css">
@@ -35,8 +35,8 @@
 <a href="#" class="track-link" data-base="verbos-irregulares"><span class="i18n" data-es="Irregulares" data-it="Irregolari" data-en="Irregular">Irregulares</span></a>
 <a href="#" class="track-link submenu-sub" data-base="ser-estar"><span class="i18n" data-es="Ser y estar" data-it="Ser y estar" data-en="Ser y estar">Ser y estar</span></a>
 <a href="#" class="track-link submenu-sub" data-base="haber-tener"><span class="i18n" data-es="Haber y tener" data-it="Haber y tener" data-en="Haber y tener">Haber y tener</span></a>
-<a href="#" class="track-link track-only" data-track-show="it" data-base="especial-atencion-verbos">Especial atención</a>
-<a href="#" class="track-link track-only" data-track-show="en" data-base="especial-atencion-verbos">Especial atención</a>
+<a href="#" class="track-link track-only" data-track-show="it" data-base="especial-atencion-verbos">Attenzione a questi</a>
+<a href="#" class="track-link track-only" data-track-show="en" data-base="especial-atencion-verbos">Watch out for this</a>
 <a href="#" class="track-link" data-base="verbos-reflexivos"><span class="i18n" data-es="Reflexivos" data-it="Riflessivi" data-en="Reflexive">Reflexivos</span></a>
 <a href="#" class="track-link" data-base="formas-impersonales"><span class="i18n" data-es="Formas impersonales" data-it="Forme impersonali" data-en="Non-finite forms">Formas impersonales</span></a>
 </div>
@@ -50,8 +50,8 @@
 <a href="#" class="track-link" data-base="pronombres"><span class="i18n" data-es="Pronombres" data-it="Pronomi" data-en="Pronouns">Pronombres</span></a>
 <a href="#" class="track-link" data-base="preposiciones"><span class="i18n" data-es="Preposiciones" data-it="Preposizioni" data-en="Prepositions">Preposiciones</span></a>
 <a href="#" class="track-link" data-base="fonetica"><span class="i18n" data-es="Fonética" data-it="Fonetica" data-en="Phonetics">Fonética</span></a>
-<a href="#" class="track-link track-only" data-track-show="it" data-base="especial-atencion-gramatica">Especial atención</a>
-<a href="#" class="track-link track-only" data-track-show="en" data-base="especial-atencion-gramatica">Especial atención</a>
+<a href="#" class="track-link track-only" data-track-show="it" data-base="especial-atencion-gramatica">Attenzione a questi</a>
+<a href="#" class="track-link track-only" data-track-show="en" data-base="especial-atencion-gramatica">Watch out for this</a>
 </div>
 </div>
 
@@ -84,6 +84,13 @@
 </div>
 
 <div class="menu-item">
+<button class="menu-button"><i class="ti ti-external-link cat-recursos"></i> <span class="i18n" data-es="Recursos" data-it="Risorse" data-en="Resources">Recursos</span> ▾</button>
+<div class="submenu">
+<a href="#" class="track-link" data-base="recursos"><span class="i18n" data-es="Todos los recursos" data-it="Tutte le risorse" data-en="All resources">Todos los recursos</span></a>
+</div>
+</div>
+
+<div class="menu-item">
 <button class="menu-button"><i class="ti ti-pencil cat-ejercicios"></i> <span class="i18n" data-es="Ejercicios" data-it="Esercizi" data-en="Exercises">Ejercicios</span> ▾</button>
 <div class="submenu">
 <a href="#" class="track-link" data-base="ejercicios"><span class="i18n" data-es="Todos los ejercicios" data-it="Tutti gli esercizi" data-en="All exercises">Todos los ejercicios</span></a>
@@ -95,6 +102,12 @@
 <p class="tagline"><span id="tagline-text">Poco a poco se llega lejos</span> <i class="ti ti-bolt"></i></p>
 </div>
 </aside>
+<div class="tab-rail">
+<div class="rail-tab" data-tab-cat="verbos" style="--tab-color:#D6488F"></div>
+<div class="rail-tab" data-tab-cat="gramatica" style="--tab-color:#5B9A3B"></div>
+<div class="rail-tab" data-tab-cat="vocabulario" style="--tab-color:#E8791E"></div>
+<div class="rail-tab" data-tab-cat="expresiones" style="--tab-color:#7A6FD1"></div>
+</div>
 <main class="main">
 <div class="page-header"><div class="language-selector">
 <button class="lang-track-btn" data-track="es">🇪🇸 Español</button>
@@ -110,12 +123,20 @@
 <section class="grammar-section">
 <span class="eyebrow">Verbos irregulares</span>
 <h2>Los verbos irregulares más comunes</h2>
-<div class="tabs">
+<div class="tense-group-toggle">
+<button class="group-btn active" data-group="indicativo">Indicativo</button>
+<button class="group-btn" data-group="subjuntivo">Subjuntivo</button>
+</div>
+<div class="tabs" data-group="indicativo">
 <button class="tab-btn active" data-tab="ir-presente">Presente</button>
 <button class="tab-btn" data-tab="ir-pps">Pretérito perfecto simple</button>
 <button class="tab-btn" data-tab="ir-imperfecto">Imperfecto</button>
 <button class="tab-btn" data-tab="ir-futuro">Futuro</button>
 <button class="tab-btn" data-tab="ir-condicional">Condicional</button>
+</div>
+<div class="tabs" data-group="subjuntivo" style="display:none">
+<button class="tab-btn" data-tab="ir-subj-pres">Presente</button>
+<button class="tab-btn" data-tab="ir-subj-imp">Pretérito imperfecto</button>
 </div>
 
 <div class="tab-panel active" id="ir-presente">
@@ -159,9 +180,7 @@
 <div class="mini-card"><h4>⭐ Otros muy usados</h4><p><strong>Hacer:</strong> haría, harías, haría, haríamos, haríais, harían<br><strong>Decir:</strong> diría, dirías, diría, diríamos, diríais, dirían<br><strong>Saber:</strong> sabría, sabrías, sabría, sabríamos, sabríais, sabrían<br><strong>Salir:</strong> saldría, saldrías, saldría, saldríamos, saldríais, saldrían<br><strong>Poner:</strong> pondría, pondrías, pondría, pondríamos, pondríais, pondrían<br><strong>Ver:</strong> vería, verías, vería, veríamos, veríais, verían<br></p></div>
 </div>
 </div>
-<div class="topic-block" style="margin-top:30px;padding-top:30px;border-top:1px solid var(--border)">
-<span class="eyebrow">Subjuntivo</span>
-<h3 style="font-size:22px;margin:6px 0 10px">Subjuntivo presente</h3>
+<div class="tab-panel" id="ir-subj-pres">
 <div class="mini-cards">
 <div class="mini-card"><h4>⭐ Los esenciales</h4><p><strong>Ser:</strong> sea, seas, sea, seamos, seáis, sean<br><strong>Estar:</strong> esté, estés, esté, estemos, estéis, estén<br><strong>Haber:</strong> haya, hayas, haya, hayamos, hayáis, hayan<br><strong>Ir:</strong> vaya, vayas, vaya, vayamos, vayáis, vayan<br><strong>Tener:</strong> tenga, tengas, tenga, tengamos, tengáis, tengan</p></div>
 <div class="mini-card"><h4>⭐ Cambio de raíz (e→ie, o→ue)</h4><p><strong>Querer:</strong> quiera, quieras, quiera, queramos, queráis, quieran<br><strong>Poder:</strong> pueda, puedas, pueda, podamos, podáis, puedan<br><strong>Dormir:</strong> duerma, duermas, duerma, durmamos, durmáis, duerman<br><strong>Pensar:</strong> piense, pienses, piense, pensemos, penséis, piensen<br><strong>Venir:</strong> venga, vengas, venga, vengamos, vengáis, vengan</p></div>
@@ -169,9 +188,7 @@
 </div>
 </div>
 
-<div class="topic-block" style="margin-top:30px;padding-top:30px;border-top:1px solid var(--border)">
-<span class="eyebrow">Subjuntivo</span>
-<h3 style="font-size:22px;margin:6px 0 10px">Subjuntivo pretérito imperfecto</h3>
+<div class="tab-panel" id="ir-subj-imp">
 <div class="mini-cards">
 <div class="mini-card"><h4>⭐ Los esenciales</h4><p><strong>Ser:</strong> fuera, fueras, fuera, fuéramos, fuerais, fueran<br><strong>Estar:</strong> estuviera, estuvieras, estuviera, estuviéramos, estuvierais, estuvieran<br><strong>Haber:</strong> hubiera, hubieras, hubiera, hubiéramos, hubierais, hubieran<br><strong>Ir:</strong> fuera, fueras, fuera, fuéramos, fuerais, fueran<br><strong>Tener:</strong> tuviera, tuvieras, tuviera, tuviéramos, tuvierais, tuvieran</p></div>
 <div class="mini-card"><h4>⭐ Cambio de raíz (e→ie, o→ue)</h4><p><strong>Querer:</strong> quisiera, quisieras, quisiera, quisiéramos, quisierais, quisieran<br><strong>Poder:</strong> pudiera, pudieras, pudiera, pudiéramos, pudierais, pudieran<br><strong>Dormir:</strong> durmiera, durmieras, durmiera, durmiéramos, durmierais, durmieran<br><strong>Pensar:</strong> pensara, pensaras, pensara, pensáramos, pensarais, pensaran<br><strong>Venir:</strong> viniera, vinieras, viniera, viniéramos, vinierais, vinieran</p></div>
@@ -181,7 +198,7 @@
 
 <div class="topic-block" style="margin-top:30px;padding-top:30px;border-top:1px solid var(--border)">
 <span class="eyebrow">Tiempos compuestos</span>
-<h3 style="font-size:22px;margin:6px 0 10px">Los compuestos: haber + participio</h3>
+<h3 style="font-size:22px;margin:6px 0 10px">Los participios irregulares</h3>
 <p class="subtitle" style="margin-bottom:16px">Todos los tiempos compuestos (he hablado, había hablado, habré hablado, haya hablado...) se forman igual: conjugas <b>haber</b> en el tiempo que toque, y añades el <b>participio</b> del verbo, que no cambia. Lo único que hay que memorizar son los participios irregulares:</p>
 <div class="table-wrap"><table>
 <thead><tr><th>Verbo</th><th>Participio irregular</th><th>Ejemplo</th></tr></thead>
@@ -199,7 +216,7 @@
 </div>
 
 
-<div class="ex-cta"><a href="ejercicios-es.html?tema=irregulares" class="button button-primary"><i class="ti ti-target"></i> Ponte a prueba con ejercicios</a></div>
+<div class="ex-cta"><a href="ejercicios-es.html?tema=irregulares" class="button button-primary"><i class="ti ti-pencil"></i> Ponte a prueba con ejercicios</a></div>
 </section>
 </main>
 <footer>© 2026 Jose N. · Profesor de español · <a href="privacidad.html">Privacidad</a></footer>

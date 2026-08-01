@@ -6,7 +6,7 @@
 <title>Articles (English) | Aprende Español con Jose Nogues</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@400;600;700;800&family=Caveat:wght@700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
 <link rel="icon" type="image/png" href="favicon.png">
 <link rel="stylesheet" href="styles.css">
@@ -35,8 +35,8 @@
 <a href="#" class="track-link" data-base="verbos-irregulares"><span class="i18n" data-es="Irregulares" data-it="Irregolari" data-en="Irregular">Irregulares</span></a>
 <a href="#" class="track-link submenu-sub" data-base="ser-estar"><span class="i18n" data-es="Ser y estar" data-it="Ser y estar" data-en="Ser y estar">Ser y estar</span></a>
 <a href="#" class="track-link submenu-sub" data-base="haber-tener"><span class="i18n" data-es="Haber y tener" data-it="Haber y tener" data-en="Haber y tener">Haber y tener</span></a>
-<a href="#" class="track-link track-only" data-track-show="it" data-base="especial-atencion-verbos">Especial atención</a>
-<a href="#" class="track-link track-only" data-track-show="en" data-base="especial-atencion-verbos">Especial atención</a>
+<a href="#" class="track-link track-only" data-track-show="it" data-base="especial-atencion-verbos">Attenzione a questi</a>
+<a href="#" class="track-link track-only" data-track-show="en" data-base="especial-atencion-verbos">Watch out for this</a>
 <a href="#" class="track-link" data-base="verbos-reflexivos"><span class="i18n" data-es="Reflexivos" data-it="Riflessivi" data-en="Reflexive">Reflexivos</span></a>
 <a href="#" class="track-link" data-base="formas-impersonales"><span class="i18n" data-es="Formas impersonales" data-it="Forme impersonali" data-en="Non-finite forms">Formas impersonales</span></a>
 </div>
@@ -50,8 +50,8 @@
 <a href="#" class="track-link" data-base="pronombres"><span class="i18n" data-es="Pronombres" data-it="Pronomi" data-en="Pronouns">Pronombres</span></a>
 <a href="#" class="track-link" data-base="preposiciones"><span class="i18n" data-es="Preposiciones" data-it="Preposizioni" data-en="Prepositions">Preposiciones</span></a>
 <a href="#" class="track-link" data-base="fonetica"><span class="i18n" data-es="Fonética" data-it="Fonetica" data-en="Phonetics">Fonética</span></a>
-<a href="#" class="track-link track-only" data-track-show="it" data-base="especial-atencion-gramatica">Especial atención</a>
-<a href="#" class="track-link track-only" data-track-show="en" data-base="especial-atencion-gramatica">Especial atención</a>
+<a href="#" class="track-link track-only" data-track-show="it" data-base="especial-atencion-gramatica">Attenzione a questi</a>
+<a href="#" class="track-link track-only" data-track-show="en" data-base="especial-atencion-gramatica">Watch out for this</a>
 </div>
 </div>
 
@@ -84,6 +84,13 @@
 </div>
 
 <div class="menu-item">
+<button class="menu-button"><i class="ti ti-external-link cat-recursos"></i> <span class="i18n" data-es="Recursos" data-it="Risorse" data-en="Resources">Recursos</span> ▾</button>
+<div class="submenu">
+<a href="#" class="track-link" data-base="recursos"><span class="i18n" data-es="Todos los recursos" data-it="Tutte le risorse" data-en="All resources">Todos los recursos</span></a>
+</div>
+</div>
+
+<div class="menu-item">
 <button class="menu-button"><i class="ti ti-pencil cat-ejercicios"></i> <span class="i18n" data-es="Ejercicios" data-it="Esercizi" data-en="Exercises">Ejercicios</span> ▾</button>
 <div class="submenu">
 <a href="#" class="track-link" data-base="ejercicios"><span class="i18n" data-es="Todos los ejercicios" data-it="Tutti gli esercizi" data-en="All exercises">Todos los ejercicios</span></a>
@@ -95,17 +102,12 @@
 <p class="tagline"><span id="tagline-text">Poco a poco se llega lejos</span> <i class="ti ti-bolt"></i></p>
 </div>
 </aside>
-
-
-
-
-
-
-
-
-
-
-
+<div class="tab-rail">
+<div class="rail-tab" data-tab-cat="verbos" style="--tab-color:#D6488F"></div>
+<div class="rail-tab" data-tab-cat="gramatica" style="--tab-color:#5B9A3B"></div>
+<div class="rail-tab" data-tab-cat="vocabulario" style="--tab-color:#E8791E"></div>
+<div class="rail-tab" data-tab-cat="expresiones" style="--tab-color:#7A6FD1"></div>
+</div>
 <main class="main">
 <div class="page-header"><div class="language-selector">
 <button class="lang-track-btn" data-track="es">🇪🇸 Español</button>
@@ -132,8 +134,10 @@
 <h3>Contractions</h3>
 <p class="subtitle" style="margin-bottom:14px">"El" always contracts with the prepositions <b>a</b> and <b>de</b>:</p>
 <div class="mini-cards">
-<div class="mini-card"><h4>a + el → al</h4><p class="examples">Voy al cine.</p><p>Never "a el cine".</p></div>
-<div class="mini-card"><h4>de + el → del</h4><p class="examples">Vengo del trabajo.</p><p>Never "de el trabajo".</p></div>
+<div class="mini-card"><h4>a + el → al</h4><p class="examples">Voy <u>al</u> cine.</p><p>Never "a el cine".</p></div>
+<div class="mini-card"><h4>de + el → del</h4><p class="examples">Vengo <u>del</u> trabajo.</p><p>Never "de el trabajo".</p></div>
+<div class="tip-box"><i class="ti ti-alert-triangle"></i> <b>Watch out, these do NOT contract:</b> "de + ella" → <b>de ella</b> (never "della"), "de + él" → <b>de él</b> (it keeps the accent mark precisely so it isn't confused with the article "el"). Only "a + el" and "de + el" contract — with any other pronoun or proper noun, never.</div>
+
 </div>
 
 <h3>When the article is dropped</h3>
@@ -144,7 +148,7 @@
 </div>
 
 <div class="tip-box"><i class="ti ti-alert-triangle"></i> <b>Heads up:</b> English has no grammatical gender at all, so picking "el" vs "la" is usually the hardest part at the start — there's no real shortcut, just exposure. Always learn a noun together with its article (say "la mano", not just "mano") rather than memorizing them separately.</div>
-<div class="ex-cta"><a href="ejercicios-en.html?tema=articulos" class="button button-primary"><i class="ti ti-target"></i> Test yourself with exercises</a></div>
+<div class="ex-cta"><a href="ejercicios-en.html?tema=articulos" class="button button-primary"><i class="ti ti-pencil"></i> Test yourself with exercises</a></div>
 </section>
 </main>
 <footer>© 2026 Jose N. · Profesor de español · <a href="privacidad.html">Privacidad</a></footer>

@@ -6,7 +6,7 @@
 <title>False friends (italiano) | Aprende Español con Jose Nogues</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@400;600;700;800&family=Caveat:wght@700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
 <link rel="icon" type="image/png" href="favicon.png">
 <link rel="stylesheet" href="styles.css">
@@ -35,8 +35,8 @@
 <a href="#" class="track-link" data-base="verbos-irregulares"><span class="i18n" data-es="Irregulares" data-it="Irregolari" data-en="Irregular">Irregulares</span></a>
 <a href="#" class="track-link submenu-sub" data-base="ser-estar"><span class="i18n" data-es="Ser y estar" data-it="Ser y estar" data-en="Ser y estar">Ser y estar</span></a>
 <a href="#" class="track-link submenu-sub" data-base="haber-tener"><span class="i18n" data-es="Haber y tener" data-it="Haber y tener" data-en="Haber y tener">Haber y tener</span></a>
-<a href="#" class="track-link track-only" data-track-show="it" data-base="especial-atencion-verbos">Especial atención</a>
-<a href="#" class="track-link track-only" data-track-show="en" data-base="especial-atencion-verbos">Especial atención</a>
+<a href="#" class="track-link track-only" data-track-show="it" data-base="especial-atencion-verbos">Attenzione a questi</a>
+<a href="#" class="track-link track-only" data-track-show="en" data-base="especial-atencion-verbos">Watch out for this</a>
 <a href="#" class="track-link" data-base="verbos-reflexivos"><span class="i18n" data-es="Reflexivos" data-it="Riflessivi" data-en="Reflexive">Reflexivos</span></a>
 <a href="#" class="track-link" data-base="formas-impersonales"><span class="i18n" data-es="Formas impersonales" data-it="Forme impersonali" data-en="Non-finite forms">Formas impersonales</span></a>
 </div>
@@ -50,8 +50,8 @@
 <a href="#" class="track-link" data-base="pronombres"><span class="i18n" data-es="Pronombres" data-it="Pronomi" data-en="Pronouns">Pronombres</span></a>
 <a href="#" class="track-link" data-base="preposiciones"><span class="i18n" data-es="Preposiciones" data-it="Preposizioni" data-en="Prepositions">Preposiciones</span></a>
 <a href="#" class="track-link" data-base="fonetica"><span class="i18n" data-es="Fonética" data-it="Fonetica" data-en="Phonetics">Fonética</span></a>
-<a href="#" class="track-link track-only" data-track-show="it" data-base="especial-atencion-gramatica">Especial atención</a>
-<a href="#" class="track-link track-only" data-track-show="en" data-base="especial-atencion-gramatica">Especial atención</a>
+<a href="#" class="track-link track-only" data-track-show="it" data-base="especial-atencion-gramatica">Attenzione a questi</a>
+<a href="#" class="track-link track-only" data-track-show="en" data-base="especial-atencion-gramatica">Watch out for this</a>
 </div>
 </div>
 
@@ -84,6 +84,13 @@
 </div>
 
 <div class="menu-item">
+<button class="menu-button"><i class="ti ti-external-link cat-recursos"></i> <span class="i18n" data-es="Recursos" data-it="Risorse" data-en="Resources">Recursos</span> ▾</button>
+<div class="submenu">
+<a href="#" class="track-link" data-base="recursos"><span class="i18n" data-es="Todos los recursos" data-it="Tutte le risorse" data-en="All resources">Todos los recursos</span></a>
+</div>
+</div>
+
+<div class="menu-item">
 <button class="menu-button"><i class="ti ti-pencil cat-ejercicios"></i> <span class="i18n" data-es="Ejercicios" data-it="Esercizi" data-en="Exercises">Ejercicios</span> ▾</button>
 <div class="submenu">
 <a href="#" class="track-link" data-base="ejercicios"><span class="i18n" data-es="Todos los ejercicios" data-it="Tutti gli esercizi" data-en="All exercises">Todos los ejercicios</span></a>
@@ -95,17 +102,12 @@
 <p class="tagline"><span id="tagline-text">Poco a poco se llega lejos</span> <i class="ti ti-bolt"></i></p>
 </div>
 </aside>
-
-
-
-
-
-
-
-
-
-
-
+<div class="tab-rail">
+<div class="rail-tab" data-tab-cat="verbos" style="--tab-color:#D6488F"></div>
+<div class="rail-tab" data-tab-cat="gramatica" style="--tab-color:#5B9A3B"></div>
+<div class="rail-tab" data-tab-cat="vocabulario" style="--tab-color:#E8791E"></div>
+<div class="rail-tab" data-tab-cat="expresiones" style="--tab-color:#7A6FD1"></div>
+</div>
 <main class="main">
 <div class="page-header"><div class="language-selector">
 <button class="lang-track-btn" data-track="es">🇪🇸 Español</button>
@@ -125,26 +127,26 @@
 <div class="table-wrap"><table>
 <thead><tr><th>Parola spagnola</th><th>Sembra significare (italiano)</th><th>Significa in realtà</th></tr></thead>
 <tbody>
-<tr><td>burro</td><td>burro (da spalmare)</td><td>asino (l'animale) — "burro" da spalmare si dice "mantequilla"</td></tr>
-<tr><td>aceite</td><td>aceto</td><td>olio — "aceto" si dice "vinagre"</td></tr>
-<tr><td>largo</td><td>largo</td><td>lungo — "largo" (ampio) si dice "ancho"</td></tr>
-<tr><td>subir</td><td>subire</td><td>salire — "subire" si dice "sufrir"</td></tr>
-<tr><td>guardar</td><td>guardare</td><td>conservare, tenere — "guardare" si dice "mirar"</td></tr>
-<tr><td>salir</td><td>salire</td><td>uscire — "salire" si dice "subir"</td></tr>
-<tr><td>topo</td><td>topo (il roditore)</td><td>talpa — attenzione, anche se in spagnolo esiste "talpa" come parola meno comune</td></tr>
-<tr><td>embarazada</td><td>imbarazzata</td><td>incinta</td></tr>
-<tr><td>presunto</td><td>prosciutto crudo (in italiano è tutt'altro contesto)</td><td>presunto (come in "presunto colpevole") — coincide!</td></tr>
-<tr><td>oficina</td><td>officina</td><td>ufficio — "officina" (meccanica) si dice "taller"</td></tr>
-<tr><td>contestar</td><td>contestare</td><td>responder — "contestare" (protestar) se dice "protestar"</td></tr>
-<tr><td>gamba</td><td>gamba (la parte del corpo)</td><td>langostino/gamba (el marisco) — la parte del cuerpo se dice "pierna"</td></tr>
-<tr><td>caldo</td><td>caldo (il brodo)</td><td>caliente — el brodo se dice "caldo" también en español, ¡pero no confundir con "caliente"!</td></tr>
-<tr><td>burla</td><td>burla</td><td>burla, coincide — pero "burlarse de" no es "burlarsi" en el mismo sentido siempre</td></tr>
-<tr><td>tienda</td><td>tienda (da campeggio)</td><td>negozio — la carpa para dormir también se dice "tienda de campaña"</td></tr>
-<tr><td>pronto</td><td>pronto</td><td>enseguida/pronto — "essere pronto" (estar listo) se dice "estar listo"</td></tr>
+<tr><td>burro <button class="speak-btn" data-text="burro"><i class="ti ti-volume"></i></button></td><td>burro (da spalmare)</td><td>asino (l'animale) — "burro" da spalmare si dice "mantequilla"</td></tr>
+<tr><td>aceite <button class="speak-btn" data-text="aceite"><i class="ti ti-volume"></i></button></td><td>aceto</td><td>olio — "aceto" si dice "vinagre"</td></tr>
+<tr><td>largo <button class="speak-btn" data-text="largo"><i class="ti ti-volume"></i></button></td><td>largo</td><td>lungo — "largo" (ampio) si dice "ancho"</td></tr>
+<tr><td>subir <button class="speak-btn" data-text="subir"><i class="ti ti-volume"></i></button></td><td>subire</td><td>salire — "subire" si dice "sufrir"</td></tr>
+<tr><td>guardar <button class="speak-btn" data-text="guardar"><i class="ti ti-volume"></i></button></td><td>guardare</td><td>conservare, tenere — "guardare" si dice "mirar"</td></tr>
+<tr><td>salir <button class="speak-btn" data-text="salir"><i class="ti ti-volume"></i></button></td><td>salire</td><td>uscire — "salire" si dice "subir"</td></tr>
+<tr><td>topo <button class="speak-btn" data-text="topo"><i class="ti ti-volume"></i></button></td><td>topo (il roditore)</td><td>talpa — attenzione, anche se in spagnolo esiste "talpa" come parola meno comune</td></tr>
+<tr><td>embarazada <button class="speak-btn" data-text="embarazada"><i class="ti ti-volume"></i></button></td><td>imbarazzata</td><td>incinta</td></tr>
+<tr><td>presunto <button class="speak-btn" data-text="presunto"><i class="ti ti-volume"></i></button></td><td>prosciutto crudo (in italiano è tutt'altro contesto)</td><td>presunto (come in "presunto colpevole") — coincide!</td></tr>
+<tr><td>oficina <button class="speak-btn" data-text="oficina"><i class="ti ti-volume"></i></button></td><td>officina</td><td>ufficio — "officina" (meccanica) si dice "taller"</td></tr>
+<tr><td>contestar <button class="speak-btn" data-text="contestar"><i class="ti ti-volume"></i></button></td><td>contestare</td><td>responder — "contestare" (protestar) se dice "protestar"</td></tr>
+<tr><td>gamba <button class="speak-btn" data-text="gamba"><i class="ti ti-volume"></i></button></td><td>gamba (la parte del corpo)</td><td>langostino/gamba (el marisco) — la parte del cuerpo se dice "pierna"</td></tr>
+<tr><td>caldo <button class="speak-btn" data-text="caldo"><i class="ti ti-volume"></i></button></td><td>caldo (il brodo)</td><td>caliente — el brodo se dice "caldo" también en español, ¡pero no confundir con "caliente"!</td></tr>
+<tr><td>burla <button class="speak-btn" data-text="burla"><i class="ti ti-volume"></i></button></td><td>burla</td><td>burla, coincide — pero "burlarse de" no es "burlarsi" en el mismo sentido siempre</td></tr>
+<tr><td>tienda <button class="speak-btn" data-text="tienda"><i class="ti ti-volume"></i></button></td><td>tienda (da campeggio)</td><td>negozio — la carpa para dormir también se dice "tienda de campaña"</td></tr>
+<tr><td>pronto <button class="speak-btn" data-text="pronto"><i class="ti ti-volume"></i></button></td><td>pronto</td><td>enseguida/pronto — "essere pronto" (estar listo) se dice "estar listo"</td></tr>
 </tbody></table></div>
 
 <div class="tip-box"><i class="ti ti-alert-triangle"></i> <b>I più pericolosi:</b> "burro", "aceite" e "subir/salir" sono scambi frequentissimi perché il suono è quasi identico ma il significato è opposto o completamente diverso. Vale la pena impararli a memoria fin da subito.</div>
-<div class="ex-cta"><a href="ejercicios-it.html?tema=falsos-amigos" class="button button-primary"><i class="ti ti-target"></i> Mettiti alla prova con gli esercizi</a></div>
+<div class="ex-cta"><a href="ejercicios-it.html?tema=falsos-amigos" class="button button-primary"><i class="ti ti-pencil"></i> Mettiti alla prova con gli esercizi</a></div>
 </section>
 </main>
 <footer>© 2026 Jose N. · Profesor de español · <a href="privacidad.html">Privacidad</a></footer>

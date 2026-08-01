@@ -6,7 +6,7 @@
 <title>Regular verbs (English) | Aprende Español con Jose Nogues</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@400;600;700;800&family=Caveat:wght@700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
 <link rel="icon" type="image/png" href="favicon.png">
 <link rel="stylesheet" href="styles.css">
@@ -35,8 +35,8 @@
 <a href="#" class="track-link" data-base="verbos-irregulares"><span class="i18n" data-es="Irregulares" data-it="Irregolari" data-en="Irregular">Irregulares</span></a>
 <a href="#" class="track-link submenu-sub" data-base="ser-estar"><span class="i18n" data-es="Ser y estar" data-it="Ser y estar" data-en="Ser y estar">Ser y estar</span></a>
 <a href="#" class="track-link submenu-sub" data-base="haber-tener"><span class="i18n" data-es="Haber y tener" data-it="Haber y tener" data-en="Haber y tener">Haber y tener</span></a>
-<a href="#" class="track-link track-only" data-track-show="it" data-base="especial-atencion-verbos">Especial atención</a>
-<a href="#" class="track-link track-only" data-track-show="en" data-base="especial-atencion-verbos">Especial atención</a>
+<a href="#" class="track-link track-only" data-track-show="it" data-base="especial-atencion-verbos">Attenzione a questi</a>
+<a href="#" class="track-link track-only" data-track-show="en" data-base="especial-atencion-verbos">Watch out for this</a>
 <a href="#" class="track-link" data-base="verbos-reflexivos"><span class="i18n" data-es="Reflexivos" data-it="Riflessivi" data-en="Reflexive">Reflexivos</span></a>
 <a href="#" class="track-link" data-base="formas-impersonales"><span class="i18n" data-es="Formas impersonales" data-it="Forme impersonali" data-en="Non-finite forms">Formas impersonales</span></a>
 </div>
@@ -50,8 +50,8 @@
 <a href="#" class="track-link" data-base="pronombres"><span class="i18n" data-es="Pronombres" data-it="Pronomi" data-en="Pronouns">Pronombres</span></a>
 <a href="#" class="track-link" data-base="preposiciones"><span class="i18n" data-es="Preposiciones" data-it="Preposizioni" data-en="Prepositions">Preposiciones</span></a>
 <a href="#" class="track-link" data-base="fonetica"><span class="i18n" data-es="Fonética" data-it="Fonetica" data-en="Phonetics">Fonética</span></a>
-<a href="#" class="track-link track-only" data-track-show="it" data-base="especial-atencion-gramatica">Especial atención</a>
-<a href="#" class="track-link track-only" data-track-show="en" data-base="especial-atencion-gramatica">Especial atención</a>
+<a href="#" class="track-link track-only" data-track-show="it" data-base="especial-atencion-gramatica">Attenzione a questi</a>
+<a href="#" class="track-link track-only" data-track-show="en" data-base="especial-atencion-gramatica">Watch out for this</a>
 </div>
 </div>
 
@@ -84,6 +84,13 @@
 </div>
 
 <div class="menu-item">
+<button class="menu-button"><i class="ti ti-external-link cat-recursos"></i> <span class="i18n" data-es="Recursos" data-it="Risorse" data-en="Resources">Recursos</span> ▾</button>
+<div class="submenu">
+<a href="#" class="track-link" data-base="recursos"><span class="i18n" data-es="Todos los recursos" data-it="Tutte le risorse" data-en="All resources">Todos los recursos</span></a>
+</div>
+</div>
+
+<div class="menu-item">
 <button class="menu-button"><i class="ti ti-pencil cat-ejercicios"></i> <span class="i18n" data-es="Ejercicios" data-it="Esercizi" data-en="Exercises">Ejercicios</span> ▾</button>
 <div class="submenu">
 <a href="#" class="track-link" data-base="ejercicios"><span class="i18n" data-es="Todos los ejercicios" data-it="Tutti gli esercizi" data-en="All exercises">Todos los ejercicios</span></a>
@@ -95,19 +102,12 @@
 <p class="tagline"><span id="tagline-text">Poco a poco se llega lejos</span> <i class="ti ti-bolt"></i></p>
 </div>
 </aside>
-
-
-
-
-
-
-
-
-
-
-
-
-
+<div class="tab-rail">
+<div class="rail-tab" data-tab-cat="verbos" style="--tab-color:#D6488F"></div>
+<div class="rail-tab" data-tab-cat="gramatica" style="--tab-color:#5B9A3B"></div>
+<div class="rail-tab" data-tab-cat="vocabulario" style="--tab-color:#E8791E"></div>
+<div class="rail-tab" data-tab-cat="expresiones" style="--tab-color:#7A6FD1"></div>
+</div>
 <main class="main">
 <div class="page-header"><div class="language-selector">
 <button class="lang-track-btn" data-track="es">🇪🇸 Español</button>
@@ -131,7 +131,13 @@
 <div class="tip-box"><i class="ti ti-bulb"></i> <b>Pronunciation tip:</b> Spanish vowels are always pronounced the same way — A (ah), E (eh), I (ee), O (oh), U (oo). No guessing!</div>
 
 <h3 style="margin-top:26px">The five tenses, one by one</h3>
-<div class="tabs"><button class="tab-btn active" data-tab="t-imp">Imperfecto (past)</button><button class="tab-btn" data-tab="t-perf">Perfecto (past)</button><button class="tab-btn" data-tab="t-pres">Presente (present)</button><button class="tab-btn" data-tab="t-fut">Futuro (future)</button><button class="tab-btn" data-tab="t-condi">Condicional</button></div>
+<div class="tense-group-toggle">
+<button class="group-btn active" data-group="simples">Simple tenses</button>
+<button class="group-btn" data-group="compuestos">Compound tenses</button>
+</div>
+<div class="tabs" data-group="simples"><button class="tab-btn active" data-tab="t-imp">Imperfecto (past)</button><button class="tab-btn" data-tab="t-perf">Perfecto (past)</button><button class="tab-btn" data-tab="t-pres">Presente (present)</button><button class="tab-btn" data-tab="t-fut">Futuro (future)</button><button class="tab-btn" data-tab="t-condi">Condicional</button></div>
+<div class="tabs" data-group="compuestos" style="display:none"><button class="tab-btn" data-tab="t-pretperf">Present Perfect</button><button class="tab-btn" data-tab="t-pluscuam">Past Perfect</button><button class="tab-btn" data-tab="t-pretant">Preterite Perfect</button><button class="tab-btn" data-tab="t-futcomp">Future Perfect</button><button class="tab-btn" data-tab="t-condcomp">Conditional Perfect</button>
+</div>
 <div class="tab-panel active" id="t-imp">
 <h3 style="margin-top:0">Pretérito Imperfecto — Past</h3>
 <p class="subtitle" style="margin-bottom:14px">For ongoing, habitual, or repeated actions in the past. "I used to speak / I was eating / I was living"</p>
@@ -166,9 +172,44 @@
 <div class="table-wrap"><table>
 <thead><tr><th>Pronoun</th><th>English</th><th>-AR (hablar)</th><th>-ER (comer)</th><th>-IR (vivir)</th></tr></thead>
 <tbody><tr><td>yo</td><td>I</td><td>hablar<b>ía</b></td><td>comer<b>ía</b></td><td>vivir<b>ía</b></td></tr><tr><td>tú</td><td>you</td><td>hablar<b>ías</b></td><td>comer<b>ías</b></td><td>vivir<b>ías</b></td></tr><tr><td>él/ella</td><td>he/she</td><td>hablar<b>ía</b></td><td>comer<b>ía</b></td><td>vivir<b>ía</b></td></tr><tr><td>nosotros</td><td>we</td><td>hablar<b>íamos</b></td><td>comer<b>íamos</b></td><td>vivir<b>íamos</b></td></tr><tr><td>vosotros</td><td>you all</td><td>hablar<b>íais</b></td><td>comer<b>íais</b></td><td>vivir<b>íais</b></td></tr><tr><td>ellos/ellas</td><td>they</td><td>hablar<b>ían</b></td><td>comer<b>ían</b></td><td>vivir<b>ían</b></td></tr></tbody></table></div>
-<div class="tip-box">Just like the Futuro — add endings directly to the full infinitive (-ía, -ías, -ía, -íamos, -íais, -ían). ¿Hablarías con él? → Would you speak with him?</div>
+<div class="tip-box">Just like the Futuro — add endings directly to the full infinitive (-ía, -ías, -ía, -íamos, -íais, -ían). ¿Hablarías con él? → Would you speak with him?</div><div class="tab-panel" id="t-pretperf">
+<h3 style="margin-top:0">Pretérito Perfecto Compuesto — Present Perfect</h3>
+<p class="subtitle" style="margin-bottom:14px">Used for past actions connected to the present. "I have spoken / I have eaten / I have lived"</p>
+<div class="table-wrap"><table>
+<thead><tr><th>Pronoun</th><th>English</th><th>-AR (hablar)</th><th>-ER (comer)</th><th>-IR (vivir)</th></tr></thead>
+<tbody><tr><td>yo</td><td>I</td><td>he habl<b>ado</b></td><td>he com<b>ido</b></td><td>he viv<b>ido</b></td></tr><tr><td>tú</td><td>you</td><td>has habl<b>ado</b></td><td>has com<b>ido</b></td><td>has viv<b>ido</b></td></tr><tr><td>él/ella</td><td>he/she</td><td>ha habl<b>ado</b></td><td>ha com<b>ido</b></td><td>ha viv<b>ido</b></td></tr><tr><td>nosotros</td><td>we</td><td>hemos habl<b>ado</b></td><td>hemos com<b>ido</b></td><td>hemos viv<b>ido</b></td></tr><tr><td>vosotros</td><td>you all</td><td>habéis habl<b>ado</b></td><td>habéis com<b>ido</b></td><td>habéis viv<b>ido</b></td></tr><tr><td>ellos/ellas</td><td>they</td><td>han habl<b>ado</b></td><td>han com<b>ido</b></td><td>han viv<b>ido</b></td></tr></tbody></table></div>
 </div>
-<div class="ex-cta"><a href="ejercicios-en.html?tema=regulares" class="button button-primary"><i class="ti ti-target"></i> Test yourself with exercises</a></div>
+<div class="tab-panel" id="t-pluscuam">
+<h3 style="margin-top:0">Pluscuamperfecto — Past Perfect</h3>
+<p class="subtitle" style="margin-bottom:14px">Used for a past action that happened before another past action. "I had spoken / I had eaten / I had lived"</p>
+<div class="table-wrap"><table>
+<thead><tr><th>Pronoun</th><th>English</th><th>-AR (hablar)</th><th>-ER (comer)</th><th>-IR (vivir)</th></tr></thead>
+<tbody><tr><td>yo</td><td>I</td><td>había habl<b>ado</b></td><td>había com<b>ido</b></td><td>había viv<b>ido</b></td></tr><tr><td>tú</td><td>you</td><td>habías habl<b>ado</b></td><td>habías com<b>ido</b></td><td>habías viv<b>ido</b></td></tr><tr><td>él/ella</td><td>he/she</td><td>había habl<b>ado</b></td><td>había com<b>ido</b></td><td>había viv<b>ido</b></td></tr><tr><td>nosotros</td><td>we</td><td>habíamos habl<b>ado</b></td><td>habíamos com<b>ido</b></td><td>habíamos viv<b>ido</b></td></tr><tr><td>vosotros</td><td>you all</td><td>habíais habl<b>ado</b></td><td>habíais com<b>ido</b></td><td>habíais viv<b>ido</b></td></tr><tr><td>ellos/ellas</td><td>they</td><td>habían habl<b>ado</b></td><td>habían com<b>ido</b></td><td>habían viv<b>ido</b></td></tr></tbody></table></div>
+</div>
+<div class="tab-panel" id="t-pretant">
+<h3 style="margin-top:0">Pretérito Anterior — Preterite Perfect</h3>
+<p class="subtitle" style="margin-bottom:14px">A rare, mostly literary tense for an action finished right before another past action. "As soon as I had spoken..."</p>
+<div class="table-wrap"><table>
+<thead><tr><th>Pronoun</th><th>English</th><th>-AR (hablar)</th><th>-ER (comer)</th><th>-IR (vivir)</th></tr></thead>
+<tbody><tr><td>yo</td><td>I</td><td>hube habl<b>ado</b></td><td>hube com<b>ido</b></td><td>hube viv<b>ido</b></td></tr><tr><td>tú</td><td>you</td><td>hubiste habl<b>ado</b></td><td>hubiste com<b>ido</b></td><td>hubiste viv<b>ido</b></td></tr><tr><td>él/ella</td><td>he/she</td><td>hubo habl<b>ado</b></td><td>hubo com<b>ido</b></td><td>hubo viv<b>ido</b></td></tr><tr><td>nosotros</td><td>we</td><td>hubimos habl<b>ado</b></td><td>hubimos com<b>ido</b></td><td>hubimos viv<b>ido</b></td></tr><tr><td>vosotros</td><td>you all</td><td>hubisteis habl<b>ado</b></td><td>hubisteis com<b>ido</b></td><td>hubisteis viv<b>ido</b></td></tr><tr><td>ellos/ellas</td><td>they</td><td>hubieron habl<b>ado</b></td><td>hubieron com<b>ido</b></td><td>hubieron viv<b>ido</b></td></tr></tbody></table></div>
+</div>
+<div class="tab-panel" id="t-futcomp">
+<h3 style="margin-top:0">Futuro Compuesto — Future Perfect</h3>
+<p class="subtitle" style="margin-bottom:14px">Used for a future action that will be finished before another moment. "I will have spoken / I will have eaten / I will have lived"</p>
+<div class="table-wrap"><table>
+<thead><tr><th>Pronoun</th><th>English</th><th>-AR (hablar)</th><th>-ER (comer)</th><th>-IR (vivir)</th></tr></thead>
+<tbody><tr><td>yo</td><td>I</td><td>habré habl<b>ado</b></td><td>habré com<b>ido</b></td><td>habré viv<b>ido</b></td></tr><tr><td>tú</td><td>you</td><td>habrás habl<b>ado</b></td><td>habrás com<b>ido</b></td><td>habrás viv<b>ido</b></td></tr><tr><td>él/ella</td><td>he/she</td><td>habrá habl<b>ado</b></td><td>habrá com<b>ido</b></td><td>habrá viv<b>ido</b></td></tr><tr><td>nosotros</td><td>we</td><td>habremos habl<b>ado</b></td><td>habremos com<b>ido</b></td><td>habremos viv<b>ido</b></td></tr><tr><td>vosotros</td><td>you all</td><td>habréis habl<b>ado</b></td><td>habréis com<b>ido</b></td><td>habréis viv<b>ido</b></td></tr><tr><td>ellos/ellas</td><td>they</td><td>habrán habl<b>ado</b></td><td>habrán com<b>ido</b></td><td>habrán viv<b>ido</b></td></tr></tbody></table></div>
+</div>
+<div class="tab-panel" id="t-condcomp">
+<h3 style="margin-top:0">Condicional Compuesto — Conditional Perfect</h3>
+<p class="subtitle" style="margin-bottom:14px">Used for what would have happened under another condition. "I would have spoken / I would have eaten / I would have lived"</p>
+<div class="table-wrap"><table>
+<thead><tr><th>Pronoun</th><th>English</th><th>-AR (hablar)</th><th>-ER (comer)</th><th>-IR (vivir)</th></tr></thead>
+<tbody><tr><td>yo</td><td>I</td><td>habría habl<b>ado</b></td><td>habría com<b>ido</b></td><td>habría viv<b>ido</b></td></tr><tr><td>tú</td><td>you</td><td>habrías habl<b>ado</b></td><td>habrías com<b>ido</b></td><td>habrías viv<b>ido</b></td></tr><tr><td>él/ella</td><td>he/she</td><td>habría habl<b>ado</b></td><td>habría com<b>ido</b></td><td>habría viv<b>ido</b></td></tr><tr><td>nosotros</td><td>we</td><td>habríamos habl<b>ado</b></td><td>habríamos com<b>ido</b></td><td>habríamos viv<b>ido</b></td></tr><tr><td>vosotros</td><td>you all</td><td>habríais habl<b>ado</b></td><td>habríais com<b>ido</b></td><td>habríais viv<b>ido</b></td></tr><tr><td>ellos/ellas</td><td>they</td><td>habrían habl<b>ado</b></td><td>habrían com<b>ido</b></td><td>habrían viv<b>ido</b></td></tr></tbody></table></div>
+</div>
+
+</div>
+<div class="ex-cta"><a href="ejercicios-en.html?tema=regulares" class="button button-primary"><i class="ti ti-pencil"></i> Test yourself with exercises</a></div>
 </section>
 </main>
 <footer>© 2026 Jose N. · Profesor de español · <a href="privacidad.html">Privacidad</a></footer>

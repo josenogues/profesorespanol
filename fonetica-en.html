@@ -6,7 +6,7 @@
 <title>Fonética (English) | Aprende Español con Jose Nogues</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@400;600;700;800&family=Caveat:wght@700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
 <link rel="icon" type="image/png" href="favicon.png">
 <link rel="stylesheet" href="styles.css">
@@ -35,8 +35,8 @@
 <a href="#" class="track-link" data-base="verbos-irregulares"><span class="i18n" data-es="Irregulares" data-it="Irregolari" data-en="Irregular">Irregulares</span></a>
 <a href="#" class="track-link submenu-sub" data-base="ser-estar"><span class="i18n" data-es="Ser y estar" data-it="Ser y estar" data-en="Ser y estar">Ser y estar</span></a>
 <a href="#" class="track-link submenu-sub" data-base="haber-tener"><span class="i18n" data-es="Haber y tener" data-it="Haber y tener" data-en="Haber y tener">Haber y tener</span></a>
-<a href="#" class="track-link track-only" data-track-show="it" data-base="especial-atencion-verbos">Especial atención</a>
-<a href="#" class="track-link track-only" data-track-show="en" data-base="especial-atencion-verbos">Especial atención</a>
+<a href="#" class="track-link track-only" data-track-show="it" data-base="especial-atencion-verbos">Attenzione a questi</a>
+<a href="#" class="track-link track-only" data-track-show="en" data-base="especial-atencion-verbos">Watch out for this</a>
 <a href="#" class="track-link" data-base="verbos-reflexivos"><span class="i18n" data-es="Reflexivos" data-it="Riflessivi" data-en="Reflexive">Reflexivos</span></a>
 <a href="#" class="track-link" data-base="formas-impersonales"><span class="i18n" data-es="Formas impersonales" data-it="Forme impersonali" data-en="Non-finite forms">Formas impersonales</span></a>
 </div>
@@ -50,8 +50,8 @@
 <a href="#" class="track-link" data-base="pronombres"><span class="i18n" data-es="Pronombres" data-it="Pronomi" data-en="Pronouns">Pronombres</span></a>
 <a href="#" class="track-link" data-base="preposiciones"><span class="i18n" data-es="Preposiciones" data-it="Preposizioni" data-en="Prepositions">Preposiciones</span></a>
 <a href="#" class="track-link" data-base="fonetica"><span class="i18n" data-es="Fonética" data-it="Fonetica" data-en="Phonetics">Fonética</span></a>
-<a href="#" class="track-link track-only" data-track-show="it" data-base="especial-atencion-gramatica">Especial atención</a>
-<a href="#" class="track-link track-only" data-track-show="en" data-base="especial-atencion-gramatica">Especial atención</a>
+<a href="#" class="track-link track-only" data-track-show="it" data-base="especial-atencion-gramatica">Attenzione a questi</a>
+<a href="#" class="track-link track-only" data-track-show="en" data-base="especial-atencion-gramatica">Watch out for this</a>
 </div>
 </div>
 
@@ -84,6 +84,13 @@
 </div>
 
 <div class="menu-item">
+<button class="menu-button"><i class="ti ti-external-link cat-recursos"></i> <span class="i18n" data-es="Recursos" data-it="Risorse" data-en="Resources">Recursos</span> ▾</button>
+<div class="submenu">
+<a href="#" class="track-link" data-base="recursos"><span class="i18n" data-es="Todos los recursos" data-it="Tutte le risorse" data-en="All resources">Todos los recursos</span></a>
+</div>
+</div>
+
+<div class="menu-item">
 <button class="menu-button"><i class="ti ti-pencil cat-ejercicios"></i> <span class="i18n" data-es="Ejercicios" data-it="Esercizi" data-en="Exercises">Ejercicios</span> ▾</button>
 <div class="submenu">
 <a href="#" class="track-link" data-base="ejercicios"><span class="i18n" data-es="Todos los ejercicios" data-it="Tutti gli esercizi" data-en="All exercises">Todos los ejercicios</span></a>
@@ -95,6 +102,12 @@
 <p class="tagline"><span id="tagline-text">Poco a poco se llega lejos</span> <i class="ti ti-bolt"></i></p>
 </div>
 </aside>
+<div class="tab-rail">
+<div class="rail-tab" data-tab-cat="verbos" style="--tab-color:#D6488F"></div>
+<div class="rail-tab" data-tab-cat="gramatica" style="--tab-color:#5B9A3B"></div>
+<div class="rail-tab" data-tab-cat="vocabulario" style="--tab-color:#E8791E"></div>
+<div class="rail-tab" data-tab-cat="expresiones" style="--tab-color:#7A6FD1"></div>
+</div>
 <main class="main">
 <div class="page-header"><div class="language-selector">
 <button class="lang-track-btn" data-track="es">🇪🇸 Español</button>
@@ -116,7 +129,7 @@
 <span class="eyebrow">Sounds</span>
 <h3 style="font-size:22px;margin:6px 0 10px">The vowels</h3>
 <p class="subtitle" style="margin-bottom:16px">Spanish has only 5 vowel sounds, and each one always sounds the same — unlike English, where the same letter can sound completely different depending on the word (think of the "a" in "cat" vs "father" vs "about"). Learn these 5 sounds well and there won't be any surprises.</p>
-<div class="table-wrap"><table>
+<div class="table-wrap compact"><table>
 <thead><tr><th>Vowel</th><th>Example</th><th></th></tr></thead>
 <tbody>
 <tr><td><b>a</b></td><td>casa</td><td><button class="speak-btn" data-text="casa" title="Listen"><i class="ti ti-volume"></i></button></td></tr>
@@ -137,6 +150,19 @@
 <div class="compare-card"><h4>Diphthong</h4><ul><li>A strong vowel (a, e, o) + a weak one (i, u), or two weak ones together</li><li>Pronounced as <b>one single syllable</b></li><li><b>bien</b>, <b>cielo</b>, <b>cuatro</b>, <b>ciudad</b></li></ul></div>
 <div class="compare-card"><h4>Triphthong</h4><ul><li>Weak + strong + weak, all three together</li><li>Not very common, but it exists</li><li><b>buey</b>, <b>cambiáis</b>, <b>limpiáis</b></li></ul></div>
 <div class="compare-card"><h4>Hiatus</h4><ul><li>Two strong vowels together, or a weak one carrying an accent mark</li><li>Split into <b>separate syllables</b></li><li><b>le-o</b>, <b>pa-ís</b>, <b>dí-a</b></li></ul></div>
+</div>
+<div class="topic-block">
+<span class="eyebrow">Spelling</span>
+<h3 style="font-size:22px;margin:6px 0 10px">Spanish's special letters and sounds</h3>
+<p class="subtitle" style="margin-bottom:16px">Spanish has sounds and letters that don't exist in English. Here are the essential rules!</p>
+<div class="compare-grid" style="grid-template-columns:repeat(3,1fr)">
+<div class="compare-card"><h4>Double letters</h4><ul><li><b>LL</b> → a soft "y" sound: llamar, llave <button class="speak-btn" data-text="llave"><i class="ti ti-volume"></i></button>, pollo</li><li><b>RR</b> → a strong rolled r: perro <button class="speak-btn" data-text="perro"><i class="ti ti-volume"></i></button>, carro, correr</li><li><b>CC</b> → sounds like "ks": acceso, acción, accidente</li></ul></div>
+<div class="compare-card"><h4>H and CH</h4><ul><li><b>H</b> → always silent: hola <button class="speak-btn" data-text="hola"><i class="ti ti-volume"></i></button>, hombre, haber</li><li><b>CH</b> → like English "ch" in "chip": noche <button class="speak-btn" data-text="noche"><i class="ti ti-volume"></i></button>, coche, chico, mucho</li></ul></div>
+<div class="compare-card"><h4>GUE / GUI / GÜE / GÜI</h4><ul><li><b>GUE, GUI</b> → the U is silent: guerra, guiar (sounds like "geh", "ghee")</li><li><b>GÜE, GÜI</b> → the Ü IS pronounced (with a dieresis): pingüino <button class="speak-btn" data-text="pingüino"><i class="ti ti-volume"></i></button></li></ul></div>
+<div class="compare-card"><h4>The Ñ</h4><ul><li>A letter unique to Spanish, sounds like "ny" in "canyon".</li><li>Examples: España <button class="speak-btn" data-text="España"><i class="ti ti-volume"></i></button>, año, mañana, señor, niño</li></ul></div>
+<div class="compare-card"><h4>The Q</h4><ul><li><b>QUE, QUI</b> → the U is always silent: que, quiero, queso, quince (reads as "keh", "kee")</li><li>QUA or QUO don't exist in Spanish: it's written cuatro, cuando</li></ul></div>
+<div class="compare-card"><h4>The X</h4><ul><li>Usually sounds like "ks": éxito <button class="speak-btn" data-text="éxito"><i class="ti ti-volume"></i></button>, taxi, sexo</li><li>In some words of indigenous origin it sounds like "sh": México, Oaxaca, Texas</li></ul></div>
+</div>
 </div>
 <div class="tip-box"><i class="ti ti-alert-triangle"></i> <b>Trick:</b> if a weak vowel (i, u) carries a written accent next to a strong one, it's always a hiatus, not a diphthong — that's why "país" splits into pa-ís, two syllables, instead of being pronounced as one.</div>
 
@@ -169,21 +195,8 @@
 </div>
 </div>
 
-<div class="topic-block">
-<span class="eyebrow">Spelling</span>
-<h3 style="font-size:22px;margin:6px 0 10px">Spanish's special letters and sounds</h3>
-<p class="subtitle" style="margin-bottom:16px">Spanish has sounds and letters that don't exist in English. Here are the essential rules!</p>
-<div class="compare-grid" style="grid-template-columns:repeat(3,1fr)">
-<div class="compare-card"><h4>Double letters</h4><ul><li><b>LL</b> → a soft "y" sound: llamar, llave, pollo</li><li><b>RR</b> → a strong rolled r: perro, carro, correr</li><li><b>CC</b> → sounds like "ks": acceso, acción, accidente</li></ul></div>
-<div class="compare-card"><h4>H and CH</h4><ul><li><b>H</b> → always silent: hola, hombre, haber</li><li><b>CH</b> → like English "ch" in "chip": noche, coche, chico, mucho</li></ul></div>
-<div class="compare-card"><h4>GUE / GUI / GÜE / GÜI</h4><ul><li><b>GUE, GUI</b> → the U is silent: guerra, guiar (sounds like "geh", "ghee")</li><li><b>GÜE, GÜI</b> → the Ü IS pronounced (with a dieresis): pingüino</li></ul></div>
-<div class="compare-card"><h4>The Ñ</h4><ul><li>A letter unique to Spanish, sounds like "ny" in "canyon".</li><li>Examples: España, año, mañana, señor, niño</li></ul></div>
-<div class="compare-card"><h4>The Q</h4><ul><li><b>QUE, QUI</b> → the U is always silent: que, quiero, queso, quince (reads as "keh", "kee")</li><li>QUA or QUO don't exist in Spanish: it's written cuatro, cuando</li></ul></div>
-<div class="compare-card"><h4>The X</h4><ul><li>Usually sounds like "ks": éxito, taxi, sexo</li><li>In some words of indigenous origin it sounds like "sh": México, Oaxaca, Texas</li></ul></div>
-</div>
-</div>
 
-<div class="ex-cta"><a href="ejercicios-en.html?tema=fonetica" class="button button-primary"><i class="ti ti-target"></i> Test yourself with exercises</a></div>
+<div class="ex-cta"><a href="ejercicios-en.html?tema=fonetica" class="button button-primary"><i class="ti ti-pencil"></i> Test yourself with exercises</a></div>
 </section>
 </main>
 <footer>© 2026 Jose N. · Profesor de español · <a href="privacidad.html">Privacidad</a></footer>

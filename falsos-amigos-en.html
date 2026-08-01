@@ -6,7 +6,7 @@
 <title>False friends (English) | Aprende Español con Jose Nogues</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@400;600;700;800&family=Caveat:wght@700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
 <link rel="icon" type="image/png" href="favicon.png">
 <link rel="stylesheet" href="styles.css">
@@ -35,8 +35,8 @@
 <a href="#" class="track-link" data-base="verbos-irregulares"><span class="i18n" data-es="Irregulares" data-it="Irregolari" data-en="Irregular">Irregulares</span></a>
 <a href="#" class="track-link submenu-sub" data-base="ser-estar"><span class="i18n" data-es="Ser y estar" data-it="Ser y estar" data-en="Ser y estar">Ser y estar</span></a>
 <a href="#" class="track-link submenu-sub" data-base="haber-tener"><span class="i18n" data-es="Haber y tener" data-it="Haber y tener" data-en="Haber y tener">Haber y tener</span></a>
-<a href="#" class="track-link track-only" data-track-show="it" data-base="especial-atencion-verbos">Especial atención</a>
-<a href="#" class="track-link track-only" data-track-show="en" data-base="especial-atencion-verbos">Especial atención</a>
+<a href="#" class="track-link track-only" data-track-show="it" data-base="especial-atencion-verbos">Attenzione a questi</a>
+<a href="#" class="track-link track-only" data-track-show="en" data-base="especial-atencion-verbos">Watch out for this</a>
 <a href="#" class="track-link" data-base="verbos-reflexivos"><span class="i18n" data-es="Reflexivos" data-it="Riflessivi" data-en="Reflexive">Reflexivos</span></a>
 <a href="#" class="track-link" data-base="formas-impersonales"><span class="i18n" data-es="Formas impersonales" data-it="Forme impersonali" data-en="Non-finite forms">Formas impersonales</span></a>
 </div>
@@ -50,8 +50,8 @@
 <a href="#" class="track-link" data-base="pronombres"><span class="i18n" data-es="Pronombres" data-it="Pronomi" data-en="Pronouns">Pronombres</span></a>
 <a href="#" class="track-link" data-base="preposiciones"><span class="i18n" data-es="Preposiciones" data-it="Preposizioni" data-en="Prepositions">Preposiciones</span></a>
 <a href="#" class="track-link" data-base="fonetica"><span class="i18n" data-es="Fonética" data-it="Fonetica" data-en="Phonetics">Fonética</span></a>
-<a href="#" class="track-link track-only" data-track-show="it" data-base="especial-atencion-gramatica">Especial atención</a>
-<a href="#" class="track-link track-only" data-track-show="en" data-base="especial-atencion-gramatica">Especial atención</a>
+<a href="#" class="track-link track-only" data-track-show="it" data-base="especial-atencion-gramatica">Attenzione a questi</a>
+<a href="#" class="track-link track-only" data-track-show="en" data-base="especial-atencion-gramatica">Watch out for this</a>
 </div>
 </div>
 
@@ -84,6 +84,13 @@
 </div>
 
 <div class="menu-item">
+<button class="menu-button"><i class="ti ti-external-link cat-recursos"></i> <span class="i18n" data-es="Recursos" data-it="Risorse" data-en="Resources">Recursos</span> ▾</button>
+<div class="submenu">
+<a href="#" class="track-link" data-base="recursos"><span class="i18n" data-es="Todos los recursos" data-it="Tutte le risorse" data-en="All resources">Todos los recursos</span></a>
+</div>
+</div>
+
+<div class="menu-item">
 <button class="menu-button"><i class="ti ti-pencil cat-ejercicios"></i> <span class="i18n" data-es="Ejercicios" data-it="Esercizi" data-en="Exercises">Ejercicios</span> ▾</button>
 <div class="submenu">
 <a href="#" class="track-link" data-base="ejercicios"><span class="i18n" data-es="Todos los ejercicios" data-it="Tutti gli esercizi" data-en="All exercises">Todos los ejercicios</span></a>
@@ -95,17 +102,12 @@
 <p class="tagline"><span id="tagline-text">Poco a poco se llega lejos</span> <i class="ti ti-bolt"></i></p>
 </div>
 </aside>
-
-
-
-
-
-
-
-
-
-
-
+<div class="tab-rail">
+<div class="rail-tab" data-tab-cat="verbos" style="--tab-color:#D6488F"></div>
+<div class="rail-tab" data-tab-cat="gramatica" style="--tab-color:#5B9A3B"></div>
+<div class="rail-tab" data-tab-cat="vocabulario" style="--tab-color:#E8791E"></div>
+<div class="rail-tab" data-tab-cat="expresiones" style="--tab-color:#7A6FD1"></div>
+</div>
 <main class="main">
 <div class="page-header"><div class="language-selector">
 <button class="lang-track-btn" data-track="es">🇪🇸 Español</button>
@@ -125,28 +127,28 @@
 <div class="table-wrap"><table>
 <thead><tr><th>Spanish word</th><th>Looks like</th><th>Actually means</th></tr></thead>
 <tbody>
-<tr><td>embarazada</td><td>embarrassed</td><td>pregnant</td></tr>
-<tr><td>actualmente</td><td>actually</td><td>currently</td></tr>
-<tr><td>éxito</td><td>exit</td><td>success</td></tr>
-<tr><td>sensible</td><td>sensible</td><td>sensitive</td></tr>
-<tr><td>realizar</td><td>to realize</td><td>to carry out</td></tr>
-<tr><td>asistir</td><td>to assist</td><td>to attend</td></tr>
-<tr><td>carpeta</td><td>carpet</td><td>folder</td></tr>
-<tr><td>librería</td><td>library</td><td>bookshop</td></tr>
-<tr><td>discutir</td><td>to discuss</td><td>to argue</td></tr>
-<tr><td>constipado</td><td>constipated</td><td>having a cold</td></tr>
-<tr><td>molestar</td><td>to molest</td><td>to bother/annoy</td></tr>
-<tr><td>largo</td><td>large</td><td>long</td></tr>
-<tr><td>molestar</td><td>to molest</td><td>to bother/annoy</td></tr>
-<tr><td>largo</td><td>large</td><td>long</td></tr>
-<tr><td>presentar</td><td>to present a gift</td><td>to introduce (someone)</td></tr>
-<tr><td>tela</td><td>to tell</td><td>fabric</td></tr>
-<tr><td>receta</td><td>receipt</td><td>recipe</td></tr>
-<tr><td>fábrica</td><td>fabric</td><td>factory</td></tr>
+<tr><td>embarazada <button class="speak-btn" data-text="embarazada"><i class="ti ti-volume"></i></button></td><td>embarrassed</td><td>pregnant</td></tr>
+<tr><td>actualmente <button class="speak-btn" data-text="actualmente"><i class="ti ti-volume"></i></button></td><td>actually</td><td>currently</td></tr>
+<tr><td>éxito <button class="speak-btn" data-text="éxito"><i class="ti ti-volume"></i></button></td><td>exit</td><td>success</td></tr>
+<tr><td>sensible <button class="speak-btn" data-text="sensible"><i class="ti ti-volume"></i></button></td><td>sensible</td><td>sensitive</td></tr>
+<tr><td>realizar <button class="speak-btn" data-text="realizar"><i class="ti ti-volume"></i></button></td><td>to realize</td><td>to carry out</td></tr>
+<tr><td>asistir <button class="speak-btn" data-text="asistir"><i class="ti ti-volume"></i></button></td><td>to assist</td><td>to attend</td></tr>
+<tr><td>carpeta <button class="speak-btn" data-text="carpeta"><i class="ti ti-volume"></i></button></td><td>carpet</td><td>folder</td></tr>
+<tr><td>librería <button class="speak-btn" data-text="librería"><i class="ti ti-volume"></i></button></td><td>library</td><td>bookshop</td></tr>
+<tr><td>discutir <button class="speak-btn" data-text="discutir"><i class="ti ti-volume"></i></button></td><td>to discuss</td><td>to argue</td></tr>
+<tr><td>constipado <button class="speak-btn" data-text="constipado"><i class="ti ti-volume"></i></button></td><td>constipated</td><td>having a cold</td></tr>
+<tr><td>molestar <button class="speak-btn" data-text="molestar"><i class="ti ti-volume"></i></button></td><td>to molest</td><td>to bother/annoy</td></tr>
+<tr><td>largo <button class="speak-btn" data-text="largo"><i class="ti ti-volume"></i></button></td><td>large</td><td>long</td></tr>
+<tr><td>molestar <button class="speak-btn" data-text="molestar"><i class="ti ti-volume"></i></button></td><td>to molest</td><td>to bother/annoy</td></tr>
+<tr><td>largo <button class="speak-btn" data-text="largo"><i class="ti ti-volume"></i></button></td><td>large</td><td>long</td></tr>
+<tr><td>presentar <button class="speak-btn" data-text="presentar"><i class="ti ti-volume"></i></button></td><td>to present a gift</td><td>to introduce (someone)</td></tr>
+<tr><td>tela <button class="speak-btn" data-text="tela"><i class="ti ti-volume"></i></button></td><td>to tell</td><td>fabric</td></tr>
+<tr><td>receta <button class="speak-btn" data-text="receta"><i class="ti ti-volume"></i></button></td><td>receipt</td><td>recipe</td></tr>
+<tr><td>fábrica <button class="speak-btn" data-text="fábrica"><i class="ti ti-volume"></i></button></td><td>fabric</td><td>factory</td></tr>
 </tbody></table></div>
 
 <div class="tip-box"><i class="ti ti-alert-triangle"></i> <b>The riskiest ones:</b> "embarazada" and "constipado" are the two most likely to cause an actually awkward moment if you get them wrong — worth memorizing those two first.</div>
-<div class="ex-cta"><a href="ejercicios-en.html?tema=falsos-amigos" class="button button-primary"><i class="ti ti-target"></i> Test yourself with exercises</a></div>
+<div class="ex-cta"><a href="ejercicios-en.html?tema=falsos-amigos" class="button button-primary"><i class="ti ti-pencil"></i> Test yourself with exercises</a></div>
 </section>
 </main>
 <footer>© 2026 Jose N. · Profesor de español · <a href="privacidad.html">Privacidad</a></footer>
