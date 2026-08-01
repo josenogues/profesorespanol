@@ -887,6 +887,9 @@ ${qHTML}`;
   }
   align();
   window.addEventListener('resize', align);
+  document.addEventListener('click', (e) => {
+    if(e.target.closest('.menu-button')) requestAnimationFrame(align); // el menú desplegado cambia de alto
+  });
   setTimeout(align, 300); // por si las fuentes cambian la altura del menú al cargar
 })();
 
