@@ -337,6 +337,8 @@ body[data-category="verbos"] .rail-tab[data-tab-cat="verbos"],
 body[data-category="gramatica"] .rail-tab[data-tab-cat="gramatica"],
 body[data-category="vocabulario"] .rail-tab[data-tab-cat="vocabulario"],
 body[data-category="expresiones"] .rail-tab[data-tab-cat="expresiones"],
+body[data-category="recursos"] .rail-tab[data-tab-cat="recursos"],
+body[data-category="ejercicios"] .rail-tab[data-tab-cat="ejercicios"],
 body[data-category="atencion"] .rail-tab[data-tab-cat="gramatica"]{
   opacity:1;width:22px;box-shadow:3px 2px 8px rgba(0,0,0,.22)
 }
