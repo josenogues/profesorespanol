@@ -246,6 +246,40 @@ a.closest(".menu-item").classList.add("active","current-section");
       showFeedback(block, built === correct);
       return;
     }
+    const matchItem = e.target.closest('.match-item');
+    if(matchItem && !matchItem.classList.contains('matched')){
+      const block = matchItem.closest('.match-block');
+      const selected = block.querySelector('.match-item.selected');
+      if(selected === matchItem){
+        matchItem.classList.remove('selected');
+        return;
+      }
+      if(!selected){
+        matchItem.classList.add('selected');
+        return;
+      }
+      if(selected.closest('.match-col') === matchItem.closest('.match-col')){
+        selected.classList.remove('selected');
+        matchItem.classList.add('selected');
+        return;
+      }
+      if(selected.dataset.key === matchItem.dataset.key){
+        selected.classList.remove('selected');
+        selected.classList.add('matched');
+        matchItem.classList.add('matched');
+        const total = parseInt(block.dataset.pairs, 10);
+        const matchedCount = block.querySelectorAll('.match-item.matched').length / 2;
+        if(matchedCount >= total) showFeedback(block, true);
+      } else {
+        selected.classList.add('wrong-flash');
+        matchItem.classList.add('wrong-flash');
+        setTimeout(() => {
+          selected.classList.remove('selected', 'wrong-flash');
+          matchItem.classList.remove('wrong-flash');
+        }, 500);
+      }
+      return;
+    }
     const optBtn = e.target.closest('.option-btn');
     if(optBtn){
       const block = optBtn.closest('.exercise-block');
@@ -554,7 +588,10 @@ a.closest(".menu-item").classList.add("active","current-section");
   let mixMode = false;
 
   function kickerFor(type){
-    return type === 'fill' ? cfg.labels.kickerFill : type === 'choice' ? cfg.labels.kickerChoice : cfg.labels.kickerTranslate;
+    return type === 'fill' ? cfg.labels.kickerFill
+      : type === 'choice' ? cfg.labels.kickerChoice
+      : type === 'correct' ? cfg.labels.kickerCorrect
+      : cfg.labels.kickerTranslate;
   }
 
   function renderItemHTML(item){
@@ -582,7 +619,17 @@ ${catTag}<div class="exercise-kicker"><span>${kicker}</span><span class="exercis
 <div class="exercise-options">${opts}</div>
 <p class="exercise-feedback"></p></div>`;
     }
-    const placeholder = item.type === 'translate' ? cfg.labels.placeholderTranslate : cfg.labels.placeholderFill;
+    if(item.type === 'match'){
+      const leftItems = shuffle(item.pairs.map((p, i) => ({ text: p[0], key: i })));
+      const rightItems = shuffle(item.pairs.map((p, i) => ({ text: p[1], key: i })));
+      const colHtml = list => list.map(x => `<button class="match-item" data-key="${x.key}">${x.text}</button>`).join('');
+      return `<div class="exercise-block match-block" ${borderStyle} data-exid="${item.exid}" data-pairs="${item.pairs.length}">
+${catTag}<div class="exercise-kicker"><span>${cfg.labels.kickerMatch}</span><span class="exercise-done-badge">${cfg.labels.done}</span></div>
+<p class="exercise-prompt">${item.prompt}</p>${hint}
+<div class="match-columns"><div class="match-col">${colHtml(leftItems)}</div><div class="match-col">${colHtml(rightItems)}</div></div>
+<p class="exercise-feedback"></p></div>`;
+    }
+    const placeholder = item.type === 'translate' ? cfg.labels.placeholderTranslate : item.type === 'correct' ? cfg.labels.placeholderCorrect : cfg.labels.placeholderFill;
     return `<div class="exercise-block" ${borderStyle} data-exid="${item.exid}" data-answer="${item.answer}">
 ${catTag}<div class="exercise-kicker"><span>${kicker}</span><span class="exercise-done-badge">${cfg.labels.done}</span></div>
 <p class="exercise-prompt">${item.prompt}</p>${hint}
