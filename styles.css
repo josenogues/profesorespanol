@@ -156,6 +156,9 @@ footer{text-align:center;padding:30px;color:var(--muted);border-top:1px solid va
 [data-theme="dark"] .option-btn.correct{background:#183a24;border-color:#2fa84f;color:#7be39a}
 [data-theme="dark"] .option-btn.incorrect{background:#3a1c1c;border-color:#e0524f;color:#f2a09d}
 .exercise-feedback{margin-top:10px;font-weight:700;font-size:15px;min-height:20px}
+.exercise-theory-link{display:inline-flex;align-items:center;gap:5px;margin-top:8px;font-size:12.5px;color:var(--muted);text-decoration:none;font-weight:500}
+.exercise-theory-link:hover{color:var(--primary-dark);text-decoration:underline}
+.exercise-theory-link i{font-size:13px}
 .exercise-feedback.correct{color:#1c6b32}
 .exercise-feedback.incorrect{color:#a3302d}
 [data-theme="dark"] .exercise-feedback.correct,[data-theme="dark"] .exercise-done-badge{color:#7be39a}
@@ -225,6 +228,8 @@ footer{text-align:center;padding:30px;color:var(--muted);border-top:1px solid va
 .ex-cat-card.active i,.ex-cat-card.active p{color:#fff}
 .ex-level-code{font-family:var(--font-head);font-weight:700;font-size:19px;color:var(--cat-color,var(--muted));display:block;margin-bottom:8px}
 .ex-cat-card.active .ex-level-code{color:#fff}
+.ex-level-card:hover{background:var(--tint);border-color:var(--primary)}
+.ex-level-card.active:hover{background:var(--primary);border-color:var(--primary)}
 
 .ex-mode-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-bottom:8px}
 .ex-mode-card{border:1px solid var(--border);background:var(--card-bg);border-radius:16px;padding:26px 22px;cursor:pointer;text-align:left;transition:.15s;font-family:var(--font-body)}
