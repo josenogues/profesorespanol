@@ -231,6 +231,11 @@ footer{text-align:center;padding:30px;color:var(--muted);border-top:1px solid va
 .ex-level-card:hover{background:var(--tint);border-color:var(--primary)}
 .ex-level-card.active:hover{background:var(--primary);border-color:var(--primary)}
 
+.ex-construction-notice{display:flex;gap:14px;align-items:flex-start;border-left:4px solid var(--gold);background:var(--attention-bg);border-radius:0 12px 12px 0;padding:16px 18px;margin-bottom:22px}
+.ex-construction-notice i{font-size:22px;line-height:1;color:var(--gold-dark);flex-shrink:0;margin-top:2px}
+.ex-construction-notice strong{display:block;font-family:var(--font-head);color:var(--gold-dark);margin-bottom:4px}
+.ex-construction-notice p{margin:0;font-size:14.5px;line-height:1.5;color:var(--text)}
+
 .ex-mode-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-bottom:8px}
 .ex-mode-card{border:1px solid var(--border);background:var(--card-bg);border-radius:16px;padding:26px 22px;cursor:pointer;text-align:left;transition:.15s;font-family:var(--font-body)}
 .ex-mode-card:hover{transform:translateY(-3px);box-shadow:0 8px 20px rgba(58,69,112,.14);border-color:var(--primary)}
