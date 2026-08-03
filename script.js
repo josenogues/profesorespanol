@@ -555,7 +555,7 @@ a.closest(".menu-item").classList.add("active","current-section");
           localStorage.setItem(ACCESS_KEY, 'true');
           document.body.removeChild(overlay);
         } else {
-          errorEl.textContent = 'Ese email no está en la lista. Escribe a Jose si crees que es un error.';
+          errorEl.textContent = 'Ese email no está en la lista. Escribe a José si crees que es un error.';
           btn.disabled = false;
           btn.textContent = 'Entrar';
         }
