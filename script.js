@@ -246,6 +246,40 @@ a.closest(".menu-item").classList.add("active","current-section");
       showFeedback(block, built === correct);
       return;
     }
+    const matchItem = e.target.closest('.match-item');
+    if(matchItem && !matchItem.classList.contains('matched')){
+      const block = matchItem.closest('.match-block');
+      const selected = block.querySelector('.match-item.selected');
+      if(selected === matchItem){
+        matchItem.classList.remove('selected');
+        return;
+      }
+      if(!selected){
+        matchItem.classList.add('selected');
+        return;
+      }
+      if(selected.closest('.match-col') === matchItem.closest('.match-col')){
+        selected.classList.remove('selected');
+        matchItem.classList.add('selected');
+        return;
+      }
+      if(selected.dataset.key === matchItem.dataset.key){
+        selected.classList.remove('selected');
+        selected.classList.add('matched');
+        matchItem.classList.add('matched');
+        const total = parseInt(block.dataset.pairs, 10);
+        const matchedCount = block.querySelectorAll('.match-item.matched').length / 2;
+        if(matchedCount >= total) showFeedback(block, true);
+      } else {
+        selected.classList.add('wrong-flash');
+        matchItem.classList.add('wrong-flash');
+        setTimeout(() => {
+          selected.classList.remove('selected', 'wrong-flash');
+          matchItem.classList.remove('wrong-flash');
+        }, 500);
+      }
+      return;
+    }
     const optBtn = e.target.closest('.option-btn');
     if(optBtn){
       const block = optBtn.closest('.exercise-block');
@@ -539,11 +573,18 @@ a.closest(".menu-item").classList.add("active","current-section");
 
   const cfg = window.EXERCISE_HUB_CONFIG; // { categories:[{key,label,color,topics:[...]}], topics:{key:{items,generator?}}, labels:{...} }
   const container = document.getElementById('ex-hub-container');
-  const catBtns = document.querySelectorAll('.ex-cat-card');
+  const catBtns = document.querySelectorAll('.ex-cat-card:not(.ex-level-card)');
+  const levelBtns = document.querySelectorAll('.ex-level-card');
   const pillsWrap = document.getElementById('ex-topic-pills');
   const step2 = document.getElementById('ex-step2');
   const generateBtn = document.getElementById('ex-hub-generate');
   const mixBtn = document.getElementById('ex-hub-mix');
+  const modeGrid = document.getElementById('ex-mode-grid');
+  const modeCards = document.querySelectorAll('.ex-mode-card');
+  const panelNivel = document.getElementById('ex-mode-panel-nivel');
+  const panelTema = document.getElementById('ex-mode-panel-tema');
+  const modeBackBtns = document.querySelectorAll('.ex-mode-back');
+  const hubToolbar = document.getElementById('ex-hub-toolbar');
 
   // mapa tema -> categoría, para poder colorear cada resultado aunque venga de la mezcla al azar
   const topicToCat = {};
@@ -552,9 +593,13 @@ a.closest(".menu-item").classList.add("active","current-section");
   let activeCategory = null; // key de la categoría elegida en el paso 1
   let activeTopics = new Set(); // subtemas activos dentro de esa categoría (vacío = todos los de la categoría)
   let mixMode = false;
+  let activeLevel = null; // "A1".."C1" cuando se practica por nivel (recorrido completo, cruza todas las materias)
 
   function kickerFor(type){
-    return type === 'fill' ? cfg.labels.kickerFill : type === 'choice' ? cfg.labels.kickerChoice : cfg.labels.kickerTranslate;
+    return type === 'fill' ? cfg.labels.kickerFill
+      : type === 'choice' ? cfg.labels.kickerChoice
+      : type === 'correct' ? cfg.labels.kickerCorrect
+      : cfg.labels.kickerTranslate;
   }
 
   function renderItemHTML(item){
@@ -582,7 +627,17 @@ ${catTag}<div class="exercise-kicker"><span>${kicker}</span><span class="exercis
 <div class="exercise-options">${opts}</div>
 <p class="exercise-feedback"></p></div>`;
     }
-    const placeholder = item.type === 'translate' ? cfg.labels.placeholderTranslate : cfg.labels.placeholderFill;
+    if(item.type === 'match'){
+      const leftItems = shuffle(item.pairs.map((p, i) => ({ text: p[0], key: i })));
+      const rightItems = shuffle(item.pairs.map((p, i) => ({ text: p[1], key: i })));
+      const colHtml = list => list.map(x => `<button class="match-item" data-key="${x.key}">${x.text}</button>`).join('');
+      return `<div class="exercise-block match-block" ${borderStyle} data-exid="${item.exid}" data-pairs="${item.pairs.length}">
+${catTag}<div class="exercise-kicker"><span>${cfg.labels.kickerMatch}</span><span class="exercise-done-badge">${cfg.labels.done}</span></div>
+<p class="exercise-prompt">${item.prompt}</p>${hint}
+<div class="match-columns"><div class="match-col">${colHtml(leftItems)}</div><div class="match-col">${colHtml(rightItems)}</div></div>
+<p class="exercise-feedback"></p></div>`;
+    }
+    const placeholder = item.type === 'translate' ? cfg.labels.placeholderTranslate : item.type === 'correct' ? cfg.labels.placeholderCorrect : cfg.labels.placeholderFill;
     return `<div class="exercise-block" ${borderStyle} data-exid="${item.exid}" data-answer="${item.answer}">
 ${catTag}<div class="exercise-kicker"><span>${kicker}</span><span class="exercise-done-badge">${cfg.labels.done}</span></div>
 <p class="exercise-prompt">${item.prompt}</p>${hint}
@@ -680,7 +735,7 @@ ${qHTML}`;
 
   function render(){
     let topicKeys;
-    if(mixMode){
+    if(activeLevel || mixMode){
       topicKeys = Object.keys(cfg.topics);
     } else if(activeCategory){
       const cat = (cfg.categories || []).find(c => c.key === activeCategory);
@@ -688,13 +743,14 @@ ${qHTML}`;
     } else {
       topicKeys = [];
     }
-    const count = mixMode ? 20 : 12;
-    const pool = collectPool(topicKeys);
+    const count = (mixMode || activeLevel) ? 20 : 12;
+    let pool = collectPool(topicKeys);
+    if(activeLevel) pool = pool.filter(it => it.level === activeLevel);
     const picked = sample(pool, Math.min(count, pool.length));
     container.innerHTML = picked.map(item => {
       const withId = Object.assign({}, item, { exid: (item.exid||'ex') + '-' + uid() });
       return renderItemHTML(withId);
-    }).join('') || (topicKeys.length ? '' : `<p class="subtitle">${cfg.labels.empty}</p>`);
+    }).join('') || (topicKeys.length ? `<p class="subtitle">${cfg.labels.emptyLevel || cfg.labels.empty}</p>` : `<p class="subtitle">${cfg.labels.empty}</p>`);
   }
 
   function renderPills(){
@@ -718,7 +774,9 @@ ${qHTML}`;
 
   function selectCategory(key){
     mixMode = false;
+    activeLevel = null;
     if(mixBtn) mixBtn.classList.remove('active');
+    levelBtns.forEach(b => b.classList.remove('active'));
     activeCategory = key;
     activeTopics.clear();
     catBtns.forEach(b => b.classList.toggle('active', b.dataset.cat === key));
@@ -730,16 +788,34 @@ ${qHTML}`;
     }
   }
 
+  function selectLevel(level){
+    mixMode = false;
+    activeCategory = null;
+    activeTopics.clear();
+    activeLevel = level;
+    if(mixBtn) mixBtn.classList.remove('active');
+    catBtns.forEach(b => b.classList.remove('active'));
+    levelBtns.forEach(b => b.classList.toggle('active', b.dataset.level === level));
+    step2.style.display = 'none';
+    render();
+  }
+
   catBtns.forEach(btn => {
     btn.addEventListener('click', () => selectCategory(btn.dataset.cat));
+  });
+
+  levelBtns.forEach(btn => {
+    btn.addEventListener('click', () => selectLevel(btn.dataset.level));
   });
 
   if(mixBtn){
     mixBtn.addEventListener('click', () => {
       mixMode = true;
       activeCategory = null;
+      activeLevel = null;
       activeTopics.clear();
       catBtns.forEach(b => b.classList.remove('active'));
+      levelBtns.forEach(b => b.classList.remove('active'));
       step2.style.display = 'none';
       mixBtn.classList.add('active');
       render();
@@ -754,10 +830,41 @@ ${qHTML}`;
     }
   });
 
+  function showMode(mode){
+    if(modeGrid) modeGrid.style.display = 'none';
+    if(panelNivel) panelNivel.style.display = mode === 'nivel' ? '' : 'none';
+    if(panelTema) panelTema.style.display = mode === 'tema' ? '' : 'none';
+    if(hubToolbar) hubToolbar.style.display = '';
+  }
+
+  function backToModeChoice(){
+    mixMode = false;
+    activeLevel = null;
+    activeCategory = null;
+    activeTopics.clear();
+    if(mixBtn) mixBtn.classList.remove('active');
+    catBtns.forEach(b => b.classList.remove('active'));
+    levelBtns.forEach(b => b.classList.remove('active'));
+    step2.style.display = 'none';
+    container.innerHTML = '';
+    if(modeGrid) modeGrid.style.display = '';
+    if(panelNivel) panelNivel.style.display = 'none';
+    if(panelTema) panelTema.style.display = 'none';
+    if(hubToolbar) hubToolbar.style.display = 'none';
+  }
+
+  modeCards.forEach(btn => {
+    btn.addEventListener('click', () => showMode(btn.dataset.mode));
+  });
+  modeBackBtns.forEach(btn => {
+    btn.addEventListener('click', backToModeChoice);
+  });
+
   // preselecciona un tema si se llega desde el botón "ponte a prueba" de una página de contenido
   const params = new URLSearchParams(location.search);
   const tema = params.get('tema');
   if(tema && cfg.topics[tema] && topicToCat[tema]){
+    showMode('tema');
     selectCategory(topicToCat[tema].key);
     activeTopics.add(tema);
     renderPills();
