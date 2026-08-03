@@ -238,6 +238,7 @@ footer{text-align:center;padding:30px;color:var(--muted);border-top:1px solid va
 .ex-pill{padding:7px 14px;border-radius:20px;border:1px solid var(--border);background:var(--card-bg);cursor:pointer;font-size:12.5px;font-weight:600;color:var(--text);transition:.15s}
 .ex-pill:hover{border-color:var(--primary)}
 .ex-pill.active{color:#fff}
+.ex-pill-count{opacity:.65;font-weight:700;margin-left:3px}
 .exercise-cat-tag{margin:0 0 6px;font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.04em}
 .ex-hub-toolbar{display:flex;justify-content:flex-end;margin-bottom:16px}
 .ex-cta{display:inline-block;margin-top:24px}

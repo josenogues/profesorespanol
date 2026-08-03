@@ -585,6 +585,7 @@ a.closest(".menu-item").classList.add("active","current-section");
   const panelTema = document.getElementById('ex-mode-panel-tema');
   const modeBackBtns = document.querySelectorAll('.ex-mode-back');
   const hubToolbar = document.getElementById('ex-hub-toolbar');
+  const step2Label = document.getElementById('ex-step2-label');
 
   // mapa tema -> categoría, para poder colorear cada resultado aunque venga de la mezcla al azar
   const topicToCat = {};
@@ -594,6 +595,7 @@ a.closest(".menu-item").classList.add("active","current-section");
   let activeTopics = new Set(); // subtemas activos dentro de esa categoría (vacío = todos los de la categoría)
   let mixMode = false;
   let activeLevel = null; // "A1".."C1" cuando se practica por nivel (recorrido completo, cruza todas las materias)
+  let activeLevelTopic = null; // sección (tema) elegida dentro del nivel activo
 
   function kickerFor(type){
     return type === 'fill' ? cfg.labels.kickerFill
@@ -735,7 +737,9 @@ ${qHTML}`;
 
   function render(){
     let topicKeys;
-    if(activeLevel || mixMode){
+    if(activeLevel){
+      topicKeys = activeLevelTopic ? [activeLevelTopic] : [];
+    } else if(mixMode){
       topicKeys = Object.keys(cfg.topics);
     } else if(activeCategory){
       const cat = (cfg.categories || []).find(c => c.key === activeCategory);
@@ -743,19 +747,20 @@ ${qHTML}`;
     } else {
       topicKeys = [];
     }
-    const count = (mixMode || activeLevel) ? 20 : 12;
+    const count = mixMode ? 20 : (activeLevel ? 30 : 12);
     let pool = collectPool(topicKeys);
     if(activeLevel) pool = pool.filter(it => it.level === activeLevel);
     const picked = sample(pool, Math.min(count, pool.length));
     container.innerHTML = picked.map(item => {
       const withId = Object.assign({}, item, { exid: (item.exid||'ex') + '-' + uid() });
       return renderItemHTML(withId);
-    }).join('') || (topicKeys.length ? `<p class="subtitle">${cfg.labels.emptyLevel || cfg.labels.empty}</p>` : `<p class="subtitle">${cfg.labels.empty}</p>`);
+    }).join('') || (topicKeys.length ? '' : `<p class="subtitle">${cfg.labels.empty}</p>`);
   }
 
   function renderPills(){
     const cat = (cfg.categories || []).find(c => c.key === activeCategory);
     if(!cat){ step2.style.display = 'none'; return; }
+    if(step2Label) step2Label.textContent = cfg.labels.stepTopicOptional || step2Label.textContent;
     pillsWrap.innerHTML = cat.topics.map(key => {
       const label = cfg.topicLabels[key] || key;
       const active = activeTopics.has(key);
@@ -772,9 +777,38 @@ ${qHTML}`;
     });
   }
 
+  // agrupa los ejercicios de un nivel en secciones por tema (como una lección), en vez de una mezcla al azar
+  function renderLevelPills(level){
+    const sections = [];
+    (cfg.categories || []).forEach(cat => {
+      (cat.topics || []).forEach(key => {
+        const topic = cfg.topics[key];
+        if(!topic || !topic.items) return;
+        const n = topic.items.filter(it => it.level === level).length;
+        if(n > 0) sections.push({ key, label: cfg.topicLabels[key] || key, color: cat.color, n });
+      });
+    });
+    if(step2Label) step2Label.textContent = cfg.labels.stepLevelSections || step2Label.textContent;
+    pillsWrap.innerHTML = sections.map(s =>
+      `<button class="ex-pill" data-level-topic="${s.key}" data-color="${s.color}">${s.label} <span class="ex-pill-count">${s.n}</span></button>`
+    ).join('');
+    step2.style.display = sections.length ? '' : 'none';
+    pillsWrap.querySelectorAll('.ex-pill').forEach(btn => {
+      btn.addEventListener('click', () => {
+        activeLevelTopic = btn.dataset.levelTopic;
+        pillsWrap.querySelectorAll('.ex-pill').forEach(b => { b.classList.remove('active'); b.style.background=''; b.style.borderColor=''; });
+        btn.classList.add('active');
+        btn.style.background = btn.dataset.color;
+        btn.style.borderColor = btn.dataset.color;
+        render();
+      });
+    });
+  }
+
   function selectCategory(key){
     mixMode = false;
     activeLevel = null;
+    activeLevelTopic = null;
     if(mixBtn) mixBtn.classList.remove('active');
     levelBtns.forEach(b => b.classList.remove('active'));
     activeCategory = key;
@@ -793,11 +827,12 @@ ${qHTML}`;
     activeCategory = null;
     activeTopics.clear();
     activeLevel = level;
+    activeLevelTopic = null;
     if(mixBtn) mixBtn.classList.remove('active');
     catBtns.forEach(b => b.classList.remove('active'));
     levelBtns.forEach(b => b.classList.toggle('active', b.dataset.level === level));
-    step2.style.display = 'none';
-    render();
+    container.innerHTML = '';
+    renderLevelPills(level);
   }
 
   catBtns.forEach(btn => {
@@ -813,6 +848,7 @@ ${qHTML}`;
       mixMode = true;
       activeCategory = null;
       activeLevel = null;
+      activeLevelTopic = null;
       activeTopics.clear();
       catBtns.forEach(b => b.classList.remove('active'));
       levelBtns.forEach(b => b.classList.remove('active'));
@@ -834,12 +870,13 @@ ${qHTML}`;
     if(modeGrid) modeGrid.style.display = 'none';
     if(panelNivel) panelNivel.style.display = mode === 'nivel' ? '' : 'none';
     if(panelTema) panelTema.style.display = mode === 'tema' ? '' : 'none';
-    if(hubToolbar) hubToolbar.style.display = '';
+    if(hubToolbar) hubToolbar.style.display = mode === 'tema' ? '' : 'none'; // "generar otra tanda" no tiene sentido en un recorrido por nivel
   }
 
   function backToModeChoice(){
     mixMode = false;
     activeLevel = null;
+    activeLevelTopic = null;
     activeCategory = null;
     activeTopics.clear();
     if(mixBtn) mixBtn.classList.remove('active');
