@@ -579,6 +579,12 @@ a.closest(".menu-item").classList.add("active","current-section");
   const step2 = document.getElementById('ex-step2');
   const generateBtn = document.getElementById('ex-hub-generate');
   const mixBtn = document.getElementById('ex-hub-mix');
+  const modeGrid = document.getElementById('ex-mode-grid');
+  const modeCards = document.querySelectorAll('.ex-mode-card');
+  const panelNivel = document.getElementById('ex-mode-panel-nivel');
+  const panelTema = document.getElementById('ex-mode-panel-tema');
+  const modeBackBtns = document.querySelectorAll('.ex-mode-back');
+  const hubToolbar = document.getElementById('ex-hub-toolbar');
 
   // mapa tema -> categoría, para poder colorear cada resultado aunque venga de la mezcla al azar
   const topicToCat = {};
@@ -824,10 +830,41 @@ ${qHTML}`;
     }
   });
 
+  function showMode(mode){
+    if(modeGrid) modeGrid.style.display = 'none';
+    if(panelNivel) panelNivel.style.display = mode === 'nivel' ? '' : 'none';
+    if(panelTema) panelTema.style.display = mode === 'tema' ? '' : 'none';
+    if(hubToolbar) hubToolbar.style.display = '';
+  }
+
+  function backToModeChoice(){
+    mixMode = false;
+    activeLevel = null;
+    activeCategory = null;
+    activeTopics.clear();
+    if(mixBtn) mixBtn.classList.remove('active');
+    catBtns.forEach(b => b.classList.remove('active'));
+    levelBtns.forEach(b => b.classList.remove('active'));
+    step2.style.display = 'none';
+    container.innerHTML = '';
+    if(modeGrid) modeGrid.style.display = '';
+    if(panelNivel) panelNivel.style.display = 'none';
+    if(panelTema) panelTema.style.display = 'none';
+    if(hubToolbar) hubToolbar.style.display = 'none';
+  }
+
+  modeCards.forEach(btn => {
+    btn.addEventListener('click', () => showMode(btn.dataset.mode));
+  });
+  modeBackBtns.forEach(btn => {
+    btn.addEventListener('click', backToModeChoice);
+  });
+
   // preselecciona un tema si se llega desde el botón "ponte a prueba" de una página de contenido
   const params = new URLSearchParams(location.search);
   const tema = params.get('tema');
   if(tema && cfg.topics[tema] && topicToCat[tema]){
+    showMode('tema');
     selectCategory(topicToCat[tema].key);
     activeTopics.add(tema);
     renderPills();
