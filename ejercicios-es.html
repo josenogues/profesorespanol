@@ -142,6 +142,11 @@
 <button class="ex-cat-card ex-level-card" data-level="B2" style="--cat-color:#c15a20;--cat-bg:#c15a2030"><span class="ex-level-code" aria-hidden="true">B2</span><p>Intermedio alto</p></button>
 <button class="ex-cat-card ex-level-card" data-level="C1" style="--cat-color:#a83a3a;--cat-bg:#a83a3a30"><span class="ex-level-code" aria-hidden="true">C1</span><p>Avanzado</p></button>
 </div>
+
+<div id="ex-level-cat-step" style="display:none">
+<p class="ex-step-label" style="margin-top:22px" id="ex-level-cat-label">Elige una materia</p>
+<div class="ex-category-grid" id="ex-level-cat-grid"></div>
+</div>
 </div>
 
 <div id="ex-mode-panel-tema" class="ex-mode-panel" style="display:none">
@@ -248,7 +253,7 @@ window.EXERCISE_HUB_CONFIG = {
   labels: {
     kickerFill: "Rellena el hueco", kickerChoice: "Elige la opción correcta", kickerTranslate: "Traduce",
     kickerMatch: "Une los pares", kickerCorrect: "Corrige el error", placeholderCorrect: "Escribe la frase corregida",
-    stepLevelSections: "Elige una sección", stepTopicOptional: "Paso 2 — elige un tema (opcional)",
+    stepLevelSections: "Elige una sección", stepTopicOptional: "Paso 2 — elige un tema (opcional)", stepLevelMateria: "Elige una materia", theoryPrefix: "Teoría relacionada",
     kickerOrder: "Ordena la frase", orderPlaceholder: "Toca las palabras en orden", orderReset: "Reiniciar",
     placeholderFill: "Escribe la respuesta", placeholderTranslate: "Escribe la traducción",
     check: "Comprobar", done: "<i class='ti ti-check'></i> Completado", empty: "Elige una materia arriba para ver ejercicios.",

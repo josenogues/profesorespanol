@@ -586,6 +586,8 @@ a.closest(".menu-item").classList.add("active","current-section");
   const modeBackBtns = document.querySelectorAll('.ex-mode-back');
   const hubToolbar = document.getElementById('ex-hub-toolbar');
   const step2Label = document.getElementById('ex-step2-label');
+  const levelCatStep = document.getElementById('ex-level-cat-step');
+  const levelCatGrid = document.getElementById('ex-level-cat-grid');
 
   // mapa tema -> categoría, para poder colorear cada resultado aunque venga de la mezcla al azar
   const topicToCat = {};
@@ -596,6 +598,25 @@ a.closest(".menu-item").classList.add("active","current-section");
   let mixMode = false;
   let activeLevel = null; // "A1".."C1" cuando se practica por nivel (recorrido completo, cruza todas las materias)
   let activeLevelTopic = null; // sección (tema) elegida dentro del nivel activo
+  let activeLevelCategory = null; // materia elegida dentro del nivel activo (máximo 4, como el menú)
+
+  // temas cuyo slug de página no coincide con la key del tema en el hub de ejercicios
+  const TOPIC_PAGE_SLUG = {
+    regulares: 'verbos-regulares',
+    irregulares: 'verbos-irregulares',
+    reflexivos: 'verbos-reflexivos',
+    'atn-verbos': 'especial-atencion-verbos',
+    'atn-gramatica': 'especial-atencion-gramatica'
+  };
+
+  function theoryLinkHTML(item){
+    const cat = item._cat;
+    if(!item._topicKey || !cat) return '';
+    const slug = TOPIC_PAGE_SLUG[item._topicKey] || item._topicKey;
+    const topicLabel = cfg.topicLabels[item._topicKey] || item._topicKey;
+    const href = `${slug}-${cfg.lang}.html`;
+    return `<a class="exercise-theory-link" href="${href}"><i class="ti ti-book-2" aria-hidden="true"></i> ${cfg.labels.theoryPrefix || 'Teoría'}: ${cat.label} › ${topicLabel}</a>`;
+  }
 
   function kickerFor(type){
     return type === 'fill' ? cfg.labels.kickerFill
@@ -619,7 +640,7 @@ ${catTag}<div class="exercise-kicker"><span>${cfg.labels.kickerOrder}</span><spa
 <div class="order-answer-area" data-placeholder="${cfg.labels.orderPlaceholder}"></div>
 <div class="order-word-bank">${bank}</div>
 <div class="exercise-row"><button class="order-check">${cfg.labels.check}</button><button class="order-reset">${cfg.labels.orderReset}</button></div>
-<p class="exercise-feedback"></p></div>`;
+<p class="exercise-feedback"></p>${theoryLinkHTML(item)}</div>`;
     }
     if(item.type === 'choice'){
       const opts = item.options.map(o => `<button class="option-btn" data-value="${o}">${o}</button>`).join('');
@@ -627,7 +648,7 @@ ${catTag}<div class="exercise-kicker"><span>${cfg.labels.kickerOrder}</span><spa
 ${catTag}<div class="exercise-kicker"><span>${kicker}</span><span class="exercise-done-badge">${cfg.labels.done}</span></div>
 <p class="exercise-prompt">${item.prompt}</p>${hint}
 <div class="exercise-options">${opts}</div>
-<p class="exercise-feedback"></p></div>`;
+<p class="exercise-feedback"></p>${theoryLinkHTML(item)}</div>`;
     }
     if(item.type === 'match'){
       const leftItems = shuffle(item.pairs.map((p, i) => ({ text: p[0], key: i })));
@@ -637,14 +658,14 @@ ${catTag}<div class="exercise-kicker"><span>${kicker}</span><span class="exercis
 ${catTag}<div class="exercise-kicker"><span>${cfg.labels.kickerMatch}</span><span class="exercise-done-badge">${cfg.labels.done}</span></div>
 <p class="exercise-prompt">${item.prompt}</p>${hint}
 <div class="match-columns"><div class="match-col">${colHtml(leftItems)}</div><div class="match-col">${colHtml(rightItems)}</div></div>
-<p class="exercise-feedback"></p></div>`;
+<p class="exercise-feedback"></p>${theoryLinkHTML(item)}</div>`;
     }
     const placeholder = item.type === 'translate' ? cfg.labels.placeholderTranslate : item.type === 'correct' ? cfg.labels.placeholderCorrect : cfg.labels.placeholderFill;
     return `<div class="exercise-block" ${borderStyle} data-exid="${item.exid}" data-answer="${item.answer}">
 ${catTag}<div class="exercise-kicker"><span>${kicker}</span><span class="exercise-done-badge">${cfg.labels.done}</span></div>
 <p class="exercise-prompt">${item.prompt}</p>${hint}
 <div class="exercise-row"><input type="text" class="exercise-input" placeholder="${placeholder}"><button class="exercise-check">${cfg.labels.check}</button></div>
-<p class="exercise-feedback"></p></div>`;
+<p class="exercise-feedback"></p>${theoryLinkHTML(item)}</div>`;
   }
 
   function shuffle(arr){
@@ -669,7 +690,7 @@ ${catTag}<div class="exercise-kicker"><span>${kicker}</span><span class="exercis
       } else if(topic.items){
         items = topic.items;
       }
-      pool = pool.concat(items.map(it => Object.assign({}, it, { _cat: cat })));
+      pool = pool.concat(items.map(it => Object.assign({}, it, { _cat: cat, _topicKey: key })));
     });
     return pool;
   }
@@ -777,20 +798,41 @@ ${qHTML}`;
     });
   }
 
-  // agrupa los ejercicios de un nivel en secciones por tema (como una lección), en vez de una mezcla al azar
-  function renderLevelPills(level){
-    const sections = [];
+  // paso 1 dentro de un nivel: hasta 4 materias (las mismas del menú), no una lista larga de temas sueltos
+  function renderLevelCategories(level){
+    const cats = [];
     (cfg.categories || []).forEach(cat => {
+      if(cat.key === 'lectura') return;
+      let n = 0;
       (cat.topics || []).forEach(key => {
         const topic = cfg.topics[key];
-        if(!topic || !topic.items) return;
-        const n = topic.items.filter(it => it.level === level).length;
-        if(n > 0) sections.push({ key, label: cfg.topicLabels[key] || key, color: cat.color, n });
+        if(topic && topic.items) n += topic.items.filter(it => it.level === level).length;
       });
+      if(n > 0) cats.push({ key: cat.key, label: cat.label, color: cat.color, n });
+    });
+    if(levelCatGrid) levelCatGrid.innerHTML = cats.map(c =>
+      `<button class="ex-cat-card ex-level-cat-btn" data-level-cat="${c.key}" style="--cat-color:${c.color};--cat-bg:${c.color}30"><p>${c.label} <span class="ex-pill-count">${c.n}</span></p></button>`
+    ).join('');
+    if(levelCatStep) levelCatStep.style.display = cats.length ? '' : 'none';
+    if(levelCatGrid) levelCatGrid.querySelectorAll('.ex-level-cat-btn').forEach(btn => {
+      btn.addEventListener('click', () => selectLevelCategory(btn.dataset.levelCat));
+    });
+  }
+
+  // paso 2 dentro de un nivel: los temas de la materia elegida, como secciones de una lección
+  function renderLevelTopicPills(level, catKey){
+    const cat = (cfg.categories || []).find(c => c.key === catKey);
+    if(!cat){ step2.style.display = 'none'; return; }
+    const sections = [];
+    (cat.topics || []).forEach(key => {
+      const topic = cfg.topics[key];
+      if(!topic || !topic.items) return;
+      const n = topic.items.filter(it => it.level === level).length;
+      if(n > 0) sections.push({ key, label: cfg.topicLabels[key] || key, n });
     });
     if(step2Label) step2Label.textContent = cfg.labels.stepLevelSections || step2Label.textContent;
     pillsWrap.innerHTML = sections.map(s =>
-      `<button class="ex-pill" data-level-topic="${s.key}" data-color="${s.color}">${s.label} <span class="ex-pill-count">${s.n}</span></button>`
+      `<button class="ex-pill" data-level-topic="${s.key}">${s.label} <span class="ex-pill-count">${s.n}</span></button>`
     ).join('');
     step2.style.display = sections.length ? '' : 'none';
     pillsWrap.querySelectorAll('.ex-pill').forEach(btn => {
@@ -798,17 +840,26 @@ ${qHTML}`;
         activeLevelTopic = btn.dataset.levelTopic;
         pillsWrap.querySelectorAll('.ex-pill').forEach(b => { b.classList.remove('active'); b.style.background=''; b.style.borderColor=''; });
         btn.classList.add('active');
-        btn.style.background = btn.dataset.color;
-        btn.style.borderColor = btn.dataset.color;
+        btn.style.background = cat.color;
+        btn.style.borderColor = cat.color;
         render();
       });
     });
+  }
+
+  function selectLevelCategory(catKey){
+    activeLevelCategory = catKey;
+    activeLevelTopic = null;
+    if(levelCatGrid) levelCatGrid.querySelectorAll('.ex-level-cat-btn').forEach(b => b.classList.toggle('active', b.dataset.levelCat === catKey));
+    container.innerHTML = '';
+    renderLevelTopicPills(activeLevel, catKey);
   }
 
   function selectCategory(key){
     mixMode = false;
     activeLevel = null;
     activeLevelTopic = null;
+    activeLevelCategory = null;
     if(mixBtn) mixBtn.classList.remove('active');
     levelBtns.forEach(b => b.classList.remove('active'));
     activeCategory = key;
@@ -828,11 +879,13 @@ ${qHTML}`;
     activeTopics.clear();
     activeLevel = level;
     activeLevelTopic = null;
+    activeLevelCategory = null;
     if(mixBtn) mixBtn.classList.remove('active');
     catBtns.forEach(b => b.classList.remove('active'));
     levelBtns.forEach(b => b.classList.toggle('active', b.dataset.level === level));
     container.innerHTML = '';
-    renderLevelPills(level);
+    step2.style.display = 'none';
+    renderLevelCategories(level);
   }
 
   catBtns.forEach(btn => {
@@ -877,12 +930,14 @@ ${qHTML}`;
     mixMode = false;
     activeLevel = null;
     activeLevelTopic = null;
+    activeLevelCategory = null;
     activeCategory = null;
     activeTopics.clear();
     if(mixBtn) mixBtn.classList.remove('active');
     catBtns.forEach(b => b.classList.remove('active'));
     levelBtns.forEach(b => b.classList.remove('active'));
     step2.style.display = 'none';
+    if(levelCatStep) levelCatStep.style.display = 'none';
     container.innerHTML = '';
     if(modeGrid) modeGrid.style.display = '';
     if(panelNivel) panelNivel.style.display = 'none';
