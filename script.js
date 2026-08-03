@@ -199,11 +199,15 @@ a.closest(".menu-item").classList.add("active","current-section");
     }
   }
 
+  function normalizeAnswer(s){
+    return s.trim().toLowerCase().replace(/[¿¡]/g, '').replace(/[.!?]+$/, '').trim();
+  }
+
   function checkTextAnswer(block){
     const input = block.querySelector('.exercise-input');
     if(!input) return;
-    const accepted = block.dataset.answer.split('|').map(s => s.trim().toLowerCase());
-    const val = input.value.trim().toLowerCase();
+    const accepted = block.dataset.answer.split('|').map(s => normalizeAnswer(s));
+    const val = normalizeAnswer(input.value);
     showFeedback(block, accepted.includes(val));
   }
 
@@ -241,8 +245,8 @@ a.closest(".menu-item").classList.add("active","current-section");
     const orderCheckBtn = e.target.closest('.order-check');
     if(orderCheckBtn){
       const block = orderCheckBtn.closest('.exercise-block');
-      const built = orderAnswerText(block).trim().toLowerCase();
-      const correct = block.dataset.answer.trim().toLowerCase();
+      const built = normalizeAnswer(orderAnswerText(block));
+      const correct = normalizeAnswer(block.dataset.answer);
       showFeedback(block, built === correct);
       return;
     }
@@ -597,7 +601,6 @@ a.closest(".menu-item").classList.add("active","current-section");
   let activeTopics = new Set(); // subtemas activos dentro de esa categoría (vacío = todos los de la categoría)
   let mixMode = false;
   let activeLevel = null; // "A1".."C1" cuando se practica por nivel (recorrido completo, cruza todas las materias)
-  let activeLevelTopic = null; // sección (tema) elegida dentro del nivel activo
   let activeLevelCategory = null; // materia elegida dentro del nivel activo (máximo 4, como el menú)
 
   // temas cuyo slug de página no coincide con la key del tema en el hub de ejercicios
@@ -759,7 +762,8 @@ ${qHTML}`;
   function render(){
     let topicKeys;
     if(activeLevel){
-      topicKeys = activeLevelTopic ? [activeLevelTopic] : [];
+      const levelCat = (cfg.categories || []).find(c => c.key === activeLevelCategory);
+      topicKeys = levelCat ? levelCat.topics : [];
     } else if(mixMode){
       topicKeys = Object.keys(cfg.topics);
     } else if(activeCategory){
@@ -819,46 +823,15 @@ ${qHTML}`;
     });
   }
 
-  // paso 2 dentro de un nivel: los temas de la materia elegida, como secciones de una lección
-  function renderLevelTopicPills(level, catKey){
-    const cat = (cfg.categories || []).find(c => c.key === catKey);
-    if(!cat){ step2.style.display = 'none'; return; }
-    const sections = [];
-    (cat.topics || []).forEach(key => {
-      const topic = cfg.topics[key];
-      if(!topic || !topic.items) return;
-      const n = topic.items.filter(it => it.level === level).length;
-      if(n > 0) sections.push({ key, label: cfg.topicLabels[key] || key, n });
-    });
-    if(step2Label) step2Label.textContent = cfg.labels.stepLevelSections || step2Label.textContent;
-    pillsWrap.innerHTML = sections.map(s =>
-      `<button class="ex-pill" data-level-topic="${s.key}">${s.label} <span class="ex-pill-count">${s.n}</span></button>`
-    ).join('');
-    step2.style.display = sections.length ? '' : 'none';
-    pillsWrap.querySelectorAll('.ex-pill').forEach(btn => {
-      btn.addEventListener('click', () => {
-        activeLevelTopic = btn.dataset.levelTopic;
-        pillsWrap.querySelectorAll('.ex-pill').forEach(b => { b.classList.remove('active'); b.style.background=''; b.style.borderColor=''; });
-        btn.classList.add('active');
-        btn.style.background = cat.color;
-        btn.style.borderColor = cat.color;
-        render();
-      });
-    });
-  }
-
   function selectLevelCategory(catKey){
     activeLevelCategory = catKey;
-    activeLevelTopic = null;
     if(levelCatGrid) levelCatGrid.querySelectorAll('.ex-level-cat-btn').forEach(b => b.classList.toggle('active', b.dataset.levelCat === catKey));
-    container.innerHTML = '';
-    renderLevelTopicPills(activeLevel, catKey);
+    render();
   }
 
   function selectCategory(key){
     mixMode = false;
     activeLevel = null;
-    activeLevelTopic = null;
     activeLevelCategory = null;
     if(mixBtn) mixBtn.classList.remove('active');
     levelBtns.forEach(b => b.classList.remove('active'));
@@ -878,7 +851,6 @@ ${qHTML}`;
     activeCategory = null;
     activeTopics.clear();
     activeLevel = level;
-    activeLevelTopic = null;
     activeLevelCategory = null;
     if(mixBtn) mixBtn.classList.remove('active');
     catBtns.forEach(b => b.classList.remove('active'));
@@ -901,7 +873,6 @@ ${qHTML}`;
       mixMode = true;
       activeCategory = null;
       activeLevel = null;
-      activeLevelTopic = null;
       activeTopics.clear();
       catBtns.forEach(b => b.classList.remove('active'));
       levelBtns.forEach(b => b.classList.remove('active'));
@@ -929,7 +900,6 @@ ${qHTML}`;
   function backToModeChoice(){
     mixMode = false;
     activeLevel = null;
-    activeLevelTopic = null;
     activeLevelCategory = null;
     activeCategory = null;
     activeTopics.clear();
