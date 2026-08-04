@@ -1168,10 +1168,14 @@ ${qHTML}`;
     if(!matches.length){
       results.innerHTML = '<div class="search-empty">Sin resultados para "' + qRaw + '"</div>';
     } else {
+      const FLAGS = { es: '🇪🇸', it: '🇮🇹', en: '🇬🇧' };
       results.innerHTML = matches.map(entry => {
         const inTitle = normalize(entry.title).includes(q);
         const snippet = inTitle ? '' : `<span class="search-snippet">${snippetAround(entry.text, normalize(entry.text), q)}</span>`;
-        return `<a href="${entry.url}"><span class="search-title">${entry.title}</span>${snippet}</a>`;
+        // sin idioma elegido, varias páginas (ES/IT/EN) pueden compartir título — se añade la bandera para distinguirlas
+        const t = trackOf(entry.url);
+        const flag = (!currentTrack && t && FLAGS[t]) ? FLAGS[t] + ' ' : '';
+        return `<a href="${entry.url}"><span class="search-title">${flag}${entry.title}</span>${snippet}</a>`;
       }).join('');
     }
     results.classList.add('active');

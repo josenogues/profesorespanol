@@ -460,7 +460,7 @@ body.sidebar-collapsed .sidebar-toggle:hover{background:var(--tint)}
 body.sidebar-collapsed .sidebar{transform:translateX(-100%)}
 body.sidebar-collapsed .main{margin-left:24px}
 .sidebar{transition:transform .25s ease}
-@media(max-width:900px){.sidebar-toggle{display:flex;left:auto;right:18px;color:var(--text)}}
+@media(max-width:900px){.sidebar-toggle{display:flex;left:auto;right:18px;color:var(--text)}body.sidebar-collapsed .sidebar{display:none}}
 
 /* ---------- Vida visual para las tarjetas de Vocabulario ---------- */
 body[data-category="vocabulario"] .mini-card{border-left:3px solid #E8791E;background:#FBEBD9}
