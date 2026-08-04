@@ -79,9 +79,6 @@ table tbody td{padding:11px 16px;border-top:1px solid var(--border)}
 table tbody tr:nth-child(even){background:var(--table-stripe)}
 table tbody td:first-child{font-weight:600}
 
-.tip-box{background:var(--tint);border:1px solid #d8dce6;border-radius:12px;padding:16px 18px;margin-top:18px;font-size:15.5px;color:var(--text)}
-.tip-box strong{color:var(--primary-dark)}
-
 .tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
 .tab-btn{padding:9px 18px;border-radius:20px;border:1px solid var(--border);background:var(--card-bg);cursor:pointer;font-size:15px;font-weight:600;color:var(--text);transition:.15s}
 .tab-btn:hover{background:var(--tint);color:var(--primary-dark);border-color:var(--primary-light)}
@@ -394,6 +391,7 @@ body[data-category="atencion"] .eyebrow{background:#FCEBEB;color:#A32D2D}
 /* ---------- Notas adhesivas (antes: tip-box plano) ---------- */
 .tip-box{background:#FFF3A3;border:0;border-radius:0;padding:16px 20px;margin-top:18px;font-size:15.5px;color:#3a3220;transform:rotate(-0.6deg);box-shadow:3px 4px 10px rgba(0,0,0,.12);position:relative;max-width:560px}
 .tip-box::before{content:"";position:absolute;top:-10px;left:40px;transform:rotate(2deg);width:56px;height:20px;background:rgba(255,255,255,.85);box-shadow:0 1px 3px rgba(0,0,0,.15)}
+.tip-box strong{color:#8a5b0a}
 
 /* ---------- Modo oscuro: ajustes del cuaderno ---------- */
 [data-theme="dark"] .main{
@@ -403,7 +401,9 @@ body[data-category="atencion"] .eyebrow{background:#FCEBEB;color:#A32D2D}
     repeating-linear-gradient(#14171d 0 27px, #191d23 27px 28px);
 }
 [data-theme="dark"] .page-header .breadcrumb{background:#14171d}
-[data-theme="dark"] .tip-box{background:#E6C34A;color:#3a3220}
+[data-theme="dark"] .tip-box{background:#3a2c0d;color:#e8d5a3;box-shadow:3px 4px 10px rgba(0,0,0,.35)}
+[data-theme="dark"] .tip-box::before{background:rgba(255,255,255,.12)}
+[data-theme="dark"] .tip-box strong{color:#f2c94c}
 [data-theme="dark"] .language-selector button{background:#2a2f38;color:#d8d6cf}
 
 /* ---------- Botón de escuchar (motor de audio) ---------- */
