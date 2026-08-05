@@ -252,6 +252,8 @@ footer{text-align:center;padding:30px;color:var(--muted);border-top:1px solid va
 .ex-exam-progress{flex:1;height:8px;border-radius:6px;background:var(--tint);overflow:hidden}
 .ex-exam-progress-fill{height:100%;width:0;background:var(--primary);border-radius:6px;transition:width .25s}
 .ex-exam-progress-label{font-size:13px;font-weight:700;color:var(--muted);white-space:nowrap;font-variant-numeric:tabular-nums}
+.ex-exam-conclude-btn{display:block;margin:22px auto 0;background:none;border:0;color:var(--muted);font-size:13px;font-weight:600;text-decoration:underline;cursor:pointer;padding:4px}
+.ex-exam-conclude-btn:hover{color:var(--primary-dark)}
 
 .ex-exam-item .exercise-prompt{font-size:18px;font-weight:600;margin-bottom:14px}
 .ex-exam-feedback{margin-top:12px;font-weight:700;font-size:15px;min-height:20px}

@@ -614,6 +614,7 @@ a.closest(".menu-item").classList.add("active","current-section");
   const examProgressFill = document.getElementById('ex-exam-progress-fill');
   const examProgressLabel = document.getElementById('ex-exam-progress-label');
   const examExitBtn = document.getElementById('ex-exam-exit');
+  const examConcludeBtn = document.getElementById('ex-exam-conclude');
   const examOverlay = document.getElementById('ex-exam-overlay');
   const globalCounterEl = document.getElementById('ex-global-counter');
   const levelPracticeSublabel = document.getElementById('ex-level-practice-sublabel');
@@ -1148,6 +1149,15 @@ ${qHTML}`;
     showFailDialog(correctCount, total);
   }
 
+  function concludeExam(){
+    if(!examState) return;
+    if(!window.confirm(cfg.labels.examConcludeConfirm || '')) return;
+    const remaining = examState.queue.slice(examState.idx);
+    examState.wrongThisRound = examState.wrongThisRound.concat(remaining);
+    examState.idx = examState.queue.length;
+    finishRound();
+  }
+
   function passExam(){
     const correctCount = examState.correct.size;
     const total = examState.total;
@@ -1199,7 +1209,17 @@ ${qHTML}`;
   }
 
   if(examStartBtn) examStartBtn.addEventListener('click', () => { if(activeLevel) startExam(activeLevel); });
-  if(examExitBtn) examExitBtn.addEventListener('click', () => endExam(true));
+  if(examExitBtn) examExitBtn.addEventListener('click', () => {
+    if(!examState || window.confirm(cfg.labels.examExitConfirm || '')) endExam(true);
+  });
+  if(examConcludeBtn) examConcludeBtn.addEventListener('click', concludeExam);
+
+  window.addEventListener('beforeunload', function(e){
+    if(examState){
+      e.preventDefault();
+      e.returnValue = '';
+    }
+  });
 
   catBtns.forEach(btn => {
     btn.addEventListener('click', () => selectCategory(btn.dataset.cat));
