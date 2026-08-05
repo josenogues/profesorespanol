@@ -127,6 +127,7 @@
 <span class="eyebrow">Practica</span>
 <h2>Ejercicios</h2>
 <p class="subtitle">Elige cómo quieres practicar.</p>
+<p class="ex-global-counter" id="ex-global-counter"></p>
 <div class="ex-construction-note"><i class="ti ti-traffic-cone" aria-hidden="true"></i><div><strong>Página en obras</strong><p>Aunque está en obras, puedes igualmente hacer los ejercicios que encuentres disponibles. Próximamente añadiré más.</p></div></div>
 
 <div class="ex-mode-grid" id="ex-mode-grid">
@@ -138,18 +139,39 @@
 <button class="ex-mode-back" id="ex-mode-back-nivel"><i class="ti ti-arrow-left" aria-hidden="true"></i> Cambiar modo</button>
 <p class="ex-step-label">Elige tu nivel</p>
 <div class="ex-category-grid">
-<button class="ex-cat-card ex-level-card" data-level="A1"><span class="ex-level-code" aria-hidden="true">A1</span><p>Principiante</p></button>
-<button class="ex-cat-card ex-level-card" data-level="A2"><span class="ex-level-code" aria-hidden="true">A2</span><p>Elemental</p></button>
-<button class="ex-cat-card ex-level-card" data-level="B1"><span class="ex-level-code" aria-hidden="true">B1</span><p>Intermedio</p></button>
-<button class="ex-cat-card ex-level-card" data-level="B2"><span class="ex-level-code" aria-hidden="true">B2</span><p>Intermedio alto</p></button>
-<button class="ex-cat-card ex-level-card" data-level="C1"><span class="ex-level-code" aria-hidden="true">C1</span><p>Avanzado</p></button>
+<button class="ex-cat-card ex-level-card" data-level="A1"><span class="ex-level-donut" data-donut-level="A1"></span><span class="ex-level-code" aria-hidden="true">A1</span><p>Principiante</p></button>
+<button class="ex-cat-card ex-level-card" data-level="A2"><span class="ex-level-donut" data-donut-level="A2"></span><span class="ex-level-code" aria-hidden="true">A2</span><p>Elemental</p></button>
+<button class="ex-cat-card ex-level-card" data-level="B1"><span class="ex-level-donut" data-donut-level="B1"></span><span class="ex-level-code" aria-hidden="true">B1</span><p>Intermedio</p></button>
+<button class="ex-cat-card ex-level-card" data-level="B2"><span class="ex-level-donut" data-donut-level="B2"></span><span class="ex-level-code" aria-hidden="true">B2</span><p>Intermedio alto</p></button>
+<button class="ex-cat-card ex-level-card" data-level="C1"><span class="ex-level-donut" data-donut-level="C1"></span><span class="ex-level-code" aria-hidden="true">C1</span><p>Avanzado</p></button>
+</div>
+
+<div id="ex-level-exam-step" style="display:none">
+<div class="ex-exam-cta-card">
+<div class="ex-exam-cta-text">
+<h4 id="ex-exam-cta-title">Examen de nivel</h4>
+<p id="ex-exam-cta-desc">Responde preguntas de todas las materias. Necesitas un 90% de aciertos para superarlo.</p>
+</div>
+<button class="ex-exam-start-btn" id="ex-exam-start-btn"><i class="ti ti-trophy" aria-hidden="true"></i> Empezar examen</button>
+</div>
 </div>
 
 <div id="ex-level-cat-step" style="display:none">
-<p class="ex-step-label" style="margin-top:22px" id="ex-level-cat-label">Elige una materia</p>
+<p class="ex-step-label" style="margin-top:22px" id="ex-level-practice-sublabel">O practica por materia, sin nota</p>
 <div class="ex-category-grid" id="ex-level-cat-grid"></div>
 </div>
 </div>
+
+<div id="ex-exam-runner" class="ex-exam-runner" style="display:none">
+<div class="ex-exam-topbar">
+<button class="ex-exam-exit" id="ex-exam-exit" aria-label="Salir del examen"><i class="ti ti-x" aria-hidden="true"></i></button>
+<div class="ex-exam-progress"><div class="ex-exam-progress-fill" id="ex-exam-progress-fill"></div></div>
+<span class="ex-exam-progress-label" id="ex-exam-progress-label">1 / 1</span>
+</div>
+<div id="ex-exam-question"></div>
+</div>
+
+<div id="ex-exam-overlay" class="ex-exam-overlay" style="display:none"></div>
 
 <div id="ex-mode-panel-tema" class="ex-mode-panel" style="display:none">
 <button class="ex-mode-back" id="ex-mode-back-tema"><i class="ti ti-arrow-left" aria-hidden="true"></i> Cambiar modo</button>
@@ -260,7 +282,18 @@ window.EXERCISE_HUB_CONFIG = {
     kickerOrder: "Ordena la frase", orderPlaceholder: "Toca las palabras en orden", orderReset: "Reiniciar",
     placeholderFill: "Escribe la respuesta", placeholderTranslate: "Escribe la traducción",
     check: "Comprobar", done: "<i class='ti ti-check'></i> Completado", empty: "Elige una materia arriba para ver ejercicios.",
-    level_principiante: "Principiante", level_intermedio: "Intermedio", level_avanzado: "Avanzado", listen: "Escuchar", listenAll: "Escuchar todo el texto", questions: "Preguntas de comprensión"
+    level_principiante: "Principiante", level_intermedio: "Intermedio", level_avanzado: "Avanzado", listen: "Escuchar", listenAll: "Escuchar todo el texto", questions: "Preguntas de comprensión",
+    examTitle: "Examen de nivel", examDesc: "Responde preguntas de todas las materias del nivel. Necesitas un 90% de aciertos para superarlo.",
+    examOrPractice: "O practica por materia, sin nota", examIncorrect: "No es correcto", examAnswerLabel: "respuesta",
+    examFailTitle: "Todavía no llegas al 90%", examFailBody: "Has acertado {correct} de {total}. Elige cómo seguir — no hace falta repetirlo todo, solo lo que fallaste.",
+    examRetryErrors: "Intenta los errores", examRestart: "Si lo prefieres, empieza de cero",
+    examPassTitle: "¡Nivel {level} superado!", examPassBody: "Has acertado {correct} de {total}. ¡Muy buen trabajo!",
+    examBackToLevels: "Volver a los niveles",
+    examStartBtnLabel: "Empezar examen", examContinueBtnLabel: "Continuar examen",
+    examPendingDesc: "La última vez llevabas {correct} de {total} aciertos en este examen. Puedes seguir donde lo dejaste.",
+    examResumeTitle: "Examen de nivel {level} sin terminar",
+    examResumeBody: "La última vez llevabas {correct} de {total} aciertos. ¿Qué quieres hacer?",
+    counterText: "Has hecho {n} ejercicios hasta hoy. ¡Sigue así!"
   }
 };
 </script>

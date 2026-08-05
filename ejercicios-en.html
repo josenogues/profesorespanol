@@ -126,6 +126,7 @@
 <span class="eyebrow">Practice</span>
 <h2>Exercises</h2>
 <p class="subtitle">Choose how you'd like to practice.</p>
+<p class="ex-global-counter" id="ex-global-counter"></p>
 <div class="ex-construction-note"><i class="ti ti-traffic-cone" aria-hidden="true"></i><div><strong>Page under construction</strong><p>Even though it's under construction, you can still do the exercises already available. More coming soon.</p></div></div>
 
 <div class="ex-mode-grid" id="ex-mode-grid">
@@ -137,18 +138,39 @@
 <button class="ex-mode-back" id="ex-mode-back-nivel"><i class="ti ti-arrow-left" aria-hidden="true"></i> Change mode</button>
 <p class="ex-step-label">Pick your level</p>
 <div class="ex-category-grid">
-<button class="ex-cat-card ex-level-card" data-level="A1"><span class="ex-level-code" aria-hidden="true">A1</span><p>Beginner</p></button>
-<button class="ex-cat-card ex-level-card" data-level="A2"><span class="ex-level-code" aria-hidden="true">A2</span><p>Elementary</p></button>
-<button class="ex-cat-card ex-level-card" data-level="B1"><span class="ex-level-code" aria-hidden="true">B1</span><p>Intermediate</p></button>
-<button class="ex-cat-card ex-level-card" data-level="B2"><span class="ex-level-code" aria-hidden="true">B2</span><p>Upper-Intermediate</p></button>
-<button class="ex-cat-card ex-level-card" data-level="C1"><span class="ex-level-code" aria-hidden="true">C1</span><p>Advanced</p></button>
+<button class="ex-cat-card ex-level-card" data-level="A1"><span class="ex-level-donut" data-donut-level="A1"></span><span class="ex-level-code" aria-hidden="true">A1</span><p>Beginner</p></button>
+<button class="ex-cat-card ex-level-card" data-level="A2"><span class="ex-level-donut" data-donut-level="A2"></span><span class="ex-level-code" aria-hidden="true">A2</span><p>Elementary</p></button>
+<button class="ex-cat-card ex-level-card" data-level="B1"><span class="ex-level-donut" data-donut-level="B1"></span><span class="ex-level-code" aria-hidden="true">B1</span><p>Intermediate</p></button>
+<button class="ex-cat-card ex-level-card" data-level="B2"><span class="ex-level-donut" data-donut-level="B2"></span><span class="ex-level-code" aria-hidden="true">B2</span><p>Upper-Intermediate</p></button>
+<button class="ex-cat-card ex-level-card" data-level="C1"><span class="ex-level-donut" data-donut-level="C1"></span><span class="ex-level-code" aria-hidden="true">C1</span><p>Advanced</p></button>
+</div>
+
+<div id="ex-level-exam-step" style="display:none">
+<div class="ex-exam-cta-card">
+<div class="ex-exam-cta-text">
+<h4 id="ex-exam-cta-title">Level exam</h4>
+<p id="ex-exam-cta-desc">Answer questions from every subject in the level. You need 90% correct to pass it.</p>
+</div>
+<button class="ex-exam-start-btn" id="ex-exam-start-btn"><i class="ti ti-trophy" aria-hidden="true"></i> Start the exam</button>
+</div>
 </div>
 
 <div id="ex-level-cat-step" style="display:none">
-<p class="ex-step-label" style="margin-top:22px" id="ex-level-cat-label">Pick a subject</p>
+<p class="ex-step-label" style="margin-top:22px" id="ex-level-practice-sublabel">Or practice by subject, no score</p>
 <div class="ex-category-grid" id="ex-level-cat-grid"></div>
 </div>
 </div>
+
+<div id="ex-exam-runner" class="ex-exam-runner" style="display:none">
+<div class="ex-exam-topbar">
+<button class="ex-exam-exit" id="ex-exam-exit" aria-label="Exit the exam"><i class="ti ti-x" aria-hidden="true"></i></button>
+<div class="ex-exam-progress"><div class="ex-exam-progress-fill" id="ex-exam-progress-fill"></div></div>
+<span class="ex-exam-progress-label" id="ex-exam-progress-label">1 / 1</span>
+</div>
+<div id="ex-exam-question"></div>
+</div>
+
+<div id="ex-exam-overlay" class="ex-exam-overlay" style="display:none"></div>
 
 <div id="ex-mode-panel-tema" class="ex-mode-panel" style="display:none">
 <button class="ex-mode-back" id="ex-mode-back-tema"><i class="ti ti-arrow-left" aria-hidden="true"></i> Change mode</button>
@@ -265,7 +287,18 @@ window.EXERCISE_HUB_CONFIG = {
     kickerOrder: "Put the sentence in order", orderPlaceholder: "Tap the words in order", orderReset: "Reset",
     placeholderFill: "Write your answer", placeholderTranslate: "Write your translation",
     check: "Check", done: "<i class='ti ti-check'></i> Completed", empty: "Pick a subject above to see exercises.",
-    level_principiante: "Beginner", level_intermedio: "Intermediate", level_avanzado: "Advanced", listen: "Listen", listenAll: "Listen to the full text", questions: "Comprehension questions"
+    level_principiante: "Beginner", level_intermedio: "Intermediate", level_avanzado: "Advanced", listen: "Listen", listenAll: "Listen to the full text", questions: "Comprehension questions",
+    examTitle: "Level exam", examDesc: "Answer questions from every subject in the level. You need 90% correct to pass it.",
+    examOrPractice: "Or practice by subject, no score", examIncorrect: "Not quite", examAnswerLabel: "answer",
+    examFailTitle: "Not at 90% yet", examFailBody: "You got {correct} of {total} right. Choose how to continue — no need to redo everything, just what you missed.",
+    examRetryErrors: "Retry the mistakes", examRestart: "Or start over from scratch",
+    examPassTitle: "Level {level} passed!", examPassBody: "You got {correct} of {total} right. Great work!",
+    examBackToLevels: "Back to levels",
+    examStartBtnLabel: "Start the exam", examContinueBtnLabel: "Continue the exam",
+    examPendingDesc: "Last time you had {correct} of {total} correct in this exam. You can pick up where you left off.",
+    examResumeTitle: "Unfinished level {level} exam",
+    examResumeBody: "Last time you had {correct} of {total} correct. What would you like to do?",
+    counterText: "You've done {n} exercises so far. Keep it up!"
   }
 };
 </script>

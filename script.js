@@ -166,6 +166,18 @@ a.closest(".menu-item").classList.add("active","current-section");
   const INCORRECT_MSGS = ['Casi, prueba otra vez','No es eso, ¡tú puedes!','Sigue intentando','Revísalo con calma'];
   const pageKey = 'ex_done_' + (location.pathname.split('/').pop() || 'home');
 
+  // contador global de ejercicios acertados (motiva en el hub, ver "jn-counter-updated")
+  const COUNTER_KEY = 'jn_total_done';
+  window.jnGetExerciseCount = function(){
+    return parseInt(localStorage.getItem(COUNTER_KEY) || '0', 10);
+  };
+  window.jnCountExercise = function(){
+    const n = window.jnGetExerciseCount() + 1;
+    localStorage.setItem(COUNTER_KEY, String(n));
+    document.dispatchEvent(new CustomEvent('jn-counter-updated', { detail: { count: n } }));
+    return n;
+  };
+
   function getDone(){
     try { return JSON.parse(localStorage.getItem(pageKey) || '[]'); } catch(e){ return []; }
   }
@@ -192,6 +204,7 @@ a.closest(".menu-item").classList.add("active","current-section");
       fb.className = 'exercise-feedback correct';
       block.classList.add('is-done');
       markDone(block.dataset.exid);
+      window.jnCountExercise();
     } else {
       const answer = block.dataset.answer.split('|')[0];
       fb.textContent = randomOf(INCORRECT_MSGS) + ' (respuesta: ' + answer + ')';
@@ -592,6 +605,18 @@ a.closest(".menu-item").classList.add("active","current-section");
   const step2Label = document.getElementById('ex-step2-label');
   const levelCatStep = document.getElementById('ex-level-cat-step');
   const levelCatGrid = document.getElementById('ex-level-cat-grid');
+  const levelExamStep = document.getElementById('ex-level-exam-step');
+  const examCtaTitle = document.getElementById('ex-exam-cta-title');
+  const examCtaDesc = document.getElementById('ex-exam-cta-desc');
+  const examStartBtn = document.getElementById('ex-exam-start-btn');
+  const examRunner = document.getElementById('ex-exam-runner');
+  const examQuestionEl = document.getElementById('ex-exam-question');
+  const examProgressFill = document.getElementById('ex-exam-progress-fill');
+  const examProgressLabel = document.getElementById('ex-exam-progress-label');
+  const examExitBtn = document.getElementById('ex-exam-exit');
+  const examOverlay = document.getElementById('ex-exam-overlay');
+  const globalCounterEl = document.getElementById('ex-global-counter');
+  const levelPracticeSublabel = document.getElementById('ex-level-practice-sublabel');
 
   // mapa tema -> categoría, para poder colorear cada resultado aunque venga de la mezcla al azar
   const topicToCat = {};
@@ -611,6 +636,10 @@ a.closest(".menu-item").classList.add("active","current-section");
     'atn-verbos': 'especial-atencion-verbos',
     'atn-gramatica': 'especial-atencion-gramatica'
   };
+
+  function normalizeAnswer(s){
+    return s.trim().toLowerCase().replace(/[¿¡]/g, '').replace(/[.!?]+$/, '').trim();
+  }
 
   function theoryLinkHTML(item){
     const cat = item._cat;
@@ -858,7 +887,444 @@ ${qHTML}`;
     container.innerHTML = '';
     step2.style.display = 'none';
     renderLevelCategories(level);
+    if(levelExamStep){
+      levelExamStep.style.display = '';
+      if(examCtaTitle) examCtaTitle.textContent = (cfg.labels.examTitle || 'Examen de nivel') + ' ' + level;
+      const pending = getPendingExams()[level];
+      if(examCtaDesc){
+        examCtaDesc.textContent = pending
+          ? (cfg.labels.examPendingDesc || '').replace('{correct}', pending.correctCount).replace('{total}', pending.total)
+          : (cfg.labels.examDesc || '');
+      }
+      if(examStartBtn){
+        const label = pending ? (cfg.labels.examContinueBtnLabel || '') : (cfg.labels.examStartBtnLabel || '');
+        examStartBtn.innerHTML = `<i class="ti ti-trophy" aria-hidden="true"></i> ${label}`;
+      }
+    }
+    if(levelPracticeSublabel) levelPracticeSublabel.textContent = cfg.labels.examOrPractice || '';
   }
+
+  // ---- examen de nivel: recorre todas las materias del nivel, exige 90% acumulado ----
+  const LEVEL_STATUS_KEY = 'jn_level_status_' + cfg.lang;
+  const EXAM_PENDING_KEY = 'jn_exam_pending_' + cfg.lang;
+  let examState = null;
+
+  function getLevelStatus(){
+    try { return JSON.parse(localStorage.getItem(LEVEL_STATUS_KEY) || '{}'); } catch(e){ return {}; }
+  }
+  function saveLevelStatus(level, data){
+    const all = getLevelStatus();
+    all[level] = data;
+    localStorage.setItem(LEVEL_STATUS_KEY, JSON.stringify(all));
+  }
+
+  // intento de examen sin terminar: se guarda al salir o al fallar una ronda,
+  // para poder ofrecer "sigue donde lo dejaste" aunque vuelvas días después
+  function getPendingExams(){
+    try { return JSON.parse(localStorage.getItem(EXAM_PENDING_KEY) || '{}'); } catch(e){ return {}; }
+  }
+  function savePendingExam(level, data){
+    const all = getPendingExams();
+    all[level] = data;
+    localStorage.setItem(EXAM_PENDING_KEY, JSON.stringify(all));
+  }
+  function clearPendingExam(level){
+    const all = getPendingExams();
+    delete all[level];
+    localStorage.setItem(EXAM_PENDING_KEY, JSON.stringify(all));
+  }
+  function stripItemForStorage(item){
+    const out = { type: item.type, level: item.level, answer: item.answer, prompt: item.prompt };
+    if(item.options) out.options = item.options;
+    if(item.words) out.words = item.words;
+    if(item.pairs) out.pairs = item.pairs;
+    if(item.hint) out.hint = item.hint;
+    if(item._topicKey) out._topicKey = item._topicKey;
+    return out;
+  }
+  function rehydrateStoredItem(it){
+    return Object.assign({}, it, { _cat: topicToCat[it._topicKey], _examId: uid() });
+  }
+
+  function renderLevelDonuts(){
+    const status = getLevelStatus();
+    levelBtns.forEach(card => {
+      const lv = card.dataset.level;
+      const donut = card.querySelector('.ex-level-donut');
+      if(!donut) return;
+      const st = status[lv];
+      donut.style.setProperty('--pct', st ? st.bestPct : 0);
+      donut.classList.toggle('is-gold', !!(st && st.passed));
+      donut.innerHTML = st && st.passed ? '<i class="ti ti-check" aria-hidden="true"></i>' : '';
+    });
+  }
+
+  function renderGlobalCounter(){
+    if(!globalCounterEl) return;
+    const n = window.jnGetExerciseCount ? window.jnGetExerciseCount() : 0;
+    globalCounterEl.textContent = n > 0 ? (cfg.labels.counterText || '').replace('{n}', n) : '';
+  }
+  document.addEventListener('jn-counter-updated', renderGlobalCounter);
+
+  function buildExamPool(level){
+    const cats = (cfg.categories || []).filter(c => c.key !== 'lectura');
+    const byCat = {};
+    cats.forEach(cat => {
+      const pool = collectPool(cat.topics).filter(it => it.level === level);
+      if(pool.length) byCat[cat.key] = shuffle(pool);
+    });
+    const keys = Object.keys(byCat);
+    const totalAvailable = keys.reduce((sum, k) => sum + byCat[k].length, 0);
+    const target = Math.min(100, totalAvailable);
+    const out = [];
+    let i = 0;
+    while(out.length < target && keys.some(k => byCat[k].length)){
+      const k = keys[i % keys.length];
+      if(byCat[k].length) out.push(byCat[k].pop());
+      i++;
+    }
+    return shuffle(out).map(it => Object.assign({}, it, { _examId: uid() }));
+  }
+
+  function startExam(level){
+    const pool = buildExamPool(level);
+    if(!pool.length) return;
+    examState = {
+      level,
+      total: pool.length,
+      passThreshold: Math.ceil(pool.length * 0.9),
+      correct: new Set(),
+      correctCountBase: 0,
+      queue: pool,
+      idx: 0,
+      wrongThisRound: []
+    };
+    if(panelNivel) panelNivel.style.display = 'none';
+    if(examRunner) examRunner.style.display = '';
+    renderExamQuestion();
+  }
+
+  function resumeExam(level, pending){
+    examState = {
+      level,
+      total: pending.total,
+      passThreshold: Math.ceil(pending.total * 0.9),
+      correct: new Set(),
+      correctCountBase: pending.correctCount,
+      queue: pending.items.map(rehydrateStoredItem),
+      idx: 0,
+      wrongThisRound: []
+    };
+    if(panelNivel) panelNivel.style.display = 'none';
+    if(examRunner) examRunner.style.display = '';
+    renderExamQuestion();
+  }
+
+  function currentCorrectTotal(){
+    return (examState.correctCountBase || 0) + examState.correct.size;
+  }
+
+  function maybeStartExam(level){
+    const pending = getPendingExams()[level];
+    if(pending && pending.items && pending.items.length){
+      showResumeDialog(level, pending);
+    } else {
+      startExam(level);
+    }
+  }
+
+  function showResumeDialog(level, pending){
+    if(!examOverlay) return;
+    examOverlay.innerHTML = `<div class="ex-exam-dialog">
+<i class="ti ti-refresh-alert ex-exam-dialog-icon" aria-hidden="true"></i>
+<h3>${(cfg.labels.examResumeTitle || '').replace('{level}', level)}</h3>
+<p>${(cfg.labels.examResumeBody || '').replace('{correct}', pending.correctCount).replace('{total}', pending.total)}</p>
+<div class="ex-exam-dialog-actions">
+<button class="ex-exam-btn primary" id="ex-exam-resume-continue">${cfg.labels.examRetryErrors || ''}</button>
+<button class="ex-exam-btn ghost" id="ex-exam-resume-restart">${cfg.labels.examRestart || ''}</button>
+</div></div>`;
+    examOverlay.style.display = '';
+    const continueBtn = document.getElementById('ex-exam-resume-continue');
+    const restartBtn = document.getElementById('ex-exam-resume-restart');
+    if(continueBtn) continueBtn.addEventListener('click', () => {
+      examOverlay.style.display = 'none';
+      resumeExam(level, pending);
+    });
+    if(restartBtn) restartBtn.addEventListener('click', () => {
+      clearPendingExam(level);
+      examOverlay.style.display = 'none';
+      startExam(level);
+    });
+  }
+
+  function endExam(backToLevels){
+    examState = null;
+    if(examRunner) examRunner.style.display = 'none';
+    if(examOverlay){ examOverlay.style.display = 'none'; examOverlay.innerHTML = ''; }
+    if(backToLevels && panelNivel){
+      panelNivel.style.display = '';
+      renderLevelDonuts();
+    }
+  }
+
+  function updateExamProgress(){
+    if(!examState) return;
+    const pct = Math.round((examState.idx / examState.queue.length) * 100);
+    if(examProgressFill) examProgressFill.style.width = pct + '%';
+    if(examProgressLabel) examProgressLabel.textContent = (examState.idx + 1) + ' / ' + examState.queue.length;
+  }
+
+  function renderExamItemHTML(item){
+    const catTag = item._cat ? `<p class="exercise-cat-tag" style="color:${item._cat.color}">${item._cat.label}</p>` : '';
+    const hint = item.hint ? `<p class="exercise-hint">${item.hint}</p>` : '';
+    if(item.type === 'choice'){
+      const opts = item.options.map(o => `<button class="ex-exam-option" data-value="${o}">${o}</button>`).join('');
+      return `<div class="ex-exam-item" data-answer="${item.answer}">${catTag}<p class="exercise-prompt">${item.prompt}</p>${hint}<div class="exercise-options">${opts}</div><p class="ex-exam-feedback"></p></div>`;
+    }
+    if(item.type === 'order'){
+      const words = shuffle([...item.words]);
+      const bank = words.map(w => `<button class="ex-exam-order-word" data-word="${w}">${w}</button>`).join('');
+      return `<div class="ex-exam-item" data-answer="${item.answer}">${catTag}<p class="exercise-prompt">${item.prompt}</p>${hint}<div class="order-answer-area ex-exam-order-answer" data-placeholder="${cfg.labels.orderPlaceholder}"></div><div class="ex-exam-order-bank">${bank}</div><div class="exercise-row"><button class="ex-exam-order-check">${cfg.labels.check}</button><button class="ex-exam-order-reset">${cfg.labels.orderReset}</button></div><p class="ex-exam-feedback"></p></div>`;
+    }
+    if(item.type === 'match'){
+      const leftItems = shuffle(item.pairs.map((p, i) => ({ text: p[0], key: i })));
+      const rightItems = shuffle(item.pairs.map((p, i) => ({ text: p[1], key: i })));
+      const colHtml = list => list.map(x => `<button class="ex-exam-match-item" data-key="${x.key}">${x.text}</button>`).join('');
+      return `<div class="ex-exam-item" data-pairs="${item.pairs.length}">${catTag}<p class="exercise-prompt">${item.prompt}</p>${hint}<div class="match-columns"><div class="match-col">${colHtml(leftItems)}</div><div class="match-col">${colHtml(rightItems)}</div></div><p class="ex-exam-feedback"></p></div>`;
+    }
+    const placeholder = item.type === 'translate' ? cfg.labels.placeholderTranslate : item.type === 'correct' ? cfg.labels.placeholderCorrect : cfg.labels.placeholderFill;
+    return `<div class="ex-exam-item" data-answer="${item.answer}">${catTag}<p class="exercise-prompt">${item.prompt}</p>${hint}<div class="exercise-row"><input type="text" class="ex-exam-input" placeholder="${placeholder}"><button class="ex-exam-check">${cfg.labels.check}</button></div><p class="ex-exam-feedback"></p></div>`;
+  }
+
+  function randomPraise(){
+    const arr = ['¡Muy bien!','¡Perfecto!','¡Correcto!','¡Genial!'];
+    return arr[Math.floor(Math.random() * arr.length)];
+  }
+
+  function bindExamItem(item){
+    const root = examQuestionEl;
+    const fb = root.querySelector('.ex-exam-feedback');
+    let answered = false;
+
+    function lockAndAdvance(ok, revealText){
+      if(answered) return;
+      answered = true;
+      if(fb){
+        if(ok){
+          fb.textContent = randomPraise();
+          fb.className = 'ex-exam-feedback correct';
+        } else {
+          fb.textContent = (cfg.labels.examIncorrect || '') + (revealText ? ' (' + (cfg.labels.examAnswerLabel || '') + ': ' + revealText + ')' : '');
+          fb.className = 'ex-exam-feedback incorrect';
+        }
+      }
+      root.querySelectorAll('input,button').forEach(el => { el.disabled = true; });
+      if(ok){
+        window.jnCountExercise();
+        examState.correct.add(item._examId);
+      } else {
+        examState.wrongThisRound.push(item);
+      }
+      const delay = ok ? 900 : 1700;
+      setTimeout(() => {
+        if(!examState) return;
+        if(currentCorrectTotal() >= examState.passThreshold){
+          passExam();
+        } else {
+          examState.idx++;
+          renderExamQuestion();
+        }
+      }, delay);
+    }
+
+    if(item.type === 'choice'){
+      const correct = item.answer.trim().toLowerCase();
+      root.querySelectorAll('.ex-exam-option').forEach(btn => {
+        btn.addEventListener('click', () => {
+          if(answered) return;
+          const chosen = btn.dataset.value.trim().toLowerCase();
+          root.querySelectorAll('.ex-exam-option').forEach(b => b.classList.remove('correct','incorrect'));
+          btn.classList.add(chosen === correct ? 'correct' : 'incorrect');
+          if(chosen !== correct){
+            const rightBtn = [...root.querySelectorAll('.ex-exam-option')].find(b => b.dataset.value.trim().toLowerCase() === correct);
+            if(rightBtn) rightBtn.classList.add('correct');
+          }
+          lockAndAdvance(chosen === correct);
+        });
+      });
+    } else if(item.type === 'order'){
+      const bank = root.querySelector('.ex-exam-order-bank');
+      const area = root.querySelector('.ex-exam-order-answer');
+      root.querySelectorAll('.ex-exam-order-word').forEach(w => {
+        w.addEventListener('click', () => {
+          if(answered) return;
+          (w.parentElement === bank ? area : bank).appendChild(w);
+        });
+      });
+      const resetBtn = root.querySelector('.ex-exam-order-reset');
+      if(resetBtn) resetBtn.addEventListener('click', () => {
+        if(answered) return;
+        root.querySelectorAll('.ex-exam-order-answer .ex-exam-order-word').forEach(w => bank.appendChild(w));
+      });
+      const checkBtn = root.querySelector('.ex-exam-order-check');
+      if(checkBtn) checkBtn.addEventListener('click', () => {
+        if(answered) return;
+        const built = normalizeAnswer([...area.querySelectorAll('.ex-exam-order-word')].map(w => w.dataset.word).join(' '));
+        const correct = normalizeAnswer(item.answer);
+        lockAndAdvance(built === correct, item.answer);
+      });
+    } else if(item.type === 'match'){
+      let hadMistake = false;
+      const total = item.pairs.length;
+      root.addEventListener('click', (e) => {
+        if(answered) return;
+        const el = e.target.closest('.ex-exam-match-item');
+        if(!el || el.classList.contains('matched')) return;
+        const selected = root.querySelector('.ex-exam-match-item.selected');
+        if(selected === el){ el.classList.remove('selected'); return; }
+        if(!selected){ el.classList.add('selected'); return; }
+        if(selected.closest('.match-col') === el.closest('.match-col')){
+          selected.classList.remove('selected');
+          el.classList.add('selected');
+          return;
+        }
+        if(selected.dataset.key === el.dataset.key){
+          selected.classList.remove('selected');
+          selected.classList.add('matched');
+          el.classList.add('matched');
+          const matchedCount = root.querySelectorAll('.ex-exam-match-item.matched').length / 2;
+          if(matchedCount >= total) lockAndAdvance(!hadMistake);
+        } else {
+          hadMistake = true;
+          selected.classList.add('wrong-flash');
+          el.classList.add('wrong-flash');
+          setTimeout(() => {
+            selected.classList.remove('selected','wrong-flash');
+            el.classList.remove('wrong-flash');
+          }, 500);
+        }
+      });
+    } else {
+      const input = root.querySelector('.ex-exam-input');
+      const checkBtn = root.querySelector('.ex-exam-check');
+      function doCheck(){
+        if(answered) return;
+        const accepted = item.answer.split('|').map(s => normalizeAnswer(s));
+        const ok = accepted.includes(normalizeAnswer(input.value));
+        lockAndAdvance(ok, item.answer.split('|')[0]);
+      }
+      if(checkBtn) checkBtn.addEventListener('click', doCheck);
+      if(input) input.addEventListener('keydown', e => { if(e.key === 'Enter') doCheck(); });
+    }
+  }
+
+  function renderExamQuestion(){
+    if(!examState) return;
+    if(examState.idx >= examState.queue.length){
+      finishRound();
+      return;
+    }
+    updateExamProgress();
+    const item = examState.queue[examState.idx];
+    examQuestionEl.innerHTML = renderExamItemHTML(item);
+    bindExamItem(item);
+  }
+
+  // recopila lo que falta por dominar (fallado + sin contestar) para poder guardarlo como pendiente
+  function computeStopSummary(){
+    const remaining = examState.queue.slice(examState.idx);
+    const pendingItems = examState.wrongThisRound.concat(remaining);
+    return { pendingItems, correctCount: currentCorrectTotal(), total: examState.total };
+  }
+
+  function persistStopState(summary){
+    const level = examState.level;
+    const prevBest = (getLevelStatus()[level] || {}).bestPct || 0;
+    const pct = Math.round((summary.correctCount / summary.total) * 100);
+    const attempts = ((getLevelStatus()[level] || {}).attempts || 0) + 1;
+    saveLevelStatus(level, { passed: false, bestPct: Math.max(pct, prevBest), attempts });
+    if(summary.pendingItems.length){
+      savePendingExam(level, {
+        total: summary.total,
+        correctCount: summary.correctCount,
+        items: summary.pendingItems.map(stripItemForStorage),
+        savedAt: Date.now()
+      });
+    } else {
+      clearPendingExam(level);
+    }
+  }
+
+  // se sale del examen (botón salir o navegar fuera) sin terminar: se guarda en silencio, sin diálogo
+  function silentStop(){
+    if(!examState) return;
+    persistStopState(computeStopSummary());
+  }
+
+  function finishRound(){
+    const summary = computeStopSummary();
+    persistStopState(summary);
+    showFailDialog(summary.correctCount, summary.total);
+  }
+
+  function passExam(){
+    const correctCount = currentCorrectTotal();
+    const total = examState.total;
+    const attempts = ((getLevelStatus()[examState.level] || {}).attempts || 0) + 1;
+    saveLevelStatus(examState.level, { passed: true, bestPct: 100, attempts });
+    clearPendingExam(examState.level);
+    showPassDialog(correctCount, total);
+  }
+
+  function showFailDialog(correct, total){
+    if(!examOverlay) return;
+    examOverlay.innerHTML = `<div class="ex-exam-dialog">
+<i class="ti ti-refresh-alert ex-exam-dialog-icon" aria-hidden="true"></i>
+<h3>${cfg.labels.examFailTitle || ''}</h3>
+<p>${(cfg.labels.examFailBody || '').replace('{correct}', correct).replace('{total}', total)}</p>
+<div class="ex-exam-dialog-actions">
+<button class="ex-exam-btn primary" id="ex-exam-retry-errors">${cfg.labels.examRetryErrors || ''}</button>
+<button class="ex-exam-btn ghost" id="ex-exam-restart">${cfg.labels.examRestart || ''}</button>
+</div></div>`;
+    examOverlay.style.display = '';
+    const retryBtn = document.getElementById('ex-exam-retry-errors');
+    const restartBtn = document.getElementById('ex-exam-restart');
+    if(retryBtn) retryBtn.addEventListener('click', () => {
+      examState.queue = examState.wrongThisRound;
+      examState.wrongThisRound = [];
+      examState.idx = 0;
+      examOverlay.style.display = 'none';
+      renderExamQuestion();
+    });
+    if(restartBtn) restartBtn.addEventListener('click', () => {
+      examOverlay.style.display = 'none';
+      startExam(examState.level);
+    });
+  }
+
+  function showPassDialog(correct, total){
+    if(!examOverlay) return;
+    const level = examState.level;
+    examOverlay.innerHTML = `<div class="ex-exam-dialog ex-exam-dialog-pass">
+<div class="ex-exam-confetti">${'<span></span>'.repeat(16)}</div>
+<i class="ti ti-trophy ex-exam-dialog-icon gold" aria-hidden="true"></i>
+<h3>${(cfg.labels.examPassTitle || '').replace('{level}', level)}</h3>
+<p>${(cfg.labels.examPassBody || '').replace('{correct}', correct).replace('{total}', total)}</p>
+<div class="ex-exam-dialog-actions">
+<button class="ex-exam-btn primary" id="ex-exam-back-levels">${cfg.labels.examBackToLevels || ''}</button>
+</div></div>`;
+    examOverlay.style.display = '';
+    const backBtn = document.getElementById('ex-exam-back-levels');
+    if(backBtn) backBtn.addEventListener('click', () => endExam(true));
+  }
+
+  if(examStartBtn) examStartBtn.addEventListener('click', () => { if(activeLevel) maybeStartExam(activeLevel); });
+  if(examExitBtn) examExitBtn.addEventListener('click', () => {
+    silentStop();
+    endExam(true);
+  });
+
+  window.addEventListener('pagehide', silentStop);
 
   catBtns.forEach(btn => {
     btn.addEventListener('click', () => selectCategory(btn.dataset.cat));
@@ -908,11 +1374,13 @@ ${qHTML}`;
     levelBtns.forEach(b => b.classList.remove('active'));
     step2.style.display = 'none';
     if(levelCatStep) levelCatStep.style.display = 'none';
+    if(levelExamStep) levelExamStep.style.display = 'none';
     container.innerHTML = '';
     if(modeGrid) modeGrid.style.display = '';
     if(panelNivel) panelNivel.style.display = 'none';
     if(panelTema) panelTema.style.display = 'none';
     if(hubToolbar) hubToolbar.style.display = 'none';
+    endExam(false);
   }
 
   modeCards.forEach(btn => {
@@ -921,6 +1389,9 @@ ${qHTML}`;
   modeBackBtns.forEach(btn => {
     btn.addEventListener('click', backToModeChoice);
   });
+
+  renderLevelDonuts();
+  renderGlobalCounter();
 
   // preselecciona un tema si se llega desde el botón "ponte a prueba" de una página de contenido
   const params = new URLSearchParams(location.search);
