@@ -1192,12 +1192,8 @@ ${qHTML}`;
       const delay = ok ? 900 : 1700;
       setTimeout(() => {
         if(!examState) return;
-        if(currentCorrectTotal() >= examState.passThreshold){
-          passExam();
-        } else {
-          examState.idx++;
-          renderExamQuestion();
-        }
+        examState.idx++;
+        renderExamQuestion();
       }, delay);
     }
 
@@ -1286,7 +1282,11 @@ ${qHTML}`;
   function renderExamQuestion(){
     if(!examState) return;
     if(examState.idx >= examState.queue.length){
-      finishRound();
+      if(currentCorrectTotal() >= examState.passThreshold){
+        passExam();
+      } else {
+        finishRound();
+      }
       return;
     }
     updateExamProgress();
