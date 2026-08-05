@@ -232,12 +232,28 @@ footer{text-align:center;padding:30px;color:var(--muted);border-top:1px solid va
 .ex-global-counter{color:var(--muted);font-size:14px;font-weight:600;margin:-8px 0 18px}
 
 .ex-level-card{position:relative}
-.ex-level-donut{position:absolute;top:10px;right:10px;width:24px;height:24px;border-radius:50%;background:conic-gradient(var(--primary) calc(var(--pct,0)*1%),var(--border) 0);display:flex;align-items:center;justify-content:center}
+.ex-level-donut{position:absolute;top:10px;right:10px;width:24px;height:24px;border-radius:50%;background:conic-gradient(var(--primary) calc(var(--pct,0)*1%),var(--border) 0);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;line-height:1;color:var(--gold-dark)}
 .ex-level-donut::before{content:"";position:absolute;inset:3px;border-radius:50%;background:var(--card-bg)}
-.ex-level-donut i{position:relative;font-size:11px;color:var(--gold-dark)}
-.ex-level-donut.is-gold{background:conic-gradient(var(--gold) 0 100%)}
-.ex-level-donut.is-gold::before{background:var(--badge-gold-bg)}
+.ex-level-donut span{position:relative}
+.ex-level-donut.is-gold{background:var(--gold)}
+.ex-level-donut.is-gold::before{background:transparent}
+.ex-level-donut.is-gold span{color:#3a2c0d}
 .ex-cat-card.active .ex-level-donut::before{background:var(--primary)}
+.ex-cat-card.active .ex-level-donut.is-gold::before{background:transparent}
+
+/* nivel superado: la tarjeta entera se marca en dorado, no solo el anillo */
+.ex-level-card.is-level-passed{box-shadow:0 0 0 3px var(--gold);border-color:var(--gold)}
+.ex-level-card.is-level-passed:not(.active){background:var(--badge-gold-bg)}
+.ex-level-card.is-level-passed .ex-level-code{color:var(--gold-dark)}
+.ex-level-card.is-level-passed.active .ex-level-code{color:#fff}
+
+.ex-level-timeline{display:flex;align-items:center;margin:2px 0 20px}
+.ex-timeline-node{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--font-head);font-weight:800;font-size:11.5px;color:var(--muted);background:var(--card-bg);border:2px solid var(--border);flex-shrink:0;transition:.15s}
+.ex-timeline-node.is-passed{background:var(--gold);border-color:var(--gold);color:#3a2c0d}
+.ex-timeline-node.is-next{border-color:var(--primary);color:var(--primary-dark)}
+.ex-timeline-line{flex:1;height:3px;background:var(--border);margin:0 -1px}
+.ex-timeline-line.is-filled{background:var(--gold)}
+@media(max-width:480px){.ex-timeline-node{width:26px;height:26px;font-size:10px}}
 
 .ex-exam-cta-card{display:flex;align-items:center;justify-content:space-between;gap:18px;flex-wrap:wrap;background:var(--badge-gold-bg);border:1px solid var(--gold);border-radius:14px;padding:18px 22px;margin:4px 0 18px}
 .ex-exam-cta-text h4{margin:0 0 4px;font-size:16.5px;font-family:var(--font-head);color:var(--gold-dark)}
@@ -254,6 +270,13 @@ footer{text-align:center;padding:30px;color:var(--muted);border-top:1px solid va
 .ex-exam-progress-label{font-size:13px;font-weight:700;color:var(--muted);white-space:nowrap;font-variant-numeric:tabular-nums}
 
 .ex-exam-item .exercise-prompt{font-size:18px;font-weight:600;margin-bottom:14px}
+.ex-exam-input{flex:1;min-width:160px;padding:10px 14px;border:1px solid var(--border);border-radius:10px;font-size:15.5px;font-family:var(--font-body);color:var(--text);background:var(--card-bg)}
+.ex-exam-input:focus{outline:none;border-color:var(--primary)}
+.ex-exam-check,.ex-exam-order-check{padding:10px 18px;border-radius:10px;border:none;background:var(--primary);color:#fff;font-weight:600;font-family:var(--font-head);cursor:pointer;font-size:15px}
+.ex-exam-check:hover,.ex-exam-order-check:hover{background:var(--primary-dark)}
+.ex-exam-order-reset{padding:10px 18px;border-radius:10px;border:1px solid var(--border);background:var(--card-bg);color:var(--muted);font-weight:600;font-family:var(--font-head);cursor:pointer;font-size:15px}
+.ex-exam-order-reset:hover{border-color:var(--primary);color:var(--primary)}
+.ex-exam-input:disabled,.ex-exam-check:disabled,.ex-exam-order-check:disabled,.ex-exam-order-reset:disabled{opacity:.6;cursor:default}
 .ex-exam-feedback{margin-top:12px;font-weight:700;font-size:15px;min-height:20px}
 .ex-exam-feedback.correct{color:#1c6b32}
 .ex-exam-feedback.incorrect{color:#a3302d}

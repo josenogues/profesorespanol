@@ -951,12 +951,31 @@ ${qHTML}`;
     levelBtns.forEach(card => {
       const lv = card.dataset.level;
       const donut = card.querySelector('.ex-level-donut');
+      const passed = !!(status[lv] && status[lv].passed);
+      card.classList.toggle('is-level-passed', passed);
       if(!donut) return;
       const st = status[lv];
       donut.style.setProperty('--pct', st ? st.bestPct : 0);
-      donut.classList.toggle('is-gold', !!(st && st.passed));
-      donut.innerHTML = st && st.passed ? '<i class="ti ti-check" aria-hidden="true"></i>' : '';
+      donut.classList.toggle('is-gold', passed);
+      donut.innerHTML = passed ? '<span aria-hidden="true">&#10003;</span>' : '';
     });
+    renderLevelTimeline();
+  }
+
+  function renderLevelTimeline(){
+    const timelineEl = document.getElementById('ex-level-timeline');
+    if(!timelineEl) return;
+    const levels = ['A1','A2','B1','B2','C1'];
+    const status = getLevelStatus();
+    const passedFlags = levels.map(lv => !!(status[lv] && status[lv].passed));
+    const nextIdx = passedFlags.indexOf(false);
+    timelineEl.innerHTML = levels.map((lv, i) => {
+      const passed = passedFlags[i];
+      const isNext = !passed && i === nextIdx;
+      const connector = i > 0 ? `<span class="ex-timeline-line${passedFlags[i - 1] ? ' is-filled' : ''}"></span>` : '';
+      const nodeClass = 'ex-timeline-node' + (passed ? ' is-passed' : '') + (isNext ? ' is-next' : '');
+      return `${connector}<span class="${nodeClass}" title="${lv}">${passed ? '&#10003;' : lv}</span>`;
+    }).join('');
   }
 
   function renderGlobalCounter(){
