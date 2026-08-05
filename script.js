@@ -594,6 +594,8 @@ a.closest(".menu-item").classList.add("active","current-section");
   const levelBtns = document.querySelectorAll('.ex-level-card');
   const pillsWrap = document.getElementById('ex-topic-pills');
   const step2 = document.getElementById('ex-step2');
+  const levelFilterStep = document.getElementById('ex-level-filter-step');
+  const levelFilterPillsWrap = document.getElementById('ex-level-filter-pills');
   const generateBtn = document.getElementById('ex-hub-generate');
   const mixBtn = document.getElementById('ex-hub-mix');
   const modeGrid = document.getElementById('ex-mode-grid');
@@ -624,6 +626,7 @@ a.closest(".menu-item").classList.add("active","current-section");
 
   let activeCategory = null; // key de la categoría elegida en el paso 1
   let activeTopics = new Set(); // subtemas activos dentro de esa categoría (vacío = todos los de la categoría)
+  let activeLevelsFilter = new Set(); // niveles activos en "ejercicios libres" (vacío = todos los niveles); admite varios a la vez
   let mixMode = false;
   let activeLevel = null; // "A1".."C1" cuando se practica por nivel (recorrido completo, cruza todas las materias)
   let activeLevelCategory = null; // materia elegida dentro del nivel activo (máximo 4, como el menú)
@@ -805,6 +808,7 @@ ${qHTML}`;
     const count = mixMode ? 20 : (activeLevel ? 30 : 12);
     let pool = collectPool(topicKeys);
     if(activeLevel) pool = pool.filter(it => it.level === activeLevel);
+    else if(activeLevelsFilter.size) pool = pool.filter(it => activeLevelsFilter.has(it.level));
     const picked = sample(pool, Math.min(count, pool.length));
     container.innerHTML = picked.map(item => {
       const withId = Object.assign({}, item, { exid: (item.exid||'ex') + '-' + uid() });
@@ -827,6 +831,25 @@ ${qHTML}`;
         const key = btn.dataset.topic;
         if(activeTopics.has(key)) activeTopics.delete(key); else activeTopics.add(key);
         renderPills();
+        render();
+      });
+    });
+  }
+
+  // filtro de nivel en "ejercicios libres": admite varios niveles a la vez (p.ej. A1+A2 de vocabulario),
+  // porque un mismo tema puede tener ejercicios repartidos en varios niveles
+  function renderLevelFilterPills(){
+    if(!levelFilterPillsWrap) return;
+    const levels = ['A1', 'A2', 'B1', 'B2', 'C1'];
+    levelFilterPillsWrap.innerHTML = levels.map(lv => {
+      const active = activeLevelsFilter.has(lv);
+      return `<button class="ex-pill${active ? ' active' : ''}" data-level-filter="${lv}" style="${active ? 'background:var(--primary);border-color:var(--primary)' : ''}">${lv}</button>`;
+    }).join('');
+    levelFilterPillsWrap.querySelectorAll('.ex-pill').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const lv = btn.dataset.levelFilter;
+        if(activeLevelsFilter.has(lv)) activeLevelsFilter.delete(lv); else activeLevelsFilter.add(lv);
+        renderLevelFilterPills();
         render();
       });
     });
@@ -868,6 +891,7 @@ ${qHTML}`;
     activeCategory = key;
     activeTopics.clear();
     catBtns.forEach(b => b.classList.toggle('active', b.dataset.cat === key));
+    if(levelFilterStep) levelFilterStep.style.display = key === 'lectura' ? 'none' : '';
     if(key === 'lectura'){
       renderReadingPicker();
     } else {
@@ -1416,6 +1440,7 @@ ${qHTML}`;
       catBtns.forEach(b => b.classList.remove('active'));
       levelBtns.forEach(b => b.classList.remove('active'));
       step2.style.display = 'none';
+      if(levelFilterStep) levelFilterStep.style.display = '';
       mixBtn.classList.add('active');
       render();
     });
@@ -1465,6 +1490,7 @@ ${qHTML}`;
 
   renderLevelDonuts();
   renderGlobalCounter();
+  renderLevelFilterPills();
 
   // preselecciona un tema si se llega desde el botón "ponte a prueba" de una página de contenido
   const params = new URLSearchParams(location.search);
