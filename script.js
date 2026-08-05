@@ -981,7 +981,12 @@ ${qHTML}`;
   function renderGlobalCounter(){
     if(!globalCounterEl) return;
     const n = window.jnGetExerciseCount ? window.jnGetExerciseCount() : 0;
-    globalCounterEl.textContent = n > 0 ? (cfg.labels.counterText || '').replace('{n}', n) : '';
+    if(n > 0){
+      const text = (cfg.labels.counterText || '').replace('{n}', `<strong>${n}</strong>`);
+      globalCounterEl.innerHTML = `<span class="ex-counter-icon" aria-hidden="true">🔥</span>${text}`;
+    } else {
+      globalCounterEl.innerHTML = '';
+    }
   }
   document.addEventListener('jn-counter-updated', renderGlobalCounter);
 
