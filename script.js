@@ -663,11 +663,12 @@ a.closest(".menu-item").classList.add("active","current-section");
     const cat = item._cat;
     const catTag = cat ? `<p class="exercise-cat-tag" style="color:${cat.color}">${cat.label}</p>` : '';
     const borderStyle = cat ? `style="border-left:4px solid ${cat.color}"` : '';
+    const levelBadge = item.level ? `<span class="exercise-level-badge">${item.level}</span>` : '';
     if(item.type === 'order'){
       const words = shuffle([...item.words]);
       const bank = words.map(w => `<button class="order-word" data-word="${w}">${w}</button>`).join('');
       return `<div class="exercise-block" ${borderStyle} data-exid="${item.exid}" data-answer="${item.answer}">
-${catTag}<div class="exercise-kicker"><span>${cfg.labels.kickerOrder}</span><span class="exercise-done-badge">${cfg.labels.done}</span></div>
+${catTag}<div class="exercise-kicker"><span>${cfg.labels.kickerOrder}${levelBadge}</span><span class="exercise-done-badge">${cfg.labels.done}</span></div>
 <p class="exercise-prompt">${item.prompt}</p>${hint}
 <div class="order-answer-area" data-placeholder="${cfg.labels.orderPlaceholder}"></div>
 <div class="order-word-bank">${bank}</div>
@@ -677,7 +678,7 @@ ${catTag}<div class="exercise-kicker"><span>${cfg.labels.kickerOrder}</span><spa
     if(item.type === 'choice'){
       const opts = item.options.map(o => `<button class="option-btn" data-value="${o}">${o}</button>`).join('');
       return `<div class="exercise-block" ${borderStyle} data-exid="${item.exid}" data-answer="${item.answer}">
-${catTag}<div class="exercise-kicker"><span>${kicker}</span><span class="exercise-done-badge">${cfg.labels.done}</span></div>
+${catTag}<div class="exercise-kicker"><span>${kicker}${levelBadge}</span><span class="exercise-done-badge">${cfg.labels.done}</span></div>
 <p class="exercise-prompt">${item.prompt}</p>${hint}
 <div class="exercise-options">${opts}</div>
 <p class="exercise-feedback"></p>${theoryLinkHTML(item)}</div>`;
@@ -687,14 +688,14 @@ ${catTag}<div class="exercise-kicker"><span>${kicker}</span><span class="exercis
       const rightItems = shuffle(item.pairs.map((p, i) => ({ text: p[1], key: i })));
       const colHtml = list => list.map(x => `<button class="match-item" data-key="${x.key}">${x.text}</button>`).join('');
       return `<div class="exercise-block match-block" ${borderStyle} data-exid="${item.exid}" data-pairs="${item.pairs.length}">
-${catTag}<div class="exercise-kicker"><span>${cfg.labels.kickerMatch}</span><span class="exercise-done-badge">${cfg.labels.done}</span></div>
+${catTag}<div class="exercise-kicker"><span>${cfg.labels.kickerMatch}${levelBadge}</span><span class="exercise-done-badge">${cfg.labels.done}</span></div>
 <p class="exercise-prompt">${item.prompt}</p>${hint}
 <div class="match-columns"><div class="match-col">${colHtml(leftItems)}</div><div class="match-col">${colHtml(rightItems)}</div></div>
 <p class="exercise-feedback"></p>${theoryLinkHTML(item)}</div>`;
     }
     const placeholder = item.type === 'translate' ? cfg.labels.placeholderTranslate : item.type === 'correct' ? cfg.labels.placeholderCorrect : cfg.labels.placeholderFill;
     return `<div class="exercise-block" ${borderStyle} data-exid="${item.exid}" data-answer="${item.answer}">
-${catTag}<div class="exercise-kicker"><span>${kicker}</span><span class="exercise-done-badge">${cfg.labels.done}</span></div>
+${catTag}<div class="exercise-kicker"><span>${kicker}${levelBadge}</span><span class="exercise-done-badge">${cfg.labels.done}</span></div>
 <p class="exercise-prompt">${item.prompt}</p>${hint}
 <div class="exercise-row exercise-row-fill"><input type="text" class="exercise-input" placeholder="${placeholder}"><button class="exercise-check">${cfg.labels.check}</button></div>
 <p class="exercise-feedback"></p>${theoryLinkHTML(item)}</div>`;
