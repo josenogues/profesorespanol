@@ -997,23 +997,45 @@ ${qHTML}`;
       correctCountBase: 0,
       queue: pool,
       idx: 0,
-      wrongThisRound: []
+      wrongThisRound: [],
+      isRetryRound: false
     };
     if(panelNivel) panelNivel.style.display = 'none';
     if(examRunner) examRunner.style.display = '';
     renderExamQuestion();
   }
 
-  function resumeExam(level, pending){
+  // continúa la MISMA ronda justo donde se dejó (lo no visto sigue pendiente de ver,
+  // los fallos de esa ronda se guardan aparte para la ronda de errores, que llega solo al terminar)
+  function resumeMidRound(level, pending){
     examState = {
       level,
       total: pending.total,
       passThreshold: Math.ceil(pending.total * 0.9),
       correct: new Set(),
       correctCountBase: pending.correctCount,
-      queue: pending.items.map(rehydrateStoredItem),
+      queue: (pending.remainingItems || []).map(rehydrateStoredItem),
       idx: 0,
-      wrongThisRound: []
+      wrongThisRound: (pending.wrongItems || []).map(rehydrateStoredItem),
+      isRetryRound: !!pending.roundIsRetry
+    };
+    if(panelNivel) panelNivel.style.display = 'none';
+    if(examRunner) examRunner.style.display = '';
+    renderExamQuestion();
+  }
+
+  // arranca una ronda nueva solo con los fallos de la ronda anterior (ya completa)
+  function startRetryRound(level, pending){
+    examState = {
+      level,
+      total: pending.total,
+      passThreshold: Math.ceil(pending.total * 0.9),
+      correct: new Set(),
+      correctCountBase: pending.correctCount,
+      queue: (pending.wrongItems || []).map(rehydrateStoredItem),
+      idx: 0,
+      wrongThisRound: [],
+      isRetryRound: true
     };
     if(panelNivel) panelNivel.style.display = 'none';
     if(examRunner) examRunner.style.display = '';
@@ -1026,7 +1048,7 @@ ${qHTML}`;
 
   function maybeStartExam(level){
     const pending = getPendingExams()[level];
-    if(pending && pending.items && pending.items.length){
+    if(pending){
       showResumeDialog(level, pending);
     } else {
       startExam(level);
@@ -1035,12 +1057,20 @@ ${qHTML}`;
 
   function showResumeDialog(level, pending){
     if(!examOverlay) return;
+    const roundComplete = !pending.remainingItems || !pending.remainingItems.length;
+    const title = roundComplete
+      ? (cfg.labels.examResumeTitle || '').replace('{level}', level)
+      : (cfg.labels.examResumeMidTitle || '').replace('{level}', level);
+    const body = roundComplete
+      ? (cfg.labels.examResumeBody || '')
+      : (cfg.labels.examResumeMidBody || '');
+    const continueLabel = roundComplete ? (cfg.labels.examRetryErrors || '') : (cfg.labels.examResumeContinueBtn || '');
     examOverlay.innerHTML = `<div class="ex-exam-dialog">
 <i class="ti ti-refresh-alert ex-exam-dialog-icon" aria-hidden="true"></i>
-<h3>${(cfg.labels.examResumeTitle || '').replace('{level}', level)}</h3>
-<p>${(cfg.labels.examResumeBody || '').replace('{correct}', pending.correctCount).replace('{total}', pending.total)}</p>
+<h3>${title}</h3>
+<p>${body.replace('{correct}', pending.correctCount).replace('{total}', pending.total)}</p>
 <div class="ex-exam-dialog-actions">
-<button class="ex-exam-btn primary" id="ex-exam-resume-continue">${cfg.labels.examRetryErrors || ''}</button>
+<button class="ex-exam-btn primary" id="ex-exam-resume-continue">${continueLabel}</button>
 <button class="ex-exam-btn ghost" id="ex-exam-resume-restart">${cfg.labels.examRestart || ''}</button>
 </div></div>`;
     examOverlay.style.display = '';
@@ -1048,7 +1078,8 @@ ${qHTML}`;
     const restartBtn = document.getElementById('ex-exam-resume-restart');
     if(continueBtn) continueBtn.addEventListener('click', () => {
       examOverlay.style.display = 'none';
-      resumeExam(level, pending);
+      if(roundComplete) startRetryRound(level, pending);
+      else resumeMidRound(level, pending);
     });
     if(restartBtn) restartBtn.addEventListener('click', () => {
       clearPendingExam(level);
@@ -1108,6 +1139,15 @@ ${qHTML}`;
 
     function lockAndAdvance(ok, revealText){
       if(answered) return;
+      // en la ronda de errores no se bloquea ni se avanza al fallar: se ve la corrección
+      // y se deja seguir intentando en la misma pregunta, como en la práctica libre
+      if(!ok && examState.isRetryRound){
+        if(fb){
+          fb.textContent = (cfg.labels.examIncorrect || '') + (revealText ? ' (' + (cfg.labels.examAnswerLabel || '') + ': ' + revealText + ')' : '');
+          fb.className = 'ex-exam-feedback incorrect';
+        }
+        return;
+      }
       answered = true;
       if(fb){
         if(ok){
@@ -1193,7 +1233,8 @@ ${qHTML}`;
           selected.classList.add('matched');
           el.classList.add('matched');
           const matchedCount = root.querySelectorAll('.ex-exam-match-item.matched').length / 2;
-          if(matchedCount >= total) lockAndAdvance(!hadMistake);
+          // en la ronda de errores, emparejar todo ya es "correcto" aunque hayas fallado algún intento por el camino
+          if(matchedCount >= total) lockAndAdvance(examState.isRetryRound ? true : !hadMistake);
         } else {
           hadMistake = true;
           selected.classList.add('wrong-flash');
@@ -1230,11 +1271,15 @@ ${qHTML}`;
     bindExamItem(item);
   }
 
-  // recopila lo que falta por dominar (fallado + sin contestar) para poder guardarlo como pendiente
+  // separa lo aún no visto en esta ronda (para reanudar tal cual) de lo fallado (para la ronda de errores)
   function computeStopSummary(){
     const remaining = examState.queue.slice(examState.idx);
-    const pendingItems = examState.wrongThisRound.concat(remaining);
-    return { pendingItems, correctCount: currentCorrectTotal(), total: examState.total };
+    return {
+      remainingItems: remaining,
+      wrongItems: examState.wrongThisRound,
+      correctCount: currentCorrectTotal(),
+      total: examState.total
+    };
   }
 
   function persistStopState(summary){
@@ -1243,11 +1288,13 @@ ${qHTML}`;
     const pct = Math.round((summary.correctCount / summary.total) * 100);
     const attempts = ((getLevelStatus()[level] || {}).attempts || 0) + 1;
     saveLevelStatus(level, { passed: false, bestPct: Math.max(pct, prevBest), attempts });
-    if(summary.pendingItems.length){
+    if(summary.remainingItems.length || summary.wrongItems.length){
       savePendingExam(level, {
         total: summary.total,
         correctCount: summary.correctCount,
-        items: summary.pendingItems.map(stripItemForStorage),
+        remainingItems: summary.remainingItems.map(stripItemForStorage),
+        wrongItems: summary.wrongItems.map(stripItemForStorage),
+        roundIsRetry: !!examState.isRetryRound,
         savedAt: Date.now()
       });
     } else {
@@ -1293,6 +1340,7 @@ ${qHTML}`;
       examState.queue = examState.wrongThisRound;
       examState.wrongThisRound = [];
       examState.idx = 0;
+      examState.isRetryRound = true;
       examOverlay.style.display = 'none';
       renderExamQuestion();
     });
