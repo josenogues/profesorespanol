@@ -141,6 +141,8 @@ footer{text-align:center;padding:30px;color:var(--muted);border-top:1px solid va
 .exercise-block.is-done .exercise-done-badge{display:inline}
 .exercise-prompt{font-size:16.5px;margin-bottom:12px;font-weight:600}
 .exercise-row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.exercise-row.exercise-row-fill{flex-direction:column;align-items:stretch;flex-wrap:nowrap}
+.exercise-row.exercise-row-fill .exercise-input,.exercise-row.exercise-row-fill .ex-exam-input{flex:none}
 .exercise-input{flex:1;min-width:160px;padding:10px 14px;border:1px solid var(--border);border-radius:10px;font-size:15.5px;font-family:var(--font-body);color:var(--text);background:var(--card-bg)}
 .exercise-input:focus{outline:none;border-color:var(--primary)}
 .exercise-check{padding:10px 18px;border-radius:10px;border:none;background:var(--primary);color:#fff;font-weight:600;font-family:var(--font-head);cursor:pointer;font-size:15px}
@@ -232,12 +234,50 @@ footer{text-align:center;padding:30px;color:var(--muted);border-top:1px solid va
 .ex-global-counter{color:var(--muted);font-size:14px;font-weight:600;margin:-8px 0 18px}
 
 .ex-level-card{position:relative}
-.ex-level-donut{position:absolute;top:10px;right:10px;width:24px;height:24px;border-radius:50%;background:conic-gradient(var(--primary) calc(var(--pct,0)*1%),var(--border) 0);display:flex;align-items:center;justify-content:center}
+.ex-level-donut{position:absolute;top:10px;right:10px;width:24px;height:24px;border-radius:50%;background:conic-gradient(var(--primary) calc(var(--pct,0)*1%),var(--border) 0);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;line-height:1;color:var(--gold-dark)}
 .ex-level-donut::before{content:"";position:absolute;inset:3px;border-radius:50%;background:var(--card-bg)}
-.ex-level-donut i{position:relative;font-size:11px;color:var(--gold-dark)}
-.ex-level-donut.is-gold{background:conic-gradient(var(--gold) 0 100%)}
-.ex-level-donut.is-gold::before{background:var(--badge-gold-bg)}
+.ex-level-donut span{position:relative}
+.ex-level-donut.is-gold{background:linear-gradient(135deg,#c9860a,#ffe29a)}
+.ex-level-donut.is-gold::before{background:transparent}
+.ex-level-donut.is-gold span{color:#3a2c0d}
 .ex-cat-card.active .ex-level-donut::before{background:var(--primary)}
+.ex-cat-card.active .ex-level-donut.is-gold::before{background:transparent}
+
+/* nivel superado: contorno degradado y animado, distinto del dorado plano que ya usan
+   el aviso de examen y el post-it, para que se lea como un logro especial */
+.ex-level-card.is-level-passed{
+  border:3px solid transparent;
+  border-radius:12px;
+  background:
+    linear-gradient(var(--card-bg),var(--card-bg)) padding-box,
+    linear-gradient(120deg,#b8790a,#f2ab27,#ffe9b0,#f2ab27,#b8790a) border-box;
+  background-size:100% 100%,300% 300%;
+  animation:ex-gold-shimmer 5s ease-in-out infinite;
+}
+.ex-level-card.is-level-passed.active{
+  background:
+    linear-gradient(var(--primary),var(--primary)) padding-box,
+    linear-gradient(120deg,#b8790a,#f2ab27,#ffe9b0,#f2ab27,#b8790a) border-box;
+  background-size:100% 100%,300% 300%;
+}
+.ex-level-card.is-level-passed .ex-level-code{color:var(--gold-dark)}
+.ex-level-card.is-level-passed.active .ex-level-code{color:#fff}
+@keyframes ex-gold-shimmer{
+  0%,100%{background-position:0 0,0% 50%}
+  50%{background-position:0 0,100% 50%}
+}
+@media(prefers-reduced-motion:reduce){
+  .ex-level-card.is-level-passed{animation:none;background-position:0 0,50% 50%}
+}
+
+/* timeline general A1-C1: alineado en las mismas columnas que las tarjetas de arriba */
+.ex-level-timeline{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin:0 0 16px}
+.ex-timeline-cell{position:relative;height:14px;display:flex;align-items:center;justify-content:center}
+.ex-timeline-line-in{position:absolute;right:50%;width:calc(100% + 10px);height:3px;background:var(--border)}
+.ex-timeline-line-in.is-filled{background:linear-gradient(90deg,#b8790a,#f2ab27)}
+.ex-timeline-dot{position:relative;width:14px;height:14px;border-radius:50%;background:var(--card-bg);border:2px solid var(--border);flex-shrink:0;transition:.15s}
+.ex-timeline-dot.is-passed{background:linear-gradient(135deg,#b8790a,#ffe29a);border-color:#b8790a}
+.ex-timeline-dot.is-next{border-color:var(--primary);background:var(--card-bg);width:16px;height:16px}
 
 .ex-exam-cta-card{display:flex;align-items:center;justify-content:space-between;gap:18px;flex-wrap:wrap;background:var(--badge-gold-bg);border:1px solid var(--gold);border-radius:14px;padding:18px 22px;margin:4px 0 18px}
 .ex-exam-cta-text h4{margin:0 0 4px;font-size:16.5px;font-family:var(--font-head);color:var(--gold-dark)}
@@ -254,6 +294,13 @@ footer{text-align:center;padding:30px;color:var(--muted);border-top:1px solid va
 .ex-exam-progress-label{font-size:13px;font-weight:700;color:var(--muted);white-space:nowrap;font-variant-numeric:tabular-nums}
 
 .ex-exam-item .exercise-prompt{font-size:18px;font-weight:600;margin-bottom:14px}
+.ex-exam-input{flex:1;min-width:160px;padding:10px 14px;border:1px solid var(--border);border-radius:10px;font-size:15.5px;font-family:var(--font-body);color:var(--text);background:var(--card-bg)}
+.ex-exam-input:focus{outline:none;border-color:var(--primary)}
+.ex-exam-check,.ex-exam-order-check{padding:10px 18px;border-radius:10px;border:none;background:var(--primary);color:#fff;font-weight:600;font-family:var(--font-head);cursor:pointer;font-size:15px}
+.ex-exam-check:hover,.ex-exam-order-check:hover{background:var(--primary-dark)}
+.ex-exam-order-reset{padding:10px 18px;border-radius:10px;border:1px solid var(--border);background:var(--card-bg);color:var(--muted);font-weight:600;font-family:var(--font-head);cursor:pointer;font-size:15px}
+.ex-exam-order-reset:hover{border-color:var(--primary);color:var(--primary)}
+.ex-exam-input:disabled,.ex-exam-check:disabled,.ex-exam-order-check:disabled,.ex-exam-order-reset:disabled{opacity:.6;cursor:default}
 .ex-exam-feedback{margin-top:12px;font-weight:700;font-size:15px;min-height:20px}
 .ex-exam-feedback.correct{color:#1c6b32}
 .ex-exam-feedback.incorrect{color:#a3302d}
