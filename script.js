@@ -614,7 +614,6 @@ a.closest(".menu-item").classList.add("active","current-section");
   const examProgressFill = document.getElementById('ex-exam-progress-fill');
   const examProgressLabel = document.getElementById('ex-exam-progress-label');
   const examExitBtn = document.getElementById('ex-exam-exit');
-  const examConcludeBtn = document.getElementById('ex-exam-conclude');
   const examOverlay = document.getElementById('ex-exam-overlay');
   const globalCounterEl = document.getElementById('ex-global-counter');
   const levelPracticeSublabel = document.getElementById('ex-level-practice-sublabel');
@@ -891,13 +890,23 @@ ${qHTML}`;
     if(levelExamStep){
       levelExamStep.style.display = '';
       if(examCtaTitle) examCtaTitle.textContent = (cfg.labels.examTitle || 'Examen de nivel') + ' ' + level;
-      if(examCtaDesc) examCtaDesc.textContent = cfg.labels.examDesc || '';
+      const pending = getPendingExams()[level];
+      if(examCtaDesc){
+        examCtaDesc.textContent = pending
+          ? (cfg.labels.examPendingDesc || '').replace('{correct}', pending.correctCount).replace('{total}', pending.total)
+          : (cfg.labels.examDesc || '');
+      }
+      if(examStartBtn){
+        const label = pending ? (cfg.labels.examContinueBtnLabel || '') : (cfg.labels.examStartBtnLabel || '');
+        examStartBtn.innerHTML = `<i class="ti ti-trophy" aria-hidden="true"></i> ${label}`;
+      }
     }
     if(levelPracticeSublabel) levelPracticeSublabel.textContent = cfg.labels.examOrPractice || '';
   }
 
   // ---- examen de nivel: recorre todas las materias del nivel, exige 90% acumulado ----
   const LEVEL_STATUS_KEY = 'jn_level_status_' + cfg.lang;
+  const EXAM_PENDING_KEY = 'jn_exam_pending_' + cfg.lang;
   let examState = null;
 
   function getLevelStatus(){
@@ -907,6 +916,34 @@ ${qHTML}`;
     const all = getLevelStatus();
     all[level] = data;
     localStorage.setItem(LEVEL_STATUS_KEY, JSON.stringify(all));
+  }
+
+  // intento de examen sin terminar: se guarda al salir o al fallar una ronda,
+  // para poder ofrecer "sigue donde lo dejaste" aunque vuelvas días después
+  function getPendingExams(){
+    try { return JSON.parse(localStorage.getItem(EXAM_PENDING_KEY) || '{}'); } catch(e){ return {}; }
+  }
+  function savePendingExam(level, data){
+    const all = getPendingExams();
+    all[level] = data;
+    localStorage.setItem(EXAM_PENDING_KEY, JSON.stringify(all));
+  }
+  function clearPendingExam(level){
+    const all = getPendingExams();
+    delete all[level];
+    localStorage.setItem(EXAM_PENDING_KEY, JSON.stringify(all));
+  }
+  function stripItemForStorage(item){
+    const out = { type: item.type, level: item.level, answer: item.answer, prompt: item.prompt };
+    if(item.options) out.options = item.options;
+    if(item.words) out.words = item.words;
+    if(item.pairs) out.pairs = item.pairs;
+    if(item.hint) out.hint = item.hint;
+    if(item._topicKey) out._topicKey = item._topicKey;
+    return out;
+  }
+  function rehydrateStoredItem(it){
+    return Object.assign({}, it, { _cat: topicToCat[it._topicKey], _examId: uid() });
   }
 
   function renderLevelDonuts(){
@@ -957,6 +994,7 @@ ${qHTML}`;
       total: pool.length,
       passThreshold: Math.ceil(pool.length * 0.9),
       correct: new Set(),
+      correctCountBase: 0,
       queue: pool,
       idx: 0,
       wrongThisRound: []
@@ -964,6 +1002,59 @@ ${qHTML}`;
     if(panelNivel) panelNivel.style.display = 'none';
     if(examRunner) examRunner.style.display = '';
     renderExamQuestion();
+  }
+
+  function resumeExam(level, pending){
+    examState = {
+      level,
+      total: pending.total,
+      passThreshold: Math.ceil(pending.total * 0.9),
+      correct: new Set(),
+      correctCountBase: pending.correctCount,
+      queue: pending.items.map(rehydrateStoredItem),
+      idx: 0,
+      wrongThisRound: []
+    };
+    if(panelNivel) panelNivel.style.display = 'none';
+    if(examRunner) examRunner.style.display = '';
+    renderExamQuestion();
+  }
+
+  function currentCorrectTotal(){
+    return (examState.correctCountBase || 0) + examState.correct.size;
+  }
+
+  function maybeStartExam(level){
+    const pending = getPendingExams()[level];
+    if(pending && pending.items && pending.items.length){
+      showResumeDialog(level, pending);
+    } else {
+      startExam(level);
+    }
+  }
+
+  function showResumeDialog(level, pending){
+    if(!examOverlay) return;
+    examOverlay.innerHTML = `<div class="ex-exam-dialog">
+<i class="ti ti-refresh-alert ex-exam-dialog-icon" aria-hidden="true"></i>
+<h3>${(cfg.labels.examResumeTitle || '').replace('{level}', level)}</h3>
+<p>${(cfg.labels.examResumeBody || '').replace('{correct}', pending.correctCount).replace('{total}', pending.total)}</p>
+<div class="ex-exam-dialog-actions">
+<button class="ex-exam-btn primary" id="ex-exam-resume-continue">${cfg.labels.examRetryErrors || ''}</button>
+<button class="ex-exam-btn ghost" id="ex-exam-resume-restart">${cfg.labels.examRestart || ''}</button>
+</div></div>`;
+    examOverlay.style.display = '';
+    const continueBtn = document.getElementById('ex-exam-resume-continue');
+    const restartBtn = document.getElementById('ex-exam-resume-restart');
+    if(continueBtn) continueBtn.addEventListener('click', () => {
+      examOverlay.style.display = 'none';
+      resumeExam(level, pending);
+    });
+    if(restartBtn) restartBtn.addEventListener('click', () => {
+      clearPendingExam(level);
+      examOverlay.style.display = 'none';
+      startExam(level);
+    });
   }
 
   function endExam(backToLevels){
@@ -1037,7 +1128,7 @@ ${qHTML}`;
       const delay = ok ? 900 : 1700;
       setTimeout(() => {
         if(!examState) return;
-        if(examState.correct.size >= examState.passThreshold){
+        if(currentCorrectTotal() >= examState.passThreshold){
           passExam();
         } else {
           examState.idx++;
@@ -1139,30 +1230,49 @@ ${qHTML}`;
     bindExamItem(item);
   }
 
-  function finishRound(){
-    const correctCount = examState.correct.size;
-    const total = examState.total;
-    const pct = Math.round((correctCount / total) * 100);
-    const prevBest = (getLevelStatus()[examState.level] || {}).bestPct || 0;
-    const attempts = ((getLevelStatus()[examState.level] || {}).attempts || 0) + 1;
-    saveLevelStatus(examState.level, { passed: false, bestPct: Math.max(pct, prevBest), attempts });
-    showFailDialog(correctCount, total);
+  // recopila lo que falta por dominar (fallado + sin contestar) para poder guardarlo como pendiente
+  function computeStopSummary(){
+    const remaining = examState.queue.slice(examState.idx);
+    const pendingItems = examState.wrongThisRound.concat(remaining);
+    return { pendingItems, correctCount: currentCorrectTotal(), total: examState.total };
   }
 
-  function concludeExam(){
+  function persistStopState(summary){
+    const level = examState.level;
+    const prevBest = (getLevelStatus()[level] || {}).bestPct || 0;
+    const pct = Math.round((summary.correctCount / summary.total) * 100);
+    const attempts = ((getLevelStatus()[level] || {}).attempts || 0) + 1;
+    saveLevelStatus(level, { passed: false, bestPct: Math.max(pct, prevBest), attempts });
+    if(summary.pendingItems.length){
+      savePendingExam(level, {
+        total: summary.total,
+        correctCount: summary.correctCount,
+        items: summary.pendingItems.map(stripItemForStorage),
+        savedAt: Date.now()
+      });
+    } else {
+      clearPendingExam(level);
+    }
+  }
+
+  // se sale del examen (botón salir o navegar fuera) sin terminar: se guarda en silencio, sin diálogo
+  function silentStop(){
     if(!examState) return;
-    if(!window.confirm(cfg.labels.examConcludeConfirm || '')) return;
-    const remaining = examState.queue.slice(examState.idx);
-    examState.wrongThisRound = examState.wrongThisRound.concat(remaining);
-    examState.idx = examState.queue.length;
-    finishRound();
+    persistStopState(computeStopSummary());
+  }
+
+  function finishRound(){
+    const summary = computeStopSummary();
+    persistStopState(summary);
+    showFailDialog(summary.correctCount, summary.total);
   }
 
   function passExam(){
-    const correctCount = examState.correct.size;
+    const correctCount = currentCorrectTotal();
     const total = examState.total;
     const attempts = ((getLevelStatus()[examState.level] || {}).attempts || 0) + 1;
     saveLevelStatus(examState.level, { passed: true, bestPct: 100, attempts });
+    clearPendingExam(examState.level);
     showPassDialog(correctCount, total);
   }
 
@@ -1208,18 +1318,13 @@ ${qHTML}`;
     if(backBtn) backBtn.addEventListener('click', () => endExam(true));
   }
 
-  if(examStartBtn) examStartBtn.addEventListener('click', () => { if(activeLevel) startExam(activeLevel); });
+  if(examStartBtn) examStartBtn.addEventListener('click', () => { if(activeLevel) maybeStartExam(activeLevel); });
   if(examExitBtn) examExitBtn.addEventListener('click', () => {
-    if(!examState || window.confirm(cfg.labels.examExitConfirm || '')) endExam(true);
+    silentStop();
+    endExam(true);
   });
-  if(examConcludeBtn) examConcludeBtn.addEventListener('click', concludeExam);
 
-  window.addEventListener('beforeunload', function(e){
-    if(examState){
-      e.preventDefault();
-      e.returnValue = '';
-    }
-  });
+  window.addEventListener('pagehide', silentStop);
 
   catBtns.forEach(btn => {
     btn.addEventListener('click', () => selectCategory(btn.dataset.cat));
