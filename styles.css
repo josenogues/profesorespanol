@@ -235,25 +235,47 @@ footer{text-align:center;padding:30px;color:var(--muted);border-top:1px solid va
 .ex-level-donut{position:absolute;top:10px;right:10px;width:24px;height:24px;border-radius:50%;background:conic-gradient(var(--primary) calc(var(--pct,0)*1%),var(--border) 0);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;line-height:1;color:var(--gold-dark)}
 .ex-level-donut::before{content:"";position:absolute;inset:3px;border-radius:50%;background:var(--card-bg)}
 .ex-level-donut span{position:relative}
-.ex-level-donut.is-gold{background:var(--gold)}
+.ex-level-donut.is-gold{background:linear-gradient(135deg,#c9860a,#ffe29a)}
 .ex-level-donut.is-gold::before{background:transparent}
 .ex-level-donut.is-gold span{color:#3a2c0d}
 .ex-cat-card.active .ex-level-donut::before{background:var(--primary)}
 .ex-cat-card.active .ex-level-donut.is-gold::before{background:transparent}
 
-/* nivel superado: la tarjeta entera se marca en dorado, no solo el anillo */
-.ex-level-card.is-level-passed{box-shadow:0 0 0 3px var(--gold);border-color:var(--gold)}
-.ex-level-card.is-level-passed:not(.active){background:var(--badge-gold-bg)}
+/* nivel superado: contorno degradado y animado, distinto del dorado plano que ya usan
+   el aviso de examen y el post-it, para que se lea como un logro especial */
+.ex-level-card.is-level-passed{
+  border:3px solid transparent;
+  border-radius:12px;
+  background:
+    linear-gradient(var(--card-bg),var(--card-bg)) padding-box,
+    linear-gradient(120deg,#b8790a,#f2ab27,#ffe9b0,#f2ab27,#b8790a) border-box;
+  background-size:100% 100%,300% 300%;
+  animation:ex-gold-shimmer 5s ease-in-out infinite;
+}
+.ex-level-card.is-level-passed.active{
+  background:
+    linear-gradient(var(--primary),var(--primary)) padding-box,
+    linear-gradient(120deg,#b8790a,#f2ab27,#ffe9b0,#f2ab27,#b8790a) border-box;
+  background-size:100% 100%,300% 300%;
+}
 .ex-level-card.is-level-passed .ex-level-code{color:var(--gold-dark)}
 .ex-level-card.is-level-passed.active .ex-level-code{color:#fff}
+@keyframes ex-gold-shimmer{
+  0%,100%{background-position:0 0,0% 50%}
+  50%{background-position:0 0,100% 50%}
+}
+@media(prefers-reduced-motion:reduce){
+  .ex-level-card.is-level-passed{animation:none;background-position:0 0,50% 50%}
+}
 
-.ex-level-timeline{display:flex;align-items:center;margin:2px 0 20px}
-.ex-timeline-node{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--font-head);font-weight:800;font-size:11.5px;color:var(--muted);background:var(--card-bg);border:2px solid var(--border);flex-shrink:0;transition:.15s}
-.ex-timeline-node.is-passed{background:var(--gold);border-color:var(--gold);color:#3a2c0d}
-.ex-timeline-node.is-next{border-color:var(--primary);color:var(--primary-dark)}
-.ex-timeline-line{flex:1;height:3px;background:var(--border);margin:0 -1px}
-.ex-timeline-line.is-filled{background:var(--gold)}
-@media(max-width:480px){.ex-timeline-node{width:26px;height:26px;font-size:10px}}
+/* timeline general A1-C1: alineado en las mismas columnas que las tarjetas de arriba */
+.ex-level-timeline{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin:0 0 16px}
+.ex-timeline-cell{position:relative;height:14px;display:flex;align-items:center;justify-content:center}
+.ex-timeline-line-in{position:absolute;right:50%;width:calc(100% + 10px);height:3px;background:var(--border)}
+.ex-timeline-line-in.is-filled{background:linear-gradient(90deg,#b8790a,#f2ab27)}
+.ex-timeline-dot{position:relative;width:14px;height:14px;border-radius:50%;background:var(--card-bg);border:2px solid var(--border);flex-shrink:0;transition:.15s}
+.ex-timeline-dot.is-passed{background:linear-gradient(135deg,#b8790a,#ffe29a);border-color:#b8790a}
+.ex-timeline-dot.is-next{border-color:var(--primary);background:var(--card-bg);width:16px;height:16px}
 
 .ex-exam-cta-card{display:flex;align-items:center;justify-content:space-between;gap:18px;flex-wrap:wrap;background:var(--badge-gold-bg);border:1px solid var(--gold);border-radius:14px;padding:18px 22px;margin:4px 0 18px}
 .ex-exam-cta-text h4{margin:0 0 4px;font-size:16.5px;font-family:var(--font-head);color:var(--gold-dark)}

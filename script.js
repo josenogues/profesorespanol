@@ -972,9 +972,9 @@ ${qHTML}`;
     timelineEl.innerHTML = levels.map((lv, i) => {
       const passed = passedFlags[i];
       const isNext = !passed && i === nextIdx;
-      const connector = i > 0 ? `<span class="ex-timeline-line${passedFlags[i - 1] ? ' is-filled' : ''}"></span>` : '';
-      const nodeClass = 'ex-timeline-node' + (passed ? ' is-passed' : '') + (isNext ? ' is-next' : '');
-      return `${connector}<span class="${nodeClass}" title="${lv}">${passed ? '&#10003;' : lv}</span>`;
+      const line = i > 0 ? `<span class="ex-timeline-line-in${passedFlags[i - 1] ? ' is-filled' : ''}"></span>` : '';
+      const dotClass = 'ex-timeline-dot' + (passed ? ' is-passed' : '') + (isNext ? ' is-next' : '');
+      return `<div class="ex-timeline-cell" title="${lv}">${line}<span class="${dotClass}"></span></div>`;
     }).join('');
   }
 
