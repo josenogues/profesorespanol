@@ -141,6 +141,8 @@ footer{text-align:center;padding:30px;color:var(--muted);border-top:1px solid va
 .exercise-block.is-done .exercise-done-badge{display:inline}
 .exercise-prompt{font-size:16.5px;margin-bottom:12px;font-weight:600}
 .exercise-row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.exercise-row.exercise-row-fill{flex-direction:column;align-items:stretch;flex-wrap:nowrap}
+.exercise-row.exercise-row-fill .exercise-input,.exercise-row.exercise-row-fill .ex-exam-input{flex:none}
 .exercise-input{flex:1;min-width:160px;padding:10px 14px;border:1px solid var(--border);border-radius:10px;font-size:15.5px;font-family:var(--font-body);color:var(--text);background:var(--card-bg)}
 .exercise-input:focus{outline:none;border-color:var(--primary)}
 .exercise-check{padding:10px 18px;border-radius:10px;border:none;background:var(--primary);color:#fff;font-weight:600;font-family:var(--font-head);cursor:pointer;font-size:15px}
