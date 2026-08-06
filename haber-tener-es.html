@@ -140,11 +140,14 @@
 <button class="group-btn" data-group="compuestos">Tiempos compuestos</button>
 </div>
 <div class="tabs" data-group="simples">
-<button class="tab-btn active" data-tab="h-ind">Indicativo</button>
-<button class="tab-btn" data-tab="h-subj">Subjuntivo</button>
+<button class="tab-btn active" data-tab="h-ind">Haber · Indicativo</button>
+<button class="tab-btn" data-tab="h-subj">Haber · Subjuntivo</button>
+<button class="tab-btn" data-tab="t-ind">Tener · Indicativo</button>
+<button class="tab-btn" data-tab="t-subj">Tener · Subjuntivo</button>
 </div>
 <div class="tabs" data-group="compuestos" style="display:none">
-<button class="tab-btn" data-tab="h-indcomp">Indicativo</button>
+<button class="tab-btn" data-tab="h-indcomp">Haber · Indicativo</button>
+<button class="tab-btn" data-tab="t-indcomp">Tener · Indicativo</button>
 </div>
 <div class="tab-panel active" id="h-ind">
 <div class="table-wrap"><table>
@@ -173,6 +176,33 @@
 <div class="tip-box">El futuro de subjuntivo se usa raramente en el español moderno hablado, y aparece casi exclusivamente en textos jurídicos o literarios antiguos.</div>
 </div>
 
+<div class="tab-panel" id="t-ind">
+<div class="table-wrap"><table>
+<thead><tr><th>Pronombre</th><th>Presente</th><th>Pretérito Perfecto Simple</th><th>Pretérito Imperfecto</th><th>Futuro Simple</th><th>Condicional Simple</th></tr></thead>
+<tbody>
+<tr><td>Yo</td><td>tengo (ho)</td><td>tuve (ebbi)</td><td>tenía (avevo)</td><td>tendré (avrò)</td><td>tendría (avrei)</td></tr>
+<tr><td>Tú</td><td>tienes (hai)</td><td>tuviste (avesti)</td><td>tenías (avevi)</td><td>tendrás (avrai)</td><td>tendrías (avresti)</td></tr>
+<tr><td>Él / Ella</td><td>tiene (ha)</td><td>tuvo (ebbe)</td><td>tenía (aveva)</td><td>tendrá (avrà)</td><td>tendría (avrebbe)</td></tr>
+<tr><td>Nosotros / -as</td><td>tenemos (abbiamo)</td><td>tuvimos (avemmo)</td><td>teníamos (avevamo)</td><td>tendremos (avremo)</td><td>tendríamos (avremmo)</td></tr>
+<tr><td>Vosotros / -as</td><td>tenéis (avete)</td><td>tuvisteis (aveste)</td><td>teníais (avevate)</td><td>tendréis (avrete)</td><td>tendríais (avreste)</td></tr>
+<tr><td>Ellos / Ellas</td><td>tienen (hanno)</td><td>tuvieron (ebbero)</td><td>tenían (avevano)</td><td>tendrán (avranno)</td><td>tendrían (avrebbero)</td></tr>
+</tbody></table></div>
+<div class="tip-box">"Tener" es el verbo de posesión más común, pero nunca se usa como auxiliar de los tiempos compuestos — ese papel es solo de "haber".</div>
+</div>
+<div class="tab-panel" id="t-subj">
+<div class="table-wrap"><table>
+<thead><tr><th>Pronombre</th><th>Presente</th><th>Pretérito Imperfecto</th><th>Futuro Simple</th></tr></thead>
+<tbody>
+<tr><td>Yo</td><td>tenga (abbia)</td><td>tuviera / tuviese (avessi)</td><td>tuviere (avrò avuto)</td></tr>
+<tr><td>Tú</td><td>tengas (abbia)</td><td>tuvieras / tuvieses (avessi)</td><td>tuvieres (avrai avuto)</td></tr>
+<tr><td>Él / Ella</td><td>tenga (abbia)</td><td>tuviera / tuviese (avesse)</td><td>tuviere (avrà avuto)</td></tr>
+<tr><td>Nosotros / -as</td><td>tengamos (abbiamo)</td><td>tuviéramos / tuviésemos (avessimo)</td><td>tuviéremos (avremo avuto)</td></tr>
+<tr><td>Vosotros / -as</td><td>tengáis (abbiate)</td><td>tuvierais / tuvieseis (aveste)</td><td>tuviereis (avrete avuto)</td></tr>
+<tr><td>Ellos / Ellas</td><td>tengan (abbiano)</td><td>tuvieran / tuviesen (avessero)</td><td>tuvieren (avranno avuto)</td></tr>
+</tbody></table></div>
+<div class="tip-box">Igual que con "haber", el futuro de subjuntivo de "tener" es prácticamente inexistente en el español hablado actual.</div>
+</div>
+
 <div class="tab-panel" id="h-indcomp">
 <div class="table-wrap"><table>
 <thead><tr><th>Pronombre</th><th>Pret. perf. compuesto</th><th>Pluscuamperfecto</th><th>Pret. anterior</th><th>Futuro compuesto</th><th>Condicional compuesto</th></tr></thead>
@@ -185,6 +215,20 @@
 <tr><td>Ellos / Ellas</td><td>han habido</td><td>habían habido</td><td>hubieron habido</td><td>habrán habido</td><td>habrían habido</td></tr>
 </tbody></table></div>
 <div class="tip-box"><i class="ti ti-alert-triangle"></i> Estas formas existen, pero casi nunca se usan en la práctica — <b>haber</b> se usa sobre todo como auxiliar, no en sus propios tiempos compuestos.</div>
+</div>
+
+<div class="tab-panel" id="t-indcomp">
+<div class="table-wrap"><table>
+<thead><tr><th>Pronombre</th><th>Pret. perf. compuesto</th><th>Pluscuamperfecto</th><th>Pret. anterior</th><th>Futuro compuesto</th><th>Condicional compuesto</th></tr></thead>
+<tbody>
+<tr><td>Yo</td><td>he tenido</td><td>había tenido</td><td>hube tenido</td><td>habré tenido</td><td>habría tenido</td></tr>
+<tr><td>Tú</td><td>has tenido</td><td>habías tenido</td><td>hubiste tenido</td><td>habrás tenido</td><td>habrías tenido</td></tr>
+<tr><td>Él / Ella</td><td>ha tenido</td><td>había tenido</td><td>hubo tenido</td><td>habrá tenido</td><td>habría tenido</td></tr>
+<tr><td>Nosotros / -as</td><td>hemos tenido</td><td>habíamos tenido</td><td>hubimos tenido</td><td>habremos tenido</td><td>habríamos tenido</td></tr>
+<tr><td>Vosotros / -as</td><td>habéis tenido</td><td>habíais tenido</td><td>hubisteis tenido</td><td>habréis tenido</td><td>habríais tenido</td></tr>
+<tr><td>Ellos / Ellas</td><td>han tenido</td><td>habían tenido</td><td>hubieron tenido</td><td>habrán tenido</td><td>habrían tenido</td></tr>
+</tbody></table></div>
+<div class="tip-box"><i class="ti ti-alert-triangle"></i> Estas formas compuestas de "tener" existen pero son poco frecuentes en el uso cotidiano; lo habitual es usar "tener" en sus tiempos simples.</div>
 </div>
 
 <div class="ex-cta"><a href="ejercicios-es.html?tema=haber-tener" class="button button-primary"><i class="ti ti-pencil"></i> Ponte a prueba con ejercicios</a></div>
