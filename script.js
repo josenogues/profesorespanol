@@ -175,6 +175,8 @@ a.closest(".menu-item").classList.add("active","current-section");
     const n = window.jnGetExerciseCount() + 1;
     localStorage.setItem(COUNTER_KEY, String(n));
     document.dispatchEvent(new CustomEvent('jn-counter-updated', { detail: { count: n } }));
+    const email = localStorage.getItem('jn_student_email');
+    if(email && window.jnCloudSetFields) window.jnCloudSetFields(email, { exerciseCount: n }).catch(() => {});
     return n;
   };
 
@@ -566,6 +568,7 @@ a.closest(".menu-item").classList.add("active","current-section");
         const emails = csv.split('\n').map(line => line.split(',')[0].trim().toLowerCase()).filter(Boolean);
         if(emails.includes(email)){
           localStorage.setItem(ACCESS_KEY, 'true');
+          localStorage.setItem('jn_student_email', email);
           document.body.removeChild(overlay);
         } else {
           errorEl.textContent = 'Ese email no está en la lista. Escribe a José si crees que es un error.';
@@ -900,6 +903,19 @@ ${qHTML}`;
     }
   }
 
+  function updateExamCta(level){
+    const pending = getPendingExams()[level];
+    if(examCtaDesc){
+      examCtaDesc.textContent = pending
+        ? (cfg.labels.examPendingDesc || '').replace('{correct}', pending.correctCount).replace('{total}', pending.total)
+        : (cfg.labels.examDesc || '');
+    }
+    if(examStartBtn){
+      const label = pending ? (cfg.labels.examContinueBtnLabel || '') : (cfg.labels.examStartBtnLabel || '');
+      examStartBtn.innerHTML = `<i class="ti ti-trophy" aria-hidden="true"></i> ${label}`;
+    }
+  }
+
   function selectLevel(level){
     mixMode = false;
     activeCategory = null;
@@ -915,16 +931,10 @@ ${qHTML}`;
     if(levelExamStep){
       levelExamStep.style.display = '';
       if(examCtaTitle) examCtaTitle.textContent = (cfg.labels.examTitle || 'Examen de nivel') + ' ' + level;
-      const pending = getPendingExams()[level];
-      if(examCtaDesc){
-        examCtaDesc.textContent = pending
-          ? (cfg.labels.examPendingDesc || '').replace('{correct}', pending.correctCount).replace('{total}', pending.total)
-          : (cfg.labels.examDesc || '');
-      }
-      if(examStartBtn){
-        const label = pending ? (cfg.labels.examContinueBtnLabel || '') : (cfg.labels.examStartBtnLabel || '');
-        examStartBtn.innerHTML = `<i class="ti ti-trophy" aria-hidden="true"></i> ${label}`;
-      }
+      updateExamCta(level);
+      // si la nube tarda un poco en responder, esto refresca el botón (p. ej.
+      // "Empezar" -> "Continuar") en cuanto llegue, sin bloquear el resto
+      cloudSyncPromise.then(() => { if(activeLevel === level) updateExamCta(level); });
     }
     if(levelPracticeSublabel) levelPracticeSublabel.textContent = cfg.labels.examOrPractice || '';
   }
@@ -934,6 +944,61 @@ ${qHTML}`;
   const EXAM_PENDING_KEY = 'jn_exam_pending_' + cfg.lang;
   let examState = null;
 
+  function getStudentEmail(){
+    return localStorage.getItem('jn_student_email');
+  }
+
+  // Una vez por carga de página: si hay email (puerta de acceso) y Firebase
+  // responde, trae de la nube lo que falte en este dispositivo (examen a
+  // medias, niveles superados, contador) sin pisar nunca progreso local más
+  // avanzado. Si Firebase no está disponible, no hace nada — todo sigue
+  // funcionando con localStorage como hasta ahora.
+  const cloudSyncPromise = (async function(){
+    const email = getStudentEmail();
+    if(!email || !window.jnCloudGetStudentDoc) return;
+    try {
+      const cloud = await window.jnCloudGetStudentDoc(email);
+      if(!cloud) return;
+
+      if(cloud.examPending && cloud.examPending[cfg.lang]){
+        const local = getPendingExams();
+        let changed = false;
+        Object.keys(cloud.examPending[cfg.lang]).forEach(level => {
+          if(!local[level]){ local[level] = cloud.examPending[cfg.lang][level]; changed = true; }
+        });
+        if(changed) localStorage.setItem(EXAM_PENDING_KEY, JSON.stringify(local));
+      }
+
+      if(cloud.levelStatus && cloud.levelStatus[cfg.lang]){
+        const local = getLevelStatus();
+        let changed = false;
+        Object.keys(cloud.levelStatus[cfg.lang]).forEach(level => {
+          const c = cloud.levelStatus[cfg.lang][level];
+          const l = local[level];
+          const better = !l || (c.passed && !l.passed) ||
+            (!!c.passed === !!l.passed && ((c.bestPct || 0) > (l.bestPct || 0) || (c.attempts || 0) > (l.attempts || 0)));
+          if(better){
+            local[level] = {
+              passed: (l && l.passed) || !!c.passed,
+              bestPct: Math.max((l && l.bestPct) || 0, c.bestPct || 0),
+              attempts: Math.max((l && l.attempts) || 0, c.attempts || 0)
+            };
+            changed = true;
+          }
+        });
+        if(changed) localStorage.setItem(LEVEL_STATUS_KEY, JSON.stringify(local));
+      }
+
+      if(typeof cloud.exerciseCount === 'number' && window.jnGetExerciseCount){
+        const localCount = window.jnGetExerciseCount();
+        if(cloud.exerciseCount > localCount){
+          localStorage.setItem('jn_total_done', String(cloud.exerciseCount));
+          document.dispatchEvent(new CustomEvent('jn-counter-updated', { detail: { count: cloud.exerciseCount } }));
+        }
+      }
+    } catch(e) { /* sin conexión a Firebase: seguimos solo con localStorage */ }
+  })();
+
   function getLevelStatus(){
     try { return JSON.parse(localStorage.getItem(LEVEL_STATUS_KEY) || '{}'); } catch(e){ return {}; }
   }
@@ -941,6 +1006,10 @@ ${qHTML}`;
     const all = getLevelStatus();
     all[level] = data;
     localStorage.setItem(LEVEL_STATUS_KEY, JSON.stringify(all));
+    const email = getStudentEmail();
+    if(email && window.jnCloudSetFields){
+      window.jnCloudSetFields(email, { ['levelStatus.' + cfg.lang + '.' + level]: data }).catch(() => {});
+    }
   }
 
   // intento de examen sin terminar: se guarda al salir o al fallar una ronda,
@@ -952,11 +1021,19 @@ ${qHTML}`;
     const all = getPendingExams();
     all[level] = data;
     localStorage.setItem(EXAM_PENDING_KEY, JSON.stringify(all));
+    const email = getStudentEmail();
+    if(email && window.jnCloudSetFields){
+      window.jnCloudSetFields(email, { ['examPending.' + cfg.lang + '.' + level]: data }).catch(() => {});
+    }
   }
   function clearPendingExam(level){
     const all = getPendingExams();
     delete all[level];
     localStorage.setItem(EXAM_PENDING_KEY, JSON.stringify(all));
+    const email = getStudentEmail();
+    if(email && window.jnCloudSetFields && window.jnCloudDeleteField){
+      window.jnCloudSetFields(email, { ['examPending.' + cfg.lang + '.' + level]: window.jnCloudDeleteField() }).catch(() => {});
+    }
   }
   function stripItemForStorage(item){
     const out = { type: item.type, level: item.level, answer: item.answer, prompt: item.prompt };
