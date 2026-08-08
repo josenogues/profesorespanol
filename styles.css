@@ -77,7 +77,13 @@ h1,h2,h3,h4,.logo,.button,.tab-btn,.menu-title{font-family:var(--font-head)}
 .grammar-section .eyebrow{display:inline-block;background:var(--tint);color:var(--primary-dark);font-size:12.5px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;padding:5px 12px;border-radius:20px;margin-bottom:14px;font-family:var(--font-body)}
 .grammar-section h2{font-size:27px;margin-bottom:8px;font-weight:700}
 .grammar-section h3{font-size:20px;margin:22px 0 10px;font-weight:600;color:var(--primary-dark)}
-.grammar-section .subtitle{color:var(--muted);margin-bottom:20px;font-size:16.5px;max-width:750px}
+.grammar-section .subtitle{color:var(--muted);margin-bottom:20px;font-size:16.5px}
+
+.topic-toc{background:var(--tint);border:1px solid var(--border);border-radius:14px;padding:16px 20px;margin-bottom:28px}
+.topic-toc-label{display:flex;align-items:center;gap:6px;font-size:13px;font-weight:700;color:var(--primary-dark);text-transform:uppercase;letter-spacing:.03em;margin-bottom:10px}
+.topic-toc-items{display:flex;flex-wrap:wrap;gap:8px}
+.topic-toc-item{display:inline-block;background:var(--card-bg);border:1px solid var(--border);color:var(--primary-dark);font-size:14px;font-weight:600;padding:6px 14px;border-radius:20px;text-decoration:none;transition:transform .1s,box-shadow .1s,border-color .1s,color .1s}
+.topic-toc-item:hover{border-color:var(--primary);color:var(--primary);transform:translateY(-2px);box-shadow:0 4px 10px rgba(58,69,112,.12)}
 
 .table-wrap{overflow-x:auto;border-radius:12px;border:1px solid var(--border);margin-top:22px}
 table{width:100%;border-collapse:collapse;font-size:15.5px}
@@ -399,6 +405,7 @@ h1 .ti,h2 .ti,h3 .ti{margin-right:8px}
 
 .badge-key{display:inline-block;background:var(--badge-gold-bg);color:var(--gold-dark);font-size:11px;font-weight:700;padding:2px 8px;border-radius:20px;margin-left:6px}
 
+.topic-block{scroll-margin-top:20px}
 .attention-page .topic-block{border-left:4px solid var(--gold);padding-left:18px;background:var(--attention-bg);border-radius:0 12px 12px 0;padding-top:18px;padding-bottom:18px;padding-right:18px}
 .attention-page .topic-block h3{color:var(--gold-dark)}
 .attention-page .compare-card{background:var(--card-bg)}
@@ -609,6 +616,25 @@ body[data-category="vocabulario"] .mini-card h4{color:#A15C0E}
 [data-theme="dark"] body[data-category="vocabulario"] .mini-card{background:#2a2013}
 [data-theme="dark"] body[data-category="vocabulario"] .mini-card h4{color:#E8A85C}
 
+/* ---------- Overview de Vocabulario: grid de tarjetas por tema ---------- */
+.vocab-hub-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:16px;margin-top:22px}
+.vocab-hub-card{display:flex;flex-direction:column;gap:8px;background:var(--card-bg);border:1px solid var(--border);border-radius:16px;padding:20px;text-decoration:none;color:inherit;cursor:pointer;transition:transform .15s,box-shadow .15s,border-color .15s}
+.vocab-hub-card:hover{transform:translateY(-4px);box-shadow:0 10px 24px rgba(232,121,30,.18);border-color:#E8791E}
+.vocab-hub-icon{width:46px;height:46px;border-radius:12px;background:#FBEBD9;display:flex;align-items:center;justify-content:center;font-size:21px;color:#A15C0E}
+[data-theme="dark"] .vocab-hub-icon{background:#2a2013;color:#E8A85C}
+.vocab-hub-card h3{font-family:var(--font-head);font-size:17px;font-weight:600;margin:2px 0 0;color:var(--text)}
+.vocab-hub-card p{font-size:14.5px;color:var(--muted);margin:0;flex:1;line-height:1.4}
+.vocab-hub-go{font-size:13.5px;font-weight:700;color:#A15C0E;display:flex;align-items:center;gap:4px}
+.vocab-hub-go i{font-size:15px;transition:transform .15s}
+.vocab-hub-card:hover .vocab-hub-go i{transform:translateX(3px)}
+[data-theme="dark"] .vocab-hub-go{color:#E8A85C}
+@media(max-width:900px){.vocab-hub-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:560px){.vocab-hub-grid{grid-template-columns:1fr}}
+
+/* ---------- Botón "volver al overview" en las páginas de tema de Vocabulario ---------- */
+.vocab-back{display:inline-block;margin:0 0 20px}
+.vocab-back.vocab-back-bottom{margin:28px 0 0}
+
 /* ---------- Chips de vocabulario con audio (días, meses...) ---------- */
 .word-chip-grid{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px}
 .word-chip{display:inline-flex;align-items:center;gap:6px;background:var(--card-bg);border:1px solid var(--border);border-radius:20px;padding:6px 8px 6px 14px;font-size:14px;font-weight:600;color:var(--text)}
@@ -645,7 +671,7 @@ body[data-category="atencion"] .handwritten-title{color:#5B9A3B}
 .verb-map{margin:20px 0 28px;overflow-x:auto}
 .verb-map-intro{font-size:15.5px;color:var(--text);line-height:1.65;margin-bottom:22px}
 .verb-map-section-label{background:var(--primary);color:#fff;text-align:center;padding:11px;font-family:var(--font-head);font-weight:700;font-size:15px;border-radius:12px;margin-bottom:14px}
-.verb-map-modes{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:28px;min-width:960px}
+.verb-map-modes{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:28px;min-width:1060px}
 .verb-map-mode{background:var(--card-bg);display:flex;flex-direction:column;border:1px solid var(--border);border-radius:14px;overflow:hidden;box-shadow:0 2px 6px rgba(0,0,0,.05);min-width:0}
 .verb-map-mode-head{background:var(--primary-dark);color:#fff;text-align:center;padding:10px;font-family:var(--font-head);font-weight:700;font-size:14px}
 .verb-map-cols{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border);flex:1}
@@ -659,7 +685,7 @@ body[data-category="atencion"] .handwritten-title{color:#5B9A3B}
 .verb-map-single p{font-size:13px;color:var(--text);line-height:1.6;margin:0}
 .verb-map-impersonal{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;min-width:760px}
 .verb-map-np-tense{background:var(--card-bg);border:1px solid var(--border);border-radius:14px;box-shadow:0 2px 6px rgba(0,0,0,.05);padding:18px;text-align:center}
-.verb-map-np-tense h5{font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.03em;color:var(--primary);margin:0 0 8px}
+.verb-map-np-tense h5{display:inline-block;font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.03em;margin:0 0 8px;padding:3px 8px;border-radius:6px;background:var(--primary);color:#fff}
 .verb-map-np-tense p{font-size:16px;font-weight:600;margin:0;color:var(--text)}
 @media(max-width:760px){.verb-map-modes,.verb-map-impersonal{min-width:0;grid-template-columns:1fr}}
 @media(max-width:520px){.verb-map-cols{grid-template-columns:1fr}}
