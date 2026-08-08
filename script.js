@@ -532,7 +532,7 @@ a.closest(".menu-item").classList.add("active","current-section");
   // 3) Copia la URL que te da Google y pégala aquí abajo, reemplazando el valor de ejemplo.
   const SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTp3ALVArrf67RDanwYo7f9EA7dxBF3FDmi6qvXeB7MDJn2ApcV4kICTxJ-d-OGX4mz0ibXXELGdZNu/pub?gid=0&single=true&output=csv';
 
-  if(localStorage.getItem(ACCESS_KEY) === 'true') return;
+  if(localStorage.getItem(ACCESS_KEY) === 'true' && localStorage.getItem('jn_student_email')) return;
 
   const overlay = document.createElement('div');
   overlay.className = 'access-gate-overlay';
@@ -1008,7 +1008,7 @@ ${qHTML}`;
     localStorage.setItem(LEVEL_STATUS_KEY, JSON.stringify(all));
     const email = getStudentEmail();
     if(email && window.jnCloudSetFields){
-      window.jnCloudSetFields(email, { ['levelStatus.' + cfg.lang + '.' + level]: data }).catch(() => {});
+      window.jnCloudSetFields(email, { levelStatus: { [cfg.lang]: { [level]: data } } }).catch(() => {});
     }
   }
 
@@ -1023,7 +1023,7 @@ ${qHTML}`;
     localStorage.setItem(EXAM_PENDING_KEY, JSON.stringify(all));
     const email = getStudentEmail();
     if(email && window.jnCloudSetFields){
-      window.jnCloudSetFields(email, { ['examPending.' + cfg.lang + '.' + level]: data }).catch(() => {});
+      window.jnCloudSetFields(email, { examPending: { [cfg.lang]: { [level]: data } } }).catch(() => {});
     }
   }
   function clearPendingExam(level){
@@ -1032,7 +1032,7 @@ ${qHTML}`;
     localStorage.setItem(EXAM_PENDING_KEY, JSON.stringify(all));
     const email = getStudentEmail();
     if(email && window.jnCloudSetFields && window.jnCloudDeleteField){
-      window.jnCloudSetFields(email, { ['examPending.' + cfg.lang + '.' + level]: window.jnCloudDeleteField() }).catch(() => {});
+      window.jnCloudSetFields(email, { examPending: { [cfg.lang]: { [level]: window.jnCloudDeleteField() } } }).catch(() => {});
     }
   }
   function stripItemForStorage(item){
