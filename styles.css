@@ -645,7 +645,7 @@ body[data-category="atencion"] .handwritten-title{color:#5B9A3B}
 .verb-map{margin:20px 0 28px;overflow-x:auto}
 .verb-map-intro{font-size:15.5px;color:var(--text);line-height:1.65;margin-bottom:22px}
 .verb-map-section-label{background:var(--primary);color:#fff;text-align:center;padding:11px;font-family:var(--font-head);font-weight:700;font-size:15px;border-radius:12px;margin-bottom:14px}
-.verb-map-modes{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:28px;min-width:960px}
+.verb-map-modes{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:28px;min-width:1060px}
 .verb-map-mode{background:var(--card-bg);display:flex;flex-direction:column;border:1px solid var(--border);border-radius:14px;overflow:hidden;box-shadow:0 2px 6px rgba(0,0,0,.05);min-width:0}
 .verb-map-mode-head{background:var(--primary-dark);color:#fff;text-align:center;padding:10px;font-family:var(--font-head);font-weight:700;font-size:14px}
 .verb-map-cols{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border);flex:1}
@@ -659,7 +659,7 @@ body[data-category="atencion"] .handwritten-title{color:#5B9A3B}
 .verb-map-single p{font-size:13px;color:var(--text);line-height:1.6;margin:0}
 .verb-map-impersonal{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;min-width:760px}
 .verb-map-np-tense{background:var(--card-bg);border:1px solid var(--border);border-radius:14px;box-shadow:0 2px 6px rgba(0,0,0,.05);padding:18px;text-align:center}
-.verb-map-np-tense h5{font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.03em;color:var(--primary);margin:0 0 8px}
+.verb-map-np-tense h5{display:inline-block;font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.03em;margin:0 0 8px;padding:3px 8px;border-radius:6px;background:var(--primary);color:#fff}
 .verb-map-np-tense p{font-size:16px;font-weight:600;margin:0;color:var(--text)}
 @media(max-width:760px){.verb-map-modes,.verb-map-impersonal{min-width:0;grid-template-columns:1fr}}
 @media(max-width:520px){.verb-map-cols{grid-template-columns:1fr}}
