@@ -79,6 +79,12 @@ h1,h2,h3,h4,.logo,.button,.tab-btn,.menu-title{font-family:var(--font-head)}
 .grammar-section h3{font-size:20px;margin:22px 0 10px;font-weight:600;color:var(--primary-dark)}
 .grammar-section .subtitle{color:var(--muted);margin-bottom:20px;font-size:16.5px}
 
+.topic-toc{background:var(--tint);border:1px solid var(--border);border-radius:14px;padding:16px 20px;margin-bottom:28px}
+.topic-toc-label{display:flex;align-items:center;gap:6px;font-size:13px;font-weight:700;color:var(--primary-dark);text-transform:uppercase;letter-spacing:.03em;margin-bottom:10px}
+.topic-toc-items{display:flex;flex-wrap:wrap;gap:8px}
+.topic-toc-item{display:inline-block;background:var(--card-bg);border:1px solid var(--border);color:var(--primary-dark);font-size:14px;font-weight:600;padding:6px 14px;border-radius:20px;text-decoration:none;transition:transform .1s,box-shadow .1s,border-color .1s,color .1s}
+.topic-toc-item:hover{border-color:var(--primary);color:var(--primary);transform:translateY(-2px);box-shadow:0 4px 10px rgba(58,69,112,.12)}
+
 .table-wrap{overflow-x:auto;border-radius:12px;border:1px solid var(--border);margin-top:22px}
 table{width:100%;border-collapse:collapse;font-size:15.5px}
 table thead th{background:var(--primary);color:#fff;text-align:left;padding:12px 16px;font-weight:600;white-space:nowrap;font-family:var(--font-head)}
@@ -399,6 +405,7 @@ h1 .ti,h2 .ti,h3 .ti{margin-right:8px}
 
 .badge-key{display:inline-block;background:var(--badge-gold-bg);color:var(--gold-dark);font-size:11px;font-weight:700;padding:2px 8px;border-radius:20px;margin-left:6px}
 
+.topic-block{scroll-margin-top:20px}
 .attention-page .topic-block{border-left:4px solid var(--gold);padding-left:18px;background:var(--attention-bg);border-radius:0 12px 12px 0;padding-top:18px;padding-bottom:18px;padding-right:18px}
 .attention-page .topic-block h3{color:var(--gold-dark)}
 .attention-page .compare-card{background:var(--card-bg)}
