@@ -1507,7 +1507,7 @@ ${qHTML}`;
 <div class="ex-exam-confetti">${'<span></span>'.repeat(16)}</div>
 <i class="ti ti-trophy ex-exam-dialog-icon gold" aria-hidden="true"></i>
 <h3>${(cfg.labels.examPassTitle || '').replace('{level}', level)}</h3>
-<p>${(cfg.labels.examPassBody || '').replace('{correct}', correct).replace('{total}', total)}</p>
+<p>${((cfg.labels.examPassBodyByLevel && cfg.labels.examPassBodyByLevel[level]) || cfg.labels.examPassBody || '').replace('{correct}', correct).replace('{total}', total)}</p>
 <div class="ex-exam-dialog-actions">
 <button class="ex-exam-btn primary" id="ex-exam-back-levels">${cfg.labels.examBackToLevels || ''}</button>
 </div></div>`;
