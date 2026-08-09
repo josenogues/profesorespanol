@@ -948,6 +948,20 @@ ${qHTML}`;
     return localStorage.getItem('jn_student_email');
   }
 
+  // firebase-sync.js es type="module", así que el navegador lo carga DESPUÉS
+  // de este script clásico — cuando este código arranca, window.jnCloud* todavía
+  // no existe. Esperamos un poco (con límite) a que aparezca antes de rendirnos.
+  function waitForCloudSDK(timeoutMs){
+    return new Promise(resolve => {
+      const start = Date.now();
+      (function poll(){
+        if(window.jnCloudGetStudentDoc) return resolve(true);
+        if(Date.now() - start > timeoutMs) return resolve(false);
+        setTimeout(poll, 50);
+      })();
+    });
+  }
+
   // Una vez por carga de página: si hay email (puerta de acceso) y Firebase
   // responde, trae de la nube lo que falte en este dispositivo (examen a
   // medias, niveles superados, contador) sin pisar nunca progreso local más
@@ -955,7 +969,9 @@ ${qHTML}`;
   // funcionando con localStorage como hasta ahora.
   const cloudSyncPromise = (async function(){
     const email = getStudentEmail();
-    if(!email || !window.jnCloudGetStudentDoc) return;
+    if(!email) return;
+    const sdkReady = await waitForCloudSDK(6000);
+    if(!sdkReady) return;
     try {
       const cloud = await window.jnCloudGetStudentDoc(email);
       if(!cloud) return;
