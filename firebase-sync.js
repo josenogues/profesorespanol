@@ -5,19 +5,9 @@
 // Si Firebase no carga (bloqueado, sin conexión, cuota agotada...) el sitio
 // sigue funcionando exactamente igual que antes, solo con localStorage.
 
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
+import { app } from "./firebase-init.js";
 import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
-import { getFirestore, doc, getDoc, setDoc, deleteField } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
-
-const firebaseConfig = {
-  apiKey: "AIzaSyBQQen7Hh0sgJZXm5xLepQiRT6fcNI3O7g",
-  authDomain: "aprendeespanol.firebaseapp.com",
-  projectId: "aprendeespanol",
-  storageBucket: "aprendeespanol.firebasestorage.app",
-  messagingSenderId: "247718095843",
-  appId: "1:247718095843:web:f9fa04d1c802378edf0ed6",
-  measurementId: "G-ZLJ146V8H3"
-};
+import { getFirestore, doc, getDoc, setDoc, deleteField, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 
 function withTimeout(promise, ms, label){
   return Promise.race([
@@ -26,15 +16,13 @@ function withTimeout(promise, ms, label){
   ]);
 }
 
-let db = null;
+const db = getFirestore(app);
 
 // Promesa que resuelve cuando hay sesión anónima lista para leer/escribir.
 // Si Firebase no está disponible en 6s (bloqueado, sin red...), se rechaza
 // y el resto del sitio sigue funcionando solo con localStorage.
 window.jnCloudReady = (async () => {
-  const app = initializeApp(firebaseConfig);
   const auth = getAuth(app);
-  db = getFirestore(app);
   await withTimeout(new Promise((resolve, reject) => {
     onAuthStateChanged(auth, user => { if(user) resolve(user); });
     signInAnonymously(auth).catch(reject);
@@ -56,8 +44,12 @@ window.jnCloudGetStudentDoc = async function(email){
 
 // fields: objeto plano, admite claves con puntos como rutas de campo,
 // p. ej. {'examPending.es.A2': {...}} solo toca ese campo anidado.
+// Añade siempre "updatedAt" (hora del servidor) para poder ver en el panel
+// del profesor cuándo estuvo activo cada alumno por última vez.
 window.jnCloudSetFields = async function(email, fields){
   if(!email) return;
   await window.jnCloudReady;
-  await withTimeout(setDoc(studentRef(email), fields, { merge: true }), 6000, 'setDoc');
+  const payload = Object.assign({}, fields, { updatedAt: serverTimestamp(), email: email.trim().toLowerCase() });
+  await withTimeout(setDoc(studentRef(email), payload, { merge: true }), 6000, 'setDoc');
 };
+
