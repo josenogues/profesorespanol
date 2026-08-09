@@ -1,3 +1,11 @@
+// Escapa texto antes de insertarlo en HTML (atributos data-* y contenido):
+// sin esto, una respuesta u opción con comillas dobles (p. ej. «"buen provecho"»)
+// rompe el atributo data-answer/data-value a la mitad y el ejercicio deja de
+// poder marcarse como correcto nunca, aunque se elija la opción correcta.
+function jnEscapeHtml(s){
+  return String(s).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+
 document.querySelectorAll(".menu-button").forEach(button=>{
 if(button.tagName==="BUTTON"){
 button.addEventListener("click",()=>button.parentElement.classList.toggle("active"));
@@ -402,22 +410,22 @@ a.closest(".menu-item").classList.add("active","current-section");
   function uid(){ return Math.random().toString(36).slice(2,9); }
 
   function fillHtml(exid, prompt, answer, kicker){
-    return `<div class="exercise-block" data-exid="${exid}" data-answer="${answer}">
+    return `<div class="exercise-block" data-exid="${exid}" data-answer="${jnEscapeHtml(answer)}">
 <div class="exercise-kicker"><span>${kicker}</span><span class="exercise-done-badge"><i class="ti ti-check"></i> Completado</span></div>
 <p class="exercise-prompt">${prompt}</p>
 <div class="exercise-row exercise-row-fill"><input type="text" class="exercise-input" placeholder="Escribe la respuesta"><button class="exercise-check">Comprobar</button></div>
 <p class="exercise-feedback"></p></div>`;
   }
   function choiceHtml(exid, prompt, options, answer, kicker){
-    const opts = options.map(o => `<button class="option-btn" data-value="${o}">${o}</button>`).join('');
-    return `<div class="exercise-block" data-exid="${exid}" data-answer="${answer}">
+    const opts = options.map(o => `<button class="option-btn" data-value="${jnEscapeHtml(o)}">${jnEscapeHtml(o)}</button>`).join('');
+    return `<div class="exercise-block" data-exid="${exid}" data-answer="${jnEscapeHtml(answer)}">
 <div class="exercise-kicker"><span>${kicker}</span><span class="exercise-done-badge"><i class="ti ti-check"></i> Completado</span></div>
 <p class="exercise-prompt">${prompt}</p>
 <div class="exercise-options">${opts}</div>
 <p class="exercise-feedback"></p></div>`;
   }
   function translateHtml(exid, promptSentence, answer, kicker, verb){
-    return `<div class="exercise-block" data-exid="${exid}" data-answer="${answer}">
+    return `<div class="exercise-block" data-exid="${exid}" data-answer="${jnEscapeHtml(answer)}">
 <div class="exercise-kicker"><span>${kicker}</span><span class="exercise-done-badge"><i class="ti ti-check"></i> Completado</span></div>
 <p class="exercise-prompt">Traduce: <em>${promptSentence}</em></p>
 <div class="exercise-row exercise-row-fill"><input type="text" class="exercise-input" placeholder="Escribe la traducción"><button class="exercise-check">Comprobar</button></div>
@@ -672,8 +680,8 @@ a.closest(".menu-item").classList.add("active","current-section");
     const levelBadge = item.level ? `<span class="exercise-level-badge">${item.level}</span>` : '';
     if(item.type === 'order'){
       const words = shuffle([...item.words]);
-      const bank = words.map(w => `<button class="order-word" data-word="${w}">${w}</button>`).join('');
-      return `<div class="exercise-block" ${borderStyle} data-exid="${item.exid}" data-answer="${item.answer}">
+      const bank = words.map(w => `<button class="order-word" data-word="${jnEscapeHtml(w)}">${jnEscapeHtml(w)}</button>`).join('');
+      return `<div class="exercise-block" ${borderStyle} data-exid="${item.exid}" data-answer="${jnEscapeHtml(item.answer)}">
 ${catTag}<div class="exercise-kicker"><span>${cfg.labels.kickerOrder}${levelBadge}</span><span class="exercise-done-badge">${cfg.labels.done}</span></div>
 <p class="exercise-prompt">${item.prompt}</p>${hint}
 <div class="order-answer-area" data-placeholder="${cfg.labels.orderPlaceholder}"></div>
@@ -682,8 +690,8 @@ ${catTag}<div class="exercise-kicker"><span>${cfg.labels.kickerOrder}${levelBadg
 <p class="exercise-feedback"></p>${theoryLinkHTML(item)}</div>`;
     }
     if(item.type === 'choice'){
-      const opts = item.options.map(o => `<button class="option-btn" data-value="${o}">${o}</button>`).join('');
-      return `<div class="exercise-block" ${borderStyle} data-exid="${item.exid}" data-answer="${item.answer}">
+      const opts = item.options.map(o => `<button class="option-btn" data-value="${jnEscapeHtml(o)}">${jnEscapeHtml(o)}</button>`).join('');
+      return `<div class="exercise-block" ${borderStyle} data-exid="${item.exid}" data-answer="${jnEscapeHtml(item.answer)}">
 ${catTag}<div class="exercise-kicker"><span>${kicker}${levelBadge}</span><span class="exercise-done-badge">${cfg.labels.done}</span></div>
 <p class="exercise-prompt">${item.prompt}</p>${hint}
 <div class="exercise-options">${opts}</div>
@@ -692,7 +700,7 @@ ${catTag}<div class="exercise-kicker"><span>${kicker}${levelBadge}</span><span c
     if(item.type === 'match'){
       const leftItems = shuffle(item.pairs.map((p, i) => ({ text: p[0], key: i })));
       const rightItems = shuffle(item.pairs.map((p, i) => ({ text: p[1], key: i })));
-      const colHtml = list => list.map(x => `<button class="match-item" data-key="${x.key}">${x.text}</button>`).join('');
+      const colHtml = list => list.map(x => `<button class="match-item" data-key="${x.key}">${jnEscapeHtml(x.text)}</button>`).join('');
       return `<div class="exercise-block match-block" ${borderStyle} data-exid="${item.exid}" data-pairs="${item.pairs.length}">
 ${catTag}<div class="exercise-kicker"><span>${cfg.labels.kickerMatch}${levelBadge}</span><span class="exercise-done-badge">${cfg.labels.done}</span></div>
 <p class="exercise-prompt">${item.prompt}</p>${hint}
@@ -700,7 +708,7 @@ ${catTag}<div class="exercise-kicker"><span>${cfg.labels.kickerMatch}${levelBadg
 <p class="exercise-feedback"></p>${theoryLinkHTML(item)}</div>`;
     }
     const placeholder = item.type === 'translate' ? cfg.labels.placeholderTranslate : item.type === 'correct' ? cfg.labels.placeholderCorrect : cfg.labels.placeholderFill;
-    return `<div class="exercise-block" ${borderStyle} data-exid="${item.exid}" data-answer="${item.answer}">
+    return `<div class="exercise-block" ${borderStyle} data-exid="${item.exid}" data-answer="${jnEscapeHtml(item.answer)}">
 ${catTag}<div class="exercise-kicker"><span>${kicker}${levelBadge}</span><span class="exercise-done-badge">${cfg.labels.done}</span></div>
 <p class="exercise-prompt">${item.prompt}</p>${hint}
 <div class="exercise-row exercise-row-fill"><input type="text" class="exercise-input" placeholder="${placeholder}"><button class="exercise-check">${cfg.labels.check}</button></div>
@@ -1251,22 +1259,22 @@ ${qHTML}`;
     const catTag = item._cat ? `<p class="exercise-cat-tag" style="color:${item._cat.color}">${item._cat.label}</p>` : '';
     const hint = item.hint ? `<p class="exercise-hint">${item.hint}</p>` : '';
     if(item.type === 'choice'){
-      const opts = item.options.map(o => `<button class="ex-exam-option" data-value="${o}">${o}</button>`).join('');
-      return `<div class="ex-exam-item" data-answer="${item.answer}">${catTag}<p class="exercise-prompt">${item.prompt}</p>${hint}<div class="exercise-options">${opts}</div><p class="ex-exam-feedback"></p></div>`;
+      const opts = item.options.map(o => `<button class="ex-exam-option" data-value="${jnEscapeHtml(o)}">${jnEscapeHtml(o)}</button>`).join('');
+      return `<div class="ex-exam-item" data-answer="${jnEscapeHtml(item.answer)}">${catTag}<p class="exercise-prompt">${item.prompt}</p>${hint}<div class="exercise-options">${opts}</div><p class="ex-exam-feedback"></p></div>`;
     }
     if(item.type === 'order'){
       const words = shuffle([...item.words]);
-      const bank = words.map(w => `<button class="ex-exam-order-word" data-word="${w}">${w}</button>`).join('');
-      return `<div class="ex-exam-item" data-answer="${item.answer}">${catTag}<p class="exercise-prompt">${item.prompt}</p>${hint}<div class="order-answer-area ex-exam-order-answer" data-placeholder="${cfg.labels.orderPlaceholder}"></div><div class="ex-exam-order-bank">${bank}</div><div class="exercise-row"><button class="ex-exam-order-check">${cfg.labels.check}</button><button class="ex-exam-order-reset">${cfg.labels.orderReset}</button></div><p class="ex-exam-feedback"></p></div>`;
+      const bank = words.map(w => `<button class="ex-exam-order-word" data-word="${jnEscapeHtml(w)}">${jnEscapeHtml(w)}</button>`).join('');
+      return `<div class="ex-exam-item" data-answer="${jnEscapeHtml(item.answer)}">${catTag}<p class="exercise-prompt">${item.prompt}</p>${hint}<div class="order-answer-area ex-exam-order-answer" data-placeholder="${cfg.labels.orderPlaceholder}"></div><div class="ex-exam-order-bank">${bank}</div><div class="exercise-row"><button class="ex-exam-order-check">${cfg.labels.check}</button><button class="ex-exam-order-reset">${cfg.labels.orderReset}</button></div><p class="ex-exam-feedback"></p></div>`;
     }
     if(item.type === 'match'){
       const leftItems = shuffle(item.pairs.map((p, i) => ({ text: p[0], key: i })));
       const rightItems = shuffle(item.pairs.map((p, i) => ({ text: p[1], key: i })));
-      const colHtml = list => list.map(x => `<button class="ex-exam-match-item" data-key="${x.key}">${x.text}</button>`).join('');
+      const colHtml = list => list.map(x => `<button class="ex-exam-match-item" data-key="${x.key}">${jnEscapeHtml(x.text)}</button>`).join('');
       return `<div class="ex-exam-item" data-pairs="${item.pairs.length}">${catTag}<p class="exercise-prompt">${item.prompt}</p>${hint}<div class="match-columns"><div class="match-col">${colHtml(leftItems)}</div><div class="match-col">${colHtml(rightItems)}</div></div><p class="ex-exam-feedback"></p></div>`;
     }
     const placeholder = item.type === 'translate' ? cfg.labels.placeholderTranslate : item.type === 'correct' ? cfg.labels.placeholderCorrect : cfg.labels.placeholderFill;
-    return `<div class="ex-exam-item" data-answer="${item.answer}">${catTag}<p class="exercise-prompt">${item.prompt}</p>${hint}<div class="exercise-row exercise-row-fill"><input type="text" class="ex-exam-input" placeholder="${placeholder}"><button class="ex-exam-check">${cfg.labels.check}</button></div><p class="ex-exam-feedback"></p></div>`;
+    return `<div class="ex-exam-item" data-answer="${jnEscapeHtml(item.answer)}">${catTag}<p class="exercise-prompt">${item.prompt}</p>${hint}<div class="exercise-row exercise-row-fill"><input type="text" class="ex-exam-input" placeholder="${placeholder}"><button class="ex-exam-check">${cfg.labels.check}</button></div><p class="ex-exam-feedback"></p></div>`;
   }
 
   function randomPraise(){
