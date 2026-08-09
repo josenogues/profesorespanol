@@ -222,8 +222,11 @@ a.closest(".menu-item").classList.add("active","current-section");
     }
   }
 
+  const ACCENT_APOSTROPHE = { a: 'á', e: 'é', i: 'í', o: 'ó', u: 'ú' };
   function normalizeAnswer(s){
-    return s.trim().toLowerCase().replace(/[¿¡]/g, '').replace(/[.!?]+$/, '').trim();
+    return s.trim().toLowerCase()
+      .replace(/([aeiou])['’]/g, (_, v) => ACCENT_APOSTROPHE[v])
+      .replace(/[¿¡]/g, '').replace(/[.!?]+$/, '').trim();
   }
 
   function checkTextAnswer(block){
@@ -651,8 +654,11 @@ a.closest(".menu-item").classList.add("active","current-section");
     'atn-gramatica': 'especial-atencion-gramatica'
   };
 
+  const ACCENT_APOSTROPHE2 = { a: 'á', e: 'é', i: 'í', o: 'ó', u: 'ú' };
   function normalizeAnswer(s){
-    return s.trim().toLowerCase().replace(/[¿¡]/g, '').replace(/[.!?]+$/, '').trim();
+    return s.trim().toLowerCase()
+      .replace(/([aeiou])['’]/g, (_, v) => ACCENT_APOSTROPHE2[v])
+      .replace(/[¿¡]/g, '').replace(/[.!?]+$/, '').trim();
   }
 
   function theoryLinkHTML(item){
