@@ -82,12 +82,14 @@ async function loadStudents(){
     const totalPasses = students.reduce((sum, s) => sum + passedLevels(s.levelStatus).length, 0);
     const weekAgo = Date.now() - 7 * 24 * 60 * 60 * 1000;
     const activeThisWeek = students.filter(s => s.updatedAt && s.updatedAt.toMillis && s.updatedAt.toMillis() > weekAgo).length;
+    const onlyVisited = students.filter(s => (s.visitCount || 0) > 0 && !(s.exerciseCount || 0)).length;
 
     statsEl.innerHTML = [
       ['Alumnos', totalStudents],
       ['Ejercicios hechos (total)', totalExercises],
       ['Niveles superados (total)', totalPasses],
-      ['Activos últimos 7 días', activeThisWeek]
+      ['Activos últimos 7 días', activeThisWeek],
+      ['Solo han visitado (sin ejercicios)', onlyVisited]
     ].map(([label, n]) => `<div class="panel-stat"><div class="n">${esc(n)}</div><div class="l">${esc(label)}</div></div>`).join('');
 
     bodyEl.innerHTML = students.map(s => {
@@ -95,8 +97,11 @@ async function loadStudents(){
       const chipsHtml = chips.length
         ? `<div class="panel-levels">${chips.map(c => `<span class="panel-level-chip">${esc(c)}</span>`).join('')}</div>`
         : '<span class="panel-empty">—</span>';
+      const onlyVisits = (s.visitCount || 0) > 0 && !(s.exerciseCount || 0);
+      const flag = onlyVisits ? '<span class="panel-flag">Solo visitas</span>' : '';
       return `<tr>
-        <td>${esc(s.email || '—')}</td>
+        <td>${esc(s.email || '—')}${flag}</td>
+        <td>${esc(s.visitCount || 0)}</td>
         <td>${esc(s.exerciseCount || 0)}</td>
         <td>${chipsHtml}</td>
         <td>${esc(formatDate(s.updatedAt))}</td>

@@ -6,6 +6,32 @@ function jnEscapeHtml(s){
   return String(s).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 }
 
+// Registra una visita (una vez al día por alumno, no en cada página que abra
+// el mismo día) para que el profesor pueda ver en el panel quién entra en la
+// web pero nunca llega a hacer ejercicios. firebase-sync.js es un módulo y
+// se carga después de este script clásico, así que se espera (con límite) a
+// que window.jnCloud* aparezca; si Firebase no está disponible, no hace nada.
+function jnRegisterVisit(email){
+  if(!email) return;
+  const start = Date.now();
+  (function poll(){
+    if(window.jnCloudGetStudentDoc && window.jnCloudSetFields){
+      window.jnCloudGetStudentDoc(email).then(cloud => {
+        const todayStr = new Date().toISOString().slice(0, 10);
+        if(!cloud || cloud.lastVisitDate !== todayStr){
+          return window.jnCloudSetFields(email, {
+            visitCount: ((cloud && cloud.visitCount) || 0) + 1,
+            lastVisitDate: todayStr
+          });
+        }
+      }).catch(() => {});
+      return;
+    }
+    if(Date.now() - start > 6000) return;
+    setTimeout(poll, 50);
+  })();
+}
+
 document.querySelectorAll(".menu-button").forEach(button=>{
 if(button.tagName==="BUTTON"){
 button.addEventListener("click",()=>button.parentElement.classList.toggle("active"));
@@ -543,7 +569,10 @@ a.closest(".menu-item").classList.add("active","current-section");
   // 3) Copia la URL que te da Google y pégala aquí abajo, reemplazando el valor de ejemplo.
   const SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTp3ALVArrf67RDanwYo7f9EA7dxBF3FDmi6qvXeB7MDJn2ApcV4kICTxJ-d-OGX4mz0ibXXELGdZNu/pub?gid=0&single=true&output=csv';
 
-  if(localStorage.getItem(ACCESS_KEY) === 'true' && localStorage.getItem('jn_student_email')) return;
+  if(localStorage.getItem(ACCESS_KEY) === 'true' && localStorage.getItem('jn_student_email')){
+    jnRegisterVisit(localStorage.getItem('jn_student_email'));
+    return;
+  }
 
   const overlay = document.createElement('div');
   overlay.className = 'access-gate-overlay';
@@ -580,6 +609,7 @@ a.closest(".menu-item").classList.add("active","current-section");
         if(emails.includes(email)){
           localStorage.setItem(ACCESS_KEY, 'true');
           localStorage.setItem('jn_student_email', email);
+          jnRegisterVisit(email);
           document.body.removeChild(overlay);
         } else {
           errorEl.textContent = 'Ese email no está en la lista. Escribe a José si crees que es un error.';
