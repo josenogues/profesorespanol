@@ -1016,7 +1016,10 @@ ${qHTML}`;
             changed = true;
           }
         });
-        if(changed) localStorage.setItem(LEVEL_STATUS_KEY, JSON.stringify(local));
+        if(changed){
+          localStorage.setItem(LEVEL_STATUS_KEY, JSON.stringify(local));
+          renderLevelDonuts();
+        }
       }
 
       if(typeof cloud.exerciseCount === 'number' && window.jnGetExerciseCount){
