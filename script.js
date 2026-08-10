@@ -999,11 +999,29 @@ ${qHTML}`;
         if(changed) localStorage.setItem(EXAM_PENDING_KEY, JSON.stringify(local));
       }
 
-      if(cloud.levelStatus && cloud.levelStatus[cfg.lang]){
+      // Un nivel superado cuenta para los tres tracks (ES/IT/EN): un alumno
+      // puede pasar de un idioma de interfaz a otro y su progreso de nivel
+      // (A1...C1) debe seguir viéndose igual, aunque cada track tenga su
+      // propio examen con sus propias frases. Por eso aquí se combina lo
+      // mejor de levelStatus.es / .it / .en antes de fusionarlo con lo local.
+      if(cloud.levelStatus){
+        const combined = {};
+        ['es', 'it', 'en'].forEach(lang => {
+          const langStatus = cloud.levelStatus[lang];
+          if(!langStatus) return;
+          Object.keys(langStatus).forEach(level => {
+            const c = langStatus[level];
+            const best = combined[level];
+            const better = !best || (c.passed && !best.passed) ||
+              (!!c.passed === !!best.passed && ((c.bestPct || 0) > (best.bestPct || 0) || (c.attempts || 0) > (best.attempts || 0)));
+            if(better) combined[level] = c;
+          });
+        });
+
         const local = getLevelStatus();
         let changed = false;
-        Object.keys(cloud.levelStatus[cfg.lang]).forEach(level => {
-          const c = cloud.levelStatus[cfg.lang][level];
+        Object.keys(combined).forEach(level => {
+          const c = combined[level];
           const l = local[level];
           const better = !l || (c.passed && !l.passed) ||
             (!!c.passed === !!l.passed && ((c.bestPct || 0) > (l.bestPct || 0) || (c.attempts || 0) > (l.attempts || 0)));
