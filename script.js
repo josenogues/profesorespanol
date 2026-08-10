@@ -674,6 +674,7 @@ a.closest(".menu-item").classList.add("active","current-section");
     return type === 'fill' ? cfg.labels.kickerFill
       : type === 'choice' ? cfg.labels.kickerChoice
       : type === 'correct' ? cfg.labels.kickerCorrect
+      : type === 'transform' ? cfg.labels.kickerTransform
       : cfg.labels.kickerTranslate;
   }
 
@@ -713,7 +714,7 @@ ${catTag}<div class="exercise-kicker"><span>${cfg.labels.kickerMatch}${levelBadg
 <div class="match-columns"><div class="match-col">${colHtml(leftItems)}</div><div class="match-col">${colHtml(rightItems)}</div></div>
 <p class="exercise-feedback"></p>${theoryLinkHTML(item)}</div>`;
     }
-    const placeholder = item.type === 'translate' ? cfg.labels.placeholderTranslate : item.type === 'correct' ? cfg.labels.placeholderCorrect : cfg.labels.placeholderFill;
+    const placeholder = item.type === 'translate' ? cfg.labels.placeholderTranslate : item.type === 'correct' ? cfg.labels.placeholderCorrect : item.type === 'transform' ? cfg.labels.placeholderTransform : cfg.labels.placeholderFill;
     return `<div class="exercise-block" ${borderStyle} data-exid="${item.exid}" data-answer="${jnEscapeHtml(item.answer)}">
 ${catTag}<div class="exercise-kicker"><span>${kicker}${levelBadge}</span><span class="exercise-done-badge">${cfg.labels.done}</span></div>
 <p class="exercise-prompt">${item.prompt}</p>${hint}
@@ -1300,7 +1301,7 @@ ${qHTML}`;
       const colHtml = list => list.map(x => `<button class="ex-exam-match-item" data-key="${x.key}">${jnEscapeHtml(x.text)}</button>`).join('');
       return `<div class="ex-exam-item" data-pairs="${item.pairs.length}">${catTag}<p class="exercise-prompt">${item.prompt}</p>${hint}<div class="match-columns"><div class="match-col">${colHtml(leftItems)}</div><div class="match-col">${colHtml(rightItems)}</div></div><p class="ex-exam-feedback"></p></div>`;
     }
-    const placeholder = item.type === 'translate' ? cfg.labels.placeholderTranslate : item.type === 'correct' ? cfg.labels.placeholderCorrect : cfg.labels.placeholderFill;
+    const placeholder = item.type === 'translate' ? cfg.labels.placeholderTranslate : item.type === 'correct' ? cfg.labels.placeholderCorrect : item.type === 'transform' ? cfg.labels.placeholderTransform : cfg.labels.placeholderFill;
     return `<div class="ex-exam-item" data-answer="${jnEscapeHtml(item.answer)}">${catTag}<p class="exercise-prompt">${item.prompt}</p>${hint}<div class="exercise-row exercise-row-fill"><input type="text" class="ex-exam-input" placeholder="${placeholder}"><button class="ex-exam-check">${cfg.labels.check}</button></div><p class="ex-exam-feedback"></p></div>`;
   }
 
