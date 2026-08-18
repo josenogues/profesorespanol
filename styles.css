@@ -91,6 +91,19 @@ table thead th{background:var(--primary);color:#fff;text-align:left;padding:12px
 table tbody td{padding:11px 16px;border-top:1px solid var(--border)}
 table tbody tr:nth-child(even){background:var(--table-stripe)}
 table tbody td:first-child{font-weight:600}
+/* En móvil las tablas de 3+ columnas (conectores, expresiones comunes...)
+   no cabían y obligaban a deslizar de lado: se aprieta el espaciado y se
+   deja que las cabeceras partan de línea para que entren en pantalla. */
+@media(max-width:560px){
+  table{font-size:14px}
+  table thead th{padding:10px 9px;white-space:normal}
+  table tbody td{padding:9px 9px}
+}
+@media(max-width:400px){
+  table{font-size:13.5px}
+  table thead th{padding:9px 6px}
+  table tbody td{padding:8px 6px}
+}
 
 .tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
 .tab-btn{padding:9px 18px;border-radius:20px;border:1px solid var(--border);background:var(--card-bg);cursor:pointer;font-size:15px;font-weight:600;color:var(--text);transition:.15s}
