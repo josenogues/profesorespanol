@@ -723,12 +723,17 @@ body[data-category="atencion"] .handwritten-title{color:#5B9A3B}
 .overview-cards .mini-card{border-top:3px solid #D6488F}
 .overview-cards .mini-card h4 i{color:#D6488F !important;margin-right:6px}
 
-/* ---------- Español profesional (categoría, tarjetas y comparador de tonos) ---------- */
+/* ---------- Español profesional ----------
+   Regla de la sección: las secciones se separan con una línea, no con cajas;
+   una caja significa "esto se puede clicar"; el verde es solo el acento de la
+   sección (borde superior de tarjeta, iconos y botones), nunca un relleno. */
 .cat-profesional{color:#0F6E56}
-.tone-demo{background:var(--card-bg);border:1px solid var(--border);border-radius:12px;padding:18px 20px;margin:14px 0 30px}
-.tone-demo h4{margin:0 0 4px;font-size:16px}
-.tone-demo-sub{font-size:13px;color:var(--muted);margin:0 0 14px}
-.tone-row{padding:9px 0 9px 13px;margin-bottom:10px;border-radius:0}
+
+/* Comparador de tonos: es contenido, no es clicable -> sin caja. Las barras
+   de color ya separan los tres ejemplos. */
+.tone-demo{margin:14px 0 30px}
+.tone-demo-sub{font-size:13px;color:var(--muted);margin:0 0 12px}
+.tone-row{padding:9px 0 9px 13px;margin-bottom:12px}
 .tone-row:last-child{margin-bottom:0}
 .tone-row p{margin:0;font-size:14.5px;color:var(--text)}
 .tone-label{display:block;font-size:11.5px;font-weight:700;margin-bottom:3px}
@@ -739,28 +744,25 @@ body[data-category="atencion"] .handwritten-title{color:#5B9A3B}
 [data-theme="dark"] .tone-bad .tone-label{color:#F09595}
 [data-theme="dark"] .tone-good .tone-label{color:#97C459}
 
-/* Bloque destacado: tarjeta clicable con icono, texto y botón, para que no
-   parezca una nota y no deje un hueco vacío a la derecha. */
-.prof-featured{display:flex;align-items:center;gap:18px;background:#E1F5EE;border:1px solid #A9DCCB;
-  border-radius:14px;padding:18px 22px;margin:0 0 10px;text-decoration:none;transition:.15s}
-.prof-featured:hover{transform:translateY(-2px);box-shadow:0 6px 16px rgba(15,110,86,.18);border-color:#0F6E56}
-.prof-featured-icon{flex:0 0 auto;width:46px;height:46px;border-radius:12px;background:#0F6E56;color:#fff;
-  display:flex;align-items:center;justify-content:center;font-size:23px}
+/* Punto de entrada: misma tarjeta que las demás (mismo borde, mismo hover),
+   solo que a todo el ancho y con botón. Lo que la señala como entrada es la
+   etiqueta de encima y su posición, no el color. */
+.prof-start-label{font-size:13px;font-weight:700;color:#0F6E56;margin:0 0 8px}
+[data-theme="dark"] .prof-start-label{color:#5DCAA5}
+.prof-featured{display:flex;align-items:center;gap:16px;background:var(--card-bg);
+  border:1px solid var(--border);border-top:3px solid #0F6E56;border-radius:0 0 12px 12px;
+  padding:16px 20px;margin:0;text-decoration:none;transition:.15s}
+.prof-featured:hover{transform:translateY(-2px);box-shadow:0 4px 10px rgba(0,0,0,.07)}
+.prof-featured-icon{flex:0 0 auto;color:#0F6E56;font-size:26px;line-height:1}
 .prof-featured-body{flex:1;min-width:0}
-.prof-featured-eyebrow{display:block;font-size:11px;font-weight:700;letter-spacing:.06em;
-  text-transform:uppercase;color:#0F6E56;margin-bottom:3px}
-.prof-featured-title{display:block;font-family:var(--font-head);font-size:18px;font-weight:700;color:#0A4F3F;margin-bottom:3px}
-.prof-featured-text{display:block;font-size:14px;color:#085041;line-height:1.55}
+.prof-featured-title{display:block;font-family:var(--font-head);font-size:17px;font-weight:700;color:var(--text);margin-bottom:3px}
+.prof-featured-text{display:block;font-size:13.5px;color:var(--muted);line-height:1.55}
 .prof-featured-cta{flex:0 0 auto;display:inline-flex;align-items:center;gap:6px;background:#0F6E56;color:#fff;
   font-size:14px;font-weight:700;padding:9px 16px;border-radius:22px;white-space:nowrap}
 .prof-featured:hover .prof-featured-cta{background:#0A4F3F}
-[data-theme="dark"] .prof-featured{background:#123128;border-color:#1E5A48}
-[data-theme="dark"] .prof-featured-title{color:#9FE1CB}
-[data-theme="dark"] .prof-featured-text{color:#8FD3BC}
-[data-theme="dark"] .prof-featured-eyebrow{color:#5DCAA5}
 
-/* Los grupos pasan a ser secciones con encabezado de verdad (antes eran una
-   línea de 11px en gris que no se veía). */
+/* Grupos: secciones con encabezado y línea de separación, igual que el resto
+   de páginas del sitio. */
 .prof-group{margin-top:34px;padding-top:26px;border-top:1px solid var(--border)}
 .prof-group-label{display:flex;align-items:center;gap:10px;font-family:var(--font-head);
   font-size:21px;font-weight:700;color:var(--text);margin:0 0 3px;letter-spacing:0;text-transform:none}
