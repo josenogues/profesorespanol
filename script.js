@@ -1846,7 +1846,7 @@ ${qHTML}`;
       indexPromise = new Promise((resolve, reject) => {
         if(window.SEARCH_INDEX){ resolve(); return; }
         const s = document.createElement('script');
-        s.src = 'search-index.js';
+        s.src = 'search-index.js?v=20260902';
         s.onload = resolve;
         s.onerror = reject;
         document.head.appendChild(s);
