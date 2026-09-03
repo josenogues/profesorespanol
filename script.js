@@ -232,20 +232,29 @@ a.closest(".menu-item").classList.add("active","current-section");
   }
   function randomOf(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
 
+  // Al fallar NO se enseña la respuesta a la primera: antes bastaba con
+  // equivocarse una vez, leer la solución y pulsarla para dar el ejercicio
+  // por bueno, así que se podía recorrer un curso entero sin saber nada.
+  // Devuelve true si esta vez sí se ha revelado la respuesta.
   function showFeedback(block, ok){
     const fb = block.querySelector('.exercise-feedback');
-    if(!fb) return;
+    if(!fb) return false;
     if(ok){
       fb.textContent = randomOf(CORRECT_MSGS);
       fb.className = 'exercise-feedback correct';
       block.classList.add('is-done');
+      block.dataset.tries = '0';
       markDone(block.dataset.exid);
       window.jnCountExercise();
-    } else {
-      const answer = block.dataset.answer.split('|')[0];
-      fb.textContent = randomOf(INCORRECT_MSGS) + ' (respuesta: ' + answer + ')';
-      fb.className = 'exercise-feedback incorrect';
+      return false;
     }
+    const tries = parseInt(block.dataset.tries || '0', 10) + 1;
+    block.dataset.tries = String(tries);
+    const reveal = tries >= 2;
+    const answer = block.dataset.answer.split('|')[0];
+    fb.textContent = randomOf(INCORRECT_MSGS) + (reveal ? ' (respuesta: ' + answer + ')' : '');
+    fb.className = 'exercise-feedback incorrect';
+    return reveal;
   }
 
   const ACCENT_APOSTROPHE = { a: 'á', e: 'é', i: 'í', o: 'ó', u: 'ú' };
@@ -341,15 +350,15 @@ a.closest(".menu-item").classList.add("active","current-section");
       const block = optBtn.closest('.exercise-block');
       const correct = block.dataset.answer.trim().toLowerCase();
       const chosen = optBtn.dataset.value.trim().toLowerCase();
-      block.querySelectorAll('.option-btn').forEach(b => b.classList.remove('correct','incorrect'));
-      if(chosen === correct){
-        optBtn.classList.add('correct');
-      } else {
-        optBtn.classList.add('incorrect');
+      // las opciones ya probadas se quedan marcadas: así se ve lo que has
+      // descartado en vez de empezar de cero en cada intento
+      const ok = chosen === correct;
+      optBtn.classList.add(ok ? 'correct' : 'incorrect');
+      const reveal = showFeedback(block, ok);
+      if(ok || reveal){
         const rightBtn = [...block.querySelectorAll('.option-btn')].find(b => b.dataset.value.trim().toLowerCase() === correct);
         if(rightBtn) rightBtn.classList.add('correct');
       }
-      showFeedback(block, chosen === correct);
     }
   });
 
@@ -728,7 +737,9 @@ ${catTag}<div class="exercise-kicker"><span>${cfg.labels.kickerOrder}${levelBadg
 <p class="exercise-feedback"></p>${theoryLinkHTML(item)}</div>`;
     }
     if(item.type === 'choice'){
-      const opts = item.options.map(o => `<button class="option-btn" data-value="${jnEscapeHtml(o)}">${jnEscapeHtml(o)}</button>`).join('');
+      // barajar SIEMPRE: en los datos la respuesta correcta va la primera,
+      // así que sin esto bastaba con pulsar la primera opción para acertar
+      const opts = shuffle([...item.options]).map(o => `<button class="option-btn" data-value="${jnEscapeHtml(o)}">${jnEscapeHtml(o)}</button>`).join('');
       return `<div class="exercise-block" ${borderStyle} data-exid="${item.exid}" data-answer="${jnEscapeHtml(item.answer)}">
 ${catTag}<div class="exercise-kicker"><span>${kicker}${levelBadge}</span><span class="exercise-done-badge">${cfg.labels.done}</span></div>
 <p class="exercise-prompt">${item.prompt}</p>${hint}
@@ -1352,7 +1363,7 @@ ${qHTML}`;
     const catTag = item._cat ? `<p class="exercise-cat-tag" style="color:${item._cat.color}">${item._cat.label}</p>` : '';
     const hint = item.hint ? `<p class="exercise-hint">${item.hint}</p>` : '';
     if(item.type === 'choice'){
-      const opts = item.options.map(o => `<button class="ex-exam-option" data-value="${jnEscapeHtml(o)}">${jnEscapeHtml(o)}</button>`).join('');
+      const opts = shuffle([...item.options]).map(o => `<button class="ex-exam-option" data-value="${jnEscapeHtml(o)}">${jnEscapeHtml(o)}</button>`).join('');
       return `<div class="ex-exam-item" data-answer="${jnEscapeHtml(item.answer)}">${catTag}<p class="exercise-prompt">${item.prompt}</p>${hint}<div class="exercise-options">${opts}</div><p class="ex-exam-feedback"></p></div>`;
     }
     if(item.type === 'order'){
@@ -2146,7 +2157,7 @@ ${nextHTML}<div class="ex-signal-btns">${btns}</div></div>`;
       indexPromise = new Promise((resolve, reject) => {
         if(window.SEARCH_INDEX){ resolve(); return; }
         const s = document.createElement('script');
-        s.src = 'search-index.js?v=20260907';
+        s.src = 'search-index.js?v=20260908';
         s.onload = resolve;
         s.onerror = reject;
         document.head.appendChild(s);
