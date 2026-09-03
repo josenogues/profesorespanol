@@ -29,7 +29,21 @@ const refreshBtn = document.getElementById('panel-refresh');
 // aunque la propia carga de datos luego falle o tarde.
 window.jnPanelHandled = true;
 
-document.addEventListener('jn-panel-unlocked', loadStudents, { once: true });
+let autoLoadDone = false;
+function autoLoad(){
+  if(autoLoadDone) return;
+  autoLoadDone = true;
+  loadStudents();
+}
+
+document.addEventListener('jn-panel-unlocked', autoLoad, { once: true });
+
+// La puerta vive en un <script> clásico, que se ejecuta ANTES que este módulo
+// (los módulos van diferidos). Al recargar con la sesión ya desbloqueada, la
+// puerta lanza "jn-panel-unlocked" cuando aquí todavía no estábamos
+// escuchando, y el panel se quedaba en "Cargando..." para siempre. Por eso
+// comprobamos también el estado directamente.
+if(sessionStorage.getItem('jn_panel_unlocked') === 'true') autoLoad();
 
 function formatDate(ts){
   if(!ts || typeof ts.toDate !== 'function') return '—';
