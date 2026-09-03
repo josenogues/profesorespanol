@@ -611,6 +611,7 @@ a.closest(".menu-item").classList.add("active","current-section");
           localStorage.setItem('jn_student_email', email);
           jnRegisterVisit(email);
           document.body.removeChild(overlay);
+          document.dispatchEvent(new CustomEvent('jn-access-granted'));
         } else {
           errorEl.textContent = 'Ese email no está en la lista. Escribe a José si crees que es un error.';
           btn.disabled = false;
@@ -1012,7 +1013,7 @@ ${qHTML}`;
   // medias, niveles superados, contador) sin pisar nunca progreso local más
   // avanzado. Si Firebase no está disponible, no hace nada — todo sigue
   // funcionando con localStorage como hasta ahora.
-  const cloudSyncPromise = (async function(){
+  async function syncFromCloud(){
     const email = getStudentEmail();
     if(!email) return;
     const sdkReady = await waitForCloudSDK(6000);
@@ -1089,7 +1090,11 @@ ${qHTML}`;
         });
         if(changedC){
           localStorage.setItem(COURSE_KEY, JSON.stringify(localC));
-          if(panelCurso && panelCurso.style.display !== 'none' && !activeCourse) renderRoute();
+          // repintamos lo que el alumno tenga delante (la ruta o el curso),
+          // pero nunca a mitad de un paso: le borraríamos los ejercicios
+          if(panelCurso && panelCurso.style.display !== 'none' && activeStepIdx === null){
+            if(activeCourse) renderCourse(activeCourse); else renderRoute();
+          }
         }
       }
 
@@ -1101,7 +1106,15 @@ ${qHTML}`;
         }
       }
     } catch(e) { /* sin conexión a Firebase: seguimos solo con localStorage */ }
-  })();
+  }
+
+  const cloudSyncPromise = syncFromCloud();
+
+  // Un alumno que estrena dispositivo pasa la puerta DESPUÉS de que este código
+  // haya arrancado, así que en esa primera carga no había email que sincronizar.
+  // Al concederse el acceso lo reintentamos, y así ve su progreso ya en la
+  // página que abrió (normalmente el enlace a un curso que le mandó José).
+  document.addEventListener('jn-access-granted', function(){ syncFromCloud(); });
 
   function getLevelStatus(){
     try { return JSON.parse(localStorage.getItem(LEVEL_STATUS_KEY) || '{}'); } catch(e){ return {}; }
@@ -2132,7 +2145,7 @@ ${nextHTML}<div class="ex-signal-btns">${btns}</div></div>`;
       indexPromise = new Promise((resolve, reject) => {
         if(window.SEARCH_INDEX){ resolve(); return; }
         const s = document.createElement('script');
-        s.src = 'search-index.js?v=20260904';
+        s.src = 'search-index.js?v=20260905';
         s.onload = resolve;
         s.onerror = reject;
         document.head.appendChild(s);
