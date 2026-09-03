@@ -196,8 +196,28 @@ a.closest(".menu-item").classList.add("active","current-section");
 
 // --- Motor de ejercicios (rellenar huecos, opción múltiple, traducción) ---
 (function(){
-  const CORRECT_MSGS = ['¡Muy bien!','¡Perfecto!','¡Excelente!','¡Así se hace!','¡Genial, sigue así!','¡Correcto!'];
-  const INCORRECT_MSGS = ['Casi, prueba otra vez','No es eso, ¡tú puedes!','Sigue intentando','Revísalo con calma'];
+  // El ánimo y la solución van en el idioma del alumno: si estás empezando,
+  // "Casi, prueba otra vez (respuesta: fui)" no te dice nada.
+  const MSGS = {
+    es: {
+      ok: ['¡Muy bien!','¡Perfecto!','¡Excelente!','¡Así se hace!','¡Genial, sigue así!','¡Correcto!'],
+      ko: ['Casi, prueba otra vez','No es eso, ¡tú puedes!','Sigue intentando','Revísalo con calma'],
+      answer: 'respuesta'
+    },
+    it: {
+      ok: ['Molto bene!','Perfetto!','Eccellente!','Così si fa!','Ottimo, continua così!','Corretto!'],
+      ko: ['Ci sei quasi, riprova','Non è questo, ce la fai!','Continua a provare','Rileggilo con calma'],
+      answer: 'risposta'
+    },
+    en: {
+      ok: ['Well done!','Perfect!','Excellent!','That’s the way!','Great, keep going!','Correct!'],
+      ko: ['Almost, try again','Not that one, you can do it!','Keep trying','Take another careful look'],
+      answer: 'answer'
+    }
+  };
+  function msgs(){ return MSGS[localStorage.getItem('jn_track') || 'es'] || MSGS.es; }
+  // lo usa también el modo curso al reanudar un paso a medias
+  window.jnPraise = function(){ return randomOf(msgs().ok); };
   const pageKey = 'ex_done_' + (location.pathname.split('/').pop() || 'home');
 
   // contador global de ejercicios acertados (motiva en el hub, ver "jn-counter-updated")
@@ -240,7 +260,7 @@ a.closest(".menu-item").classList.add("active","current-section");
     const fb = block.querySelector('.exercise-feedback');
     if(!fb) return false;
     if(ok){
-      fb.textContent = randomOf(CORRECT_MSGS);
+      fb.textContent = randomOf(msgs().ok);
       fb.className = 'exercise-feedback correct';
       block.classList.add('is-done');
       block.dataset.tries = '0';
@@ -252,7 +272,8 @@ a.closest(".menu-item").classList.add("active","current-section");
     block.dataset.tries = String(tries);
     const reveal = tries >= 2;
     const answer = block.dataset.answer.split('|')[0];
-    fb.textContent = randomOf(INCORRECT_MSGS) + (reveal ? ' (respuesta: ' + answer + ')' : '');
+    const m = msgs();
+    fb.textContent = randomOf(m.ko) + (reveal ? ' (' + m.answer + ': ' + answer + ')' : '');
     fb.className = 'exercise-feedback incorrect';
     return reveal;
   }
@@ -1385,10 +1406,7 @@ ${qHTML}`;
     return `<div class="ex-exam-item" data-answer="${jnEscapeHtml(item.answer)}">${catTag}<p class="exercise-prompt">${item.prompt}</p>${hint}<div class="exercise-row exercise-row-fill"><input type="text" class="ex-exam-input" placeholder="${placeholder}"><button class="ex-exam-check">${cfg.labels.check}</button></div><p class="ex-exam-feedback"></p></div>`;
   }
 
-  function randomPraise(){
-    const arr = ['¡Muy bien!','¡Perfecto!','¡Correcto!','¡Genial!'];
-    return arr[Math.floor(Math.random() * arr.length)];
-  }
+  function randomPraise(){ return window.jnPraise(); }
 
   function bindExamItem(item){
     const root = examQuestionEl;
@@ -1912,7 +1930,9 @@ ${num}<span><h5>${jnEscapeHtml(st.title)}</h5>
         if(!saved.done[i]) return;
         b.classList.add('is-done');
         const fb = b.querySelector('.exercise-feedback');
-        if(fb){ fb.textContent = cfg.labels.done; fb.className = 'exercise-feedback correct'; }
+        // el "Completado" con su icono ya sale solo en la chapa de arriba al
+        // poner is-done; aquí va la frase de acierto, como cuando lo contestó
+        if(fb){ fb.textContent = window.jnPraise(); fb.className = 'exercise-feedback correct'; }
       });
     }
     saveStepState();
