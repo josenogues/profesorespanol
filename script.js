@@ -1089,14 +1089,17 @@ ${qHTML}`;
       if(cloud.courseProgress){
         const localC = getCourseProgress();
         let changedC = false;
-        Object.keys(cloud.courseProgress).forEach(key => {
-          const remote = cloud.courseProgress[key];
+        // lo que venga de la nube puede ser todavía por posición: se traduce
+        const remoteAll = JSON.parse(JSON.stringify(cloud.courseProgress));
+        migrarProgreso(remoteAll);
+        Object.keys(remoteAll).forEach(key => {
+          const remote = remoteAll[key];
           if(!Array.isArray(remote)) return;
           const merged = new Set(Array.isArray(localC[key]) ? localC[key] : []);
           const before = merged.size;
-          remote.forEach(i => merged.add(i));
+          remote.forEach(id => merged.add(id));
           if(merged.size !== before){
-            localC[key] = [...merged].sort((a, b) => a - b);
+            localC[key] = [...merged];
             changedC = true;
           }
         });
@@ -1688,6 +1691,7 @@ ${qHTML}`;
     const done = [...container.querySelectorAll('.exercise-block')].map(b => b.classList.contains('is-done'));
     localStorage.setItem(STEP_KEY, JSON.stringify({
       course: activeCourse.key, step: activeStepIdx,
+      stepId: (activeCourse.steps[activeStepIdx] || {}).id,
       items: activeStepItems.map(stripItemForStorage), done: done
     }));
   }
@@ -1699,18 +1703,45 @@ ${qHTML}`;
     return s;
   }
 
+  // Orden de los pasos ANTES de meter gramática y verbos en los cursos. El
+  // progreso se guardaba por posición, así que al reordenar las palomitas se
+  // corrían de paso; esto traduce una sola vez lo viejo a los identificadores.
+  const PASOS_ANTIGUOS = {
+    'primeros-pasos': ['ser-estar', 'haber-tener', 'presente', 'saludos'],
+    'viajar': ['saludos', 'presente', 'viajes', 'la-hora', 'las-fechas', 'moverse',
+               'restaurante', 'comidas', 'clima'],
+    'vivir': ['presentarse', 'reflexivos', 'fechas', 'medico', 'papeleo', 'casa',
+              'transporte', 'barrio', 'vecinos'],
+    'profesional': ['registro', 'email', 'emails-modelo', 'chat', 'telefono', 'reuniones',
+                    'presentaciones', 'cv', 'entrevista']
+  };
+
+  function migrarProgreso(all){
+    let cambiado = false;
+    Object.keys(all).forEach(key => {
+      const v = all[key];
+      if(!Array.isArray(v) || !v.length || typeof v[0] !== 'number') return;
+      const antiguos = PASOS_ANTIGUOS[key] || [];
+      all[key] = v.map(i => antiguos[i]).filter(Boolean);
+      cambiado = true;
+    });
+    return cambiado;
+  }
+
   function getCourseProgress(){
-    try { return JSON.parse(localStorage.getItem(COURSE_KEY) || '{}'); } catch(e){ return {}; }
+    let all;
+    try { all = JSON.parse(localStorage.getItem(COURSE_KEY) || '{}'); } catch(e){ return {}; }
+    if(migrarProgreso(all)) localStorage.setItem(COURSE_KEY, JSON.stringify(all));
+    return all;
   }
   function doneSet(key){
     const p = getCourseProgress()[key];
     return new Set(Array.isArray(p) ? p : []);
   }
-  function markStepDone(courseKey, idx){
+  function markStepDone(courseKey, stepId){
     const all = getCourseProgress();
     const done = Array.isArray(all[courseKey]) ? all[courseKey].slice() : [];
-    if(done.indexOf(idx) === -1) done.push(idx);
-    done.sort((a, b) => a - b);
+    if(done.indexOf(stepId) === -1) done.push(stepId);
     all[courseKey] = done;
     localStorage.setItem(COURSE_KEY, JSON.stringify(all));
     const email = getStudentEmail();
@@ -1759,7 +1790,7 @@ ${qHTML}`;
     const c = started[0] || courses.filter(pending)[0];
     if(!c) return null;
     const done = doneSet(c.key);
-    for(let i = 0; i < c.steps.length; i++){ if(!done.has(i)) return { course: c, idx: i }; }
+    for(let i = 0; i < c.steps.length; i++){ if(!done.has(c.steps[i].id)) return { course: c, idx: i }; }
     return null;
   }
 
@@ -1825,7 +1856,7 @@ ${state}</button></div>`;
     const total = course.steps.length;
     const pct = Math.round(done.size / total * 100);
     let firstPending = -1;
-    for(let i = 0; i < total; i++){ if(!done.has(i)){ firstPending = i; break; } }
+    for(let i = 0; i < total; i++){ if(!done.has(course.steps[i].id)){ firstPending = i; break; } }
 
     let html = `<div class="ex-course-hero" style="${cssVars(course)}">
 <span class="ex-course-badge"><i class="ti ${course.icon}" aria-hidden="true"></i></span>
@@ -1836,7 +1867,7 @@ ${state}</button></div>`;
 </div></div><div class="ex-steps" style="${cssVars(course)}">`;
 
     course.steps.forEach((st, i) => {
-      const isDone = done.has(i);
+      const isDone = done.has(st.id);
       const isNext = i === firstPending;
       const num = isDone ? `<span class="ex-step-num done">${TICK}</span>`
                          : `<span class="ex-step-num${isNext ? ' next' : ''}">${i + 1}</span>`;
@@ -1855,7 +1886,8 @@ ${num}<span><h5>${jnEscapeHtml(st.title)}</h5>
     activeCourse = course; activeStepIdx = idx;
     const st = course.steps[idx];
     const saved = getStepState();
-    const resumable = saved && saved.course === course.key && saved.step === idx &&
+    const resumable = saved && saved.course === course.key &&
+      saved.stepId === (st || {}).id &&
       Array.isArray(saved.items) && saved.items.length;
     let picked;
     if(resumable){
@@ -1891,7 +1923,7 @@ ${num}<span><h5>${jnEscapeHtml(st.title)}</h5>
     const course = activeCourse, idx = activeStepIdx;
     const total = course.steps.length;
     const before = doneSet(course.key).size;
-    markStepDone(course.key, idx);
+    markStepDone(course.key, course.steps[idx].id);
     const after = doneSet(course.key).size;
     const complete = after >= total;
     activeStepIdx = null; activeStepTotal = 0; activeStepItems = [];
@@ -1900,7 +1932,7 @@ ${num}<span><h5>${jnEscapeHtml(st.title)}</h5>
 
     let nextIdx = -1;
     const done = doneSet(course.key);
-    for(let i = 0; i < total; i++){ if(!done.has(i)){ nextIdx = i; break; } }
+    for(let i = 0; i < total; i++){ if(!done.has(course.steps[i].id)){ nextIdx = i; break; } }
 
     const nextHTML = (!complete && nextIdx >= 0)
       ? `<div class="ex-signal-next"><span>${cLbl.next}</span>
@@ -2018,8 +2050,15 @@ ${nextHTML}<div class="ex-signal-btns">${btns}</div></div>`;
     const c = courseByKey(cursoParam);
     if(c){
       showMode('curso');
-      const pasoParam = parseInt(params.get('paso'), 10);
-      if(pasoParam >= 1 && pasoParam <= c.steps.length) startStep(c, pasoParam - 1);
+      // el paso se identifica por su id ("ser-estar"), que no se mueve aunque
+      // reordenemos el curso; los enlaces viejos traen el número de posición
+      const paso = params.get('paso') || '';
+      let i = c.steps.findIndex(st => st.id === paso);
+      if(i < 0){
+        const n = parseInt(paso, 10);
+        if(n >= 1 && n <= c.steps.length) i = n - 1;
+      }
+      if(i >= 0) startStep(c, i);
       else renderCourse(c);
     }
   }
@@ -2209,7 +2248,7 @@ ${nextHTML}<div class="ex-signal-btns">${btns}</div></div>`;
       indexPromise = new Promise((resolve, reject) => {
         if(window.SEARCH_INDEX){ resolve(); return; }
         const s = document.createElement('script');
-        s.src = 'search-index.js?v=20260912';
+        s.src = 'search-index.js?v=20260913';
         s.onload = resolve;
         s.onerror = reject;
         document.head.appendChild(s);

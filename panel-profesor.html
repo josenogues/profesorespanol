@@ -171,8 +171,10 @@ body{padding:40px 24px}
     var c = courses[courseSel.selectedIndex];
     if(!c) return;
     var html = '<option value="">Todo el curso (sigue donde lo dejó)</option>';
+    // el enlace lleva el id del paso, no su número: así sigue valiendo aunque
+    // más adelante añadamos o movamos pasos dentro del curso
     c.steps.forEach(function(st, i){
-      html += '<option value="' + (i + 1) + '">' + (i + 1) + '. ' + st.title + '</option>';
+      html += '<option value="' + st.id + '">' + (i + 1) + '. ' + st.title + '</option>';
     });
     stepSel.innerHTML = html;
     build();
