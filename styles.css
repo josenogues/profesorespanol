@@ -527,6 +527,7 @@ body[data-category="vocabulario"] .rail-tab[data-tab-cat="vocabulario"],
 body[data-category="expresiones"] .rail-tab[data-tab-cat="expresiones"],
 body[data-category="recursos"] .rail-tab[data-tab-cat="recursos"],
 body[data-category="ejercicios"] .rail-tab[data-tab-cat="ejercicios"],
+body[data-category="profesional"] .rail-tab[data-tab-cat="profesional"],
 body[data-category="atencion"] .rail-tab[data-tab-cat="gramatica"]{
   opacity:1;width:22px;box-shadow:3px 2px 8px rgba(0,0,0,.22)
 }
@@ -539,6 +540,7 @@ body[data-category="gramatica"] .eyebrow{background:#EAF3DE;color:#3B6D11}
 body[data-category="vocabulario"] .eyebrow{background:#FBEBD9;color:#A15C0E}
 body[data-category="expresiones"] .eyebrow{background:#EEEDFE;color:#4C4399}
 body[data-category="atencion"] .eyebrow{background:#FCEBEB;color:#A32D2D}
+body[data-category="profesional"] .eyebrow{background:#E1EFE9;color:#0B5442}
 
 /* ---------- Fondo de cuaderno (líneas + margen) ---------- */
 .main{
@@ -665,6 +667,7 @@ body[data-category="gramatica"] .handwritten-title{color:#5B9A3B}
 body[data-category="vocabulario"] .handwritten-title{color:#E8791E}
 body[data-category="expresiones"] .handwritten-title{color:#7A6FD1}
 body[data-category="atencion"] .handwritten-title{color:#5B9A3B}
+body[data-category="profesional"] .handwritten-title{color:#0F6E56}
 @media(max-width:900px){.handwritten-title{display:none}}
 
 /* ---------- Espiral decorativa en el borde del menu ---------- */
@@ -904,4 +907,40 @@ a.prof-card:hover{transform:translateY(-2px);box-shadow:0 4px 10px rgba(0,0,0,.0
   .ex-resume{gap:11px;padding:13px 14px}
   .ex-resume-icon{display:none}
   .ex-signal-btns{flex-direction:column}
+}
+
+/* ---------- Emails de ejemplo ----------
+   Un email de trabajo se entiende mejor viéndolo como email que descrito en
+   una tabla: por eso estas páginas enseñan el correo entero y las notas van
+   fuera, o debajo de cada pieza cuando lo que explicamos es la anatomía. */
+.mail{background:var(--card-bg);border:1px solid var(--border);border-radius:14px;
+  overflow:hidden;margin:16px 0 0;box-shadow:0 2px 10px rgba(58,69,112,.07)}
+[data-theme="dark"] .mail{box-shadow:0 2px 10px rgba(0,0,0,.3)}
+.mail-bar{background:var(--tint);padding:9px 16px;border-bottom:1px solid var(--border);
+  display:flex;align-items:center;gap:9px;font-size:12px;font-weight:700;
+  color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
+.mail-dots{display:flex;gap:5px;flex:none}
+.mail-dots i{width:9px;height:9px;border-radius:50%;background:var(--border);display:block}
+.mail-head{padding:12px 18px 10px;border-bottom:1px solid var(--border)}
+.mail-field{display:grid;grid-template-columns:70px 1fr;gap:12px;align-items:baseline;padding:2px 0}
+.mail-field > span{color:var(--muted);font-size:11.5px;font-weight:700;
+  text-transform:uppercase;letter-spacing:.04em}
+.mail-field > div{font-size:15px}
+.mail-field .mail-subject{font-weight:700;font-family:var(--font-head)}
+.mail-body{padding:16px 18px;font-size:15.5px;line-height:1.75}
+.mail-body p{margin:0 0 13px}
+.mail-body p:last-child{margin-bottom:0}
+.mail-sign{color:var(--muted)}
+
+/* anatomía: cada pieza lleva su nota debajo */
+.mail-note{display:block;font-size:13.5px;color:#0B5442;background:#E1EFE9;
+  border-left:3px solid #0F6E56;border-radius:0 8px 8px 0;padding:7px 13px;margin:6px 0 14px}
+.mail-note b{color:#0B5442}
+[data-theme="dark"] .mail-note{background:#14312a;color:#7fd6a0;border-left-color:#2f9c7c}
+[data-theme="dark"] .mail-note b{color:#7fd6a0}
+.mail-head .mail-note{margin:8px 0 2px}
+
+@media(max-width:560px){
+  .mail-field{grid-template-columns:1fr;gap:1px;padding:5px 0}
+  .mail-body,.mail-head{padding-left:14px;padding-right:14px}
 }

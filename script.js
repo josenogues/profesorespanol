@@ -2057,7 +2057,8 @@ ${nextHTML}<div class="ex-signal-btns">${btns}</div></div>`;
     gramatica: {es:'Gramática', it:'Grammatica', en:'Grammar'},
     vocabulario: {es:'Vocabulario', it:'Vocabolario', en:'Vocabulary'},
     expresiones: {es:'Expresiones', it:'Espressioni', en:'Expressions'},
-    atencion: {es:'Especial atención', it:'Attenzione a questi', en:'Watch out for this'}
+    atencion: {es:'Especial atención', it:'Attenzione a questi', en:'Watch out for this'},
+    profesional: {es:'Profesional', it:'Professionale', en:'Business'}
   };
   const l = labels[cat];
   if(!l) return;
@@ -2145,7 +2146,7 @@ ${nextHTML}<div class="ex-signal-btns">${btns}</div></div>`;
       indexPromise = new Promise((resolve, reject) => {
         if(window.SEARCH_INDEX){ resolve(); return; }
         const s = document.createElement('script');
-        s.src = 'search-index.js?v=20260905';
+        s.src = 'search-index.js?v=20260906';
         s.onload = resolve;
         s.onerror = reject;
         document.head.appendChild(s);
