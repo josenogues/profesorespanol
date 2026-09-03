@@ -1071,6 +1071,28 @@ ${qHTML}`;
         }
       }
 
+      // el progreso de cursos también se comparte entre pistas: se une lo de
+      // la nube con lo local, sin quitar nunca un paso ya dado
+      if(cloud.courseProgress){
+        const localC = getCourseProgress();
+        let changedC = false;
+        Object.keys(cloud.courseProgress).forEach(key => {
+          const remote = cloud.courseProgress[key];
+          if(!Array.isArray(remote)) return;
+          const merged = new Set(Array.isArray(localC[key]) ? localC[key] : []);
+          const before = merged.size;
+          remote.forEach(i => merged.add(i));
+          if(merged.size !== before){
+            localC[key] = [...merged].sort((a, b) => a - b);
+            changedC = true;
+          }
+        });
+        if(changedC){
+          localStorage.setItem(COURSE_KEY, JSON.stringify(localC));
+          if(panelCurso && panelCurso.style.display !== 'none' && !activeCourse) renderRoute();
+        }
+      }
+
       if(typeof cloud.exerciseCount === 'number' && window.jnGetExerciseCount){
         const localCount = window.jnGetExerciseCount();
         if(cloud.exerciseCount > localCount){
@@ -1613,10 +1635,251 @@ ${qHTML}`;
     }
   });
 
+  // ---------------------------------------------------------------- CURSOS
+  // Un curso es un camino de pasos cortos montado sobre los ejercicios que ya
+  // existen: cada paso son unos 7 ejercicios de un tema y un corte de nivel.
+  // El progreso se guarda POR PASO (no por ejercicio) y se comparte entre las
+  // tres pistas, igual que los niveles: el español practicado es el mismo.
+  const courses = cfg.courses || [];
+  const cLbl = cfg.courseLabels || {};
+  const panelCurso = document.getElementById('ex-mode-panel-curso');
+  const courseView = document.getElementById('ex-course-view');
+  const COURSE_KEY = 'jn_course_progress';
+  let activeCourse = null;
+  let activeStepIdx = null;
+  let activeStepTotal = 0;
+
+  function cText(key, vars){
+    let s = cLbl[key] || '';
+    Object.keys(vars || {}).forEach(k => { s = s.split('{' + k + '}').join(vars[k]); });
+    return s;
+  }
+
+  function getCourseProgress(){
+    try { return JSON.parse(localStorage.getItem(COURSE_KEY) || '{}'); } catch(e){ return {}; }
+  }
+  function doneSet(key){
+    const p = getCourseProgress()[key];
+    return new Set(Array.isArray(p) ? p : []);
+  }
+  function markStepDone(courseKey, idx){
+    const all = getCourseProgress();
+    const done = Array.isArray(all[courseKey]) ? all[courseKey].slice() : [];
+    if(done.indexOf(idx) === -1) done.push(idx);
+    done.sort((a, b) => a - b);
+    all[courseKey] = done;
+    localStorage.setItem(COURSE_KEY, JSON.stringify(all));
+    const email = getStudentEmail();
+    if(email && window.jnCloudSetFields){
+      window.jnCloudSetFields(email, { courseProgress: { [courseKey]: done } }).catch(() => {});
+    }
+  }
+
+  function courseByKey(key){ return courses.filter(c => c.key === key)[0] || null; }
+  function cssVars(c){ return `--c:${c.color};--c-soft:${c.color}1A`; }
+
+  // los ejercicios de un paso: tema(s) + corte de nivel + grupo (para los
+  // pasos de "errores", que salen de dentro de un mismo tema)
+  function stepPool(course, idx){
+    const st = course.steps[idx];
+    let pool = collectPool(st.topics);
+    if(st.levels) pool = pool.filter(it => st.levels.indexOf(it.level) !== -1);
+    if(st.group) pool = pool.filter(it => it.g === st.group);
+    return pool;
+  }
+
+  // el paso que toca: primero un curso empezado y sin acabar, si no, el primero
+  // que quede pendiente. Ningún curso se bloquea nunca por los anteriores.
+  function nextUp(){
+    const prog = getCourseProgress();
+    const pending = c => (prog[c.key] || []).length < c.steps.length;
+    const started = courses.filter(c => (prog[c.key] || []).length && pending(c));
+    const c = started[0] || courses.filter(pending)[0];
+    if(!c) return null;
+    const done = doneSet(c.key);
+    for(let i = 0; i < c.steps.length; i++){ if(!done.has(i)) return { course: c, idx: i }; }
+    return null;
+  }
+
+  function topicNameOf(step){
+    return step.topics.map(k => cfg.topicLabels[k] || k).join(' · ');
+  }
+
+  const TICK = '<i class="ti ti-check" aria-hidden="true"></i>';
+
+  function renderRoute(){
+    if(!courseView) return;
+    activeCourse = null; activeStepIdx = null; activeStepTotal = 0;
+    container.innerHTML = '';
+    const up = nextUp();
+    let html = '';
+    if(up){
+      const st = up.course.steps[up.idx];
+      html += `<button class="ex-resume" data-resume="${up.course.key}" data-step="${up.idx}">
+<span class="ex-resume-icon"><i class="ti ti-player-play" aria-hidden="true"></i></span>
+<span class="ex-resume-body">
+<span class="ex-resume-label">${cLbl.resume}</span>
+<span class="ex-resume-title">${cLbl.step} ${up.idx + 1} · ${jnEscapeHtml(st.title)}</span>
+<span class="ex-resume-meta">${jnEscapeHtml(up.course.name)} · ${st.n} ${cLbl.exercises} · ${cText('minutes', { m: Math.max(3, Math.round(st.n * 0.6)) })}</span>
+</span>
+<span class="ex-resume-go">${cLbl.cont}</span></button>`;
+    }
+    html += `<p class="ex-step-label">${cLbl.route}</p><div class="ex-route" style="--n:${courses.length}">`;
+    courses.forEach((c, i) => {
+      const done = doneSet(c.key);
+      const total = c.steps.length;
+      const complete = done.size >= total;
+      const isNow = !!up && up.course.key === c.key;
+      const prevDone = i > 0 && doneSet(courses[i - 1].key).size >= courses[i - 1].steps.length;
+      const lineIn = i > 0 ? `<span class="ex-route-line in${prevDone ? ' filled' : ''}" style="--c:${courses[i - 1].color}"></span>` : '';
+      const lineOut = i < courses.length - 1 ? `<span class="ex-route-line out${complete ? ' filled' : ''}"></span>` : '';
+      const dot = `<span class="ex-route-dot${complete ? ' done' : (isNow ? ' now' : '')}"></span>`;
+      const mark = complete
+        ? `<span class="ex-course-badge">${TICK}</span>`
+        : (done.size
+            ? `<span class="ex-course-ring" style="--pct:${Math.round(done.size / total * 100)}"><span>${done.size}/${total}</span></span>`
+            : '<span class="ex-course-badge empty"></span>');
+      const state = complete
+        ? `<span class="ex-course-state">${cLbl.done}</span>`
+        : (done.size
+            ? `<span class="ex-course-state">${cText('inProgress', { n: done.size + 1 })}</span>`
+            : `<span class="ex-course-state todo">${cLbl.notStarted}</span>`);
+      html += `<div class="ex-route-stop" style="${cssVars(c)}">
+<div class="ex-route-dots">${lineIn}${lineOut}${dot}</div>
+<button class="ex-course-card${isNow ? ' now' : ''}" data-course="${c.key}">
+<span class="ex-course-top"><h4>${jnEscapeHtml(c.name)}</h4>${mark}</span>
+<span class="ex-course-meta"><span class="ex-course-lvl">${c.levels}</span> ${total} ${cLbl.steps}</span>
+${state}</button></div>`;
+    });
+    html += '</div>';
+    courseView.innerHTML = html;
+  }
+
+  function renderCourse(course){
+    if(!courseView) return;
+    activeCourse = course; activeStepIdx = null; activeStepTotal = 0;
+    container.innerHTML = '';
+    const done = doneSet(course.key);
+    const total = course.steps.length;
+    const pct = Math.round(done.size / total * 100);
+    let firstPending = -1;
+    for(let i = 0; i < total; i++){ if(!done.has(i)){ firstPending = i; break; } }
+
+    let html = `<div class="ex-course-hero" style="${cssVars(course)}">
+<span class="ex-course-badge"><i class="ti ${course.icon}" aria-hidden="true"></i></span>
+<div class="ex-course-hero-body">
+<h4>${jnEscapeHtml(course.name)}</h4>
+<p>${jnEscapeHtml(course.desc)} · ${course.levels} · ${done.size}/${total} ${cLbl.steps}</p>
+<div class="ex-course-bar"><i style="width:${pct}%"></i></div>
+</div></div><div class="ex-steps" style="${cssVars(course)}">`;
+
+    course.steps.forEach((st, i) => {
+      const isDone = done.has(i);
+      const isNext = i === firstPending;
+      const num = isDone ? `<span class="ex-step-num done">${TICK}</span>`
+                         : `<span class="ex-step-num${isNext ? ' next' : ''}">${i + 1}</span>`;
+      const right = isNext
+        ? `<span class="ex-step-go">${cLbl.start}</span>`
+        : `<span class="ex-step-right">${isDone ? cLbl.again : st.n + ' ' + cLbl.exercises}</span>`;
+      html += `<button class="ex-step-row${isNext ? ' next' : ''}${isDone ? ' done' : ''}" data-step="${i}">
+${num}<span><h5>${jnEscapeHtml(st.title)}</h5>
+<span class="ex-step-src">${jnEscapeHtml(topicNameOf(st))}</span></span>${right}</button>`;
+    });
+    html += `</div><div style="margin-top:20px"><button class="button button-secondary button-sm" data-back-route="1"><i class="ti ti-arrow-left"></i> ${cLbl.backRoute}</button></div>`;
+    courseView.innerHTML = html;
+  }
+
+  function startStep(course, idx){
+    activeCourse = course; activeStepIdx = idx;
+    const st = course.steps[idx];
+    const pool = stepPool(course, idx);
+    const picked = sample(pool, Math.min(st.n, pool.length));
+    activeStepTotal = picked.length;
+    courseView.innerHTML = `<div class="ex-run-head" style="${cssVars(course)}">
+<button class="button button-secondary button-sm" data-back-course="1"><i class="ti ti-arrow-left"></i> ${cLbl.backCourse}</button>
+<h4>${cLbl.step} ${idx + 1} · ${jnEscapeHtml(st.title)}</h4>
+<span class="ex-step-right">${activeStepTotal} ${cLbl.exercises}</span></div>`;
+    container.innerHTML = picked.map(item => {
+      const withId = Object.assign({}, item, { exid: (item.exid || 'ex') + '-' + uid() });
+      return renderItemHTML(withId);
+    }).join('');
+    if(courseView.scrollIntoView) courseView.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  function finishStep(){
+    const course = activeCourse, idx = activeStepIdx;
+    const total = course.steps.length;
+    const before = doneSet(course.key).size;
+    markStepDone(course.key, idx);
+    const after = doneSet(course.key).size;
+    const complete = after >= total;
+    activeStepIdx = null; activeStepTotal = 0;
+    container.innerHTML = '';
+
+    let nextIdx = -1;
+    const done = doneSet(course.key);
+    for(let i = 0; i < total; i++){ if(!done.has(i)){ nextIdx = i; break; } }
+
+    const nextHTML = (!complete && nextIdx >= 0)
+      ? `<div class="ex-signal-next"><span>${cLbl.next}</span>
+<p>${cLbl.step} ${nextIdx + 1} · ${jnEscapeHtml(course.steps[nextIdx].title)}</p></div>`
+      : '';
+    const btns = (!complete && nextIdx >= 0)
+      ? `<button class="ex-signal-go" data-step="${nextIdx}">${cLbl.cont}</button>
+<button class="ex-signal-stop" data-back-course="1">${cLbl.stop}</button>`
+      : `<button class="ex-signal-go" data-back-route="1">${cLbl.backRoute}</button>`;
+
+    courseView.innerHTML = `<div class="ex-signal" style="${cssVars(course)}">
+<div class="ex-signal-tick">${complete ? '<i class="ti ti-trophy" aria-hidden="true"></i>' : TICK}</div>
+<h4>${complete ? cLbl.courseDone : cText('stepDone', { n: idx + 1 })}</h4>
+<p class="ex-signal-sub">${complete ? cText('courseDoneSub', { c: course.name }) : jnEscapeHtml(course.steps[idx].title)}</p>
+<div class="ex-signal-count">${after} ${cLbl.of} ${total} ${cLbl.steps}</div>
+<div class="ex-course-bar"><i id="ex-signal-bar" style="width:${Math.round(before / total * 100)}%"></i></div>
+${nextHTML}<div class="ex-signal-btns">${btns}</div></div>`;
+
+    // la barra se mueve DELANTE de sus ojos: ese movimiento es la recompensa
+    const bar = document.getElementById('ex-signal-bar');
+    if(bar) requestAnimationFrame(() => requestAnimationFrame(() => {
+      bar.style.width = Math.round(after / total * 100) + '%';
+    }));
+    if(courseView.scrollIntoView) courseView.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  // un paso se da por hecho cuando TODOS sus ejercicios están acertados;
+  // el contador global ya avisa cada vez que se acierta uno
+  document.addEventListener('jn-counter-updated', function(){
+    if(!activeCourse || activeStepIdx === null || !activeStepTotal) return;
+    const ok = container.querySelectorAll('.exercise-block.is-done').length;
+    if(ok >= activeStepTotal) finishStep();
+  });
+
+  if(courseView){
+    courseView.addEventListener('click', function(e){
+      const resume = e.target.closest('[data-resume]');
+      if(resume){
+        const c = courseByKey(resume.dataset.resume);
+        if(c) startStep(c, parseInt(resume.dataset.step, 10));
+        return;
+      }
+      if(e.target.closest('[data-back-route]')){ renderRoute(); return; }
+      if(e.target.closest('[data-back-course]')){ renderCourse(activeCourse); return; }
+      const card = e.target.closest('[data-course]');
+      if(card){
+        const c = courseByKey(card.dataset.course);
+        if(c) renderCourse(c);
+        return;
+      }
+      const step = e.target.closest('[data-step]');
+      if(step && activeCourse){ startStep(activeCourse, parseInt(step.dataset.step, 10)); }
+    });
+  }
+
   function showMode(mode){
     if(modeGrid) modeGrid.style.display = 'none';
     if(panelNivel) panelNivel.style.display = mode === 'nivel' ? '' : 'none';
     if(panelTema) panelTema.style.display = mode === 'tema' ? '' : 'none';
+    if(panelCurso) panelCurso.style.display = mode === 'curso' ? '' : 'none';
+    if(mode === 'curso') renderRoute();
     if(hubToolbar) hubToolbar.style.display = mode === 'tema' ? '' : 'none'; // "generar otra tanda" no tiene sentido en un recorrido por nivel
   }
 
@@ -1636,6 +1899,11 @@ ${qHTML}`;
     if(modeGrid) modeGrid.style.display = '';
     if(panelNivel) panelNivel.style.display = 'none';
     if(panelTema) panelTema.style.display = 'none';
+    if(panelCurso) panelCurso.style.display = 'none';
+    activeCourse = null;
+    activeStepIdx = null;
+    activeStepTotal = 0;
+    if(courseView) courseView.innerHTML = '';
     if(hubToolbar) hubToolbar.style.display = 'none';
     endExam(false);
   }
@@ -1660,6 +1928,18 @@ ${qHTML}`;
     activeTopics.add(tema);
     renderPills();
     render();
+  }
+
+  // ?curso=vivir[&paso=4] — así se le manda un deber concreto a un alumno
+  const cursoParam = params.get('curso');
+  if(cursoParam){
+    const c = courseByKey(cursoParam);
+    if(c){
+      showMode('curso');
+      const pasoParam = parseInt(params.get('paso'), 10);
+      if(pasoParam >= 1 && pasoParam <= c.steps.length) startStep(c, pasoParam - 1);
+      else renderCourse(c);
+    }
   }
 })();
 
@@ -1846,7 +2126,7 @@ ${qHTML}`;
       indexPromise = new Promise((resolve, reject) => {
         if(window.SEARCH_INDEX){ resolve(); return; }
         const s = document.createElement('script');
-        s.src = 'search-index.js?v=20260903';
+        s.src = 'search-index.js?v=20260904';
         s.onload = resolve;
         s.onerror = reject;
         document.head.appendChild(s);
