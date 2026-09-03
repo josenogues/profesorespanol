@@ -707,7 +707,8 @@ a.closest(".menu-item").classList.add("active","current-section");
     const slug = TOPIC_PAGE_SLUG[item._topicKey] || item._topicKey;
     const topicLabel = cfg.topicLabels[item._topicKey] || item._topicKey;
     const href = `${slug}-${cfg.lang}.html`;
-    return `<a class="exercise-theory-link" href="${href}"><i class="ti ti-book-2" aria-hidden="true"></i> ${cfg.labels.theoryPrefix || 'Teoría'}: ${cat.label} › ${topicLabel}</a>`;
+    // en otra pestaña a propósito: si se navega, al volver se pierde la tanda
+    return `<a class="exercise-theory-link" href="${href}" target="_blank" rel="noopener"><i class="ti ti-book-2" aria-hidden="true"></i> ${cfg.labels.theoryPrefix || 'Teoría'}: ${cat.label} › ${topicLabel}</a>`;
   }
 
   function kickerFor(type){
@@ -1672,6 +1673,25 @@ ${qHTML}`;
   let activeCourse = null;
   let activeStepIdx = null;
   let activeStepTotal = 0;
+  let activeStepItems = [];
+
+  // Un paso a medias se guarda entero (los ejercicios que salieron y cuáles
+  // están ya acertados). Antes, si te ibas a mirar la teoría o recargabas,
+  // volvías con otra tanda distinta y todo por contestar.
+  const STEP_KEY = 'jn_course_step_' + cfg.lang;
+
+  function getStepState(){
+    try { return JSON.parse(localStorage.getItem(STEP_KEY) || 'null'); } catch(e){ return null; }
+  }
+  function saveStepState(){
+    if(!activeCourse || activeStepIdx === null || !activeStepItems.length) return;
+    const done = [...container.querySelectorAll('.exercise-block')].map(b => b.classList.contains('is-done'));
+    localStorage.setItem(STEP_KEY, JSON.stringify({
+      course: activeCourse.key, step: activeStepIdx,
+      items: activeStepItems.map(stripItemForStorage), done: done
+    }));
+  }
+  function clearStepState(){ localStorage.removeItem(STEP_KEY); }
 
   function cText(key, vars){
     let s = cLbl[key] || '';
@@ -1822,8 +1842,17 @@ ${num}<span><h5>${jnEscapeHtml(st.title)}</h5>
   function startStep(course, idx){
     activeCourse = course; activeStepIdx = idx;
     const st = course.steps[idx];
-    const pool = stepPool(course, idx);
-    const picked = sample(pool, Math.min(st.n, pool.length));
+    const saved = getStepState();
+    const resumable = saved && saved.course === course.key && saved.step === idx &&
+      Array.isArray(saved.items) && saved.items.length;
+    let picked;
+    if(resumable){
+      picked = saved.items.map(rehydrateStoredItem);
+    } else {
+      const pool = stepPool(course, idx);
+      picked = sample(pool, Math.min(st.n, pool.length));
+    }
+    activeStepItems = picked;
     activeStepTotal = picked.length;
     courseView.innerHTML = `<div class="ex-run-head" style="${cssVars(course)}">
 <button class="button button-secondary button-sm" data-back-course="1"><i class="ti ti-arrow-left"></i> ${cLbl.backCourse}</button>
@@ -1833,6 +1862,16 @@ ${num}<span><h5>${jnEscapeHtml(st.title)}</h5>
       const withId = Object.assign({}, item, { exid: (item.exid || 'ex') + '-' + uid() });
       return renderItemHTML(withId);
     }).join('');
+    if(resumable && Array.isArray(saved.done)){
+      const bloques = [...container.querySelectorAll('.exercise-block')];
+      bloques.forEach((b, i) => {
+        if(!saved.done[i]) return;
+        b.classList.add('is-done');
+        const fb = b.querySelector('.exercise-feedback');
+        if(fb){ fb.textContent = cfg.labels.done; fb.className = 'exercise-feedback correct'; }
+      });
+    }
+    saveStepState();
     if(courseView.scrollIntoView) courseView.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 
@@ -1843,7 +1882,8 @@ ${num}<span><h5>${jnEscapeHtml(st.title)}</h5>
     markStepDone(course.key, idx);
     const after = doneSet(course.key).size;
     const complete = after >= total;
-    activeStepIdx = null; activeStepTotal = 0;
+    activeStepIdx = null; activeStepTotal = 0; activeStepItems = [];
+    clearStepState();
     container.innerHTML = '';
 
     let nextIdx = -1;
@@ -1880,7 +1920,7 @@ ${nextHTML}<div class="ex-signal-btns">${btns}</div></div>`;
   document.addEventListener('jn-counter-updated', function(){
     if(!activeCourse || activeStepIdx === null || !activeStepTotal) return;
     const ok = container.querySelectorAll('.exercise-block.is-done').length;
-    if(ok >= activeStepTotal) finishStep();
+    if(ok >= activeStepTotal) finishStep(); else saveStepState();
   });
 
   if(courseView){
@@ -2157,7 +2197,7 @@ ${nextHTML}<div class="ex-signal-btns">${btns}</div></div>`;
       indexPromise = new Promise((resolve, reject) => {
         if(window.SEARCH_INDEX){ resolve(); return; }
         const s = document.createElement('script');
-        s.src = 'search-index.js?v=20260908';
+        s.src = 'search-index.js?v=20260909';
         s.onload = resolve;
         s.onerror = reject;
         document.head.appendChild(s);
