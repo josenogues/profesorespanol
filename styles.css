@@ -11,7 +11,11 @@ h1,h2,h3,h4,.logo,.button,.tab-btn,.menu-title{font-family:var(--font-head)}
 .logo{display:block;font-size:23px;font-weight:700;color:#fff;margin-bottom:30px;letter-spacing:-.01em}
 .menu-title{font-size:12px;text-transform:uppercase;color:rgba(255,255,255,.65);margin:20px 0 10px;font-weight:600;letter-spacing:.06em}
 .menu-item{margin-bottom:4px}
-.menu-button{display:block;width:100%;background:none;border:0;padding:10px;text-align:left;font-size:17.5px;font-weight:600;cursor:pointer;color:#fff;border-radius:10px;transition:.15s;font-family:var(--font-body)}
+.menu-button{display:flex;align-items:center;gap:7px;width:100%;background:none;border:0;padding:10px;text-align:left;font-size:17.5px;font-weight:600;cursor:pointer;color:#fff;border-radius:10px;transition:.15s;font-family:var(--font-body)}
+/* en fila: si el nombre de la sección no cabe, parte él, pero la flechita
+   nunca se queda sola en una segunda línea (pasaba con «Exercises and courses») */
+.menu-button > i{flex:none}
+.menu-button > span{min-width:0}
 .menu-button:hover{background:rgba(255,255,255,.15)}
 .submenu{display:none;padding-left:15px;border-left:2px solid rgba(255,255,255,.25);margin-left:10px}
 .submenu a{display:block;padding:7px 10px;color:rgba(255,255,255,.8);font-size:15px;font-weight:500;border-radius:8px;transition:.15s}
@@ -943,4 +947,42 @@ a.prof-card:hover{transform:translateY(-2px);box-shadow:0 4px 10px rgba(0,0,0,.0
 @media(max-width:560px){
   .mail-field{grid-template-columns:1fr;gap:1px;padding:5px 0}
   .mail-body,.mail-head{padding-left:14px;padding-right:14px}
+}
+
+/* ---------- Documentos de ejemplo (CV, carta) ----------
+   Igual que con los emails: un CV se entiende viéndolo, no descrito. Y la
+   página del CV son dos cosas distintas, así que van separadas de verdad. */
+.doc{background:var(--card-bg);border:1px solid var(--border);border-radius:14px;
+  padding:24px 26px;margin:14px 0 0;box-shadow:0 2px 10px rgba(58,69,112,.07)}
+[data-theme="dark"] .doc{box-shadow:0 2px 10px rgba(0,0,0,.3)}
+.doc-name{font-family:var(--font-head);font-size:22px;font-weight:700;line-height:1.2}
+.doc-role{color:var(--muted);font-size:15px;margin-top:2px}
+.doc-contact{font-size:13.5px;color:var(--muted);margin-top:9px}
+.doc-sec-label{font-family:var(--font-head);font-size:12.5px;font-weight:700;text-transform:uppercase;
+  letter-spacing:.07em;color:#0F6E56;border-bottom:2px solid #0F6E56;padding-bottom:4px;margin-bottom:11px}
+[data-theme="dark"] .doc-sec-label{color:#5fbfa0;border-bottom-color:#2f9c7c}
+.doc-entry{font-size:15px;line-height:1.6}
+.doc-entry + .doc-entry{margin-top:13px}
+.doc-entry-top{display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap}
+.doc-when{color:var(--muted);font-size:13.5px;white-space:nowrap}
+.doc-entry ul{margin:5px 0 0;padding-left:18px}
+.doc-entry li{font-size:14.5px;margin-bottom:2px}
+.doc-entry p{margin:0;font-size:14.5px}
+.doc-body p{margin:0 0 12px;font-size:15px;line-height:1.75}
+.doc-body p:last-child{margin-bottom:0}
+
+/* las dos mitades de la página: CV arriba, carta abajo */
+.part-head{margin:14px 0 4px;padding-top:24px;border-top:3px solid #0F6E56}
+.part-head:first-of-type{margin-top:0;padding-top:0;border-top:0}
+.part-head .part-kicker{display:block;font-size:12px;font-weight:700;text-transform:uppercase;
+  letter-spacing:.07em;color:#0F6E56}
+[data-theme="dark"] .part-head .part-kicker{color:#5fbfa0}
+.part-head h3{font-size:27px;margin:5px 0 0;font-weight:700}
+.part-head > p{color:var(--muted);margin:7px 0 0;max-width:70ch;font-size:15.5px}
+.part-gap{height:34px}
+
+@media(max-width:560px){
+  .doc{padding:18px 16px}
+  .doc-entry-top{gap:2px}
+  .part-head h3{font-size:23px}
 }
