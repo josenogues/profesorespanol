@@ -43,7 +43,7 @@ h1,h2,h3,h4,.logo,.button,.tab-btn,.menu-title{font-family:var(--font-head)}
 .hero-text h2{color:var(--primary);font-size:21px;margin-bottom:14px;font-weight:600}
 .hero-text p{color:var(--muted);max-width:650px;margin-bottom:22px;font-size:16.5px}
 .buttons{display:flex;flex-wrap:wrap;gap:12px}
-.button{padding:13px 22px;border-radius:14px;font-weight:600;font-size:16px;border:1px solid transparent;cursor:pointer;transition:transform .08s,box-shadow .08s}
+.button{padding:13px 22px;border-radius:14px;font-weight:600;font-size:16px;border:1px solid transparent;cursor:pointer;color:var(--text);transition:transform .08s,box-shadow .08s}
 .button-primary{background:var(--primary);color:#fff;box-shadow:0 3px 0 var(--primary-dark)}
 .button-primary:hover{transform:translateY(2px);box-shadow:0 1px 0 var(--primary-dark)}
 .button-secondary{background:var(--card-bg);border-color:var(--border);box-shadow:0 3px 0 var(--border)}
@@ -404,7 +404,7 @@ footer{text-align:center;padding:30px;color:var(--muted);border-top:1px solid va
 .ex-mode-card i{font-size:26px;color:var(--primary);display:block;margin-bottom:12px}
 .ex-mode-card h3{margin:0 0 6px;font-size:18px;font-weight:600;color:var(--text);font-family:var(--font-head)}
 .ex-mode-card p{margin:0;color:var(--muted);font-size:14.5px}
-.ex-mode-back{display:inline-flex;align-items:center;gap:6px;background:var(--card-bg);border:1px solid var(--border);border-radius:10px;color:var(--primary);font-weight:700;font-size:13.5px;cursor:pointer;padding:8px 14px;margin-bottom:18px;font-family:var(--font-body);box-shadow:0 2px 0 var(--border);transition:transform .08s,box-shadow .08s,background .12s}
+.ex-mode-back{display:inline-flex;align-items:center;gap:6px;background:var(--card-bg);border:1px solid var(--border);border-radius:10px;color:var(--primary-dark);font-weight:700;font-size:13.5px;cursor:pointer;padding:8px 14px;margin-bottom:18px;font-family:var(--font-body);box-shadow:0 2px 0 var(--border);transition:transform .08s,box-shadow .08s,background .12s}
 .ex-mode-back:hover{background:var(--tint);transform:translateY(1px);box-shadow:0 1px 0 var(--border)}
 .ex-mode-back:active{transform:translateY(2px);box-shadow:none}
 .ex-topic-pills{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px}
@@ -826,7 +826,7 @@ a.prof-card:hover{transform:translateY(-2px);box-shadow:0 4px 10px rgba(0,0,0,.0
 .ex-route-dot.done{background:var(--c);border-color:var(--c)}
 .ex-route-dot.now{width:22px;height:22px;border-color:var(--c);border-width:3px}
 
-.ex-course-card{background:var(--card-bg);border:1px solid var(--border);border-radius:13px;
+.ex-course-card{background:var(--card-bg);color:var(--text);border:1px solid var(--border);border-radius:13px;
   padding:15px 14px;flex:1;display:flex;flex-direction:column;gap:8px;cursor:pointer;
   text-align:left;font-family:var(--font-body);transition:.15s}
 .ex-course-card:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(58,69,112,.14);border-color:var(--c)}
@@ -842,7 +842,7 @@ a.prof-card:hover{transform:translateY(-2px);box-shadow:0 4px 10px rgba(0,0,0,.0
 .ex-course-ring span{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
   font-size:9.5px;font-weight:800;color:var(--c);font-variant-numeric:tabular-nums}
 .ex-course-meta{font-size:12.5px;color:var(--muted);display:flex;gap:7px;flex-wrap:wrap;align-items:center}
-.ex-course-lvl{font-family:var(--font-head);font-weight:600;font-size:11.5px;color:var(--c);
+.ex-course-lvl{font-family:var(--font-head);font-weight:600;font-size:11.5px;color:var(--c-dark);
   background:var(--c-soft);padding:2px 7px;border-radius:6px}
 .ex-course-state{font-size:12.5px;font-weight:700;margin-top:auto;color:var(--c)}
 .ex-course-state.todo{color:var(--muted);font-weight:600}
@@ -859,7 +859,7 @@ a.prof-card:hover{transform:translateY(-2px);box-shadow:0 4px 10px rgba(0,0,0,.0
   transition:width .9s cubic-bezier(.22,.9,.3,1)}
 
 .ex-steps{display:flex;flex-direction:column;gap:2px}
-.ex-step-row{display:grid;grid-template-columns:34px 1fr auto;gap:14px;align-items:center;
+.ex-step-row{display:grid;grid-template-columns:34px 1fr auto;gap:14px;align-items:center;color:var(--text);
   padding:13px 14px;border-radius:12px;border:1px solid transparent;text-align:left;
   background:none;font-family:var(--font-body);cursor:pointer;width:100%}
 .ex-step-row:hover{background:var(--tint)}
@@ -986,3 +986,13 @@ a.prof-card:hover{transform:translateY(-2px);box-shadow:0 4px 10px rgba(0,0,0,.0
   .doc-entry-top{gap:2px}
   .part-head h3{font-size:23px}
 }
+
+/* ---------- Modo oscuro: colores que no se aclaraban ----------
+   --primary y los colores de curso son tonos oscuros pensados sobre blanco;
+   como texto sobre el fondo oscuro no llegaban al contraste mínimo. */
+[data-theme="dark"] .hero-text h2{color:var(--primary-dark)}
+[data-theme="dark"] body[data-category="profesional"] .handwritten-title{color:#3fae8c}
+[data-theme="dark"] .ex-course-lvl,
+[data-theme="dark"] .ex-course-state,
+[data-theme="dark"] .ex-course-ring span,
+[data-theme="dark"] .ex-step-num.next{color:var(--c-lite)}

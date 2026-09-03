@@ -1726,7 +1726,19 @@ ${qHTML}`;
   }
 
   function courseByKey(key){ return courses.filter(c => c.key === key)[0] || null; }
-  function cssVars(c){ return `--c:${c.color};--c-soft:${c.color}1A`; }
+
+  // el color del curso como TEXTO no se lee sobre fondo oscuro (el verde de
+  // profesional es el peor), así que se pasa también una versión aclarada
+  // amt positivo aclara hacia el blanco, negativo oscurece hacia el negro
+  function shade(hex, amt){
+    const n = parseInt(hex.slice(1), 16);
+    const mix = v => Math.round(amt >= 0 ? v + (255 - v) * amt : v * (1 + amt));
+    return '#' + [16, 8, 0].map(sh => mix((n >> sh) & 255).toString(16).padStart(2, '0')).join('');
+  }
+  function cssVars(c){
+    return `--c:${c.color};--c-soft:${c.color}1A;` +
+           `--c-lite:${shade(c.color, .45)};--c-dark:${shade(c.color, -.3)}`;
+  }
 
   // los ejercicios de un paso: tema(s) + corte de nivel + grupo (para los
   // pasos de "errores", que salen de dentro de un mismo tema)
@@ -2197,7 +2209,7 @@ ${nextHTML}<div class="ex-signal-btns">${btns}</div></div>`;
       indexPromise = new Promise((resolve, reject) => {
         if(window.SEARCH_INDEX){ resolve(); return; }
         const s = document.createElement('script');
-        s.src = 'search-index.js?v=20260909';
+        s.src = 'search-index.js?v=20260910';
         s.onload = resolve;
         s.onerror = reject;
         document.head.appendChild(s);
