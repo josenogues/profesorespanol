@@ -2209,7 +2209,7 @@ ${nextHTML}<div class="ex-signal-btns">${btns}</div></div>`;
       indexPromise = new Promise((resolve, reject) => {
         if(window.SEARCH_INDEX){ resolve(); return; }
         const s = document.createElement('script');
-        s.src = 'search-index.js?v=20260911';
+        s.src = 'search-index.js?v=20260912';
         s.onload = resolve;
         s.onerror = reject;
         document.head.appendChild(s);
