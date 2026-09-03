@@ -38,6 +38,35 @@ function formatDate(ts){
     ' ' + d.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
 }
 
+// Los cursos, para poder poner el nombre en vez de la clave. El total de pasos
+// lo escribe la web junto al progreso (courseTotals), porque no es el mismo en
+// todas las pistas: "los errores que te delatan" tiene 10 pasos en italiano y
+// 7 en inglés.
+const COURSE_NAMES = {
+  'primeros-pasos': 'Primeros pasos',
+  'viajar': 'Español para viajar',
+  'vivir': 'Vivir en España',
+  'errores': 'Los errores que te delatan',
+  'profesional': 'Español profesional'
+};
+
+function courseChips(student){
+  const prog = student.courseProgress;
+  if(!prog) return [];
+  const totals = student.courseTotals || {};
+  return Object.keys(prog).map(key => {
+    const done = Array.isArray(prog[key]) ? prog[key].length : 0;
+    if(!done) return null;
+    const total = totals[key];
+    return {
+      name: COURSE_NAMES[key] || key,
+      done,
+      total: total || null,
+      complete: !!total && done >= total
+    };
+  }).filter(Boolean).sort((a, b) => b.done - a.done);
+}
+
 function passedLevels(levelStatus){
   const chips = [];
   if(!levelStatus) return chips;
@@ -83,10 +112,15 @@ async function loadStudents(){
     const weekAgo = Date.now() - 7 * 24 * 60 * 60 * 1000;
     const activeThisWeek = students.filter(s => s.updatedAt && s.updatedAt.toMillis && s.updatedAt.toMillis() > weekAgo).length;
     const onlyVisited = students.filter(s => (s.visitCount || 0) > 0 && !(s.exerciseCount || 0)).length;
+    const allChips = students.map(courseChips);
+    const totalSteps = allChips.reduce((sum, cs) => sum + cs.reduce((n, c) => n + c.done, 0), 0);
+    const doingCourse = allChips.filter(cs => cs.some(c => !c.complete)).length;
 
     statsEl.innerHTML = [
       ['Alumnos', totalStudents],
       ['Ejercicios hechos (total)', totalExercises],
+      ['Pasos de curso hechos (total)', totalSteps],
+      ['Con un curso en marcha', doingCourse],
       ['Niveles superados (total)', totalPasses],
       ['Activos últimos 7 días', activeThisWeek],
       ['Solo han visitado (sin ejercicios)', onlyVisited]
@@ -99,10 +133,18 @@ async function loadStudents(){
         : '<span class="panel-empty">—</span>';
       const onlyVisits = (s.visitCount || 0) > 0 && !(s.exerciseCount || 0);
       const flag = onlyVisits ? '<span class="panel-flag">Solo visitas</span>' : '';
+      const cursos = courseChips(s);
+      const cursosHtml = cursos.length
+        ? `<div class="panel-levels">${cursos.map(c => {
+            const count = c.total ? `${c.done}/${c.total}` : `${c.done} pasos`;
+            return `<span class="panel-course-chip${c.complete ? ' done' : ''}">${esc(c.name)} <b>${esc(count)}</b></span>`;
+          }).join('')}</div>`
+        : '<span class="panel-empty">—</span>';
       return `<tr>
         <td>${esc(s.email || '—')}${flag}</td>
         <td>${esc(s.visitCount || 0)}</td>
         <td>${esc(s.exerciseCount || 0)}</td>
+        <td>${cursosHtml}</td>
         <td>${chipsHtml}</td>
         <td>${esc(formatDate(s.updatedAt))}</td>
       </tr>`;

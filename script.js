@@ -1671,7 +1671,13 @@ ${qHTML}`;
     localStorage.setItem(COURSE_KEY, JSON.stringify(all));
     const email = getStudentEmail();
     if(email && window.jnCloudSetFields){
-      window.jnCloudSetFields(email, { courseProgress: { [courseKey]: done } }).catch(() => {});
+      // el total va junto al progreso porque no es fijo: "los errores que te
+      // delatan" tiene 10 pasos en italiano y 7 en inglés, y el panel del
+      // profesor no sabe de qué pista viene cada alumno
+      const c = courseByKey(courseKey);
+      const fields = { courseProgress: { [courseKey]: done } };
+      if(c) fields.courseTotals = { [courseKey]: c.steps.length };
+      window.jnCloudSetFields(email, fields).catch(() => {});
     }
   }
 
