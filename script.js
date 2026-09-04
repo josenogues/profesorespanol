@@ -1731,7 +1731,14 @@ ${qHTML}`;
     'vivir': ['presentarse', 'reflexivos', 'fechas', 'medico', 'papeleo', 'casa',
               'transporte', 'barrio', 'vecinos'],
     'profesional': ['registro', 'email', 'emails-modelo', 'chat', 'telefono', 'reuniones',
-                    'presentaciones', 'cv', 'entrevista']
+                    'presentaciones', 'cv', 'entrevista'],
+    // "errores" no existe en español y tenía pasos distintos en cada pista,
+    // así que su orden viejo depende del idioma del alumno
+    'errores': {
+      it: ['traer-llevar', 'venir-ir', 'pedir-preguntar', 'dejar', 'recordar', 'cambio',
+           'mucho-muy', 'contraste', 'por-para', 'falsos-amigos'],
+      en: ['gustar', 'sujeto', 'adjetivo', 'por-para', 'fa1', 'fa2', 'varios']
+    }
   };
 
   function migrarProgreso(all){
@@ -1739,7 +1746,11 @@ ${qHTML}`;
     Object.keys(all).forEach(key => {
       const v = all[key];
       if(!Array.isArray(v) || !v.length || typeof v[0] !== 'number') return;
-      const antiguos = PASOS_ANTIGUOS[key] || [];
+      let antiguos = PASOS_ANTIGUOS[key];
+      if(antiguos && !Array.isArray(antiguos)) antiguos = antiguos[cfg.lang];
+      // si no sabemos a qué correspondían esos números, mejor dejarlos como
+      // están que borrarle el curso al alumno
+      if(!antiguos) return;
       all[key] = v.map(i => antiguos[i]).filter(Boolean);
       cambiado = true;
     });
