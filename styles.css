@@ -1,5 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Caveat:wght@700&display=swap');
-:root{--primary:#3A4570;--primary-dark:#232C4F;--primary-light:#6B76A3;--gold:#f2ab27;--gold-dark:#8a5b0a;--bg:#f4f6fb;--sidebar:#232C4F;--text:#232220;--muted:#6b6963;--border:#e7e5e0;--tint:#EEF0F6;--card-bg:#fff;--table-stripe:#fafafa;--badge-gold-bg:#fff3d6;--attention-bg:#fffaf0;--font-head:'Fredoka',Arial,sans-serif;--font-body:'Nunito',Arial,sans-serif}
+:root{--primary:#3A4570;--primary-dark:#232C4F;--primary-light:#6B76A3;--gold:#f2ab27;--gold-dark:#8a5b0a;--bg:#f4f6fb;--sidebar:#232C4F;--text:#232220;--muted:#6b6963;--border:#e7e5e0;--tint:#EEF0F6;--card-bg:#fff;--text-secondary:#3f3d38;--table-stripe:#fafafa;--badge-gold-bg:#fff3d6;--attention-bg:#fffaf0;--font-head:'Fredoka',Arial,sans-serif;--font-body:'Nunito',Arial,sans-serif}
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:var(--font-body);background:var(--bg);color:var(--text);line-height:1.65;font-size:17px}
 ::selection{background:var(--gold);color:#232220}
@@ -40,7 +40,7 @@ h1,h2,h3,h4,.logo,.button,.tab-btn,.menu-title{font-family:var(--font-head)}
 .reviews-section{position:relative;z-index:1;margin-bottom:50px}
 .profile-image{width:170px;height:170px;border-radius:50%;object-fit:cover;background:var(--tint);border:3px solid #fff;box-shadow:0 0 0 2px var(--border)}
 .hero-text h1{font-size:44px;margin-bottom:8px;font-weight:700;letter-spacing:-.01em}
-.hero-text h2{color:var(--primary);font-size:21px;margin-bottom:14px;font-weight:600}
+.hero-text h2{color:var(--primary-dark);font-size:21px;margin-bottom:14px;font-weight:600}
 .hero-text p{color:var(--muted);max-width:650px;margin-bottom:22px;font-size:16.5px}
 .buttons{display:flex;flex-wrap:wrap;gap:12px}
 .button{padding:13px 22px;border-radius:14px;font-weight:600;font-size:16px;border:1px solid transparent;cursor:pointer;color:var(--text);transition:transform .08s,box-shadow .08s}
@@ -87,7 +87,7 @@ h1,h2,h3,h4,.logo,.button,.tab-btn,.menu-title{font-family:var(--font-head)}
 .topic-toc-label{display:flex;align-items:center;gap:6px;font-size:13px;font-weight:700;color:var(--primary-dark);text-transform:uppercase;letter-spacing:.03em;margin-bottom:10px}
 .topic-toc-items{display:flex;flex-wrap:wrap;gap:8px}
 .topic-toc-item{display:inline-block;background:var(--card-bg);border:1px solid var(--border);color:var(--primary-dark);font-size:14px;font-weight:600;padding:6px 14px;border-radius:20px;text-decoration:none;transition:transform .1s,box-shadow .1s,border-color .1s,color .1s}
-.topic-toc-item:hover{border-color:var(--primary);color:var(--primary);transform:translateY(-2px);box-shadow:0 4px 10px rgba(58,69,112,.12)}
+.topic-toc-item:hover{border-color:var(--primary);color:var(--primary-dark);transform:translateY(-2px);box-shadow:0 4px 10px rgba(58,69,112,.12)}
 
 .table-wrap{overflow-x:auto;border-radius:12px;border:1px solid var(--border);margin-top:22px}
 table{width:100%;border-collapse:collapse;font-size:15.5px}
@@ -251,7 +251,9 @@ footer{text-align:center;padding:30px;color:var(--muted);border-top:1px solid va
 
 .ex-step-label{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:10px}
 .ex-category-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-bottom:16px}
-.ex-cat-card{border:1px solid var(--border);background:var(--card-bg);border-radius:12px;padding:18px;cursor:pointer;text-align:left;transition:.15s;font-family:var(--font-body)}
+/* el color hay que ponerlo: un <button> no hereda el del body, se queda con
+   el negro del navegador y en modo oscuro no se lee */
+.ex-cat-card{border:1px solid var(--border);background:var(--card-bg);border-radius:12px;padding:18px;cursor:pointer;text-align:left;transition:.15s;font-family:var(--font-body);color:var(--text)}
 .ex-cat-card i{font-size:22px;color:var(--cat-color,var(--muted));display:block;margin-bottom:10px}
 .ex-cat-card p{margin:0;font-family:var(--font-body);font-weight:500;font-size:16px;color:var(--text-secondary)}
 .ex-cat-card:hover{transform:translateY(-2px)}
@@ -401,7 +403,7 @@ footer{text-align:center;padding:30px;color:var(--muted);border-top:1px solid va
 .ex-mode-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-bottom:8px}
 .ex-mode-card{border:1px solid var(--border);background:var(--card-bg);border-radius:16px;padding:26px 22px;cursor:pointer;text-align:left;transition:.15s;font-family:var(--font-body)}
 .ex-mode-card:hover{transform:translateY(-3px);box-shadow:0 8px 20px rgba(58,69,112,.14);border-color:var(--primary)}
-.ex-mode-card i{font-size:26px;color:var(--primary);display:block;margin-bottom:12px}
+.ex-mode-card i{font-size:26px;color:var(--primary-dark);display:block;margin-bottom:12px}
 .ex-mode-card h3{margin:0 0 6px;font-size:18px;font-weight:600;color:var(--text);font-family:var(--font-head)}
 .ex-mode-card p{margin:0;color:var(--muted);font-size:14.5px}
 .ex-mode-back{display:inline-flex;align-items:center;gap:6px;background:var(--card-bg);border:1px solid var(--border);border-radius:10px;color:var(--primary-dark);font-weight:700;font-size:13.5px;cursor:pointer;padding:8px 14px;margin-bottom:18px;font-family:var(--font-body);box-shadow:0 2px 0 var(--border);transition:transform .08s,box-shadow .08s,background .12s}
@@ -450,6 +452,7 @@ h1 .ti,h2 .ti,h3 .ti{margin-right:8px}
 [data-theme="dark"]{
   --bg:#12161d;
   --text:#e7e5e1;
+  --text-secondary:#cfccc6;
   --muted:#9a978f;
   --border:#2b3038;
   --tint:#1a2534;
@@ -458,13 +461,16 @@ h1 .ti,h2 .ti,h3 .ti{margin-right:8px}
   --badge-gold-bg:#3a2f16;
   --attention-bg:#241f14;
   --sidebar:#1a2038;
+  /* --primary-dark y --gold-dark sólo se usan como color de TEXTO, así que
+     aquí valen su versión clara; --primary no se puede tocar porque además
+     es fondo en 66 sitios (por eso el texto tira de --primary-dark). */
   --primary-dark:#8891C4;
+  --gold-dark:#e8b04a;
 }
 [data-theme="dark"] .rating-badge,
 [data-theme="dark"] .access-gate-modal{box-shadow:0 8px 20px rgba(0,0,0,.4)}
 [data-theme="dark"] img.profile-image{border-color:var(--card-bg)}
 [data-theme="dark"] .deco-wrap .blob{opacity:.35}
-[data-theme="dark"] .badge-gold,[data-theme="dark"] .badge-trap,[data-theme="dark"] .badge-key{color:#f2ab27}
 
 .theme-switch{display:inline-block;margin-left:5px;cursor:pointer}
 .theme-switch input{display:none}
@@ -662,7 +668,7 @@ body[data-category="vocabulario"] .mini-card h4{color:#A15C0E}
 /* ---------- Selector de tiempos en dos niveles (simples/compuestos) ---------- */
 .tense-group-toggle{display:flex;gap:8px;margin-bottom:16px;background:var(--tint);padding:4px;border-radius:12px;width:fit-content}
 .group-btn{border:0;background:transparent;padding:9px 20px;border-radius:9px;font-family:var(--font-head);font-weight:700;font-size:14.5px;color:var(--muted);cursor:pointer;transition:.15s}
-.group-btn.active{background:var(--card-bg);color:var(--primary);box-shadow:0 1px 3px rgba(0,0,0,.1)}
+.group-btn.active{background:var(--card-bg);color:var(--primary-dark);box-shadow:0 1px 3px rgba(0,0,0,.1)}
 
 /* ---------- Titulo escrito a mano por seccion ---------- */
 .handwritten-title{font-family:'Caveat',cursive;font-weight:700;font-size:34px;color:var(--muted);transform:rotate(-2deg);margin-right:auto;white-space:nowrap}
@@ -990,7 +996,6 @@ a.prof-card:hover{transform:translateY(-2px);box-shadow:0 4px 10px rgba(0,0,0,.0
 /* ---------- Modo oscuro: colores que no se aclaraban ----------
    --primary y los colores de curso son tonos oscuros pensados sobre blanco;
    como texto sobre el fondo oscuro no llegaban al contraste mínimo. */
-[data-theme="dark"] .hero-text h2{color:var(--primary-dark)}
 [data-theme="dark"] body[data-category="profesional"] .handwritten-title{color:#3fae8c}
 [data-theme="dark"] .ex-course-lvl,
 [data-theme="dark"] .ex-course-state,
