@@ -54,13 +54,12 @@ function formatDate(ts){
 
 // Los cursos, para poder poner el nombre en vez de la clave. El total de pasos
 // lo escribe la web junto al progreso (courseTotals), porque no es el mismo en
-// todas las pistas: "los errores que te delatan" tiene 10 pasos en italiano y
-// 7 en inglés.
+// todas las pistas: "Vivir en España" tiene 15 pasos en español y 16 en
+// italiano y en inglés.
 const COURSE_NAMES = {
   'primeros-pasos': 'Primeros pasos',
   'viajar': 'Español para viajar',
   'vivir': 'Vivir en España',
-  'errores': 'Los errores que te delatan',
   'profesional': 'Español profesional'
 };
 

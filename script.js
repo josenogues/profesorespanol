@@ -1113,6 +1113,7 @@ ${qHTML}`;
         // lo que venga de la nube puede ser todavía por posición: se traduce
         const remoteAll = JSON.parse(JSON.stringify(cloud.courseProgress));
         migrarProgreso(remoteAll);
+        migrarErrores(remoteAll);
         Object.keys(remoteAll).forEach(key => {
           const remote = remoteAll[key];
           if(!Array.isArray(remote)) return;
@@ -1757,10 +1758,41 @@ ${qHTML}`;
     return cambiado;
   }
 
+  // «Los errores que te delatan» ha dejado de ser un curso: sus pasos se
+  // repartieron por los otros cuatro, donde el error aparece de verdad. Lo
+  // que un alumno llevara hecho se traslada al curso que ahora lo tiene, en
+  // vez de perderse.
+  // los pasos que al repartirlos cambiaron de nombre: en inglés los falsos
+  // amigos iban partidos en dos y había un paso cajón de sastre
+  const ALIAS_ERRORES = {
+    fa1: 'atn-falsos-amigos', fa2: 'atn-falsos-amigos',
+    varios: 'atn-pedir-preguntar'
+  };
+
+  function migrarErrores(all){
+    if(!Array.isArray(all.errores)) return false;
+    const hechos = all.errores;
+    delete all.errores;
+    hechos.forEach(id => {
+      const destino = ALIAS_ERRORES[id];
+      cfg.courses.forEach(c => {
+        const st = c.steps.find(x => x.id === destino || x.id === 'atn-' + id || x.id === id);
+        if(!st) return;
+        const arr = all[c.key] || (all[c.key] = []);
+        if(!arr.includes(st.id)) arr.push(st.id);
+      });
+    });
+    return true;
+  }
+
   function getCourseProgress(){
     let all;
     try { all = JSON.parse(localStorage.getItem(COURSE_KEY) || '{}'); } catch(e){ return {}; }
-    if(migrarProgreso(all)) localStorage.setItem(COURSE_KEY, JSON.stringify(all));
+    // el orden importa: primero los números a identificadores, y sólo
+    // entonces se puede saber qué pasos de "errores" llevaba hechos
+    let cambiado = migrarProgreso(all);
+    if(migrarErrores(all)) cambiado = true;
+    if(cambiado) localStorage.setItem(COURSE_KEY, JSON.stringify(all));
     return all;
   }
   function doneSet(key){
