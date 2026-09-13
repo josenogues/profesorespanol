@@ -599,8 +599,46 @@ a.closest(".menu-item").classList.add("active","current-section");
   // 3) Copia la URL que te da Google y pégala aquí abajo, reemplazando el valor de ejemplo.
   const SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTp3ALVArrf67RDanwYo7f9EA7dxBF3FDmi6qvXeB7MDJn2ApcV4kICTxJ-d-OGX4mz0ibXXELGdZNu/pub?gid=0&single=true&output=csv';
 
-  if(localStorage.getItem(ACCESS_KEY) === 'true' && localStorage.getItem('jn_student_email')){
-    jnRegisterVisit(localStorage.getItem('jn_student_email'));
+  // Lee la lista de emails autorizados del Sheet publicado. Sólo se mira la
+  // primera columna, así que se pueden poner notas al lado sin romper nada.
+  function leerLista(){
+    return fetch(SHEET_CSV_URL, { cache: 'no-store' })
+      .then(r => {
+        if(!r.ok) throw new Error('respuesta ' + r.status);
+        return r.text();
+      })
+      .then(csv => {
+        const emails = csv.split('\n')
+          .map(line => line.split(',')[0].trim().toLowerCase())
+          .filter(Boolean);
+        // Si el Sheet deja de estar publicado, Google devuelve una página de
+        // error CON código 200. Sin esta comprobación la "lista" sería basura
+        // y echaríamos a todos los alumnos de golpe.
+        if(!emails.some(e => e.includes('@'))) throw new Error('la lista no parece una lista de emails');
+        return emails;
+      });
+  }
+
+  // El permiso se guardaba para siempre en el navegador y no se volvía a
+  // comprobar: sacar a alguien del Sheet no lo echaba del portátil donde ya
+  // había entrado. Ahora se revisa por detrás en cada carga.
+  function revisarPermiso(email){
+    leerLista().then(emails => {
+      if(emails.includes(email)) return;
+      localStorage.removeItem(ACCESS_KEY);
+      localStorage.removeItem('jn_student_email');
+      location.reload();
+    }).catch(() => {
+      // sin red o Google caído: NO se echa a nadie. Sólo se revoca cuando
+      // Google contesta y el email de verdad no está en la lista.
+    });
+  }
+
+  const yaDentro = localStorage.getItem(ACCESS_KEY) === 'true' && localStorage.getItem('jn_student_email');
+  if(yaDentro){
+    const email = localStorage.getItem('jn_student_email');
+    jnRegisterVisit(email);
+    revisarPermiso(email);   // por detrás: la página ya se ve, no espera a Google
     return;
   }
 
@@ -632,10 +670,8 @@ a.closest(".menu-item").classList.add("active","current-section");
 
     btn.disabled = true;
     btn.textContent = 'Comprobando...';
-    fetch(SHEET_CSV_URL)
-      .then(r => r.text())
-      .then(csv => {
-        const emails = csv.split('\n').map(line => line.split(',')[0].trim().toLowerCase()).filter(Boolean);
+    leerLista()
+      .then(emails => {
         if(emails.includes(email)){
           localStorage.setItem(ACCESS_KEY, 'true');
           localStorage.setItem('jn_student_email', email);
