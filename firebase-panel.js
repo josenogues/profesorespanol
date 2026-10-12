@@ -6,7 +6,7 @@
 
 import { app } from "./firebase-init.js";
 import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
-import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
+import { getFirestore, collection, getDocs, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 
 function esc(s){
   return String(s == null ? '' : s).replace(/[&"<>]/g, c => ({'&':'&amp;','"':'&quot;','<':'&lt;','>':'&gt;'}[c]));
@@ -131,6 +131,7 @@ async function loadStudents(){
 
     statsEl.innerHTML = [
       ['Alumnos', totalStudents],
+      ['Clases asignadas (total)', students.reduce((n, s) => n + (Array.isArray(s.clases) ? s.clases.length : 0), 0)],
       ['Ejercicios hechos (total)', totalExercises],
       ['Pasos de curso hechos (total)', totalSteps],
       ['Con un curso en marcha', doingCourse],
@@ -138,6 +139,9 @@ async function loadStudents(){
       ['Activos últimos 7 días', activeThisWeek],
       ['Solo han visitado (sin ejercicios)', onlyVisited]
     ].map(([label, n]) => `<div class="panel-stat"><div class="n">${esc(n)}</div><div class="l">${esc(label)}</div></div>`).join('');
+
+    porEmail.clear();
+    students.forEach(s => { if(s.email) porEmail.set(s.email, s); });
 
     bodyEl.innerHTML = students.map(s => {
       const chips = passedLevels(s.levelStatus);
@@ -153,8 +157,10 @@ async function loadStudents(){
             return `<span class="panel-course-chip${c.complete ? ' done' : ''}">${esc(c.name)} <b>${esc(count)}</b></span>`;
           }).join('')}</div>`
         : '<span class="panel-empty">—</span>';
+      const nClases = Array.isArray(s.clases) ? s.clases.length : 0;
       return `<tr>
         <td>${esc(s.email || '—')}${flag}</td>
+        <td><button class="button button-secondary button-sm" data-ficha="${esc(s.email || '')}">${nClases} <i class="ti ti-chevron-right"></i></button></td>
         <td>${esc(s.visitCount || 0)}</td>
         <td>${esc(s.exerciseCount || 0)}</td>
         <td>${cursosHtml}</td>
@@ -172,3 +178,143 @@ async function loadStudents(){
 }
 
 refreshBtn.addEventListener('click', loadStudents);
+
+// ─────────────────── Ficha del alumno: asignar clases ───────────────────
+// El catálogo (qué clases existen) es código, en clases.js. Aquí solo se
+// guarda QUIÉN tiene cada una y con qué fecha. Se escribe el campo "clases"
+// y nada más: "updatedAt" es la última actividad DEL ALUMNO y no debe
+// moverse porque el profesor abra su ficha.
+
+const porEmail = new Map();
+const ficha = document.getElementById('ficha');
+const fQuien = document.getElementById('ficha-quien');
+const fResumen = document.getElementById('ficha-resumen');
+const fSelect = document.getElementById('ficha-clase');
+const fFecha = document.getElementById('ficha-fecha');
+const fLista = document.getElementById('ficha-lista');
+const fEstado = document.getElementById('ficha-estado');
+
+let emailAbierto = null;
+let clasesAbiertas = [];
+
+function hoyISO(){
+  const d = new Date();
+  return new Date(d.getTime() - d.getTimezoneOffset() * 60000).toISOString().slice(0, 10);
+}
+
+function tituloDe(id){
+  const c = window.jnClasePorId && window.jnClasePorId(id);
+  return c ? (c.titulo.es || id) : id;
+}
+
+function etiquetasDe(id){
+  const c = window.jnClasePorId && window.jnClasePorId(id);
+  return (c && c.etiquetas) || [];
+}
+
+function avisa(txt, tipo){
+  if(!fEstado) return;
+  fEstado.textContent = txt || '';
+  fEstado.className = 'ficha-estado' + (tipo ? ' ' + tipo : '');
+}
+
+function pintaFicha(){
+  if(!fLista) return;
+  const hoy = hoyISO();
+  // fechadas primero, de más reciente a más antigua; las sin fecha al final
+  const orden = clasesAbiertas.map((c, i) => ({ c, i }))
+    .sort((a, b) => {
+      if(!a.c.fecha && !b.c.fecha) return 0;
+      if(!a.c.fecha) return 1;
+      if(!b.c.fecha) return -1;
+      return b.c.fecha.localeCompare(a.c.fecha);
+    });
+
+  fLista.innerHTML = orden.length ? orden.map(({ c, i }) => {
+    const chips = etiquetasDe(c.id).map(t => `<span class="panel-course-chip">${esc(t)}</span>`).join('');
+    const pend = c.fecha && c.fecha > hoy;
+    return `<div class="fi-row${pend ? ' pend' : ''}">
+      <input type="date" class="fi-fecha" data-i="${i}" value="${esc(c.fecha || '')}">
+      <div class="fi-tit">${esc(tituloDe(c.id))}</div>
+      <div class="fi-chips">${chips}</div>
+      <input type="text" class="fi-nota" data-i="${i}" value="${esc(c.nota || '')}"
+             placeholder="Nota para ti: cómo fue, qué repetir...">
+      <button class="fi-quitar" data-quitar="${i}" title="Quitar de su lista">×</button>
+    </div>`;
+  }).join('') : '<p class="panel-empty">Todavía no tiene ninguna clase asignada.</p>';
+
+  const n = clasesAbiertas.length;
+  if(fResumen) fResumen.textContent = n === 1 ? '1 clase asignada' : n + ' clases asignadas';
+}
+
+async function guarda(){
+  if(!emailAbierto) return;
+  avisa('Guardando...');
+  try {
+    const db = getFirestore(app);
+    // sin updatedAt: ese campo es la actividad del alumno, no la mía
+    await withTimeout(setDoc(doc(db, 'students', emailAbierto),
+      { clases: clasesAbiertas, email: emailAbierto }, { merge: true }), 8000, 'setDoc');
+    const s = porEmail.get(emailAbierto);
+    if(s) s.clases = clasesAbiertas.slice();
+    avisa('Guardado.', 'ok');
+    setTimeout(() => avisa(''), 2000);
+  } catch(err) {
+    avisa('No se ha podido guardar: ' + (err && err.message ? err.message : 'error'), 'mal');
+  }
+}
+
+function abreFicha(email){
+  const s = porEmail.get(email);
+  if(!s || !ficha) return;
+  emailAbierto = email;
+  clasesAbiertas = Array.isArray(s.clases) ? s.clases.map(c => Object.assign({}, c)) : [];
+  if(fQuien) fQuien.textContent = email;
+  if(fSelect){
+    fSelect.innerHTML = (window.JN_CLASES || [])
+      .map(c => `<option value="${esc(c.id)}">${esc(c.titulo.es)}</option>`).join('')
+      || '<option value="">(todavía no hay clases en el catálogo)</option>';
+  }
+  if(fFecha) fFecha.value = hoyISO();
+  avisa('');
+  pintaFicha();
+  ficha.style.display = 'block';
+  ficha.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+document.addEventListener('click', function(e){
+  const btn = e.target.closest('[data-ficha]');
+  if(btn){ abreFicha(btn.dataset.ficha); return; }
+
+  const cerrar = e.target.closest('#ficha-cerrar');
+  if(cerrar){ ficha.style.display = 'none'; emailAbierto = null; return; }
+
+  const add = e.target.closest('#ficha-add');
+  if(add){
+    const id = fSelect && fSelect.value;
+    if(!id){ avisa('No hay ninguna clase que añadir.', 'mal'); return; }
+    if(clasesAbiertas.some(c => c.id === id)){
+      avisa('Esa clase ya está en su lista.', 'mal');
+      return;
+    }
+    clasesAbiertas.push({ id: id, fecha: (fFecha && fFecha.value) || '', nota: '' });
+    pintaFicha();
+    guarda();
+    return;
+  }
+
+  const quitar = e.target.closest('[data-quitar]');
+  if(quitar){
+    clasesAbiertas.splice(parseInt(quitar.dataset.quitar, 10), 1);
+    pintaFicha();
+    guarda();
+  }
+});
+
+// la fecha y la nota se guardan al salir del campo, no en cada tecla
+document.addEventListener('change', function(e){
+  const f = e.target.closest('.fi-fecha');
+  if(f){ clasesAbiertas[+f.dataset.i].fecha = f.value; pintaFicha(); guarda(); return; }
+  const n = e.target.closest('.fi-nota');
+  if(n){ clasesAbiertas[+n.dataset.i].nota = n.value; guarda(); }
+});

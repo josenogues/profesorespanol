@@ -10,7 +10,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
 <link rel="icon" type="image/png" href="favicon.png">
-<link rel="stylesheet" href="styles.css?v=20261012b">
+<link rel="stylesheet" href="styles.css?v=20261012c">
 <script>if(localStorage.getItem('jn_theme')==='dark')document.documentElement.setAttribute('data-theme','dark');</script>
 <style>
 body{padding:40px 24px}
@@ -47,6 +47,24 @@ body{padding:40px 24px}
 .panel-gate-input{width:100%;padding:12px 14px;border-radius:12px;border:1px solid var(--border);font-size:16px;margin-bottom:12px;font-family:var(--font-body)}
 .panel-gate-error{color:#b3261e;font-size:13.5px;min-height:18px;margin-top:6px}
 #panel-content{display:none}
+.ficha-cab{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap}
+.ficha-h3{font-family:var(--font-head);font-size:17px;margin:22px 0 10px}
+.ficha-op{text-transform:none;letter-spacing:0;font-weight:500;opacity:.8}
+.ficha-alta{display:flex;gap:12px;flex-wrap:wrap;align-items:flex-end}
+.ficha-alta label{display:block;font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+.ficha-alta select,.ficha-alta input{display:block;margin-top:5px;padding:9px 11px;border-radius:10px;border:1px solid var(--border);background:var(--card-bg);color:var(--text);font-family:var(--font-body);font-size:15px}
+.ficha-alta select{min-width:260px;font-weight:600}
+.fi-row{display:grid;grid-template-columns:150px 1fr auto;gap:10px 14px;align-items:start;background:var(--card-bg);border:1px solid var(--border);border-left:4px solid #7A5230;border-radius:12px;padding:12px 16px;margin-bottom:8px}
+.fi-row.pend{border-left-style:dashed}
+.fi-tit{grid-column:2;grid-row:1;font-family:var(--font-head);font-size:16.5px;font-weight:600}
+.fi-chips{grid-column:2;grid-row:2;display:flex;flex-wrap:wrap;gap:6px}
+.fi-nota{grid-column:2;grid-row:3;width:100%;margin-top:4px;padding:7px 10px;border-radius:8px;border:1px dashed var(--border);background:transparent;color:var(--text);font-family:var(--font-body);font-size:14px}
+.fi-fecha{grid-column:1;grid-row:1/4;padding:7px 9px;border-radius:8px;border:1px solid var(--border);background:var(--card-bg);color:var(--text);font-family:var(--font-body);font-size:14px;width:100%}
+.fi-quitar{grid-column:3;grid-row:1/4;background:none;border:0;color:var(--muted);font-size:20px;cursor:pointer;padding:0 4px}
+.ficha-estado{font-size:14px;color:var(--muted);min-height:20px;margin-top:10px}
+.ficha-estado.ok{color:#1c6b38}
+.ficha-estado.mal{color:#b3261e}
+@media(max-width:640px){.fi-row{grid-template-columns:1fr}.fi-fecha,.fi-tit,.fi-chips,.fi-nota{grid-column:1}.fi-fecha{grid-row:auto}.fi-quitar{grid-column:1;grid-row:auto;text-align:left}}
 </style>
 </head>
 <body>
@@ -90,10 +108,31 @@ body{padding:40px 24px}
 <div class="panel-stats" id="panel-stats"></div>
 
 <div class="table-wrap"><table>
-<thead><tr><th>Email</th><th>Visitas</th><th>Ejercicios hechos</th><th>Cursos</th><th>Niveles superados</th><th>Última actividad</th></tr></thead>
+<thead><tr><th>Email</th><th>Clases</th><th>Visitas</th><th>Ejercicios hechos</th><th>Cursos</th><th>Niveles superados</th><th>Última actividad</th></tr></thead>
 <tbody id="panel-table-body"></tbody>
 </table></div>
 <p class="panel-empty" id="panel-loading">Cargando...</p>
+<div class="panel-link" id="ficha" style="display:none">
+<div class="ficha-cab">
+<div><h2 style="margin:0"><i class="ti ti-notebook" aria-hidden="true"></i> <span id="ficha-quien"></span></h2>
+<p id="ficha-resumen" style="margin:4px 0 0"></p></div>
+<button class="button button-secondary button-sm" id="ficha-cerrar"><i class="ti ti-x"></i> Cerrar</button>
+</div>
+
+<h3 class="ficha-h3">Añadir una clase a su lista</h3>
+<div class="ficha-alta">
+<label>Clase<select id="ficha-clase"></select></label>
+<label>Fecha <span class="ficha-op">déjala vacía si no te acuerdas</span>
+<input type="date" id="ficha-fecha"></label>
+<button class="button button-primary" id="ficha-add"><i class="ti ti-plus"></i> Añadir</button>
+</div>
+
+<h3 class="ficha-h3">Sus clases</h3>
+<div id="ficha-lista"></div>
+<p class="ficha-estado" id="ficha-estado"></p>
+</div>
+
+
 </div>
 
 <script>
@@ -220,6 +259,7 @@ body{padding:40px 24px}
   refresh();
 })();
 </script>
-<script type="module" src="firebase-panel.js?v=20260917"></script>
+<script src="clases.js?v=20261012"></script>
+<script type="module" src="firebase-panel.js?v=20261012"></script>
 </body>
 </html>
