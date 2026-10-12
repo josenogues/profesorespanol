@@ -29,6 +29,7 @@
       cargando: 'Cargando tus clases...',
       sinAcceso: 'Entra con tu email para ver tus clases.',
       error: 'No se han podido cargar tus clases. Revisa tu conexión y vuelve a intentarlo.',
+      teoria: 'Teoría', practicar: 'Practicar', deberes: 'Deberes',
       hoy: 'hoy', anteriores: 'Clases anteriores', sinF: 'sin fecha'
     },
     it: {
@@ -48,6 +49,7 @@
       cargando: 'Carico le tue lezioni...',
       sinAcceso: 'Entra con la tua email per vedere le tue lezioni.',
       error: 'Non è stato possibile caricare le tue lezioni. Controlla la connessione e riprova.',
+      teoria: 'Teoria', practicar: 'Esercitati', deberes: 'Compiti',
       hoy: 'oggi', anteriores: 'Lezioni precedenti', sinF: 'senza data'
     },
     en: {
@@ -67,6 +69,7 @@
       cargando: 'Loading your classes...',
       sinAcceso: 'Sign in with your email to see your classes.',
       error: 'Your classes could not be loaded. Check your connection and try again.',
+      teoria: 'Theory', practicar: 'Practise', deberes: 'Homework',
       hoy: 'today', anteriores: 'Earlier classes', sinF: 'no date'
     }
   }[track] || {};
@@ -106,6 +109,23 @@
   function render(asignadas){
     // cada asignación: {id, fecha, nota}. La nota es de José y aquí no se usa.
     const filas = asignadas.map(a => {
+      // una clase rápida se guarda entera dentro de la asignación; una del
+      // catálogo solo por id, y el contenido vive en clases.js
+      if(a.rapida){
+        const r = a.rapida;
+        const auto = [];
+        (r.temas || []).forEach(id => {
+          const t = window.jnTemaPorId && window.jnTemaPorId(id);
+          (t ? t.etiquetas : []).forEach(e => { if(auto.indexOf(e) < 0) auto.push(e); });
+        });
+        return {
+          titulo: r.titulo || (fechaLarga(a.fecha) || T.sinF),
+          href: null,
+          rapida: r,
+          etiquetas: auto.concat(r.extra || []),
+          fecha: a.fecha || ''
+        };
+      }
       const c = window.jnClasePorId(a.id);
       if(!c) return null;                       // clase retirada del catálogo
       return {
@@ -159,12 +179,17 @@
       const busca = (f.titulo + ' ' + f.etiquetas.join(' ')).toLowerCase();
       const cuando = f.fecha ? (fechaLarga(f.fecha) || f.fecha) : T.sinF;
       const pendiente = f.fecha && f.fecha > hoy;
-      return '<a class="cl-row' + (pendiente ? ' cl-prox-row' : '') + '" href="' + esc(f.href) +
-             '" data-busca="' + esc(busca) + '">' +
-             '<span class="cl-fecha">' + esc(cuando) + '</span>' +
-             '<span class="cl-tit">' + esc(f.titulo) + '</span>' +
-             '<span class="cl-temas">' + chips + '</span>' +
-             '<i class="ti ti-chevron-right cl-flecha" aria-hidden="true"></i></a>';
+      const clases = 'cl-row' + (pendiente ? ' cl-prox-row' : '') + (f.rapida ? ' cl-abre' : '');
+      const cab = '<span class="cl-fecha">' + esc(cuando) + '</span>' +
+                  '<span class="cl-tit">' + esc(f.titulo) + '</span>' +
+                  '<span class="cl-temas">' + chips + '</span>';
+      if(!f.rapida){
+        return '<a class="' + clases + '" href="' + esc(f.href) + '" data-busca="' + esc(busca) + '">' +
+               cab + '<i class="ti ti-chevron-right cl-flecha" aria-hidden="true"></i></a>';
+      }
+      return '<div class="' + clases + '" data-busca="' + esc(busca) + '" tabindex="0" role="button">' +
+             cab + '<i class="ti ti-chevron-down cl-flecha" aria-hidden="true"></i>' +
+             '<div class="cl-detalle">' + detalleRapida(f.rapida) + '</div></div>';
     }).join('\n');
 
     pinta(
@@ -177,6 +202,36 @@
       '<p class="panel-empty" id="cl-vacio" style="display:none;margin-top:14px">' + esc(T.nada) + '</p>'
     );
     filtro();
+    document.querySelectorAll('.cl-abre').forEach(function(el){
+      el.addEventListener('click', function(){ el.classList.toggle('abierta'); });
+      el.addEventListener('keydown', function(ev){
+        if(ev.key === 'Enter' || ev.key === ' '){ ev.preventDefault(); el.classList.toggle('abierta'); }
+      });
+    });
+  }
+
+  // El contenido de una clase rápida: la regla de cada tema, con sus enlaces.
+  // La regla vive en temas.js, así que si se mejora, mejora en todas.
+  function detalleRapida(r){
+    const bloques = (r.temas || []).map(id => {
+      const t = window.jnTemaPorId && window.jnTemaPorId(id);
+      if(!t) return '';
+      const nom = (t.nombre && (t.nombre[track] || t.nombre.es)) || id;
+      const reg = (t.regla && (t.regla[track] || t.regla.es)) || '';
+      // falsos amigos solo tiene página en italiano e inglés
+      const hayPagina = !t.pistas || t.pistas.indexOf(track) >= 0;
+      const links =
+        (hayPagina ? '<a href="' + esc(t.pagina) + '-' + track + '.html">' +
+                     '<i class="ti ti-book-2" aria-hidden="true"></i> ' + esc(T.teoria) + '</a>' : '') +
+        '<a href="ejercicios-' + track + '.html?tema=' + esc(t.id) + '">' +
+        '<i class="ti ti-pencil" aria-hidden="true"></i> ' + esc(T.practicar) + '</a>';
+      return '<div class="cl-bloque"><b>' + esc(nom) + '</b><p>' + reg + '</p>' +
+             '<div class="cl-links">' + links + '</div></div>';
+    }).join('');
+    const deb = r.deberes
+      ? '<div class="cl-deberes"><b>' + esc(T.deberes) + '</b><p>' + esc(r.deberes) + '</p></div>'
+      : '';
+    return bloques + deb;
   }
 
   function filtro(){

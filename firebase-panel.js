@@ -318,3 +318,204 @@ document.addEventListener('change', function(e){
   const n = e.target.closest('.fi-nota');
   if(n){ clasesAbiertas[+n.dataset.i].nota = n.value; guarda(); }
 });
+
+// ──────────────────────── Clase rápida ────────────────────────
+// Se guarda dentro de la ficha de cada alumno, no en una colección aparte:
+// es el único sitio donde ya sabemos que se puede escribir, y una clase
+// rápida es por definición de usar y tirar. Si luego merece la pena, se
+// asciende al catálogo de clases.js y entonces vive en código.
+
+const rap = document.getElementById('rapida');
+const rTitulo = document.getElementById('rap-titulo');
+const rBusca = document.getElementById('rap-buscatema');
+const rSugs = document.getElementById('rap-sugs');
+const rTemas = document.getElementById('rap-temas');
+const rEtq = document.getElementById('rap-etiquetas');
+const rDeberes = document.getElementById('rap-deberes');
+const rAlumnos = document.getElementById('rap-alumnos');
+const rFecha = document.getElementById('rap-fecha');
+const rVista = document.getElementById('rap-vista');
+const rEstado = document.getElementById('rap-estado');
+
+let rSel = [];        // ids de temas marcados
+let rMano = [];       // etiquetas puestas a mano
+let rQuien = [];      // emails marcados
+
+function normaliza(s){
+  return String(s || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
+}
+
+function etiquetasAuto(){
+  const out = [];
+  rSel.forEach(id => {
+    const t = window.jnTemaPorId(id);
+    (t ? t.etiquetas : []).forEach(e => { if(out.indexOf(e) < 0) out.push(e); });
+  });
+  return out;
+}
+
+function pintaRapida(){
+  // temas marcados
+  rTemas.innerHTML = rSel.map(id => {
+    const t = window.jnTemaPorId(id);
+    if(!t) return '';
+    return `<div class="rap-tema"><div><b>${esc(t.nombre.es)}</b>
+      <div class="r">${t.regla.es}</div></div>
+      <button class="rap-x" data-quitatema="${esc(id)}" title="quitar">×</button></div>`;
+  }).join('');
+
+  // etiquetas: las de los temas y las tuyas
+  rEtq.innerHTML =
+    etiquetasAuto().map(e => `<span class="mk-chip">${esc(e)}</span>`).join('') +
+    rMano.map(e => `<span class="mk-chip mano">${esc(e)}<b data-quitaetq="${esc(e)}">×</b></span>`).join('');
+
+  // lo que verá el alumno
+  const titulo = (rTitulo.value || '').trim();
+  const bloques = rSel.map(id => {
+    const t = window.jnTemaPorId(id);
+    if(!t) return '';
+    return `<div class="pv-bloque"><b>${esc(t.nombre.es)}</b><p>${t.regla.es}</p></div>`;
+  }).join('');
+  const deb = (rDeberes.value || '').trim();
+  rVista.innerHTML = (titulo || bloques)
+    ? `<h3 class="pv-h3">${esc(titulo || '(sin título: se pondrá la fecha)')}</h3>` +
+      `<div class="mk-chips" style="margin-bottom:14px">` +
+      etiquetasAuto().concat(rMano).map(e => `<span class="mk-chip">${esc(e)}</span>`).join('') +
+      `</div>${bloques}` +
+      (deb ? `<div class="pv-deb"><b>Deberes</b><p>${esc(deb)}</p></div>` : '')
+    : '<p class="pv-vacio">Marca un tema y aquí aparecerá lo que verá el alumno.</p>';
+}
+
+function pintaAlumnos(){
+  const emails = [...porEmail.keys()].sort();
+  rAlumnos.innerHTML = emails.length
+    ? emails.map(e => `<label class="rap-al${rQuien.indexOf(e) >= 0 ? ' on' : ''}">
+        <input type="checkbox" data-quien="${esc(e)}"${rQuien.indexOf(e) >= 0 ? ' checked' : ''}> ${esc(e)}</label>`).join('')
+    : '<span class="panel-empty">Todavía no hay alumnos.</span>';
+}
+
+function sugerencias(q){
+  const n = normaliza(q);
+  if(!n){ rSugs.classList.remove('on'); rSugs.innerHTML = ''; return; }
+  // primero lo que empieza por lo escrito, luego el nombre, luego la etiqueta
+  // exacta y al final la regla: si escribes «por» quieres «Por o para», no
+  // «Preposiciones» porque en su descripción aparezca la palabra
+  function puntos(t){
+    const nom = normaliza(t.nombre.es);
+    if(nom.startsWith(n)) return 0;
+    if(t.etiquetas.some(e => normaliza(e) === n)) return 1;
+    if(nom.includes(n)) return 2;
+    if(t.etiquetas.some(e => normaliza(e).includes(n))) return 3;
+    if(normaliza(t.regla.es).includes(n)) return 4;
+    return 9;
+  }
+  const hits = (window.JN_TEMAS || [])
+    .filter(t => rSel.indexOf(t.id) < 0 && puntos(t) < 9)
+    .sort((a, b) => puntos(a) - puntos(b) || a.nombre.es.localeCompare(b.nombre.es))
+    .slice(0, 8);
+  rSugs.innerHTML = hits.map(t =>
+    `<button data-tema="${esc(t.id)}">${esc(t.nombre.es)}<span class="cat">${esc(t.cat)}</span></button>`).join('')
+    || '<button disabled style="color:var(--muted)">Ningún tema con eso</button>';
+  rSugs.classList.add('on');
+}
+
+function abreRapida(){
+  rSel = []; rMano = []; rQuien = [];
+  rTitulo.value = ''; rDeberes.value = ''; rBusca.value = '';
+  rFecha.value = hoyISO();
+  rEstado.textContent = ''; rEstado.className = 'ficha-estado';
+  rSugs.classList.remove('on');
+  pintaAlumnos(); pintaRapida();
+  rap.style.display = 'block';
+  rap.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+async function guardaRapida(){
+  if(!rSel.length){ rEstado.textContent = 'Marca al menos un tema.'; rEstado.className = 'ficha-estado mal'; return; }
+  if(!rQuien.length){ rEstado.textContent = '¿A qué alumno se la asigno?'; rEstado.className = 'ficha-estado mal'; return; }
+  const clase = {
+    rapida: {
+      titulo: (rTitulo.value || '').trim(),
+      temas: rSel.slice(),
+      extra: rMano.slice(),
+      deberes: (rDeberes.value || '').trim()
+    },
+    fecha: rFecha.value || '',
+    nota: ''
+  };
+  rEstado.textContent = 'Guardando...'; rEstado.className = 'ficha-estado';
+  try {
+    const db = getFirestore(app);
+    for(const email of rQuien){
+      const s = porEmail.get(email) || {};
+      const lista = Array.isArray(s.clases) ? s.clases.slice() : [];
+      lista.push(JSON.parse(JSON.stringify(clase)));
+      await withTimeout(setDoc(doc(db, 'students', email),
+        { clases: lista, email: email }, { merge: true }), 8000, 'setDoc');
+      s.clases = lista;
+      porEmail.set(email, s);
+    }
+    rEstado.textContent = 'Asignada a ' + rQuien.length + (rQuien.length === 1 ? ' alumno.' : ' alumnos.');
+    rEstado.className = 'ficha-estado ok';
+    setTimeout(() => { rap.style.display = 'none'; loadStudents(); }, 1200);
+  } catch(err) {
+    rEstado.textContent = 'No se ha podido guardar: ' + (err && err.message ? err.message : 'error');
+    rEstado.className = 'ficha-estado mal';
+  }
+}
+
+document.addEventListener('click', function(e){
+  if(e.target.closest('#rap-abrir')){ abreRapida(); return; }
+  if(e.target.closest('#rap-cerrar')){ rap.style.display = 'none'; return; }
+
+  const sug = e.target.closest('[data-tema]');
+  if(sug){
+    rSel.push(sug.dataset.tema);
+    rBusca.value = ''; sugerencias('');
+    pintaRapida();
+    return;
+  }
+  const qt = e.target.closest('[data-quitatema]');
+  if(qt){ rSel = rSel.filter(x => x !== qt.dataset.quitatema); pintaRapida(); return; }
+
+  const qe = e.target.closest('[data-quitaetq]');
+  if(qe){ rMano = rMano.filter(x => x !== qe.dataset.quitaetq); pintaRapida(); return; }
+
+  if(e.target.closest('#rap-etq-add')){
+    const inp = document.getElementById('rap-etq');
+    const v = (inp.value || '').trim();
+    if(v && etiquetasAuto().indexOf(v) < 0 && rMano.indexOf(v) < 0) rMano.push(v);
+    inp.value = ''; pintaRapida();
+    return;
+  }
+  if(e.target.closest('#rap-guardar')){ guardaRapida(); }
+});
+
+document.addEventListener('input', function(e){
+  if(e.target === rBusca){ sugerencias(rBusca.value); return; }
+  if(e.target === rTitulo || e.target === rDeberes) pintaRapida();
+});
+
+document.addEventListener('change', function(e){
+  const q = e.target.closest('[data-quien]');
+  if(q){
+    const email = q.dataset.quien;
+    if(q.checked){ if(rQuien.indexOf(email) < 0) rQuien.push(email); }
+    else rQuien = rQuien.filter(x => x !== email);
+    pintaAlumnos();
+  }
+});
+
+// Enter en el buscador coge la primera sugerencia; Enter en la etiqueta la añade
+document.addEventListener('keydown', function(e){
+  if(e.key !== 'Enter') return;
+  if(e.target === rBusca){
+    e.preventDefault();
+    const primera = rSugs.querySelector('[data-tema]');
+    if(primera) primera.click();
+  }
+  if(e.target && e.target.id === 'rap-etq'){
+    e.preventDefault();
+    document.getElementById('rap-etq-add').click();
+  }
+});

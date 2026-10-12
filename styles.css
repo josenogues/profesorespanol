@@ -1095,3 +1095,18 @@ a.menu-button.current-page{background:rgba(255,255,255,.15)}
   .cl-temas{grid-column:1;grid-row:3}
   .cl-flecha{display:none}
 }
+
+/* Clase rápida desplegable dentro de la lista del alumno */
+.cl-abre{cursor:pointer}
+.cl-detalle{grid-column:1/-1;display:none;margin-top:12px;padding-top:12px;border-top:1px solid var(--border)}
+.cl-abre.abierta .cl-detalle{display:block}
+.cl-abre.abierta .cl-flecha{transform:rotate(180deg)}
+.cl-bloque{border-left:3px solid #7A5230;padding-left:12px;margin-bottom:14px}
+.cl-bloque b{font-family:var(--font-head);font-size:15.5px;color:var(--text)}
+.cl-bloque p{margin:3px 0 6px;font-size:14.5px;line-height:1.5;color:var(--text)}
+.cl-links{display:flex;flex-wrap:wrap;gap:14px}
+.cl-links a{font-size:13.5px;color:var(--primary-dark);font-weight:600;text-decoration:none}
+.cl-links a:hover{text-decoration:underline}
+.cl-deberes{background:var(--tint);border-left:3px solid #7A5230;border-radius:8px;padding:12px 14px;margin-top:4px}
+.cl-deberes b{font-family:var(--font-head);font-size:15px;color:var(--text)}
+.cl-deberes p{margin:3px 0 0;font-size:14.5px;color:var(--text)}

@@ -10,7 +10,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
 <link rel="icon" type="image/png" href="favicon.png">
-<link rel="stylesheet" href="styles.css?v=20261012c">
+<link rel="stylesheet" href="styles.css?v=20261013">
 <script>if(localStorage.getItem('jn_theme')==='dark')document.documentElement.setAttribute('data-theme','dark');</script>
 <style>
 body{padding:40px 24px}
@@ -64,6 +64,43 @@ body{padding:40px 24px}
 .ficha-estado{font-size:14px;color:var(--muted);min-height:20px;margin-top:10px}
 .ficha-estado.ok{color:#1c6b38}
 .ficha-estado.mal{color:#b3261e}
+.rap-cols{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,400px);gap:24px;margin-top:18px;align-items:start}
+.rap-lbl{display:block;font-size:12.5px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--muted);margin:20px 0 7px}
+.rap-lbl:first-child{margin-top:0}
+.rap-inp{width:100%;padding:11px 13px;border-radius:10px;border:1px solid var(--border);background:var(--card-bg);color:var(--text);font-family:var(--font-body);font-size:15.5px}
+.rap-ta{resize:vertical;line-height:1.5}
+.rap-buscar{position:relative}
+.rap-buscar > i{position:absolute;left:13px;top:19px;transform:translateY(-50%);color:var(--muted)}
+.rap-buscar input{width:100%;padding:11px 13px 11px 38px;border-radius:10px;border:1px solid var(--border);background:var(--card-bg);color:var(--text);font-family:var(--font-body);font-size:15.5px}
+.rap-sugs{position:absolute;z-index:5;left:0;right:0;top:46px;background:var(--card-bg);border:1px solid var(--border);border-radius:10px;overflow:hidden;display:none}
+.rap-sugs.on{display:block}
+.rap-sugs button{display:block;width:100%;text-align:left;background:none;border:0;padding:9px 13px;color:var(--text);font-family:var(--font-body);font-size:15px;cursor:pointer}
+.rap-sugs button:hover,.rap-sugs button.sel{background:var(--tint)}
+.rap-sugs .cat{color:var(--muted);font-size:13px;margin-left:6px}
+.rap-tema{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;background:var(--tint);border-radius:10px;padding:10px 12px;margin-top:6px}
+.rap-tema .r{font-size:13.5px;color:var(--muted);margin-top:3px;line-height:1.45}
+.rap-x{background:none;border:0;color:var(--muted);font-size:19px;line-height:1;cursor:pointer;padding:0 2px}
+.mk-chips{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.mk-chip{background:var(--tint);color:var(--primary-dark);font-size:12px;font-weight:600;padding:2px 9px;border-radius:10px}
+.mk-chip.mano{background:transparent;border:1px dashed var(--muted);color:var(--text)}
+.mk-chip b{cursor:pointer;margin-left:5px;opacity:.6}
+.rap-addetq{display:flex;gap:8px;margin-top:8px;max-width:340px}
+.rap-addetq input{flex:1;padding:8px 11px;border-radius:9px;border:1px solid var(--border);background:var(--card-bg);color:var(--text);font-family:var(--font-body);font-size:14px}
+.rap-als{display:flex;flex-wrap:wrap;gap:8px}
+.rap-al{display:inline-flex;align-items:center;gap:7px;background:var(--card-bg);border:1px solid var(--border);border-radius:10px;padding:8px 13px;font-size:15px;font-weight:600;cursor:pointer}
+.rap-al.on{border-color:#7A5230;background:var(--tint)}
+.rap-prev{position:sticky;top:20px}
+.rap-prevcab{font-size:12.5px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--muted);margin-bottom:8px}
+.pv{background:var(--bg);border:1px solid var(--border);border-radius:14px;padding:20px;min-height:120px}
+.pv-h3{font-family:var(--font-head);font-size:19px;margin:0 0 10px}
+.pv-bloque{border-left:3px solid #7A5230;padding-left:12px;margin-bottom:14px}
+.pv-bloque b{font-family:var(--font-head);font-size:15.5px}
+.pv-bloque p{margin:3px 0 0;font-size:14.5px;line-height:1.5}
+.pv-deb{background:var(--tint);border-left:3px solid #7A5230;border-radius:8px;padding:12px 14px;margin-top:16px}
+.pv-deb b{font-family:var(--font-head);font-size:15px}
+.pv-deb p{margin:3px 0 0;font-size:14.5px}
+.pv-vacio{color:var(--muted);font-size:14.5px}
+@media(max-width:900px){.rap-cols{grid-template-columns:1fr}.rap-prev{position:static}}
 @media(max-width:640px){.fi-row{grid-template-columns:1fr}.fi-fecha,.fi-tit,.fi-chips,.fi-nota{grid-column:1}.fi-fecha{grid-row:auto}.fi-quitar{grid-column:1;grid-row:auto;text-align:left}}
 </style>
 </head>
@@ -106,12 +143,59 @@ body{padding:40px 24px}
 </div>
 
 <div class="panel-stats" id="panel-stats"></div>
+<div style="display:flex;justify-content:flex-end;margin-bottom:12px">
+<button class="button button-primary button-sm" id="rap-abrir"><i class="ti ti-bolt"></i> Clase rápida</button>
+</div>
 
 <div class="table-wrap"><table>
 <thead><tr><th>Email</th><th>Clases</th><th>Visitas</th><th>Ejercicios hechos</th><th>Cursos</th><th>Niveles superados</th><th>Última actividad</th></tr></thead>
 <tbody id="panel-table-body"></tbody>
 </table></div>
 <p class="panel-empty" id="panel-loading">Cargando...</p>
+<div class="panel-link" id="rapida" style="display:none">
+<div class="ficha-cab">
+<div><h2 style="margin:0"><i class="ti ti-bolt" aria-hidden="true"></i> Clase rápida</h2>
+<p style="margin:4px 0 0">Marca lo que habéis visto. La ficha del alumno se monta sola.</p></div>
+<button class="button button-secondary button-sm" id="rap-cerrar"><i class="ti ti-x"></i> Cancelar</button>
+</div>
+
+<div class="rap-cols">
+<div>
+<label class="rap-lbl">Título <span class="ficha-op">si lo dejas vacío, se pone la fecha</span></label>
+<input class="rap-inp" type="text" id="rap-titulo" placeholder="Los cuatro que siempre se confunden">
+
+<label class="rap-lbl">¿Qué habéis visto?</label>
+<div class="rap-buscar"><i class="ti ti-search" aria-hidden="true"></i>
+<input type="text" id="rap-buscatema" placeholder="Escribe un tema: por, mucho, subjuntivo..." autocomplete="off">
+<div class="rap-sugs" id="rap-sugs"></div></div>
+<div id="rap-temas"></div>
+
+<label class="rap-lbl">Etiquetas <span class="ficha-op">salen solas de los temas</span></label>
+<div class="mk-chips" id="rap-etiquetas"></div>
+<div class="rap-addetq"><input type="text" id="rap-etq" placeholder="añadir una etiqueta tuya"><button class="button button-secondary button-sm" id="rap-etq-add">+</button></div>
+
+<label class="rap-lbl">Deberes <span class="ficha-op">opcional</span></label>
+<textarea class="rap-inp rap-ta" id="rap-deberes" rows="3" placeholder="Escribe 8 frases usando las cuatro parejas. Me las lees el jueves."></textarea>
+
+<label class="rap-lbl">¿A quién?</label>
+<div class="rap-als" id="rap-alumnos"></div>
+
+<label class="rap-lbl">Fecha</label>
+<input class="rap-inp" type="date" id="rap-fecha" style="max-width:200px">
+
+<div style="margin-top:22px">
+<button class="button button-primary" id="rap-guardar"><i class="ti ti-check"></i> Guardar y asignar</button>
+<span class="ficha-estado" id="rap-estado" style="margin-left:12px"></span>
+</div>
+</div>
+
+<div class="rap-prev">
+<div class="rap-prevcab">Lo que verá el alumno</div>
+<div class="pv" id="rap-vista"></div>
+</div>
+</div>
+</div>
+
 <div class="panel-link" id="ficha" style="display:none">
 <div class="ficha-cab">
 <div><h2 style="margin:0"><i class="ti ti-notebook" aria-hidden="true"></i> <span id="ficha-quien"></span></h2>
@@ -260,6 +344,7 @@ body{padding:40px 24px}
 })();
 </script>
 <script src="clases.js?v=20261012"></script>
-<script type="module" src="firebase-panel.js?v=20261012"></script>
+<script src="temas.js?v=20261013"></script>
+<script type="module" src="firebase-panel.js?v=20261013b"></script>
 </body>
 </html>
