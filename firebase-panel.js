@@ -544,3 +544,33 @@ document.addEventListener('keydown', function(e){
     document.getElementById('rap-etq-add').click();
   }
 });
+
+// ──────────────────── Catálogo de clases ────────────────────
+// Para poder abrirlas y revisarlas: hasta ahora solo salían como texto en
+// el desplegable de la ficha del alumno y no había manera de verlas.
+
+function pintaCatalogo(){
+  const caja = document.getElementById('cat-lista');
+  const res = document.getElementById('cat-resumen');
+  if(!caja) return;
+  const lista = window.JN_CLASES || [];
+  if(res) res.textContent = lista.length === 1 ? '1 clase escrita' : lista.length + ' clases escritas';
+  caja.innerHTML = lista.length ? lista.map(c => {
+    const chips = (c.etiquetas || []).map(e => `<span class="panel-course-chip">${esc(e)}</span>`).join('');
+    const idiomas = ['es', 'it', 'en'].map(l =>
+      `<a href="${esc(c.pagina)}-${l}.html" target="_blank" rel="noopener">${l.toUpperCase()}</a>`).join('');
+    return `<div class="cat-row">
+      <div class="cat-tit">${esc(c.titulo.es)}</div>
+      <div class="cat-chips">${chips}</div>
+      <div class="cat-meta"><span class="cat-niv">${esc(c.nivel || '')}</span>
+        <span class="cat-niv">${esc(c.perfil || '')}</span></div>
+      <div class="cat-abrir">${idiomas}</div>
+    </div>`;
+  }).join('') : '<p class="panel-empty">Todavía no hay ninguna clase en el catálogo.</p>';
+}
+
+document.addEventListener('click', function(e){
+  if(e.target.closest('#rap-abrir2')) abreRapida();
+});
+
+pintaCatalogo();
