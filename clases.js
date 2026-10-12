@@ -34,6 +34,19 @@ window.JN_CLASES = [
     },
     etiquetas: ['había comido', 'estaba comiendo', 'iba a comer',
                 'pluscuamperfecto', 'imperfecto continuo']
+  },
+  {
+    id: 'tres-pasados',
+    pagina: 'clase-tres-pasados',
+    nivel: 'A2–B1',
+    perfil: 'cualquiera',
+    titulo: {
+      es: 'Los tres pasados en la misma mesa',
+      it: 'I tre passati sullo stesso tavolo',
+      en: 'The three pasts on one table'
+    },
+    etiquetas: ['indefinido', 'imperfecto', 'perfecto compuesto',
+                'hablé', 'he hablado', 'hablaba']
   }
 ];
 
