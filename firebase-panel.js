@@ -377,6 +377,7 @@ function pintaRapida(){
     return `<div class="pv-bloque"><b>${esc(t.nombre.es)}</b><p>${t.regla.es}</p></div>`;
   }).join('');
   const deb = (rDeberes.value || '').trim();
+  pintaTodo();
   rVista.innerHTML = (titulo || bloques)
     ? `<h3 class="pv-h3">${esc(titulo || '(sin título: se pondrá la fecha)')}</h3>` +
       `<div class="mk-chips" style="margin-bottom:14px">` +
@@ -419,12 +420,32 @@ function sugerencias(q){
   rSugs.classList.add('on');
 }
 
+// La lista entera, por si no tienes claro qué dar: a veces viendo las
+// opciones sale la clase sola.
+const CATS = { verbos:'Verbos', gramatica:'Gramática', vocabulario:'Vocabulario',
+               expresiones:'Expresiones', profesional:'Profesional' };
+
+function pintaTodo(){
+  const caja = document.getElementById('rap-todo');
+  if(!caja) return;
+  caja.innerHTML = Object.keys(CATS).map(cat => {
+    const items = (window.JN_TEMAS || []).filter(t => t.cat === cat);
+    if(!items.length) return '';
+    return `<h5>${esc(CATS[cat])}</h5><div class="lista">` + items.map(t => {
+      const ya = rSel.indexOf(t.id) >= 0;
+      return `<button type="button" class="${ya ? 'ya' : ''}"${ya ? ' disabled' : ''}
+        data-tema="${esc(t.id)}" title="${esc(t.regla.es.replace(/<[^>]+>/g, ''))}">${esc(t.nombre.es)}</button>`;
+    }).join('') + '</div>';
+  }).join('');
+}
+
 function abreRapida(){
   rSel = []; rMano = []; rQuien = [];
   rTitulo.value = ''; rDeberes.value = ''; rBusca.value = '';
   rFecha.value = hoyISO();
   rEstado.textContent = ''; rEstado.className = 'ficha-estado';
   rSugs.classList.remove('on');
+  document.getElementById('rap-todo').classList.remove('on');
   pintaAlumnos(); pintaRapida();
   rap.style.display = 'block';
   rap.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -466,6 +487,10 @@ async function guardaRapida(){
 
 document.addEventListener('click', function(e){
   if(e.target.closest('#rap-abrir')){ abreRapida(); return; }
+  if(e.target.closest('#rap-vertodo')){
+    document.getElementById('rap-todo').classList.toggle('on');
+    return;
+  }
   if(e.target.closest('#rap-cerrar')){ rap.style.display = 'none'; return; }
 
   const sug = e.target.closest('[data-tema]');

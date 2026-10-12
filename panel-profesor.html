@@ -77,6 +77,16 @@ body{padding:40px 24px}
 .rap-sugs button{display:block;width:100%;text-align:left;background:none;border:0;padding:9px 13px;color:var(--text);font-family:var(--font-body);font-size:15px;cursor:pointer}
 .rap-sugs button:hover,.rap-sugs button.sel{background:var(--tint)}
 .rap-sugs .cat{color:var(--muted);font-size:13px;margin-left:6px}
+.rap-vertodo{margin-top:8px;background:none;border:1px dashed var(--border);border-radius:10px;padding:7px 13px;font-size:13.5px;color:var(--muted);cursor:pointer;font-family:var(--font-body)}
+.rap-vertodo:hover{border-color:var(--primary);color:var(--primary-dark)}
+.rap-todo{display:none;margin-top:10px;border:1px solid var(--border);border-radius:12px;padding:14px 16px;max-height:340px;overflow-y:auto;background:var(--card-bg)}
+.rap-todo.on{display:block}
+.rap-todo h5{font-family:var(--font-head);font-size:13px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin:14px 0 7px}
+.rap-todo h5:first-child{margin-top:0}
+.rap-todo .lista{display:flex;flex-wrap:wrap;gap:6px}
+.rap-todo button{background:var(--tint);border:0;border-radius:10px;padding:5px 11px;font-size:13.5px;color:var(--text);cursor:pointer;font-family:var(--font-body)}
+.rap-todo button:hover{background:var(--primary);color:#fff}
+.rap-todo button.ya{opacity:.4;cursor:default;text-decoration:line-through}
 .rap-tema{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;background:var(--tint);border-radius:10px;padding:10px 12px;margin-top:6px}
 .rap-tema .r{font-size:13.5px;color:var(--muted);margin-top:3px;line-height:1.45}
 .rap-x{background:none;border:0;color:var(--muted);font-size:19px;line-height:1;cursor:pointer;padding:0 2px}
@@ -168,6 +178,9 @@ body{padding:40px 24px}
 <div class="rap-buscar"><i class="ti ti-search" aria-hidden="true"></i>
 <input type="text" id="rap-buscatema" placeholder="Escribe un tema: por, mucho, subjuntivo..." autocomplete="off">
 <div class="rap-sugs" id="rap-sugs"></div></div>
+<button class="rap-vertodo" id="rap-vertodo" type="button">
+<i class="ti ti-list" aria-hidden="true"></i> Ver todos los temas</button>
+<div class="rap-todo" id="rap-todo"></div>
 <div id="rap-temas"></div>
 
 <label class="rap-lbl">Etiquetas <span class="ficha-op">salen solas de los temas</span></label>
@@ -345,6 +358,6 @@ body{padding:40px 24px}
 </script>
 <script src="clases.js?v=20261012"></script>
 <script src="temas.js?v=20261013"></script>
-<script type="module" src="firebase-panel.js?v=20261013b"></script>
+<script type="module" src="firebase-panel.js?v=20261013c"></script>
 </body>
 </html>
