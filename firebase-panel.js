@@ -486,7 +486,6 @@ async function guardaRapida(){
 }
 
 document.addEventListener('click', function(e){
-  if(e.target.closest('#rap-abrir')){ abreRapida(); return; }
   if(e.target.closest('#rap-vertodo')){
     document.getElementById('rap-todo').classList.toggle('on');
     return;
@@ -570,7 +569,7 @@ function pintaCatalogo(){
 }
 
 document.addEventListener('click', function(e){
-  if(e.target.closest('#rap-abrir2')) abreRapida();
+  if(e.target.closest('#rap-abrir2')){ abreRapida(); }
 });
 
 pintaCatalogo();
