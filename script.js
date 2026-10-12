@@ -72,7 +72,7 @@ if(firstTab) firstTab.click();
 // Resalta el enlace de la página actual en el menú lateral y abre su submenú
 (function(){
 const current=location.pathname.split("/").pop()||"index.html";
-document.querySelectorAll(".submenu a").forEach(a=>{
+document.querySelectorAll(".submenu a, a.menu-button").forEach(a=>{
 const href=a.getAttribute("href");
 if(href===current){
 a.classList.add("current-page");
@@ -82,7 +82,7 @@ a.closest(".menu-item").classList.add("active","current-section");
 // las de "Verbos" no tienen href real (son track-link con data-base), así que se comparan por patrón base-it.html / base-en.html
 const m = current.match(/^(.+)-(it|en|es)\.html$/);
 if(m){
-document.querySelectorAll(".submenu a.track-link").forEach(a=>{
+document.querySelectorAll(".submenu a.track-link, a.menu-button.track-link").forEach(a=>{
 if(a.dataset.base === m[1]){
 a.classList.add("current-page");
 a.closest(".menu-item").classList.add("active","current-section");
