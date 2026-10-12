@@ -678,6 +678,7 @@ body[data-category="vocabulario"] .handwritten-title{color:#E8791E}
 body[data-category="expresiones"] .handwritten-title{color:#7A6FD1}
 body[data-category="atencion"] .handwritten-title{color:#5B9A3B}
 body[data-category="profesional"] .handwritten-title{color:#0F6E56}
+body[data-category="clases"] .handwritten-title{color:#7A5230}
 @media(max-width:900px){.handwritten-title{display:none}}
 
 /* ---------- Espiral decorativa en el borde del menu ---------- */
@@ -997,7 +998,56 @@ a.prof-card:hover{transform:translateY(-2px);box-shadow:0 4px 10px rgba(0,0,0,.0
    --primary y los colores de curso son tonos oscuros pensados sobre blanco;
    como texto sobre el fondo oscuro no llegaban al contraste mínimo. */
 [data-theme="dark"] body[data-category="profesional"] .handwritten-title{color:#3fae8c}
+[data-theme="dark"] body[data-category="clases"] .handwritten-title{color:#c99a68}
 [data-theme="dark"] .ex-course-lvl,
 [data-theme="dark"] .ex-course-state,
 [data-theme="dark"] .ex-course-ring span,
 [data-theme="dark"] .ex-step-num.next{color:var(--c-lite)}
+
+/* ---------- Fichas de clase ---------- */
+.cat-clases{color:#7A5230}
+body[data-category="clases"] .eyebrow{background:#F2EAE1;color:#6B4423}
+[data-theme="dark"] body[data-category="clases"] .eyebrow{background:#2b2218;color:#d8b68c}
+
+/* El paralelo: la misma idea dicha de dos maneras */
+.par-grid{display:flex;flex-direction:column;gap:10px;margin:16px 0}
+.par-head{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:0 4px;font-size:11.5px;
+  font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+.par-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;align-items:start}
+.par-cell{background:var(--card-bg);border:1px solid var(--border);border-left:4px solid var(--pc);
+  border-radius:12px;padding:13px 16px}
+.par-when{font-size:11px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--pc)}
+.par-form{font-family:var(--font-head);font-size:21px;font-weight:700;color:var(--text);margin:3px 0 2px}
+.par-name{font-size:11.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.03em}
+.par-warn{display:block;margin-top:9px;font-size:13.5px;font-weight:600;color:var(--gold-dark)}
+@media(max-width:700px){.par-head{display:none}.par-row{grid-template-columns:1fr}}
+
+/* El motor: verbo 1 se conjuga, verbo 2 no se mueve */
+.motor{background:var(--sidebar);color:#fff;border-radius:14px;padding:20px 18px;text-align:center;margin:18px 0}
+.motor b{display:block;font-family:var(--font-head);font-size:20px;line-height:1.35}
+.motor span{display:block;margin-top:6px;font-size:14px;opacity:.85}
+
+/* Los deberes del día */
+.deberes{background:var(--tint);border:1px solid var(--border);border-left:4px solid #7A5230;
+  border-radius:12px;padding:18px 20px;margin-top:24px}
+.deberes h4{font-family:var(--font-head);font-size:17px;margin-bottom:6px}
+.deberes p{margin:0;font-size:15.5px;color:var(--text)}
+
+/* En móvil las tablas de 4 columnas se salían por 25px y había que
+   arrastrarlas; con menos aire en las celdas caben enteras. */
+@media(max-width:480px){
+  table{font-size:14.5px}
+  table thead th{padding:10px 10px}
+  table tbody td{padding:10px 10px}
+}
+
+/* Los tres colores del paralelo van por clase y no en línea, para poder
+   darles su versión clara en modo oscuro: en oscuro los originales se
+   quedaban por debajo de 3:1 y no se leían. */
+.par-pasado{--pc:#B5452F}
+.par-presente{--pc:#2F6F8F}
+.par-futuro{--pc:#6B4FA8}
+[data-theme="dark"] .par-pasado{--pc:#e8947c}
+[data-theme="dark"] .par-presente{--pc:#79c0de}
+[data-theme="dark"] .par-futuro{--pc:#b39ae8}
+.par-h{font-family:var(--font-head);font-size:16px;margin:16px 0 0;color:var(--pc)}

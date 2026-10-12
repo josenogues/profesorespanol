@@ -2259,7 +2259,8 @@ ${nextHTML}<div class="ex-signal-btns">${btns}</div></div>`;
     vocabulario: {es:'Vocabulario', it:'Vocabolario', en:'Vocabulary'},
     expresiones: {es:'Expresiones', it:'Espressioni', en:'Expressions'},
     atencion: {es:'Especial atención', it:'Attenzione a questi', en:'Watch out for this'},
-    profesional: {es:'Profesional', it:'Professionale', en:'Business'}
+    profesional: {es:'Profesional', it:'Professionale', en:'Business'},
+    clases: {es:'Mis clases', it:'Le mie lezioni', en:'My classes'}
   };
   const l = labels[cat];
   if(!l) return;
