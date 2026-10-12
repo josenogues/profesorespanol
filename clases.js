@@ -21,6 +21,19 @@ window.JN_CLASES = [
     },
     etiquetas: ['pretérito perfecto', 'estar + gerundio', 'ir a + infinitivo',
                 'haber', 'estar', 'ir']
+  },
+  {
+    id: 'motor',
+    pagina: 'clase-motor',
+    nivel: 'B1–B2',
+    perfil: 'cualquiera',
+    titulo: {
+      es: 'El motor manda',
+      it: 'Il motore comanda',
+      en: 'The engine is in charge'
+    },
+    etiquetas: ['había comido', 'estaba comiendo', 'iba a comer',
+                'pluscuamperfecto', 'imperfecto continuo']
   }
 ];
 
