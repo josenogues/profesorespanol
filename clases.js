@@ -47,6 +47,20 @@ window.JN_CLASES = [
     },
     etiquetas: ['indefinido', 'imperfecto', 'perfecto compuesto',
                 'hablé', 'he hablado', 'hablaba']
+  },
+  {
+    id: 'formas-pasado',
+    pagina: 'clase-formas-pasado',
+    nivel: 'A2–B1',
+    perfil: 'cualquiera',
+    titulo: {
+      es: 'Las formas del pasado',
+      it: 'Le forme del passato',
+      en: 'The forms of the past'
+    },
+    etiquetas: ['conjugación del pasado', 'participios irregulares',
+                'verbos irregulares', 'fui', 'hice', 'dije',
+                'busqué', 'leyó', 'durmió']
   }
 ];
 
