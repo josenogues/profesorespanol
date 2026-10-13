@@ -786,8 +786,8 @@ a.closest(".menu-item").classList.add("active","current-section");
 
   // temas cuyo slug de página no coincide con la key del tema en el hub de ejercicios
   const TOPIC_PAGE_SLUG = {
-    regulares: 'verbos-regulares',
-    irregulares: 'verbos-irregulares',
+    regulares: 'conjugaciones',
+    irregulares: 'conjugaciones',
     reflexivos: 'verbos-reflexivos',
     'atn-verbos': 'especial-atencion-verbos',
     'atn-gramatica': 'especial-atencion-gramatica'

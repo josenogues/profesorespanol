@@ -22,13 +22,13 @@ window.JN_TEMAS = [
          it:'<b>Hay</b> = esiste, senza dire di chi. <b>Tener</b> = è di qualcuno.',
          en:'<b>Hay</b> = there is, no owner. <b>Tener</b> = somebody has it.'} },
 
-{ id:'regulares', pagina:'verbos-regulares', cat:'verbos', etiquetas:['verbos regulares','-ar','-er','-ir'],
+{ id:'regulares', pagina:'conjugaciones', cat:'verbos', etiquetas:['verbos regulares','-ar','-er','-ir'],
   nombre:{es:'Verbos regulares', it:'Verbi regolari', en:'Regular verbs'},
   regla:{es:'Quitas <b>-ar, -er, -ir</b> y pegas la terminación. Si te la sabes para uno, te la sabes para miles.',
          it:'Togli <b>-ar, -er, -ir</b> e attacchi la desinenza. Se la sai per uno, la sai per migliaia.',
          en:'Drop <b>-ar, -er, -ir</b> and add the ending. Learn it for one verb and you have thousands.'} },
 
-{ id:'irregulares', pagina:'verbos-irregulares', cat:'verbos', etiquetas:['verbos irregulares'],
+{ id:'irregulares', pagina:'conjugaciones', cat:'verbos', etiquetas:['verbos irregulares'],
   nombre:{es:'Verbos irregulares', it:'Verbi irregolari', en:'Irregular verbs'},
   regla:{es:'No hay regla, y son justo los que más se usan. Se aprenden como palabras sueltas.',
          it:'Non c’è regola, e sono proprio i più usati. Si imparano come parole singole.',
