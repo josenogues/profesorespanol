@@ -128,9 +128,13 @@
       }
       const c = window.jnClasePorId(a.id);
       if(!c) return null;                       // clase retirada del catálogo
+      // una clase que solo existe en una pista (las de angloparlantes) se le
+      // sigue enseñando al alumno aunque cambie el idioma de la web: José se
+      // la asignó, y es peor que le desaparezca de la lista
+      const pista = (c.pistas && c.pistas.indexOf(track) < 0) ? c.pistas[0] : track;
       return {
         titulo: (c.titulo && (c.titulo[track] || c.titulo.es)) || a.id,
-        href: c.pagina + '-' + track + '.html',
+        href: c.pagina + '-' + pista + '.html',
         etiquetas: c.etiquetas || [],
         fecha: a.fecha || ''
       };
@@ -223,7 +227,10 @@
       const links =
         (hayPagina ? '<a href="' + esc(t.pagina) + '-' + track + '.html">' +
                      '<i class="ti ti-book-2" aria-hidden="true"></i> ' + esc(T.teoria) + '</a>' : '') +
-        '<a href="ejercicios-' + track + '.html?tema=' + esc(t.id) + '">' +
+        // los temas finos (por/para, gustar...) no son un tema del hub de
+        // ejercicios, viven dentro de uno: el enlace tiene que ir al suyo o
+        // llega a la página y no selecciona nada
+        '<a href="ejercicios-' + track + '.html?tema=' + esc(t.ejercicios || t.id) + '">' +
         '<i class="ti ti-pencil" aria-hidden="true"></i> ' + esc(T.practicar) + '</a>';
       return '<div class="cl-bloque"><b>' + esc(nom) + '</b><p>' + reg + '</p>' +
              '<div class="cl-links">' + links + '</div></div>';

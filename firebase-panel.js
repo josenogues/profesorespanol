@@ -272,7 +272,11 @@ function abreFicha(email){
   if(fQuien) fQuien.textContent = email;
   if(fSelect){
     fSelect.innerHTML = (window.JN_CLASES || [])
-      .map(c => `<option value="${esc(c.id)}">${esc(c.titulo.es)}</option>`).join('')
+      // con el catálogo creciendo, el nivel y la pista ahorran abrir la clase
+      .map(c => {
+        const marca = [c.nivel, (c.pistas || []).join('/').toUpperCase()].filter(Boolean).join(' · ');
+        return `<option value="${esc(c.id)}">${esc(c.titulo.es)}${marca ? ' · ' + esc(marca) : ''}</option>`;
+      }).join('')
       || '<option value="">(todavía no hay clases en el catálogo)</option>';
   }
   if(fFecha) fFecha.value = hoyISO();
@@ -556,7 +560,8 @@ function pintaCatalogo(){
   if(res) res.textContent = lista.length === 1 ? '1 clase escrita' : lista.length + ' clases escritas';
   caja.innerHTML = lista.length ? lista.map(c => {
     const chips = (c.etiquetas || []).map(e => `<span class="panel-course-chip">${esc(e)}</span>`).join('');
-    const idiomas = ['es', 'it', 'en'].map(l =>
+    // una clase solo existe en las pistas que diga; sin el campo, en las tres
+    const idiomas = (c.pistas || ['es', 'it', 'en']).map(l =>
       `<a href="${esc(c.pagina)}-${l}.html" target="_blank" rel="noopener">${l.toUpperCase()}</a>`).join('');
     return `<div class="cat-row">
       <div class="cat-tit">${esc(c.titulo.es)}</div>

@@ -7,6 +7,10 @@
 //
 // Las etiquetas van en español en las tres pistas: son el nombre de lo que
 // se está aprendiendo, y es lo que el alumno ve escrito en la ficha.
+//
+// `pistas` limita en qué idiomas existe una clase. Las clases para
+// angloparlantes están construidas sobre «en inglés dirías…», así que solo
+// tienen página en inglés. Si falta el campo, la clase vale para las tres.
 
 window.JN_CLASES = [
   {
@@ -61,6 +65,74 @@ window.JN_CLASES = [
     etiquetas: ['conjugación del pasado', 'participios irregulares',
                 'verbos irregulares', 'fui', 'hice', 'dije',
                 'busqué', 'leyó', 'durmió']
+  },
+
+  // ─── Para angloparlantes de nivel básico. Solo en inglés. ───
+  {
+    id: 'to-be',
+    pagina: 'clase-to-be',
+    nivel: 'A1',
+    perfil: 'angloparlantes',
+    pistas: ['en'],
+    titulo: {
+      es: 'Un «to be» inglés, tres españoles',
+      it: 'Un «to be» inglese, tre spagnoli',
+      en: 'One «to be» in English, three in Spanish'
+    },
+    etiquetas: ['ser', 'estar', 'hay', 'to be', 'soy', 'estoy', 'there is']
+  },
+  {
+    id: 'frio',
+    pagina: 'clase-frio',
+    nivel: 'A1',
+    perfil: 'angloparlantes',
+    pistas: ['en'],
+    titulo: {
+      es: 'Frío de tres maneras',
+      it: 'Freddo in tre modi',
+      en: 'Cold in three ways'
+    },
+    etiquetas: ['tener frío', 'hace frío', 'tener hambre', 'tener años',
+                'el tiempo', 'hace sol']
+  },
+  {
+    id: 'gustar',
+    pagina: 'clase-gustar',
+    nivel: 'A1',
+    perfil: 'angloparlantes',
+    pistas: ['en'],
+    titulo: {
+      es: 'Las cosas te gustan a ti',
+      it: 'Le cose piacciono a te',
+      en: 'Things please you'
+    },
+    etiquetas: ['gustar', 'me gusta', 'encantar', 'doler', 'apetecer', 'pronombres']
+  },
+  {
+    id: 'sin-do',
+    pagina: 'clase-sin-do',
+    nivel: 'A1',
+    perfil: 'angloparlantes',
+    pistas: ['en'],
+    titulo: {
+      es: 'Aquí no existe el «do»',
+      it: 'Qui non esiste il «do»',
+      en: 'There is no «do» here'
+    },
+    etiquetas: ['preguntas', 'negación', 'no', 'nada', 'nadie', 'nunca', '¿verdad?']
+  },
+  {
+    id: 'bando',
+    pagina: 'clase-bando',
+    nivel: 'A1',
+    perfil: 'angloparlantes',
+    pistas: ['en'],
+    titulo: {
+      es: 'Cada palabra elige bando',
+      it: 'Ogni parola sceglie una squadra',
+      en: 'Every noun picks a team'
+    },
+    etiquetas: ['género', 'concordancia', 'el', 'la', 'adjetivos', 'plural', 'el agua']
   }
 ];
 
