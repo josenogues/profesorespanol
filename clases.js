@@ -133,6 +133,62 @@ window.JN_CLASES = [
       en: 'Every noun picks a team'
     },
     etiquetas: ['género', 'concordancia', 'el', 'la', 'adjetivos', 'plural', 'el agua']
+  },
+  {
+    id: 'menos-piezas',
+    pagina: 'clase-menos-piezas',
+    nivel: 'A2',
+    perfil: 'angloparlantes',
+    pistas: ['en'],
+    titulo: {
+      es: 'Quita el «yo», quita el «estoy»',
+      it: 'Togli lo «yo», togli lo «estoy»',
+      en: 'Drop the «yo», drop the «estoy»'
+    },
+    etiquetas: ['sujeto innecesario', 'yo', 'estar + gerundio', 'estoy hablando',
+                'presente', 'me duele la cabeza']
+  },
+  {
+    id: 'dos-sentidos',
+    pagina: 'clase-dos-sentidos',
+    nivel: 'A2',
+    perfil: 'angloparlantes',
+    pistas: ['en'],
+    titulo: {
+      es: 'Cuando ser y estar cambian lo que dices',
+      it: 'Quando ser ed estar cambiano il senso',
+      en: 'One adjective, two meanings'
+    },
+    etiquetas: ['ser', 'estar', 'es aburrido', 'está aburrido', 'es listo',
+                'está bueno', 'adjetivos']
+  },
+  {
+    id: 'dos-verbos',
+    pagina: 'clase-dos-verbos',
+    nivel: 'A2',
+    perfil: 'angloparlantes',
+    pistas: ['en'],
+    titulo: {
+      es: 'Un verbo en inglés, dos en español',
+      it: 'Un verbo in inglese, due in spagnolo',
+      en: 'One English verb, two Spanish ones'
+    },
+    etiquetas: ['saber', 'conocer', 'pedir', 'preguntar', 'traer', 'llevar',
+                'ir', 'venir', 'tiempo', 'hora', 'vez', 'funcionar']
+  },
+  {
+    id: 'falsos-amigos-en',
+    pagina: 'clase-falsos-amigos',
+    nivel: 'A2',
+    perfil: 'angloparlantes',
+    pistas: ['en'],
+    titulo: {
+      es: 'Las que parecen inglesas y no lo son',
+      it: 'Quelle che sembrano inglesi e non lo sono',
+      en: 'The words that look English and aren’t'
+    },
+    etiquetas: ['falsos amigos', 'embarazada', 'constipado', 'éxito',
+                'actualmente', 'sensible', 'librería', 'molestar']
   }
 ];
 
