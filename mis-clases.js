@@ -31,7 +31,8 @@
       error: 'No se han podido cargar tus clases. Revisa tu conexión y vuelve a intentarlo.',
       teoria: 'Teoría', practicar: 'Practicar', deberes: 'Deberes',
       hoy: 'hoy', anteriores: 'Clases anteriores', sinF: 'sin fecha',
-      apuntes: 'Mis apuntes', conApuntes: 'Tienes apuntes en esta clase'
+      apuntes: 'Mis apuntes', conApuntes: 'Tienes apuntes en esta clase',
+      bajarTodo: 'Descargar todos mis apuntes'
     },
     it: {
       titulo: 'Le tue lezioni',
@@ -52,7 +53,8 @@
       error: 'Non è stato possibile caricare le tue lezioni. Controlla la connessione e riprova.',
       teoria: 'Teoria', practicar: 'Esercitati', deberes: 'Compiti',
       hoy: 'oggi', anteriores: 'Lezioni precedenti', sinF: 'senza data',
-      apuntes: 'I miei appunti', conApuntes: 'Hai appunti in questa lezione'
+      apuntes: 'I miei appunti', conApuntes: 'Hai appunti in questa lezione',
+      bajarTodo: 'Scarica tutti i miei appunti'
     },
     en: {
       titulo: 'Your classes',
@@ -73,7 +75,8 @@
       error: 'Your classes could not be loaded. Check your connection and try again.',
       teoria: 'Theory', practicar: 'Practise', deberes: 'Homework',
       hoy: 'today', anteriores: 'Earlier classes', sinF: 'no date',
-      apuntes: 'My notes', conApuntes: 'You have notes in this class'
+      apuntes: 'My notes', conApuntes: 'You have notes in this class',
+      bajarTodo: 'Download all my notes'
     }
   }[track] || {};
 
@@ -229,8 +232,26 @@
       '<div class="cl-buscar"><i class="ti ti-search" aria-hidden="true"></i>' +
       '<input type="text" id="cl-filtro" placeholder="' + esc(T.buscar) + '" autocomplete="off"></div>' +
       '<div class="cl-lista" id="cl-lista">' + lista + '</div>' +
+      (filas.some(f => f.conApuntes)
+        ? '<p style="margin:16px 0 0"><button type="button" id="cl-bajar" ' +
+          'class="button button-secondary"><i class="ti ti-download"></i> ' +
+          esc(T.bajarTodo) + '</button></p>'
+        : '') +
       '<p class="panel-empty" id="cl-vacio" style="display:none;margin-top:14px">' + esc(T.nada) + '</p>'
     );
+    const bajar = document.getElementById('cl-bajar');
+    if(bajar) bajar.addEventListener('click', function(){
+      // un archivo con todo, en el mismo orden en que ve las clases
+      const trozos = orden.filter(f => f.conApuntes).map(function(f){
+        const n = apuntes[f.clave];
+        const cuando = f.fecha ? (fechaLarga(f.fecha) || f.fecha) : T.sinF;
+        return f.titulo + '\n' + cuando + '\n\n' + n.t;
+      });
+      if(!trozos.length || !window.jnApuntesDescarga) return;
+      window.jnApuntesDescarga('mis-apuntes-' + hoyISO(),
+        trozos.join('\n\n' + '─'.repeat(40) + '\n\n') + '\n');
+    });
+
     filtro();
     document.querySelectorAll('[data-apu]').forEach(function(hueco){
       window.jnApuntesCaja(hueco.dataset.apu, hueco);

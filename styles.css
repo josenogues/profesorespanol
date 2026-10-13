@@ -1127,7 +1127,7 @@ a.menu-button.current-page{background:rgba(255,255,255,.15)}
   background:var(--card-bg);border:1px solid var(--border);border-radius:14px;
   box-shadow:0 14px 40px rgba(0,0,0,.26);overflow:hidden}
 .apu-panel[hidden]{display:none}
-.apu-cab{display:flex;align-items:center;justify-content:space-between;gap:10px;
+.apu-cab{display:flex;align-items:center;gap:10px;
   padding:13px 16px;background:#7A5230;color:#fff}
 .apu-cab b{font-family:var(--font-head);font-size:16px}
 .apu-cerrar{border:0;background:transparent;color:#fff;cursor:pointer;font-size:19px;
@@ -1166,3 +1166,14 @@ a.menu-button.current-page{background:rgba(255,255,255,.15)}
 .ex-solo button{border:0;background:transparent;color:inherit;cursor:pointer;font-size:19px;
   line-height:1;padding:2px 4px;border-radius:50%}
 .ex-solo button:hover{background:rgba(0,0,0,.12)}
+/* Cuaderno: botones de la cabecera y tirador para estirarlo */
+.apu-acciones{display:flex;gap:4px;margin-left:auto;margin-right:4px}
+.apu-acciones button{border:0;background:rgba(255,255,255,.18);color:#fff;cursor:pointer;
+  font-family:var(--font-body);font-size:12.5px;font-weight:700;padding:4px 9px;border-radius:14px}
+.apu-acciones button:hover{background:rgba(255,255,255,.32)}
+.apu-tirador{position:absolute;top:0;left:0;width:20px;height:20px;cursor:nwse-resize;z-index:2;
+  touch-action:none}
+.apu-tirador::before{content:"";position:absolute;top:6px;left:6px;width:8px;height:8px;
+  border-top:2px solid rgba(255,255,255,.75);border-left:2px solid rgba(255,255,255,.75);
+  border-radius:2px 0 0 0}
+@media(max-width:620px){ .apu-tirador{display:none} }
