@@ -259,6 +259,20 @@ window.JN_TEMAS = [
          it:'Più corto di un’email e più formale di un WhatsApp. E quasi sempre col <b>tú</b>.',
          en:'Shorter than an email, more formal than WhatsApp. And almost always <b>tú</b>.'} },
 
+{ id:'profesional-deletrear', pagina:'profesional-deletrear', ejercicios:'profesional-telefono', cat:'profesional',
+  etiquetas:['deletrear','alfabeto','arroba','números','fechas','teléfonos'],
+  nombre:{es:'Deletrear y dar datos', it:'Spelling e dati', en:'Spelling and data'},
+  regla:{es:'«B de Barcelona». Los símbolos, las letras que confunden y cómo se dicen números, fechas y teléfonos.',
+         it:'«B de Barcelona». I simboli, le lettere che confondono e come si dicono numeri, date e telefoni.',
+         en:'«B de Barcelona». The symbols, the tricky letters, and how numbers, dates and phone numbers are said.'} },
+
+{ id:'profesional-videollamada', pagina:'profesional-videollamada', ejercicios:'profesional-reuniones', cat:'profesional',
+  etiquetas:['videollamada','micro','pantalla','conexión'],
+  nombre:{es:'La videollamada', it:'La videochiamata', en:'Video calls'},
+  regla:{es:'Las frases para arreglar la videollamada: el micro, la imagen, compartir pantalla y la conexión.',
+         it:'Le frasi per aggiustare la videochiamata: microfono, immagine, condivisione schermo e connessione.',
+         en:'The phrases for fixing a video call: the mic, the picture, sharing your screen and the connection.'} },
+
 { id:'profesional-telefono', pagina:'profesional-telefono', cat:'profesional', etiquetas:['teléfono'],
   nombre:{es:'El teléfono', it:'Il telefono', en:'On the phone'},
   regla:{es:'Sin cara ni gestos: <b>«¿Me lo puedes repetir, por favor?»</b> es la frase que más te va a salvar.',

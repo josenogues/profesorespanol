@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Spelling things out | Aprende Español con José Nogues</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@400;600;700;800&family=Caveat:wght@700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
+<link rel="icon" type="image/png" href="favicon.png">
+<link rel="stylesheet" href="styles.css?v=20261014f">
+<script>if(localStorage.getItem('jn_theme')==='dark')document.documentElement.setAttribute('data-theme','dark');</script>
+</head>
+<body data-category="profesional">
+<button id="sidebar-toggle" class="sidebar-toggle" aria-label="Mostrar/ocultar menú"><i class="ti ti-menu-2"></i></button>
+<aside class="sidebar">
+<a href="index.html" class="logo-header"><img src="logo.png" alt="Aprende español con José" class="logo-img"></a>
+
+<div class="sidebar-search">
+<i class="ti ti-search"></i>
+<input type="text" id="site-search" placeholder="Buscar..." autocomplete="off">
+<div class="search-results" id="search-results"></div>
+</div>
+
+
+<div class="menu-item">
+<a href="#" class="menu-button track-link" data-base="mis-clases"><i class="ti ti-notebook cat-clases"></i> <span class="i18n" data-es="Mis clases" data-it="Le mie lezioni" data-en="My classes">Mis clases</span></a>
+</div>
+<div class="menu-sep"><span class="i18n" data-es="Teoría y práctica" data-it="Teoria e pratica" data-en="Theory &amp; practice">Teoría y práctica</span></div>
+
+<div class="menu-item">
+<button class="menu-button"><i class="ti ti-microphone cat-verbos"></i> <span class="i18n" data-es="Verbos" data-it="Verbi" data-en="Verbs">Verbos</span> ▾</button>
+<div class="submenu">
+<a href="#" class="track-link" data-base="tiempos-verbales"><span class="i18n" data-es="Qué tiempo uso" data-it="Che tempo uso" data-en="Which tense">Qué tiempo uso</span></a>
+<div class="menu-sep"><span class="i18n" data-es="Las formas" data-it="Le forme" data-en="The forms">Las formas</span></div>
+<a href="#" class="track-link" data-base="conjugaciones"><span class="i18n" data-es="Conjugaciones" data-it="Coniugazioni" data-en="Conjugations">Conjugaciones</span></a>
+<a href="#" class="track-link" data-base="perifrasis"><span class="i18n" data-es="Perífrasis verbales" data-it="Perifrasi verbali" data-en="Verbal periphrases">Perífrasis verbales</span></a>
+<a href="#" class="track-link" data-base="formas-impersonales"><span class="i18n" data-es="Formas impersonales" data-it="Forme impersonali" data-en="Non-finite forms">Formas impersonales</span></a>
+<div class="menu-sep"><span class="i18n" data-es="Los modos" data-it="I modi" data-en="The moods">Los modos</span></div>
+<a href="#" class="track-link" data-base="indicativo"><span class="i18n" data-es="Indicativo" data-it="Indicativo" data-en="Indicative">Indicativo</span></a>
+<a href="#" class="track-link" data-base="subjuntivo"><span class="i18n" data-es="Subjuntivo" data-it="Congiuntivo" data-en="Subjunctive">Subjuntivo</span></a>
+<a href="#" class="track-link" data-base="imperativo"><span class="i18n" data-es="Imperativo" data-it="Imperativo" data-en="Imperative">Imperativo</span></a>
+<div class="menu-sep"><span class="i18n" data-es="Verbos concretos" data-it="Verbi concreti" data-en="Particular verbs">Verbos concretos</span></div>
+<a href="#" class="track-link" data-base="ser-estar"><span class="i18n" data-es="Ser y estar" data-it="Ser y estar" data-en="Ser y estar">Ser y estar</span></a>
+<a href="#" class="track-link" data-base="haber-tener"><span class="i18n" data-es="Haber y tener" data-it="Haber y tener" data-en="Haber y tener">Haber y tener</span></a>
+<a href="#" class="track-link" data-base="verbos-reflexivos"><span class="i18n" data-es="Reflexivos" data-it="Riflessivi" data-en="Reflexive">Reflexivos</span></a>
+<a href="#" class="track-link track-only" data-track-show="es" data-base="especial-atencion-verbos">Verbos que se confunden</a>
+<a href="#" class="track-link track-only" data-track-show="it" data-base="especial-atencion-verbos">Attenzione a questi</a>
+<a href="#" class="track-link track-only" data-track-show="en" data-base="especial-atencion-verbos">Watch out for this</a>
+</div>
+</div>
+
+<div class="menu-item">
+<button class="menu-button"><i class="ti ti-book-2 cat-gramatica"></i> <span class="i18n" data-es="Gramática" data-it="Grammatica" data-en="Grammar">Gramática</span> ▾</button>
+<div class="submenu">
+<div class="menu-sep"><span class="i18n" data-es="La frase" data-it="La frase" data-en="The sentence">La frase</span></div>
+<a href="#" class="track-link" data-base="articulos"><span class="i18n" data-es="Artículos" data-it="Articoli" data-en="Articles">Artículos</span></a>
+<a href="#" class="track-link" data-base="genero-numero"><span class="i18n" data-es="Género y número" data-it="Genere e numero" data-en="Gender &amp; number">Género y número</span></a>
+<a href="#" class="track-link" data-base="pronombres"><span class="i18n" data-es="Pronombres" data-it="Pronomi" data-en="Pronouns">Pronombres</span></a>
+<a href="#" class="track-link" data-base="preposiciones"><span class="i18n" data-es="Preposiciones" data-it="Preposizioni" data-en="Prepositions">Preposiciones</span></a>
+<a href="#" class="track-link" data-base="conectores"><span class="i18n" data-es="Conectores" data-it="Connettori" data-en="Connectors">Conectores</span></a>
+<a href="#" class="track-link" data-base="estilo-indirecto"><span class="i18n" data-es="Estilo indirecto" data-it="Discorso indiretto" data-en="Reported speech">Estilo indirecto</span></a>
+<div class="menu-sep"><span class="i18n" data-es="Cómo suena y cómo se escribe" data-it="Come suona e come si scrive" data-en="Sound and spelling">Cómo suena y cómo se escribe</span></div>
+<a href="#" class="track-link" data-base="fonetica"><span class="i18n" data-es="Fonética" data-it="Fonetica" data-en="Phonetics">Fonética</span></a>
+<div class="menu-sep"><span class="i18n" data-es="Lo que te delata" data-it="Quello che ti tradisce" data-en="What gives you away">Lo que te delata</span></div>
+<a href="#" class="track-link track-only" data-track-show="es" data-base="especial-atencion-gramatica">Gramática que delata</a>
+<a href="#" class="track-link track-only" data-track-show="it" data-base="especial-atencion-gramatica">Attenzione a questi</a>
+<a href="#" class="track-link track-only" data-track-show="en" data-base="especial-atencion-gramatica">Watch out for this</a>
+</div>
+</div>
+
+<div class="menu-item">
+<button class="menu-button"><i class="ti ti-tags cat-vocabulario"></i> <span class="i18n" data-es="Vocabulario" data-it="Vocabolario" data-en="Vocabulary">Vocabulario</span> ▾</button>
+<div class="submenu">
+<a href="#" class="track-link" data-base="vocabulario"><span class="i18n" data-es="Ver todos los temas" data-it="Vedi tutti gli argomenti" data-en="See all topics">Ver todos los temas</span></a>
+</div>
+</div>
+
+<div class="menu-item">
+<button class="menu-button"><i class="ti ti-message-circle-2 cat-expresiones"></i> <span class="i18n" data-es="Expresiones" data-it="Espressioni" data-en="Expressions">Expresiones</span> ▾</button>
+<div class="submenu">
+<a href="#" class="track-link" data-base="expresiones-comunes"><span class="i18n" data-es="Expresiones comunes" data-it="Espressioni comuni" data-en="Common expressions">Expresiones comunes</span></a>
+<a href="#" class="track-link hide-on-es" data-base="falsos-amigos"><span class="i18n" data-es="False friends" data-it="False friends" data-en="False friends">False friends</span></a>
+<a href="#" class="track-link" data-base="modismos"><span class="i18n" data-es="Modismos" data-it="Modi di dire" data-en="Idioms & sayings">Modismos</span></a>
+</div>
+</div>
+
+<div class="menu-item">
+<button class="menu-button"><i class="ti ti-briefcase cat-profesional"></i> <span class="i18n" data-es="Español profesional" data-it="Spagnolo al lavoro" data-en="Business Spanish">Español profesional</span> ▾</button>
+<div class="submenu">
+<a href="#" class="track-link" data-base="profesional"><span class="i18n" data-es="Visión general" data-it="Panoramica" data-en="Overview">Visión general</span></a>
+<a href="#" class="track-link" data-base="profesional-registro"><span class="i18n" data-es="Registro y tono" data-it="Registro e tono" data-en="Register and tone">Registro y tono</span></a>
+<a href="#" class="track-link" data-base="profesional-email"><span class="i18n" data-es="El email profesional" data-it="L'email professionale" data-en="The professional email">El email profesional</span></a>
+<a href="#" class="track-link" data-base="profesional-emails-modelo"><span class="i18n" data-es="Emails modelo" data-it="Email modello" data-en="Model emails">Emails modelo</span></a>
+<a href="#" class="track-link" data-base="profesional-chat"><span class="i18n" data-es="Chat de trabajo" data-it="Chat di lavoro" data-en="Work chat">Chat de trabajo</span></a>
+<a href="#" class="track-link" data-base="profesional-telefono"><span class="i18n" data-es="El teléfono" data-it="Il telefono" data-en="On the phone">El teléfono</span></a>
+<a href="#" class="track-link" data-base="profesional-deletrear"><span class="i18n" data-es="Deletrear y dar datos" data-it="Spelling e dati" data-en="Spelling &amp; data">Deletrear y dar datos</span></a>
+<a href="#" class="track-link" data-base="profesional-reuniones"><span class="i18n" data-es="Reuniones" data-it="Riunioni" data-en="Meetings">Reuniones</span></a>
+<a href="#" class="track-link" data-base="profesional-videollamada"><span class="i18n" data-es="La videollamada" data-it="La videochiamata" data-en="Video calls">La videollamada</span></a>
+<a href="#" class="track-link" data-base="profesional-presentaciones"><span class="i18n" data-es="Presentaciones" data-it="Presentazioni" data-en="Presentations">Presentaciones</span></a>
+<a href="#" class="track-link" data-base="profesional-cv"><span class="i18n" data-es="El CV y la carta" data-it="Il CV e la lettera" data-en="The CV and cover letter">El CV y la carta</span></a>
+<a href="#" class="track-link" data-base="profesional-entrevista"><span class="i18n" data-es="La entrevista" data-it="Il colloquio" data-en="The job interview">La entrevista</span></a>
+</div>
+</div>
+
+<div class="menu-item">
+<button class="menu-button"><i class="ti ti-pencil cat-ejercicios"></i> <span class="i18n" data-es="Ejercicios y cursos" data-it="Esercizi e corsi" data-en="Exercises &amp; courses">Ejercicios y cursos</span> ▾</button>
+<div class="submenu">
+<a href="#" class="track-link" data-base="ejercicios"><span class="i18n" data-es="Todos los ejercicios" data-it="Tutti gli esercizi" data-en="All exercises">Todos los ejercicios</span></a>
+</div>
+</div>
+
+
+<div class="sidebar-filler">
+<p class="tagline"><span id="tagline-text">Poco a poco se llega lejos</span> <i class="ti ti-bolt"></i></p>
+</div>
+</aside>
+<div class="tab-rail">
+<div class="rail-tab" data-tab-cat="clases" style="--tab-color:#7A5230"></div>
+<div class="rail-tab" data-tab-cat="verbos" style="--tab-color:#D6488F"></div>
+<div class="rail-tab" data-tab-cat="gramatica" style="--tab-color:#5B9A3B"></div>
+<div class="rail-tab" data-tab-cat="vocabulario" style="--tab-color:#E8791E"></div>
+<div class="rail-tab" data-tab-cat="expresiones" style="--tab-color:#7A6FD1"></div>
+<div class="rail-tab" data-tab-cat="profesional" style="--tab-color:#0F6E56"></div>
+<div class="rail-tab" data-tab-cat="ejercicios" style="--tab-color:#3A6FC9"></div>
+</div>
+<main class="main">
+<div class="page-header"><div class="language-selector">
+<button class="lang-track-btn" data-track="es">🇪🇸 Español</button>
+<button class="lang-track-btn" data-track="it">🇮🇹 Italiano</button>
+<button class="lang-track-btn" data-track="en">🇬🇧 English</button>
+<label class="theme-switch" title="Modo oscuro">
+<input type="checkbox" id="theme-toggle">
+<span class="theme-switch-track"><i class="ti ti-sun"></i><i class="ti ti-moon"></i><span class="theme-switch-thumb"></span></span>
+</label>
+</div>
+<div class="breadcrumb"><a href="index.html"><i class="ti ti-home"></i> Inicio</a> / Business Spanish / Spelling things out</div>
+</div>
+<section class="grammar-section">
+<span class="eyebrow">Business Spanish</span>
+<h2>Spelling things out</h2>
+<p class="subtitle">Nobody freezes on the phone because of grammar: they freeze because they can't say their email out loud. This is what you want ready.</p>
+<h3>The symbols</h3>
+<div class="table-wrap"><table><thead><tr><th>Symbol</th><th>You say</th><th>Example</th></tr></thead><tbody><tr><td>@</td><td>arroba</td><td>logistica@stampi.it</td></tr><tr><td>.</td><td>punto</td><td>stampi<b>.</b>it → «stampi punto it»</td></tr><tr><td>-</td><td>guion</td><td>MV-07 → «eme uve guion cero siete»</td></tr><tr><td>_</td><td>guion bajo</td><td>logistica_2</td></tr><tr><td>/</td><td>barra</td><td>albarán 2208/24</td></tr><tr><td>n.º</td><td>número</td><td>pedido n.º 3390</td></tr><tr><td>capital / lower case</td><td>en mayúscula / en minúscula</td><td>«la ele en mayúscula»</td></tr><tr><td>all one word</td><td>todo junto / sin espacios</td><td>«stampilombardi, todo junto»</td></tr></tbody></table></div>
+<h3 style="margin-top:30px">The letters that cause most trouble</h3>
+<p class="subtitle" style="margin-bottom:16px">If you can name these, half the phone calls are solved.</p>
+<div class="table-wrap"><table><thead><tr><th>Letter</th><th>Name</th><th>Why it causes trouble</th></tr></thead><tbody><tr><td>b / v</td><td>be / uve</td><td>They sound exactly the same in Spanish: always spell them out.</td></tr><tr><td>g / j</td><td>ge / jota</td><td>«ge» and «gi» sound like the jota.</td></tr><tr><td>c / z</td><td>ce / zeta</td><td>«ce», «ci» and «za, zo, zu» sound alike in most of Spain.</td></tr><tr><td>h</td><td>hache</td><td>It is silent: you never hear it.</td></tr><tr><td>ll / y</td><td>doble ele / i griega (o ye)</td><td>They sound the same for most speakers.</td></tr><tr><td>w</td><td>uve doble (o doble uve)</td><td>Common in emails and websites.</td></tr><tr><td>k / q</td><td>ka / cu</td><td>«cu» is the letter q: don't mix it up with u.</td></tr><tr><td>r / rr</td><td>erre / doble erre</td><td>You say «doble erre», not «dos erres».</td></tr></tbody></table></div>
+<h3 style="margin-top:30px">The spelling alphabet</h3>
+<p class="subtitle" style="margin-bottom:16px">The formula: <b>«B de Barcelona, V de Valencia»</b>. There is no single official alphabet — what matters is using names everyone knows.</p>
+<div class="table-wrap"><table><thead><tr><th>Letter</th><th>Word</th><th>Letter</th><th>Word</th></tr></thead><tbody><tr><td>A</td><td>Alicante</td><td>N</td><td>Navarra</td></tr><tr><td>B</td><td>Barcelona</td><td>Ñ</td><td>Ñandú</td></tr><tr><td>C</td><td>Cáceres</td><td>O</td><td>Oviedo</td></tr><tr><td>D</td><td>Dinamarca</td><td>P</td><td>Portugal</td></tr><tr><td>E</td><td>España</td><td>Q</td><td>Querétaro</td></tr><tr><td>F</td><td>Francia</td><td>R</td><td>Roma</td></tr><tr><td>G</td><td>Granada</td><td>S</td><td>Sevilla</td></tr><tr><td>H</td><td>Huelva</td><td>T</td><td>Toledo</td></tr><tr><td>I</td><td>Italia</td><td>U</td><td>Úbeda</td></tr><tr><td>J</td><td>Jaén</td><td>V</td><td>Valencia</td></tr><tr><td>K</td><td>Kilo</td><td>W</td><td>Washington</td></tr><tr><td>L</td><td>Lugo</td><td>X</td><td>Xilófono</td></tr><tr><td>M</td><td>Madrid</td><td>Y / Z</td><td>Yegua / Zaragoza</td></tr></tbody></table></div>
+<h3 style="margin-top:30px">Numbers, figures and dates</h3>
+<div class="table-wrap"><table><thead><tr><th>What</th><th>How it is said</th></tr></thead><tbody><tr><td>Thousands</td><td>With a <b>full stop</b>: 12.500 → doce mil quinientos (the opposite of English)</td></tr><tr><td>Decimals</td><td>With a <b>comma</b>: 3,5 → tres coma cinco</td></tr><tr><td>Long codes</td><td>Digit by digit or in pairs: 4471 → cuatro, cuatro, siete, uno / cuarenta y cuatro, setenta y uno</td></tr><tr><td>Phone numbers</td><td>In pairs: 02 345 67 89 → cero dos, tres cuatro cinco, sesenta y siete, ochenta y nueve</td></tr><tr><td>Zeros</td><td>«cero», never «o»: 0071 → cero, cero, siete, uno</td></tr><tr><td>Dates</td><td>el 12 de marzo / el día 12 → never «el 12 marzo» without «de»</td></tr><tr><td>Times</td><td>a las 19:30 → a las siete y media de la tarde / a las diecinueve treinta</td></tr><tr><td>Percentages</td><td>el 30 % → el treinta por ciento (with the article)</td></tr><tr><td>Quantities</td><td>2 palés / 500 kg → dos palés, quinientos kilos</td></tr></tbody></table></div>
+<h3 style="margin-top:30px">Confirming what you heard</h3>
+<div class="table-wrap"><table><thead><tr><th>Situation</th><th>In Spanish</th></tr></thead><tbody><tr><td>Read it back</td><td>Le repito para confirmar: cuatro, cuatro, siete, uno, ¿correcto?</td></tr><tr><td>Ask them to spell it</td><td>¿Me lo puede deletrear, por favor?</td></tr><tr><td>Unsure about a letter</td><td>¿Con be o con uve? / ¿Con hache?</td></tr><tr><td>Confirm</td><td>Exacto. / Eso es. / Correcto.</td></tr><tr><td>Correct them</td><td>No, perdone: con uve de Valencia.</td></tr></tbody></table></div>
+<div class="tip-box"><i class="ti ti-bulb" aria-hidden="true"></i> Say the phone number <b>twice</b>, slowly, in groups of two digits. The person on the other end is writing it down, and nobody asks for a third repeat.</div>
+<div class="ex-cta"><a href="ejercicios-en.html?tema=profesional-telefono" class="button button-primary"><i class="ti ti-pencil"></i> Test yourself with exercises</a></div>
+</section>
+</main>
+<footer>© 2026 José N. · Profesor de español · <a href="privacidad.html">Privacidad</a></footer>
+<script type="module" src="firebase-init.js?v=20260809"></script>
+<script src="script.js?v=20261014f"></script>
+</body>
+</html>
