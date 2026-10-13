@@ -189,6 +189,60 @@ window.JN_CLASES = [
     },
     etiquetas: ['falsos amigos', 'embarazada', 'constipado', 'éxito',
                 'actualmente', 'sensible', 'librería', 'molestar']
+  },
+
+  // ─── Español para el trabajo ───
+  {
+    id: 'llamada',
+    pagina: 'clase-llamada',
+    nivel: 'B1–B2',
+    perfil: 'trabajo',
+    titulo: {
+      es: 'Una llamada de principio a fin',
+      it: 'Una telefonata dall’inizio alla fine',
+      en: 'A phone call from start to finish'
+    },
+    etiquetas: ['teléfono', 'deletrear', 'recado', 'contestador', 'números',
+                '¿de parte de quién?']
+  },
+  {
+    id: 'reunion',
+    pagina: 'clase-reunion',
+    nivel: 'B2',
+    perfil: 'trabajo',
+    titulo: {
+      es: 'La reunión: entrar, opinar y cerrar',
+      it: 'La riunione: entrare, opinare e chiudere',
+      en: 'Meetings: getting in, weighing in, wrapping up'
+    },
+    etiquetas: ['reuniones', 'pedir la palabra', 'interrumpir', 'opinar', 'acuerdo',
+                'repartir tareas', 'videollamada']
+  },
+  {
+    id: 'suavizar',
+    pagina: 'clase-suavizar',
+    nivel: 'B1–B2',
+    perfil: 'trabajo',
+    titulo: {
+      es: 'Decirlo sin que suene a orden',
+      it: 'Dirlo senza che suoni come un ordine',
+      en: 'Saying it without sounding like an order'
+    },
+    etiquetas: ['cortesía', 'condicional', 'imperfecto de cortesía', 'subjuntivo',
+                'pedir', 'discrepar']
+  },
+  {
+    id: 'italiano-trabajo',
+    pagina: 'clase-italiano-trabajo',
+    nivel: 'B2',
+    perfil: 'italianos',
+    pistas: ['it'],
+    titulo: {
+      es: 'Cuando el italiano te traiciona',
+      it: 'Quando l’italiano ti tradisce',
+      en: 'When Italian trips you up'
+    },
+    etiquetas: ['interferencias', 'italiano', 'teléfono', 'videollamada', 'falsos amigos']
   }
 ];
 
