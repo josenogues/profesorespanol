@@ -13,40 +13,23 @@
 <link rel="stylesheet" href="styles.css?v=20261014i">
 <script>if(localStorage.getItem('jn_theme')==='dark')document.documentElement.setAttribute('data-theme','dark');</script>
 <style>
-/* ===== Muestra: el cuaderno de José =====
-   La idea: la página ES una hoja del cuaderno. El fondo rayado y la línea
-   roja del margen ya existían; aquí se usan de verdad en vez de tapar el
-   papel con cajas blancas. Nada de esto toca styles.css. */
+/* ===== Muestra 2: el cuaderno de José =====
+   La página es una hoja del cuaderno. El papel rayado, la línea roja del
+   margen y la letra manuscrita ya existían en la web: aquí se usan, en vez
+   de taparlos con cajas blancas. Nada de esto toca styles.css. */
 
-/* — Apertura — */
-.jn-apertura{display:flex;gap:34px;align-items:flex-start;flex-wrap:wrap;margin-bottom:12px}
-.jn-foto{flex:none;width:168px;padding:9px 9px 42px;background:#fff;box-shadow:2px 5px 14px rgba(0,0,0,.16);
-  transform:rotate(-2.5deg);position:relative;margin-top:14px}
-.jn-foto img{display:block;width:100%;height:170px;object-fit:cover}
-.jn-foto figcaption{position:absolute;left:0;right:0;bottom:11px;text-align:center;
-  font-family:'Caveat',cursive;font-size:22px;color:#55534d;line-height:1}
-/* el trocito de celo, igual que en las notas adhesivas de las clases */
-.jn-foto::before{content:"";position:absolute;top:-11px;left:50%;margin-left:-32px;width:64px;height:22px;
-  background:rgba(255,255,255,.8);box-shadow:0 1px 3px rgba(0,0,0,.18);transform:rotate(-3deg)}
-[data-theme="dark"] .jn-foto{background:#242932;box-shadow:2px 5px 14px rgba(0,0,0,.45)}
-[data-theme="dark"] .jn-foto figcaption{color:#a9a69e}
-[data-theme="dark"] .jn-foto::before{background:rgba(255,255,255,.14)}
-.jn-texto{flex:1;min-width:280px}
-.jn-saludo{font-family:'Caveat',cursive;font-weight:700;font-size:54px;line-height:.95;
-  color:var(--primary-dark);margin:0 0 2px;transform:rotate(-1deg)}
-[data-theme="dark"] .jn-saludo{color:#c3cbe8}
-.jn-sub{font-family:var(--font-head);font-size:19.5px;font-weight:600;color:var(--text-secondary);margin:10px 0 14px}
-.jn-texto p{max-width:60ch;margin-bottom:14px;color:var(--text-secondary)}
-.jn-estrellas{display:inline-flex;align-items:center;gap:7px;font-size:15px;color:var(--muted);margin-bottom:16px}
-.jn-estrellas b{font-family:var(--font-head);font-size:18px;color:var(--text)}
-.jn-estrellas .s{color:var(--gold);letter-spacing:1px}
+/* — Apertura: lo que es esta web, en una línea. Sin foto. — */
+.jn-abre{margin-bottom:38px}
+.jn-abre h1{font-family:'Caveat',cursive;font-weight:700;font-size:52px;line-height:1.05;
+  color:var(--primary-dark);transform:rotate(-1deg);margin-bottom:10px}
+[data-theme="dark"] .jn-abre h1{color:#c3cbe8}
+.jn-abre p{font-size:18.5px;color:var(--text-secondary);max-width:58ch}
 
 /* — Las dos entradas: pestañas de cuaderno, no tarjetas iguales — */
-.jn-entradas{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:22px;margin:46px 0 54px}
+.jn-entradas{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:22px;margin-bottom:26px}
 .jn-entrada{display:block;position:relative;padding:26px 26px 24px;background:var(--card-bg);
   border-top:5px solid var(--c);box-shadow:0 2px 10px rgba(0,0,0,.07);transition:.15s}
 .jn-entrada:hover{transform:translateY(-3px);box-shadow:0 7px 18px rgba(0,0,0,.12)}
-/* la lengüeta que sobresale por arriba, como el separador de un cuaderno */
 .jn-entrada::before{content:"";position:absolute;top:-16px;left:26px;width:74px;height:16px;
   background:var(--c);border-radius:4px 4px 0 0;opacity:.85}
 .jn-entrada h3{font-size:23px;margin-bottom:7px;color:var(--text)}
@@ -55,28 +38,34 @@
 .jn-entrada .ir{font-family:var(--font-head);font-weight:600;color:var(--c);font-size:15.5px}
 [data-theme="dark"] .jn-entrada{box-shadow:0 2px 10px rgba(0,0,0,.3)}
 
-/* — El índice del cuaderno: lista con puntitos, no rejilla de cajas — */
-.jn-indice-cab{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;margin-bottom:6px}
-.jn-indice-cab h2{font-family:'Caveat',cursive;font-size:38px;color:var(--text);transform:rotate(-1deg)}
-.jn-indice-cab span{color:var(--muted);font-size:15px}
-.jn-indice{columns:2;column-gap:52px;margin-top:26px}
-@media(max-width:860px){.jn-indice{columns:1}}
-.jn-grupo{break-inside:avoid;margin-bottom:30px}
-.jn-grupo h3{font-family:var(--font-head);font-size:13px;text-transform:uppercase;letter-spacing:.08em;
-  color:var(--c);padding-bottom:5px;border-bottom:2px solid var(--c);margin-bottom:9px}
-.jn-linea{display:flex;align-items:baseline;gap:7px;padding:4px 0;font-size:16px;color:var(--text-secondary)}
-.jn-linea:hover{color:var(--c)}
-.jn-linea .pts{flex:1;border-bottom:2px dotted #cfccc2;transform:translateY(-4px);min-width:16px}
-[data-theme="dark"] .jn-linea .pts{border-bottom-color:#4a4e57}
-.jn-linea .fin{color:var(--muted);font-size:13.5px;white-space:nowrap}
-.jn-linea:hover .fin{color:var(--c)}
-
-/* — Reseñas: sin blobs de colores difuminados — */
-.jn-nota{font-family:'Caveat',cursive;font-size:24px;line-height:1.35;color:var(--muted);
-  transform:rotate(-1.2deg);max-width:34ch;margin-top:10px;break-inside:avoid}
+/* — Nota a mano: para decir algo útil, no para decorar — */
+.jn-nota{font-family:'Caveat',cursive;font-size:25px;line-height:1.35;color:var(--muted);
+  transform:rotate(-1deg);max-width:44ch;margin-bottom:54px}
 .jn-nota i{color:var(--gold-dark);margin-right:6px;font-size:20px}
 [data-theme="dark"] .jn-nota i{color:var(--gold)}
-.jn-resenas{margin-top:48px;padding-top:34px;border-top:1px solid var(--border)}
+
+/* — Sobre mí, al final y pequeño: un «di cui», no la portada — */
+.jn-sobre{display:flex;gap:28px;align-items:flex-start;flex-wrap:wrap;
+  margin-top:56px;padding-top:30px;border-top:1px solid var(--border)}
+.jn-foto{flex:none;width:132px;padding:8px 8px 34px;background:#fff;box-shadow:2px 4px 12px rgba(0,0,0,.15);
+  transform:rotate(-2.5deg);position:relative;margin-top:12px}
+.jn-foto img{display:block;width:100%;height:134px;object-fit:cover}
+.jn-foto figcaption{position:absolute;left:0;right:0;bottom:9px;text-align:center;
+  font-family:'Caveat',cursive;font-size:20px;color:#55534d;line-height:1}
+.jn-foto::before{content:"";position:absolute;top:-10px;left:50%;margin-left:-28px;width:56px;height:20px;
+  background:rgba(255,255,255,.8);box-shadow:0 1px 3px rgba(0,0,0,.18);transform:rotate(-3deg)}
+[data-theme="dark"] .jn-foto{background:#242932;box-shadow:2px 4px 12px rgba(0,0,0,.45)}
+[data-theme="dark"] .jn-foto figcaption{color:#a9a69e}
+[data-theme="dark"] .jn-foto::before{background:rgba(255,255,255,.14)}
+.jn-sobre-txt{flex:1;min-width:270px}
+.jn-sobre-txt h2{font-family:var(--font-head);font-size:21px;margin-bottom:8px}
+.jn-sobre-txt p{color:var(--text-secondary);font-size:16px;max-width:58ch;margin-bottom:12px}
+.jn-estrellas{display:inline-flex;align-items:center;gap:7px;font-size:14.5px;color:var(--muted);margin-bottom:14px}
+.jn-estrellas b{font-family:var(--font-head);font-size:17px;color:var(--text)}
+.jn-estrellas .s{color:var(--gold);letter-spacing:1px}
+
+/* — Reseñas: sin manchas de color difuminadas de fondo — */
+.jn-resenas{margin-top:54px;padding-top:30px;border-top:1px solid var(--border)}
 .jn-resenas .section-title{margin-top:0}
 </style>
 </head>
@@ -206,20 +195,9 @@
 <div class="breadcrumb"><i class="ti ti-home"></i> Inicio</div>
 </div>
 
-<section class="jn-apertura">
-<figure class="jn-foto">
-<img src="profile.jpg" alt="Foto de José Nogues">
-<figcaption>José</figcaption>
-</figure>
-<div class="jn-texto">
-<p class="jn-saludo">¡Hola!</p>
-<p class="jn-sub"><span class="i18n" data-es="Soy José, profesor de español. Esta web es el cuaderno de nuestras clases." data-it="Sono José, insegnante di spagnolo. Questo sito è il quaderno delle nostre lezioni." data-en="I’m José, a Spanish teacher. This site is the notebook for our lessons.">Soy José, profesor de español. Esta web es el cuaderno de nuestras clases.</span></p>
-<p><span class="i18n" data-es="Aquí está lo que vemos juntos, lo que te dejo para practicar y la teoría a la que volver cuando se te olvide algo. Preparado para quien viene del italiano o del inglés, porque los líos no son los mismos según de dónde vengas." data-it="Qui c’è quello che vediamo insieme, quello che ti lascio da esercitare e la teoria a cui tornare quando ti dimentichi qualcosa. Pensato per chi arriva dall’italiano o dall’inglese, perché gli intoppi non sono gli stessi." data-en="Here’s what we cover together, what I leave you to practise, and the theory to come back to when something slips. Built for people coming from Italian or English, because the tangles aren’t the same depending on where you start.">Aquí está lo que vemos juntos, lo que te dejo para practicar y la teoría a la que volver cuando se te olvide algo. Preparado para quien viene del italiano o del inglés, porque los líos no son los mismos según de dónde vengas.</span></p>
-<p class="jn-estrellas"><b>5,0</b> <span class="s">★★★★★</span> <span class="i18n" data-es="en Preply" data-it="su Preply" data-en="on Preply">en Preply</span></p>
-<div class="buttons">
-<a href="https://preply.in/JOSE7IT3614462510?ts=17846445" target="_blank" rel="noopener" class="button button-preply"><i class="ti ti-school"></i> <span class="i18n" data-es="Mi perfil de Preply" data-it="Il mio profilo Preply" data-en="My Preply profile">Mi perfil de Preply</span></a>
-</div>
-</div>
+<section class="jn-abre">
+<h1><span class="i18n" data-es="El cuaderno de nuestras clases" data-it="Il quaderno delle nostre lezioni" data-en="The notebook for our lessons">El cuaderno de nuestras clases</span></h1>
+<p><span class="i18n" data-es="Lo que vemos juntos, lo que te dejo para practicar y la teoría a la que volver cuando se te olvide algo." data-it="Quello che vediamo insieme, quello che ti lascio da esercitare e la teoria a cui tornare quando ti dimentichi qualcosa." data-en="What we cover together, what I leave you to practise, and the theory to come back to when something slips.">Lo que vemos juntos, lo que te dejo para practicar y la teoría a la que volver cuando se te olvide algo.</span></p>
 </section>
 
 <section class="jn-entradas">
@@ -234,45 +212,7 @@
 <span class="ir"><span class="i18n" data-es="Empezar a practicar" data-it="Inizia a esercitarti" data-en="Start practising">Empezar a practicar</span> →</span>
 </a>
 </section>
-
-<div class="jn-indice-cab">
-<h2><span class="i18n" data-es="Lo que hay en este cuaderno" data-it="Cosa c’è in questo quaderno" data-en="What’s in this notebook">Lo que hay en este cuaderno</span></h2>
-<span><span class="i18n" data-es="abierto siempre, también entre clase y clase" data-it="sempre aperto, anche tra una lezione e l’altra" data-en="always open, also between lessons">abierto siempre, también entre clase y clase</span></span>
-</div>
-<div class="jn-indice">
-<div class="jn-grupo" style="--c:#D6488F"><h3><span class="i18n" data-es="Verbos" data-it="Verbi" data-en="Verbs">Verbos</span></h3><a class="jn-linea track-link" href="#" data-base="tiempos-verbales"><span class="i18n" data-es="Qué tiempo uso" data-it="Che tempo uso" data-en="Which tense do I use">Qué tiempo uso</span><span class="pts"></span><span class="fin"><span class="i18n" data-es="el mapa" data-it="la mappa" data-en="the map">el mapa</span></span></a>
-<a class="jn-linea track-link" href="#" data-base="conjugaciones"><span class="i18n" data-es="Conjugaciones" data-it="Coniugazioni" data-en="Conjugations">Conjugaciones</span><span class="pts"></span><span class="fin"><span class="i18n" data-es="todas las formas" data-it="tutte le forme" data-en="every form">todas las formas</span></span></a>
-<a class="jn-linea track-link" href="#" data-base="perifrasis"><span class="i18n" data-es="Perífrasis verbales" data-it="Perifrasi verbali" data-en="Verbal periphrases">Perífrasis verbales</span><span class="pts"></span></a>
-<a class="jn-linea track-link" href="#" data-base="indicativo"><span class="i18n" data-es="Indicativo" data-it="Indicativo" data-en="Indicative">Indicativo</span><span class="pts"></span></a>
-<a class="jn-linea track-link" href="#" data-base="subjuntivo"><span class="i18n" data-es="Subjuntivo" data-it="Congiuntivo" data-en="Subjunctive">Subjuntivo</span><span class="pts"></span></a>
-<a class="jn-linea track-link" href="#" data-base="imperativo"><span class="i18n" data-es="Imperativo" data-it="Imperativo" data-en="Imperative">Imperativo</span><span class="pts"></span></a>
-<a class="jn-linea track-link" href="#" data-base="ser-estar"><span class="i18n" data-es="Ser y estar" data-it="Ser y estar" data-en="Ser y estar">Ser y estar</span><span class="pts"></span><span class="fin"><span class="i18n" data-es="el clásico" data-it="il classico" data-en="the classic">el clásico</span></span></a>
-<a class="jn-linea track-link" href="#" data-base="haber-tener"><span class="i18n" data-es="Haber y tener" data-it="Haber y tener" data-en="Haber y tener">Haber y tener</span><span class="pts"></span></a>
-<a class="jn-linea track-link" href="#" data-base="verbos-reflexivos"><span class="i18n" data-es="Reflexivos" data-it="Riflessivi" data-en="Reflexive verbs">Reflexivos</span><span class="pts"></span></a>
-<a class="jn-linea track-link" href="#" data-base="especial-atencion-verbos"><span class="i18n" data-es="Verbos que se confunden" data-it="Attenzione a questi" data-en="Watch out for these">Verbos que se confunden</span><span class="pts"></span></a></div>
-<div class="jn-grupo" style="--c:#5B9A3B"><h3><span class="i18n" data-es="Gramática" data-it="Grammatica" data-en="Grammar">Gramática</span></h3><a class="jn-linea track-link" href="#" data-base="articulos"><span class="i18n" data-es="Artículos" data-it="Articoli" data-en="Articles">Artículos</span><span class="pts"></span></a>
-<a class="jn-linea track-link" href="#" data-base="genero-numero"><span class="i18n" data-es="Género y número" data-it="Genere e numero" data-en="Gender &amp; number">Género y número</span><span class="pts"></span></a>
-<a class="jn-linea track-link" href="#" data-base="pronombres"><span class="i18n" data-es="Pronombres" data-it="Pronomi" data-en="Pronouns">Pronombres</span><span class="pts"></span></a>
-<a class="jn-linea track-link" href="#" data-base="preposiciones"><span class="i18n" data-es="Preposiciones" data-it="Preposizioni" data-en="Prepositions">Preposiciones</span><span class="pts"></span><span class="fin"><span class="i18n" data-es="por y para" data-it="por e para" data-en="por and para">por y para</span></span></a>
-<a class="jn-linea track-link" href="#" data-base="conectores"><span class="i18n" data-es="Conectores" data-it="Connettivi" data-en="Connectors">Conectores</span><span class="pts"></span></a>
-<a class="jn-linea track-link" href="#" data-base="estilo-indirecto"><span class="i18n" data-es="Estilo indirecto" data-it="Discorso indiretto" data-en="Reported speech">Estilo indirecto</span><span class="pts"></span></a>
-<a class="jn-linea track-link" href="#" data-base="fonetica"><span class="i18n" data-es="Fonética" data-it="Fonetica" data-en="Pronunciation">Fonética</span><span class="pts"></span></a>
-<a class="jn-linea track-link" href="#" data-base="especial-atencion-gramatica"><span class="i18n" data-es="Gramática que delata" data-it="Attenzione a questi" data-en="What gives you away">Gramática que delata</span><span class="pts"></span></a></div>
-<div class="jn-grupo" style="--c:#E8791E"><h3><span class="i18n" data-es="Vocabulario y expresiones" data-it="Vocabolario ed espressioni" data-en="Vocabulary &amp; expressions">Vocabulario y expresiones</span></h3><a class="jn-linea track-link" href="#" data-base="vocabulario"><span class="i18n" data-es="Todos los temas" data-it="Tutti gli argomenti" data-en="All the topics">Todos los temas</span><span class="pts"></span><span class="fin"><span class="i18n" data-es="casa, comida, viajes…" data-it="casa, cibo, viaggi…" data-en="home, food, travel…">casa, comida, viajes…</span></span></a>
-<a class="jn-linea track-link" href="#" data-base="expresiones-comunes"><span class="i18n" data-es="Expresiones comunes" data-it="Espressioni comuni" data-en="Everyday expressions">Expresiones comunes</span><span class="pts"></span></a>
-<a class="jn-linea track-link" href="#" data-base="modismos"><span class="i18n" data-es="Modismos" data-it="Modi di dire" data-en="Idioms">Modismos</span><span class="pts"></span></a>
-<a class="jn-linea track-link hide-on-es" href="#" data-base="falsos-amigos"><span class="i18n" data-es="False friends" data-it="Falsi amici" data-en="False friends">False friends</span><span class="pts"></span><span class="fin"><span class="i18n" data-es="los que pican" data-it="quelli che fregano" data-en="the ones that bite">los que pican</span></span></a></div>
-<div class="jn-grupo" style="--c:#0F6E56"><h3><span class="i18n" data-es="Español para el trabajo" data-it="Spagnolo al lavoro" data-en="Spanish at work">Español para el trabajo</span></h3><a class="jn-linea track-link" href="#" data-base="profesional"><span class="i18n" data-es="Por dónde empezar" data-it="Da dove iniziare" data-en="Where to start">Por dónde empezar</span><span class="pts"></span></a>
-<a class="jn-linea track-link" href="#" data-base="profesional-registro"><span class="i18n" data-es="Registro y tono" data-it="Registro e tono" data-en="Register &amp; tone">Registro y tono</span><span class="pts"></span></a>
-<a class="jn-linea track-link" href="#" data-base="profesional-email"><span class="i18n" data-es="El email" data-it="L’email" data-en="Email">El email</span><span class="pts"></span></a>
-<a class="jn-linea track-link" href="#" data-base="profesional-telefono"><span class="i18n" data-es="El teléfono" data-it="Il telefono" data-en="The phone">El teléfono</span><span class="pts"></span></a>
-<a class="jn-linea track-link" href="#" data-base="profesional-videollamada"><span class="i18n" data-es="La videollamada" data-it="La videochiamata" data-en="Video calls">La videollamada</span><span class="pts"></span></a>
-<a class="jn-linea track-link" href="#" data-base="profesional-reuniones"><span class="i18n" data-es="Reuniones" data-it="Riunioni" data-en="Meetings">Reuniones</span><span class="pts"></span></a>
-<a class="jn-linea track-link" href="#" data-base="profesional-presentaciones"><span class="i18n" data-es="Presentaciones" data-it="Presentazioni" data-en="Presentations">Presentaciones</span><span class="pts"></span></a>
-<a class="jn-linea track-link" href="#" data-base="profesional-cv"><span class="i18n" data-es="El CV y la carta" data-it="Il CV e la lettera" data-en="CV &amp; cover letter">El CV y la carta</span><span class="pts"></span></a>
-<a class="jn-linea track-link" href="#" data-base="profesional-entrevista"><span class="i18n" data-es="La entrevista" data-it="Il colloquio" data-en="The interview">La entrevista</span><span class="pts"></span></a></div>
-<p class="jn-nota"><i class="ti ti-arrow-back-up"></i> <span class="i18n" data-es="¿No encuentras algo? El buscador de arriba a la izquierda mira dentro de todas las páginas." data-it="Non trovi qualcosa? Il cercatore in alto a sinistra guarda dentro tutte le pagine." data-en="Can’t find something? The search box at the top left looks inside every page.">¿No encuentras algo? El buscador de arriba a la izquierda mira dentro de todas las páginas.</span></p>
-</div>
+<p class="jn-nota"><i class="ti ti-arrow-bear-left"></i> <span class="i18n" data-es="¿Buscas teoría? Está toda en el menú de la izquierda, y el buscador de arriba mira dentro de todas las páginas." data-it="Cerchi la teoria? È tutta nel menù a sinistra, e il cercatore in alto guarda dentro tutte le pagine." data-en="Looking for theory? It’s all in the menu on the left, and the search box at the top looks inside every page.">¿Buscas teoría? Está toda en el menú de la izquierda, y el buscador de arriba mira dentro de todas las páginas.</span></p>
 
 <div class="jn-resenas">
 <section class="reviews-section">
@@ -333,6 +273,21 @@
 <div class="reviews-dots" id="reviews-dots"></div>
 </section>
 </div>
+
+<section class="jn-sobre">
+<figure class="jn-foto">
+<img src="profile.jpg" alt="Foto de José Nogues">
+<figcaption>José</figcaption>
+</figure>
+<div class="jn-sobre-txt">
+<h2><span class="i18n" data-es="Por cierto, soy José" data-it="A proposito, sono José" data-en="By the way, I’m José">Por cierto, soy José</span></h2>
+<p><span class="i18n" data-es="Profesor de español. Preparo este material para quien viene del italiano o del inglés, porque los líos no son los mismos según de dónde vengas. Si quieres clase conmigo, nos vemos en Preply." data-it="Insegnante di spagnolo. Preparo questo materiale per chi arriva dall’italiano o dall’inglese, perché gli intoppi non sono gli stessi. Se vuoi lezione con me, ci vediamo su Preply." data-en="Spanish teacher. I build this material for people coming from Italian or English, because the tangles aren’t the same depending on where you start. If you’d like a lesson, find me on Preply.">Profesor de español. Preparo este material para quien viene del italiano o del inglés, porque los líos no son los mismos según de dónde vengas. Si quieres clase conmigo, nos vemos en Preply.</span></p>
+<p class="jn-estrellas"><b>5,0</b> <span class="s">★★★★★</span> <span class="i18n" data-es="en Preply" data-it="su Preply" data-en="on Preply">en Preply</span></p>
+<div class="buttons">
+<a href="https://preply.in/JOSE7IT3614462510?ts=17846445" target="_blank" rel="noopener" class="button button-preply"><i class="ti ti-school"></i> <span class="i18n" data-es="Mi perfil de Preply" data-it="Il mio profilo Preply" data-en="My Preply profile">Mi perfil de Preply</span></a>
+</div>
+</div>
+</section>
 
 </main>
 <footer>© 2026 José N. · Profesor de español · <a href="privacidad.html">Privacidad</a></footer>
