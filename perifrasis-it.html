@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Perífrasis verbales | Aprende Español con José Nogues</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@400;600;700;800&family=Caveat:wght@700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
+<link rel="icon" type="image/png" href="favicon.png">
+<link rel="stylesheet" href="styles.css?v=20261014">
+<script>if(localStorage.getItem('jn_theme')==='dark')document.documentElement.setAttribute('data-theme','dark');</script>
+</head>
+<body data-category="verbos">
+<button id="sidebar-toggle" class="sidebar-toggle" aria-label="Mostrar/ocultar menú"><i class="ti ti-menu-2"></i></button>
+<aside class="sidebar">
+<a href="index.html" class="logo-header"><img src="logo.png" alt="Aprende español con José" class="logo-img"></a>
+
+<div class="sidebar-search">
+<i class="ti ti-search"></i>
+<input type="text" id="site-search" placeholder="Buscar..." autocomplete="off">
+<div class="search-results" id="search-results"></div>
+</div>
+
+
+<div class="menu-item">
+<a href="#" class="menu-button track-link" data-base="mis-clases"><i class="ti ti-notebook cat-clases"></i> <span class="i18n" data-es="Mis clases" data-it="Le mie lezioni" data-en="My classes">Mis clases</span></a>
+</div>
+<div class="menu-sep"><span class="i18n" data-es="Teoría y práctica" data-it="Teoria e pratica" data-en="Theory &amp; practice">Teoría y práctica</span></div>
+
+<div class="menu-item">
+<button class="menu-button"><i class="ti ti-microphone cat-verbos"></i> <span class="i18n" data-es="Verbos" data-it="Verbi" data-en="Verbs">Verbos</span> ▾</button>
+<div class="submenu">
+<a href="#" class="track-link" data-base="tiempos-verbales">Overview</a>
+<a href="#" class="track-link" data-base="indicativo"><span class="i18n" data-es="Indicativo" data-it="Indicativo" data-en="Indicative">Indicativo</span></a>
+<a href="#" class="track-link" data-base="subjuntivo"><span class="i18n" data-es="Subjuntivo" data-it="Congiuntivo" data-en="Subjunctive">Subjuntivo</span></a>
+<a href="#" class="track-link" data-base="imperativo"><span class="i18n" data-es="Imperativo" data-it="Imperativo" data-en="Imperative">Imperativo</span></a>
+<a href="#" class="track-link" data-base="verbos-regulares"><span class="i18n" data-es="Regulares" data-it="Regolari" data-en="Regular">Regulares</span></a>
+<a href="#" class="track-link" data-base="verbos-irregulares"><span class="i18n" data-es="Irregulares" data-it="Irregolari" data-en="Irregular">Irregulares</span></a>
+<a href="#" class="track-link submenu-sub" data-base="ser-estar"><span class="i18n" data-es="Ser y estar" data-it="Ser y estar" data-en="Ser y estar">Ser y estar</span></a>
+<a href="#" class="track-link submenu-sub" data-base="haber-tener"><span class="i18n" data-es="Haber y tener" data-it="Haber y tener" data-en="Haber y tener">Haber y tener</span></a>
+<a href="#" class="track-link track-only" data-track-show="es" data-base="especial-atencion-verbos">Verbos que se confunden</a>
+<a href="#" class="track-link track-only" data-track-show="it" data-base="especial-atencion-verbos">Attenzione a questi</a>
+<a href="#" class="track-link track-only" data-track-show="en" data-base="especial-atencion-verbos">Watch out for this</a>
+<a href="#" class="track-link" data-base="verbos-reflexivos"><span class="i18n" data-es="Reflexivos" data-it="Riflessivi" data-en="Reflexive">Reflexivos</span></a>
+<a href="#" class="track-link" data-base="formas-impersonales"><span class="i18n" data-es="Formas impersonales" data-it="Forme impersonali" data-en="Non-finite forms">Formas impersonales</span></a>
+<a href="#" class="track-link" data-base="perifrasis"><span class="i18n" data-es="Perífrasis verbales" data-it="Perifrasi verbali" data-en="Verbal periphrases">Perífrasis verbales</span></a>
+<a href="#" class="track-link" data-base="estilo-indirecto"><span class="i18n" data-es="Estilo indirecto" data-it="Discorso indiretto" data-en="Reported speech">Estilo indirecto</span></a>
+</div>
+</div>
+
+<div class="menu-item">
+<button class="menu-button"><i class="ti ti-book-2 cat-gramatica"></i> <span class="i18n" data-es="Gramática" data-it="Grammatica" data-en="Grammar">Gramática</span> ▾</button>
+<div class="submenu">
+<a href="#" class="track-link" data-base="articulos"><span class="i18n" data-es="Artículos" data-it="Articoli" data-en="Articles">Artículos</span></a>
+<a href="#" class="track-link" data-base="genero-numero"><span class="i18n" data-es="Género y número" data-it="Genere e numero" data-en="Gender & number">Género y número</span></a>
+<a href="#" class="track-link" data-base="pronombres"><span class="i18n" data-es="Pronombres" data-it="Pronomi" data-en="Pronouns">Pronombres</span></a>
+<a href="#" class="track-link" data-base="preposiciones"><span class="i18n" data-es="Preposiciones" data-it="Preposizioni" data-en="Prepositions">Preposiciones</span></a>
+<a href="#" class="track-link" data-base="fonetica"><span class="i18n" data-es="Fonética" data-it="Fonetica" data-en="Phonetics">Fonética</span></a>
+<a href="#" class="track-link" data-base="conectores"><span class="i18n" data-es="Conectores" data-it="Connettori" data-en="Connectors">Conectores</span></a>
+<a href="#" class="track-link track-only" data-track-show="es" data-base="especial-atencion-gramatica">Gramática que delata</a>
+<a href="#" class="track-link track-only" data-track-show="it" data-base="especial-atencion-gramatica">Attenzione a questi</a>
+<a href="#" class="track-link track-only" data-track-show="en" data-base="especial-atencion-gramatica">Watch out for this</a>
+</div>
+</div>
+
+<div class="menu-item">
+<button class="menu-button"><i class="ti ti-tags cat-vocabulario"></i> <span class="i18n" data-es="Vocabulario" data-it="Vocabolario" data-en="Vocabulary">Vocabulario</span> ▾</button>
+<div class="submenu">
+<a href="#" class="track-link" data-base="vocabulario"><span class="i18n" data-es="Ver todos los temas" data-it="Vedi tutti gli argomenti" data-en="See all topics">Ver todos los temas</span></a>
+</div>
+</div>
+
+<div class="menu-item">
+<button class="menu-button"><i class="ti ti-message-circle-2 cat-expresiones"></i> <span class="i18n" data-es="Expresiones" data-it="Espressioni" data-en="Expressions">Expresiones</span> ▾</button>
+<div class="submenu">
+<a href="#" class="track-link" data-base="expresiones-comunes"><span class="i18n" data-es="Expresiones comunes" data-it="Espressioni comuni" data-en="Common expressions">Expresiones comunes</span></a>
+<a href="#" class="track-link hide-on-es" data-base="falsos-amigos"><span class="i18n" data-es="False friends" data-it="False friends" data-en="False friends">False friends</span></a>
+<a href="#" class="track-link" data-base="modismos"><span class="i18n" data-es="Modismos" data-it="Modi di dire" data-en="Idioms & sayings">Modismos</span></a>
+</div>
+</div>
+
+<div class="menu-item">
+<button class="menu-button"><i class="ti ti-briefcase cat-profesional"></i> <span class="i18n" data-es="Español profesional" data-it="Spagnolo al lavoro" data-en="Business Spanish">Español profesional</span> ▾</button>
+<div class="submenu">
+<a href="#" class="track-link" data-base="profesional"><span class="i18n" data-es="Visión general" data-it="Panoramica" data-en="Overview">Visión general</span></a>
+<a href="#" class="track-link" data-base="profesional-registro"><span class="i18n" data-es="Registro y tono" data-it="Registro e tono" data-en="Register and tone">Registro y tono</span></a>
+<a href="#" class="track-link" data-base="profesional-email"><span class="i18n" data-es="El email profesional" data-it="L'email professionale" data-en="The professional email">El email profesional</span></a>
+<a href="#" class="track-link" data-base="profesional-emails-modelo"><span class="i18n" data-es="Emails modelo" data-it="Email modello" data-en="Model emails">Emails modelo</span></a>
+<a href="#" class="track-link" data-base="profesional-chat"><span class="i18n" data-es="Chat de trabajo" data-it="Chat di lavoro" data-en="Work chat">Chat de trabajo</span></a>
+<a href="#" class="track-link" data-base="profesional-telefono"><span class="i18n" data-es="El teléfono" data-it="Il telefono" data-en="On the phone">El teléfono</span></a>
+<a href="#" class="track-link" data-base="profesional-reuniones"><span class="i18n" data-es="Reuniones" data-it="Riunioni" data-en="Meetings">Reuniones</span></a>
+<a href="#" class="track-link" data-base="profesional-presentaciones"><span class="i18n" data-es="Presentaciones" data-it="Presentazioni" data-en="Presentations">Presentaciones</span></a>
+<a href="#" class="track-link" data-base="profesional-cv"><span class="i18n" data-es="El CV y la carta" data-it="Il CV e la lettera" data-en="The CV and cover letter">El CV y la carta</span></a>
+<a href="#" class="track-link" data-base="profesional-entrevista"><span class="i18n" data-es="La entrevista" data-it="Il colloquio" data-en="The job interview">La entrevista</span></a>
+</div>
+</div>
+
+<div class="menu-item">
+<button class="menu-button"><i class="ti ti-pencil cat-ejercicios"></i> <span class="i18n" data-es="Ejercicios y cursos" data-it="Esercizi e corsi" data-en="Exercises &amp; courses">Ejercicios y cursos</span> ▾</button>
+<div class="submenu">
+<a href="#" class="track-link" data-base="ejercicios"><span class="i18n" data-es="Todos los ejercicios" data-it="Tutti gli esercizi" data-en="All exercises">Todos los ejercicios</span></a>
+</div>
+</div>
+
+
+<div class="sidebar-filler">
+<p class="tagline"><span id="tagline-text">Poco a poco se llega lejos</span> <i class="ti ti-bolt"></i></p>
+</div>
+</aside>
+<div class="tab-rail">
+<div class="rail-tab" data-tab-cat="clases" style="--tab-color:#7A5230"></div>
+<div class="rail-tab" data-tab-cat="verbos" style="--tab-color:#D6488F"></div>
+<div class="rail-tab" data-tab-cat="gramatica" style="--tab-color:#5B9A3B"></div>
+<div class="rail-tab" data-tab-cat="vocabulario" style="--tab-color:#E8791E"></div>
+<div class="rail-tab" data-tab-cat="expresiones" style="--tab-color:#7A6FD1"></div>
+<div class="rail-tab" data-tab-cat="profesional" style="--tab-color:#0F6E56"></div>
+<div class="rail-tab" data-tab-cat="ejercicios" style="--tab-color:#3A6FC9"></div>
+</div>
+<main class="main">
+<div class="page-header"><div class="language-selector">
+<button class="lang-track-btn" data-track="es">🇪🇸 Español</button>
+<button class="lang-track-btn" data-track="it">🇮🇹 Italiano</button>
+<button class="lang-track-btn" data-track="en">🇬🇧 English</button>
+<label class="theme-switch" title="Modo oscuro">
+<input type="checkbox" id="theme-toggle">
+<span class="theme-switch-track"><i class="ti ti-sun"></i><i class="ti ti-moon"></i><span class="theme-switch-thumb"></span></span>
+</label>
+</div>
+<div class="breadcrumb"><a href="index.html"><i class="ti ti-home"></i> Inicio</a> / Verbi / Perífrasis verbales</div>
+</div>
+<section class="grammar-section">
+<span class="eyebrow">Verbi</span>
+<h2>Perífrasis verbales</h2>
+<p class="subtitle">Due verbi che lavorano insieme: uno porta la persona e il tempo, l'altro dice cosa succede.</p>
+<h3 style="margin-top:28px">Come funzionano</h3>
+<p>Una perifrasi sono <b>due verbi di fila</b> che dicono una cosa sola. Il primo è coniugato ed è quello che comanda: dice <b>chi</b> e <b>quando</b>. Il secondo va all'infinito, al gerundio o al participio e dice <b>cosa succede</b>.</p>
+<div class="tip-box"><i class="ti ti-bulb" aria-hidden="true"></i> <strong>In <i>tengo que estudiar</i>, <i>tengo</i> dice che sono io e che è adesso; <i>estudiar</i> dice cosa c'è da fare. Cambia il primo e cambia tutto: <i>tenía que estudiar</i>, <i>tendré que estudiar</i>.</strong></div>
+<h3 style="margin-top:30px">Obbligo e necessità</h3>
+<div class="table-wrap"><table><thead><tr><th>Perifrasi</th><th>Cosa dice</th><th>Esempio</th></tr></thead><tbody><tr><td><b>tener que + infinitivo</b></td><td>Obbligo tuo, concreto. È la più usata di tutte.</td><td><i>Tengo que llamar al banco.</i></td></tr><tr><td><b>hay que + infinitivo</b></td><td>Obbligo generale, senza dire di chi. Non cambia mai forma.</td><td><i>Hay que reservar antes.</i></td></tr><tr><td><b>deber + infinitivo</b></td><td>Obbligo morale, più serio. Suona come un consiglio o un rimprovero.</td><td><i>Debes decírselo.</i></td></tr><tr><td><b>deber de + infinitivo</b></td><td>Questo <b>non</b> è un obbligo: è una supposizione. «Immagino stia dormendo».</td><td><i>Debe de estar durmiendo.</i></td></tr><tr><td><b>necesitar + infinitivo</b></td><td>Necessità, non obbligo. Non te lo impone nessuno.</td><td><i>Necesito dormir.</i></td></tr></tbody></table></div>
+<h3 style="margin-top:30px">Futuro e intenzione</h3>
+<div class="table-wrap"><table><thead><tr><th>Perifrasi</th><th>Cosa dice</th><th>Esempio</th></tr></thead><tbody><tr><td><b>ir a + infinitivo</b></td><td>Futuro vicino o intenzione. Nel parlato si usa più del futuro semplice.</td><td><i>Voy a llamarte luego.</i></td></tr><tr><td><b>estar a punto de + infinitivo</b></td><td>Imminente: succede tra un minuto.</td><td><i>Está a punto de salir.</i></td></tr><tr><td><b>pensar + infinitivo</b></td><td>Un piano che hai già in testa.</td><td><i>Pienso mudarme en junio.</i></td></tr></tbody></table></div>
+<h3 style="margin-top:30px">Durata: quello che sta succedendo</h3>
+<div class="table-wrap"><table><thead><tr><th>Perifrasi</th><th>Cosa dice</th><th>Esempio</th></tr></thead><tbody><tr><td><b>estar + gerundio</b></td><td>In corso proprio adesso. Se non ci sta «ahora mismo», probabilmente non serve.</td><td><i>Estoy cocinando.</i></td></tr><tr><td><b>seguir / continuar + gerundio</b></td><td>Continua a succedere, non si è fermato.</td><td><i>Sigo viviendo aquí.</i></td></tr><tr><td><b>llevar + gerundio</b></td><td>Da quanto tempo lo fai. Attenzione: non si usa il passato, si usa <i>llevar</i>.</td><td><i>Llevo dos años estudiando español.</i></td></tr><tr><td><b>ir + gerundio</b></td><td>Poco a poco, un po' alla volta.</td><td><i>Voy entendiendo.</i></td></tr><tr><td><b>andar + gerundio</b></td><td>Colloquiale: di qua e di là, senza concludere.</td><td><i>Anda buscando piso.</i></td></tr></tbody></table></div>
+<h3 style="margin-top:30px">Inizio e fine</h3>
+<div class="table-wrap"><table><thead><tr><th>Perifrasi</th><th>Cosa dice</th><th>Esempio</th></tr></thead><tbody><tr><td><b>empezar / comenzar a + infinitivo</b></td><td>L'inizio, e basta.</td><td><i>Empecé a trabajar en marzo.</i></td></tr><tr><td><b>ponerse a + infinitivo</b></td><td>Cominciare di colpo, o di slancio.</td><td><i>Se puso a llover.</i></td></tr><tr><td><b>echarse a + infinitivo</b></td><td>Di colpo e senza poterlo evitare. Va con reír, llorar, correr, temblar.</td><td><i>Se echó a reír.</i></td></tr><tr><td><b>dejar de + infinitivo</b></td><td>Smettere. Attenzione: <i>no dejo de pensar en ello</i> = non smetto di pensarci.</td><td><i>He dejado de fumar.</i></td></tr><tr><td><b>acabar / terminar de + infinitivo</b></td><td>Appena finito, un attimo fa. Anche la fine normale: <i>termina de comer</i>.</td><td><i>Acabo de llegar.</i></td></tr><tr><td><b>llegar a + infinitivo</b></td><td>Arrivare al punto di, più di quanto ci si aspettasse.</td><td><i>Llegó a ganar tres premios.</i></td></tr></tbody></table></div>
+<h3 style="margin-top:30px">Ripetizione e abitudine</h3>
+<div class="table-wrap"><table><thead><tr><th>Perifrasi</th><th>Cosa dice</th><th>Esempio</th></tr></thead><tbody><tr><td><b>volver a + infinitivo</b></td><td>Di nuovo. In spagnolo si dice col verbo, non aggiungendo «otra vez».</td><td><i>He vuelto a llamar.</i></td></tr><tr><td><b>soler + infinitivo</b></td><td>L'abitudine. Esiste solo al presente e all'imperfetto.</td><td><i>Suelo desayunar a las ocho.</i></td></tr></tbody></table></div>
+<h3 style="margin-top:30px">Le tre che si confondono di più</h3>
+<div class="compare-grid" style="grid-template-columns:repeat(3,1fr)">
+<div class="compare-card"><h4><b>deber</b> o <b>deber de</b></h4><p><i>Debes ir</i> = devi andare. <i>Debe de ser tarde</i> = immagino sia tardi. Una lettera, due cose diverse.</p></div>
+<div class="compare-card"><h4><b>acabar de</b> o <b>acabar</b> + gerundio</h4><p><i>Acabo de comer</i> = ho mangiato un attimo fa. <i>Acabé comiendo solo</i> = alla fine ho finito per mangiare da solo.</p></div>
+<div class="compare-card"><h4><b>volver a</b>, che quasi nessuno usa</h4><p>In spagnolo non si dice <i>comí otra vez</i>, si dice <i>volví a comer</i>. Quando comincerai a dirlo così, si sentirà molto meno da dove vieni.</p></div>
+</div>
+<h3 style="margin-top:30px">Per continuare</h3>
+<div class="topic-toc-items"><a class="topic-toc-item" href="formas-impersonales-it.html">Le forme impersonali</a><a class="topic-toc-item" href="verbos-regulares-it.html">Le coniugazioni</a></div>
+<div class="ex-cta"><a href="ejercicios-it.html?tema=formas-impersonales" class="button button-primary"><i class="ti ti-pencil"></i> Mettiti alla prova con gli esercizi</a></div>
+</section>
+</main>
+<footer>© 2026 José N. · Profesor de español · <a href="privacidad.html">Privacidad</a></footer>
+<script type="module" src="firebase-init.js?v=20260809"></script>
+<script src="script.js?v=20261014"></script>
+</body>
+</html>

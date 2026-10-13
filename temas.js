@@ -65,6 +65,13 @@ window.JN_TEMAS = [
          it:'Infinito, gerundio e participio: le tre forme del verbo che non si coniugano.',
          en:'Infinitive, gerund and participle: the three verb forms that never conjugate.'} },
 
+{ id:'perifrasis', pagina:'perifrasis', ejercicios:'formas-impersonales', cat:'verbos',
+  etiquetas:['perífrasis','tener que','hay que','ir a','estar + gerundio','volver a','soler'],
+  nombre:{es:'Perífrasis verbales', it:'Perifrasi verbali', en:'Verbal periphrases'},
+  regla:{es:'Dos verbos seguidos: el primero manda (persona y tiempo), el segundo dice qué pasa.',
+         it:'Due verbi di fila: il primo comanda (persona e tempo), il secondo dice cosa succede.',
+         en:'Two verbs in a row: the first one is in charge (person and tense), the second says what happens.'} },
+
 { id:'estilo-indirecto', pagina:'estilo-indirecto', cat:'verbos', etiquetas:['estilo indirecto'],
   nombre:{es:'Estilo indirecto', it:'Discorso indiretto', en:'Reported speech'},
   regla:{es:'Contar lo que otro dijo: cambian los tiempos, las personas y el aquí y el ahora.',
