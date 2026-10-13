@@ -148,7 +148,10 @@ for s in CUERPO.values():
     enlazadas |= {h.split("?")[0].split("#")[0] for h in re.findall(r'href="([^"]+\.html)[^"]*"', s)}
     for base in re.findall(r'data-base="([a-z0-9-]+)"', s):
         enlazadas |= {f"{base}-{L}.html" for L in PISTAS}
-SUELTAS_OK = {"index.html", "panel-profesor.html"}
+# muestra-inicio.html es una propuesta de diseño a la que se llega por su URL
+# a secas, para poder compararla con index.html. Si se acepta, sustituye al
+# index y este apaño se borra; si no, se borra la página.
+SUELTAS_OK = {"index.html", "panel-profesor.html", "muestra-inicio.html"}
 # a las clases se llega desde «Mis clases», que las pinta con JavaScript
 SUELTAS_OK |= {p for p in PAGINAS if p.startswith("clase-")}
 for pag in PAGINAS:
