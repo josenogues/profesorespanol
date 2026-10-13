@@ -657,6 +657,32 @@ a.closest(".menu-item").classList.add("active","current-section");
     });
   }
 
+  // ── Puente temporal con la hoja de Google ──
+  // Un alumno que estaba en la hoja pero que nunca llegó a entrar en la web
+  // no tiene ficha todavía, y sin esto se quedaría fuera el día que esto se
+  // publique. Así que, SOLO cuando no hay ficha, se mira la hoja una vez: si
+  // está, se le crea la ficha y entra. Nadie se queda fuera por la mudanza.
+  //
+  // Esto es un puente, no la regla: una baja hecha desde el panel no la
+  // deshace la hoja (la baja es una ficha con activo:false, y entonces ni se
+  // mira la hoja). Cuando el panel deje de avisar de que falta gente, José
+  // puede dejar de publicar la hoja y este trozo se puede borrar.
+  const SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTp3ALVArrf67RDanwYo7f9EA7dxBF3FDmi6qvXeB7MDJn2ApcV4kICTxJ-d-OGX4mz0ibXXELGdZNu/pub?gid=0&single=true&output=csv';
+
+  function estaEnLaHoja(email){
+    return fetch(SHEET_CSV_URL, { cache: 'no-store' })
+      .then(function(r){ if(!r.ok) throw new Error('respuesta ' + r.status); return r.text(); })
+      .then(function(csv){
+        const emails = csv.split('\n')
+          .map(function(l){ return l.split(',')[0].trim().toLowerCase(); })
+          .filter(function(e){ return e.indexOf('@') > 0; });
+        // Google contesta 200 con una página de error cuando la hoja deja de
+        // estar publicada: sin esto el puente creería que no está nadie.
+        if(!emails.length) throw new Error('la hoja no da ninguna lista');
+        return emails.indexOf(email) >= 0;
+      });
+  }
+
   // Resuelve con su ficha si puede entrar. Distingue a propósito dos maneras
   // de no entrar, porque no se tratan igual:
   //   - Firebase contesta y no tiene ficha, o está de baja  → err.fuera
@@ -665,10 +691,31 @@ a.closest(".menu-item").classList.add("active","current-section");
     return esperaNube(8000)
       .then(function(){ return window.jnCloudGetStudentDoc(email); })
       .then(function(ficha){
-        if(ficha && ficha.activo !== false) return ficha;
-        const err = new Error('sin acceso');
-        err.fuera = true;
-        throw err;
+        if(ficha) {
+          if(ficha.activo !== false) return ficha;
+          const baja = new Error('dado de baja');
+          baja.fuera = true;
+          throw baja;
+        }
+        // sin ficha: el puente con la hoja, por si es de los de antes
+        return estaEnLaHoja(email).then(function(si){
+          if(!si){
+            const err = new Error('sin acceso');
+            err.fuera = true;
+            throw err;
+          }
+          const nueva = { activo: true, alta: new Date().toISOString().slice(0, 10) };
+          return window.jnCloudSetFields(email, nueva).then(function(){ return nueva; },
+                                                           function(){ return nueva; });
+        }, function(){
+          // La hoja no contesta (ya no se publica, sin red...). Firebase sí
+          // ha contestado y ha dicho que no tiene ficha, y esa es la fuente
+          // buena: se le trata como a quien no está. Es también lo que pasará
+          // siempre el día que la hoja se deje de publicar.
+          const err = new Error('sin acceso');
+          err.fuera = true;
+          throw err;
+        });
       });
   }
 
