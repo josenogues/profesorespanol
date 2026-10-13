@@ -194,7 +194,6 @@ async function loadStudents(){
       clasesAbiertas = Array.isArray(abierto.clases) ? abierto.clases.map(c => Object.assign({}, c)) : [];
       pintaFicha();
     }
-    miraSiFaltaAlguien();
   } catch(err) {
     loadingEl.textContent = 'No se han podido cargar los datos (revisa la conexión o vuelve a intentarlo). ' + (err && err.message ? err.message : '');
   } finally {
@@ -857,72 +856,6 @@ async function daDeAlta(){
   }
 }
 
-// ── La mudanza desde la hoja de Google ──
-// Mientras quede algún email en la hoja sin ficha aquí, el panel lo avisa
-// solo: si se migrara a mano se podría olvidar a alguien y dejarlo fuera de
-// la web sin enterarse. Cuando no falte nadie, el aviso no aparece y la hoja
-// se puede dejar de publicar.
-const SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTp3ALVArrf67RDanwYo7f9EA7dxBF3FDmi6qvXeB7MDJn2ApcV4kICTxJ-d-OGX4mz0ibXXELGdZNu/pub?gid=0&single=true&output=csv';
-
-function leeSheet(){
-  return fetch(SHEET_CSV_URL, { cache: 'no-store' })
-    .then(r => { if(!r.ok) throw new Error('respuesta ' + r.status); return r.text(); })
-    .then(csv => {
-      const emails = csv.split('\n')
-        .map(l => l.split(',')[0].trim().toLowerCase())
-        .filter(e => e.indexOf('@') > 0);
-      // Google contesta 200 con una página de error cuando dejas de publicar
-      // la hoja: sin esto, "no falta nadie" sería mentira.
-      if(!emails.length) throw new Error('la hoja no da ninguna lista de emails');
-      return emails;
-    });
-}
-
-function faltanDelSheet(){
-  return leeSheet().then(emails => emails.filter(e => !porEmail.has(e)));
-}
-
-function miraSiFaltaAlguien(){
-  const aviso = document.getElementById('al-aviso');
-  const txt = document.getElementById('al-aviso-txt');
-  if(!aviso) return;
-  faltanDelSheet().then(faltan => {
-    if(!faltan.length){ aviso.style.display = 'none'; return; }
-    txt.textContent = faltan.length === 1
-      ? 'Hay 1 alumno en la hoja de Google que todavía no tiene ficha aquí, así que no podría entrar en la web.'
-      : 'Hay ' + faltan.length + ' alumnos en la hoja de Google que todavía no tienen ficha aquí, así que no podrían entrar en la web.';
-    aviso.style.display = 'flex';
-  }).catch(() => {
-    // la hoja ya no se publica, o no hay red: no es un problema, el acceso
-    // ya no depende de ella
-    aviso.style.display = 'none';
-  });
-}
-
-async function importaDelSheet(estadoId){
-  const estado = document.getElementById(estadoId);
-  function di(txt, tipo){
-    if(estado){ estado.textContent = txt; estado.className = 'ficha-estado' + (tipo ? ' ' + tipo : ''); }
-  }
-  di('Leyendo la hoja de Google...');
-  try {
-    const faltan = await faltanDelSheet();
-    if(!faltan.length){ di('No falta nadie: ya están todos aquí.', 'ok'); return; }
-    const db = getFirestore(app);
-    for(const email of faltan){
-      await withTimeout(setDoc(doc(db, 'students', email),
-        { email: email, activo: true, alta: hoyISO() }, { merge: true }), 8000, 'setDoc');
-      porEmail.set(email, { email: email, activo: true, alta: hoyISO() });
-    }
-    pintaTabla();
-    miraSiFaltaAlguien();
-    di('Traídos ' + faltan.length + (faltan.length === 1 ? ' alumno. Ponle nombre en su ficha.'
-                                                         : ' alumnos. Ponles nombre en sus fichas.'), 'ok');
-  } catch(err) {
-    di('No se ha podido leer la hoja: ' + (err && err.message ? err.message : 'error'), 'mal');
-  }
-}
-
 document.addEventListener('click', function(e){
   if(e.target.closest('#alta-abrir')){
     altaCaja.style.display = 'block';
@@ -931,12 +864,7 @@ document.addEventListener('click', function(e){
     return;
   }
   if(e.target.closest('#alta-cerrar')){ altaCaja.style.display = 'none'; return; }
-  if(e.target.closest('#alta-add')){ daDeAlta(); return; }
-  if(e.target.closest('#alta-sheet-btn')){ importaDelSheet('alta-sheet-estado'); return; }
-  if(e.target.closest('#al-importar')){
-    altaCaja.style.display = 'block';
-    importaDelSheet('alta-estado');
-  }
+  if(e.target.closest('#alta-add')){ daDeAlta(); }
 });
 
 document.addEventListener('keydown', function(e){
