@@ -629,50 +629,60 @@ a.closest(".menu-item").classList.add("active","current-section");
   };
 })();
 
-// --- Puerta de acceso para alumnos (comprueba el email contra un Google Sheet publicado como CSV) ---
+// --- Puerta de acceso para alumnos ---
+// Quién puede entrar es su ficha en Firebase (colección "students"): entra
+// quien tiene ficha y no está dado de baja. Se gestiona desde el panel del
+// profesor, en la misma tabla donde se ve su progreso.
+//
+// Antes la lista era un Google Sheet publicado como CSV. Se ha cambiado por
+// dos razones: había que mantenerla aparte y no sabía quién era cada email,
+// y Google contesta 200 con una página de error cuando dejas de publicar la
+// hoja, lo que podía echar a todos los alumnos de golpe.
 (function(){
-  const ACCESS_GATE_ENABLED = true; // ponlo en true cuando publiques la web de verdad
+  const ACCESS_GATE_ENABLED = true; // ponlo en false para abrir la web a todos
   const ACCESS_KEY = 'jn_access_granted';
 
   if(!ACCESS_GATE_ENABLED) return;
 
-  // 1) Crea un Google Sheet con una columna de emails autorizados (uno por fila).
-  // 2) Archivo > Compartir > Publicar en la Web > elige esa hoja > formato CSV > Publicar.
-  // 3) Copia la URL que te da Google y pégala aquí abajo, reemplazando el valor de ejemplo.
-  const SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTp3ALVArrf67RDanwYo7f9EA7dxBF3FDmi6qvXeB7MDJn2ApcV4kICTxJ-d-OGX4mz0ibXXELGdZNu/pub?gid=0&single=true&output=csv';
+  // firebase-sync.js es un módulo y se carga después de este script clásico,
+  // así que se espera (con límite) a que window.jnCloud* aparezca.
+  function esperaNube(ms){
+    const desde = Date.now();
+    return new Promise(function(ok, mal){
+      (function poll(){
+        if(window.jnCloudGetStudentDoc) return ok();
+        if(Date.now() - desde > ms) return mal(new Error('Firebase no disponible'));
+        setTimeout(poll, 50);
+      })();
+    });
+  }
 
-  // Lee la lista de emails autorizados del Sheet publicado. Sólo se mira la
-  // primera columna, así que se pueden poner notas al lado sin romper nada.
-  function leerLista(){
-    return fetch(SHEET_CSV_URL, { cache: 'no-store' })
-      .then(r => {
-        if(!r.ok) throw new Error('respuesta ' + r.status);
-        return r.text();
-      })
-      .then(csv => {
-        const emails = csv.split('\n')
-          .map(line => line.split(',')[0].trim().toLowerCase())
-          .filter(Boolean);
-        // Si el Sheet deja de estar publicado, Google devuelve una página de
-        // error CON código 200. Sin esta comprobación la "lista" sería basura
-        // y echaríamos a todos los alumnos de golpe.
-        if(!emails.some(e => e.includes('@'))) throw new Error('la lista no parece una lista de emails');
-        return emails;
+  // Resuelve con su ficha si puede entrar. Distingue a propósito dos maneras
+  // de no entrar, porque no se tratan igual:
+  //   - Firebase contesta y no tiene ficha, o está de baja  → err.fuera
+  //   - no se ha podido preguntar (sin red, bloqueado...)   → sin err.fuera
+  function compruebaAcceso(email){
+    return esperaNube(8000)
+      .then(function(){ return window.jnCloudGetStudentDoc(email); })
+      .then(function(ficha){
+        if(ficha && ficha.activo !== false) return ficha;
+        const err = new Error('sin acceso');
+        err.fuera = true;
+        throw err;
       });
   }
 
   // El permiso se guardaba para siempre en el navegador y no se volvía a
-  // comprobar: sacar a alguien del Sheet no lo echaba del portátil donde ya
+  // comprobar: dar de baja a alguien no lo echaba del portátil donde ya
   // había entrado. Ahora se revisa por detrás en cada carga.
   function revisarPermiso(email){
-    leerLista().then(emails => {
-      if(emails.includes(email)) return;
+    compruebaAcceso(email).catch(function(err){
+      // Solo se echa a alguien cuando Firebase CONTESTA y dice que no está.
+      // Sin red, o con Firebase bloqueado, no se toca nada.
+      if(!err || !err.fuera) return;
       localStorage.removeItem(ACCESS_KEY);
       localStorage.removeItem('jn_student_email');
       location.reload();
-    }).catch(() => {
-      // sin red o Google caído: NO se echa a nadie. Sólo se revoca cuando
-      // Google contesta y el email de verdad no está en la lista.
     });
   }
 
@@ -705,29 +715,20 @@ a.closest(".menu-item").classList.add("active","current-section");
     const email = input.value.trim().toLowerCase();
     if(!email){ errorEl.textContent = 'Escribe tu email.'; return; }
 
-    if(SHEET_CSV_URL === 'PEGA_AQUI_TU_URL_CSV_DE_GOOGLE_SHEETS'){
-      errorEl.textContent = 'Aún no se ha configurado la lista de alumnos (falta pegar la URL del Google Sheet en script.js).';
-      return;
-    }
-
     btn.disabled = true;
     btn.textContent = 'Comprobando...';
-    leerLista()
-      .then(emails => {
-        if(emails.includes(email)){
-          localStorage.setItem(ACCESS_KEY, 'true');
-          localStorage.setItem('jn_student_email', email);
-          jnRegisterVisit(email);
-          document.body.removeChild(overlay);
-          document.dispatchEvent(new CustomEvent('jn-access-granted'));
-        } else {
-          errorEl.textContent = 'Ese email no está en la lista. Escribe a José si crees que es un error.';
-          btn.disabled = false;
-          btn.textContent = 'Entrar';
-        }
+    compruebaAcceso(email)
+      .then(function(){
+        localStorage.setItem(ACCESS_KEY, 'true');
+        localStorage.setItem('jn_student_email', email);
+        jnRegisterVisit(email);
+        document.body.removeChild(overlay);
+        document.dispatchEvent(new CustomEvent('jn-access-granted'));
       })
-      .catch(() => {
-        errorEl.textContent = 'No se pudo comprobar el acceso. Inténtalo de nuevo.';
+      .catch(function(err){
+        errorEl.textContent = (err && err.fuera)
+          ? 'Ese email no está en la lista. Escribe a José si crees que es un error.'
+          : 'No se ha podido comprobar el acceso. Revisa tu conexión y vuelve a intentarlo.';
         btn.disabled = false;
         btn.textContent = 'Entrar';
       });

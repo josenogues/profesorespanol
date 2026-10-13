@@ -126,6 +126,44 @@ body{padding:40px 24px}
 .pv-vacio{color:var(--muted);font-size:14.5px}
 @media(max-width:900px){.rap-cols{grid-template-columns:1fr}.rap-prev{position:static}}
 @media(max-width:640px){.fi-row{grid-template-columns:1fr}.fi-fecha,.fi-tit,.fi-chips,.fi-nota{grid-column:1}.fi-fecha{grid-row:auto}.fi-quitar{grid-column:1;grid-row:auto;text-align:left}}
+
+/* Barra de acciones sobre la tabla de alumnos */
+.al-acciones{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:16px}
+.al-buscar{position:relative;flex:1;min-width:200px}
+.al-buscar > i{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--muted)}
+.al-buscar input{width:100%;padding:10px 13px 10px 36px;border-radius:10px;border:1px solid var(--border);background:var(--card-bg);color:var(--text);font-family:var(--font-body);font-size:15px}
+.al-switch{display:inline-flex;align-items:center;gap:7px;font-size:14px;color:var(--muted);cursor:pointer;white-space:nowrap}
+.al-aviso{display:flex;gap:12px;align-items:center;flex-wrap:wrap;background:#FFF8E1;border:1px solid #E8C96A;border-radius:12px;padding:12px 16px;margin-bottom:16px;font-size:14.5px}
+[data-theme="dark"] .al-aviso{background:#332a12;border-color:#6b5a26}
+.al-aviso p{margin:0;flex:1;min-width:220px}
+/* Filas de alumno: toda la fila abre su ficha */
+tbody tr.al-fila{cursor:pointer}
+tbody tr.al-fila:hover{background:var(--tint)}
+tbody tr.al-fila.baja{opacity:.55}
+.al-quien b{display:block;font-family:var(--font-head);font-size:16px}
+.al-quien span{display:block;font-size:13px;color:var(--muted);font-weight:400}
+.panel-flag.baja{background:var(--border);color:var(--muted)}
+.al-n{font-variant-numeric:tabular-nums}
+.al-prox b{display:block;font-weight:800;font-variant-numeric:tabular-nums}
+.al-prox span{display:block;font-size:13px;color:var(--muted)}
+.al-sin{color:var(--muted);font-size:13.5px}
+/* Ficha: los datos del alumno */
+.fi-perfil{display:flex;gap:12px;flex-wrap:wrap;align-items:flex-end}
+.fi-perfil label{display:block;font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+.fi-perfil input,.fi-perfil select{display:block;margin-top:5px;padding:9px 11px;border-radius:10px;border:1px solid var(--border);background:var(--card-bg);color:var(--text);font-family:var(--font-body);font-size:15px}
+.fi-perfil input{min-width:200px}
+.fi-perfil select{font-weight:600}
+/* Filtros del catálogo */
+.cat-filtros{display:flex;gap:10px 18px;flex-wrap:wrap;align-items:center;margin-bottom:14px}
+.cat-fgrupo{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.cat-frot{font-size:11.5px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--muted)}
+.cat-fbtn{background:var(--card-bg);border:1px solid var(--border);border-radius:9px;padding:5px 11px;font-size:13.5px;color:var(--muted);cursor:pointer;font-family:var(--font-body)}
+.cat-fbtn:hover{border-color:var(--primary)}
+.cat-fbtn.on{background:var(--primary);border-color:var(--primary);color:#fff;font-weight:700}
+.cat-buscar{flex:1;min-width:180px;padding:9px 12px;border-radius:10px;border:1px solid var(--border);background:var(--card-bg);color:var(--text);font-family:var(--font-body);font-size:14.5px}
+.alta-sheet{margin-top:18px;border-top:1px solid var(--border);padding-top:14px}
+.alta-sheet summary{cursor:pointer;font-size:14px;color:var(--muted)}
+.alta-sheet p{font-size:14px;color:var(--muted);margin:10px 0}
 </style>
 </head>
 <body>
@@ -142,44 +180,83 @@ body{padding:40px 24px}
 
 <div class="panel-wrap" id="panel-content">
 <div class="panel-header">
-<h1><i class="ti ti-chart-bar" aria-hidden="true"></i> Progreso de tus alumnos</h1>
+<h1><i class="ti ti-users" aria-hidden="true"></i> Mis alumnos</h1>
 <button class="button button-secondary button-sm" id="panel-refresh"><i class="ti ti-refresh"></i> Actualizar</button>
-</div>
-
-<div class="panel-link">
-<h2><i class="ti ti-link" aria-hidden="true"></i> Mandar deberes</h2>
-<p>Elige el curso y el paso, copia el enlace y pégaselo al alumno por Preply.</p>
-<div class="panel-link-row">
-<label>Idioma del alumno
-<select id="link-lang"><option value="es">Español</option><option value="it">Italiano</option><option value="en">English</option></select>
-</label>
-<label>Curso
-<select id="link-course"><option>Cargando...</option></select>
-</label>
-<label>Paso
-<select id="link-step"></select>
-</label>
-</div>
-<div class="panel-link-out">
-<input type="text" id="link-url" readonly>
-<button class="button button-primary" id="link-copy">Copiar</button>
-</div>
 </div>
 
 <div class="panel-stats" id="panel-stats"></div>
 
+<div class="al-aviso" id="al-aviso" style="display:none">
+<p id="al-aviso-txt"></p>
+<button class="button button-primary button-sm" id="al-importar"><i class="ti ti-download"></i> Traerlos</button>
+</div>
+
+<div class="al-acciones">
+<button class="button button-primary" id="rap-abrir2"><i class="ti ti-bolt" aria-hidden="true"></i> Clase rápida</button>
+<button class="button button-secondary" id="alta-abrir"><i class="ti ti-user-plus" aria-hidden="true"></i> Dar de alta</button>
+<div class="al-buscar"><i class="ti ti-search" aria-hidden="true"></i>
+<input type="search" id="al-buscar" placeholder="Buscar un alumno por nombre o email..." autocomplete="off"></div>
+<label class="al-switch"><input type="checkbox" id="al-bajas"> Ver también las bajas</label>
+</div>
+
+<div class="panel-link" id="alta" style="display:none">
+<div class="ficha-cab">
+<div><h2 style="margin:0"><i class="ti ti-user-plus" aria-hidden="true"></i> Dar de alta a un alumno</h2>
+<p style="margin:4px 0 0">Con esto ya puede entrar en la web escribiendo su email. No hace falta nada más.</p></div>
+<button class="button button-secondary button-sm" id="alta-cerrar"><i class="ti ti-x"></i> Cerrar</button>
+</div>
+
+<div class="fi-perfil" style="margin-top:16px">
+<label>Email<input type="email" id="alta-email" placeholder="alumno@email.com" autocomplete="off"></label>
+<label>Nombre<input type="text" id="alta-nombre" placeholder="Anna" autocomplete="off"></label>
+<label>Idioma<select id="alta-idioma"><option value="">—</option><option value="es">Español</option><option value="it">Italiano</option><option value="en">English</option></select></label>
+<label>Nivel<select id="alta-nivel"><option value="">—</option><option value="A1">A1</option><option value="A2">A2</option><option value="B1">B1</option><option value="B2">B2</option><option value="C1">C1</option></select></label>
+<button class="button button-primary" id="alta-add"><i class="ti ti-check"></i> Dar de alta</button>
+</div>
+<p class="ficha-estado" id="alta-estado"></p>
+
+<details class="alta-sheet">
+<summary>La lista de Google que usábamos antes</summary>
+<p>Quién puede entrar ya se decide aquí, en esta tabla. La hoja de Google solo
+sirve para traer de una vez a los alumnos que todavía no tienen ficha; cuando
+no quede ninguno puedes dejar de publicarla y olvidarte de ella.</p>
+<button class="button button-secondary button-sm" id="alta-sheet-btn"><i class="ti ti-download"></i> Comprobar y traer los que falten</button>
+<p class="ficha-estado" id="alta-sheet-estado"></p>
+</details>
+</div>
+
 <div class="table-wrap"><table>
-<thead><tr><th>Email</th><th>Clases</th><th>Visitas</th><th>Ejercicios hechos</th><th>Cursos</th><th>Niveles superados</th><th>Última actividad</th></tr></thead>
+<thead><tr><th>Alumno</th><th>Clases</th><th>Ejercicios</th><th>Cursos</th><th>Última actividad</th><th>Próxima clase</th></tr></thead>
 <tbody id="panel-table-body"></tbody>
 </table></div>
 <p class="panel-empty" id="panel-loading">Cargando...</p>
-<div class="panel-link">
+
+<div class="panel-link" id="ficha" style="display:none">
 <div class="ficha-cab">
-<div><h2 style="margin:0"><i class="ti ti-books" aria-hidden="true"></i> Catálogo de clases</h2>
-<p id="cat-resumen" style="margin:4px 0 0"></p></div>
-<button class="button button-primary button-sm" id="rap-abrir2"><i class="ti ti-bolt"></i> Clase rápida</button>
+<div><h2 style="margin:0"><i class="ti ti-notebook" aria-hidden="true"></i> <span id="ficha-quien"></span></h2>
+<p id="ficha-resumen" style="margin:4px 0 0"></p></div>
+<button class="button button-secondary button-sm" id="ficha-cerrar"><i class="ti ti-x"></i> Cerrar</button>
 </div>
-<div id="cat-lista" style="margin-top:14px"></div>
+
+<h3 class="ficha-h3">Sus datos</h3>
+<div class="fi-perfil">
+<label>Nombre<input type="text" id="fi-nombre" placeholder="como le llamas tú" autocomplete="off"></label>
+<label>Idioma<select id="fi-idioma"><option value="">—</option><option value="es">Español</option><option value="it">Italiano</option><option value="en">English</option></select></label>
+<label>Nivel<select id="fi-nivel"><option value="">—</option><option value="A1">A1</option><option value="A2">A2</option><option value="B1">B1</option><option value="B2">B2</option><option value="C1">C1</option></select></label>
+<label>Acceso<select id="fi-activo"><option value="si">Puede entrar</option><option value="no">Dado de baja</option></select></label>
+</div>
+
+<h3 class="ficha-h3">Añadir una clase a su lista</h3>
+<div class="ficha-alta">
+<label>Clase<select id="ficha-clase"></select></label>
+<label>Fecha <span class="ficha-op">déjala vacía si no te acuerdas</span>
+<input type="date" id="ficha-fecha"></label>
+<button class="button button-primary" id="ficha-add"><i class="ti ti-plus"></i> Añadir</button>
+</div>
+
+<h3 class="ficha-h3">Sus clases</h3>
+<div id="ficha-lista"></div>
+<p class="ficha-estado" id="ficha-estado"></p>
 </div>
 
 <div class="panel-link" id="rapida" style="display:none">
@@ -229,27 +306,37 @@ body{padding:40px 24px}
 </div>
 </div>
 
-<div class="panel-link" id="ficha" style="display:none">
+<div class="panel-link">
 <div class="ficha-cab">
-<div><h2 style="margin:0"><i class="ti ti-notebook" aria-hidden="true"></i> <span id="ficha-quien"></span></h2>
-<p id="ficha-resumen" style="margin:4px 0 0"></p></div>
-<button class="button button-secondary button-sm" id="ficha-cerrar"><i class="ti ti-x"></i> Cerrar</button>
+<div><h2 style="margin:0"><i class="ti ti-books" aria-hidden="true"></i> Catálogo de clases</h2>
+<p id="cat-resumen" style="margin:4px 0 0"></p></div>
+<button class="button button-secondary button-sm" id="cat-toggle"><i class="ti ti-chevron-down"></i> Ver el catálogo</button>
+</div>
+<div id="cat-caja" style="display:none;margin-top:16px">
+<div class="cat-filtros" id="cat-filtros"></div>
+<div id="cat-lista"></div>
+</div>
 </div>
 
-<h3 class="ficha-h3">Añadir una clase a su lista</h3>
-<div class="ficha-alta">
-<label>Clase<select id="ficha-clase"></select></label>
-<label>Fecha <span class="ficha-op">déjala vacía si no te acuerdas</span>
-<input type="date" id="ficha-fecha"></label>
-<button class="button button-primary" id="ficha-add"><i class="ti ti-plus"></i> Añadir</button>
+<div class="panel-link">
+<h2><i class="ti ti-link" aria-hidden="true"></i> Mandar deberes</h2>
+<p>Elige el curso y el paso, copia el enlace y pégaselo al alumno por Preply.</p>
+<div class="panel-link-row">
+<label>Idioma del alumno
+<select id="link-lang"><option value="es">Español</option><option value="it">Italiano</option><option value="en">English</option></select>
+</label>
+<label>Curso
+<select id="link-course"><option>Cargando...</option></select>
+</label>
+<label>Paso
+<select id="link-step"></select>
+</label>
 </div>
-
-<h3 class="ficha-h3">Sus clases</h3>
-<div id="ficha-lista"></div>
-<p class="ficha-estado" id="ficha-estado"></p>
+<div class="panel-link-out">
+<input type="text" id="link-url" readonly>
+<button class="button button-primary" id="link-copy">Copiar</button>
 </div>
-
-
+</div>
 </div>
 
 <script>
@@ -378,6 +465,6 @@ body{padding:40px 24px}
 </script>
 <script src="clases.js?v=20261014h"></script>
 <script src="temas.js?v=20261014h"></script>
-<script type="module" src="firebase-panel.js?v=20261014g"></script>
+<script type="module" src="firebase-panel.js?v=20261014j"></script>
 </body>
 </html>

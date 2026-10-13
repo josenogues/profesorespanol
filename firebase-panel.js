@@ -29,21 +29,10 @@ const refreshBtn = document.getElementById('panel-refresh');
 // aunque la propia carga de datos luego falle o tarde.
 window.jnPanelHandled = true;
 
-let autoLoadDone = false;
-function autoLoad(){
-  if(autoLoadDone) return;
-  autoLoadDone = true;
-  loadStudents();
-}
-
-document.addEventListener('jn-panel-unlocked', autoLoad, { once: true });
-
-// La puerta vive en un <script> clásico, que se ejecuta ANTES que este módulo
-// (los módulos van diferidos). Al recargar con la sesión ya desbloqueada, la
-// puerta lanza "jn-panel-unlocked" cuando aquí todavía no estábamos
-// escuchando, y el panel se quedaba en "Cargando..." para siempre. Por eso
-// comprobamos también el estado directamente.
-if(sessionStorage.getItem('jn_panel_unlocked') === 'true') autoLoad();
+// Los alumnos, tal y como están en Firebase. Es el estado que comparten la
+// tabla, la ficha, la clase rápida y el alta: se llena en loadStudents() y
+// desde ahí lo lee todo lo demás.
+const porEmail = new Map();
 
 function formatDate(ts){
   if(!ts || typeof ts.toDate !== 'function') return '—';
@@ -80,17 +69,93 @@ function courseChips(student){
   }).filter(Boolean).sort((a, b) => b.done - a.done);
 }
 
-function passedLevels(levelStatus){
-  const chips = [];
-  if(!levelStatus) return chips;
-  for(const lang of Object.keys(levelStatus)){
-    const levels = levelStatus[lang] || {};
-    for(const level of Object.keys(levels)){
-      if(levels[level] && levels[level].passed) chips.push(lang.toUpperCase() + ' ' + level);
-    }
-  }
-  return chips;
+// Cómo le llamas tú. El email es la clave con la que entra, pero no es un
+// nombre: mirar una tabla de emails no te dice quién es quién.
+function nombreDe(s){
+  return (s && typeof s.nombre === 'string' && s.nombre.trim()) ? s.nombre.trim() : '';
 }
+
+// La próxima clase es, simplemente, la clase fechada en el futuro que le
+// hayas creado y que toque antes. Si no hay ninguna, no se la has preparado
+// todavía: esa es toda la información que da esta columna.
+function proximaClase(s){
+  const hoy = hoyISO();
+  return (Array.isArray(s.clases) ? s.clases : [])
+    .filter(c => c.fecha && c.fecha > hoy)
+    .sort((a, b) => a.fecha.localeCompare(b.fecha))[0] || null;
+}
+
+function fechaCorta(iso){
+  const partes = String(iso || '').split('-');
+  if(partes.length !== 3) return iso || '';
+  const MESES = ['ene', 'feb', 'mar', 'abr', 'may', 'jun',
+                 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'];
+  return partes[2].replace(/^0/, '') + ' ' + (MESES[+partes[1] - 1] || '');
+}
+
+// ───────────────── La tabla de alumnos ─────────────────
+// Se vuelve a pintar sin tocar Firebase cuando escribes en el buscador o
+// pides ver las bajas: los datos ya están en porEmail.
+
+const busqEl = document.getElementById('al-buscar');
+const bajasEl = document.getElementById('al-bajas');
+
+function pintaTabla(){
+  const q = (busqEl && busqEl.value || '').trim().toLowerCase();
+  const verBajas = !!(bajasEl && bajasEl.checked);
+  let lista = [...porEmail.values()];
+
+  lista = lista.filter(s => (verBajas || s.activo !== false) &&
+    (!q || (s.email + ' ' + nombreDe(s)).toLowerCase().includes(q)));
+
+  lista.sort((a, b) => {
+    const ta = a.updatedAt && a.updatedAt.toMillis ? a.updatedAt.toMillis() : 0;
+    const tb = b.updatedAt && b.updatedAt.toMillis ? b.updatedAt.toMillis() : 0;
+    return tb - ta;
+  });
+
+  if(!lista.length){
+    bodyEl.innerHTML = '';
+    loadingEl.textContent = q
+      ? 'Ningún alumno con eso.'
+      : (porEmail.size ? 'Todos tus alumnos están dados de baja. Marca «ver también las bajas».'
+                       : 'Todavía no hay alumnos. Dale a «Dar de alta».');
+    loadingEl.style.display = 'block';
+    return;
+  }
+  loadingEl.style.display = 'none';
+
+  bodyEl.innerHTML = lista.map(s => {
+    const baja = s.activo === false;
+    const nombre = nombreDe(s);
+    const marca = [s.nivel, (s.idioma || '').toUpperCase()].filter(Boolean).join(' · ');
+    const cursos = courseChips(s);
+    const cursosHtml = cursos.length
+      ? `<div class="panel-levels">${cursos.map(c => {
+          const count = c.total ? `${c.done}/${c.total}` : `${c.done} pasos`;
+          return `<span class="panel-course-chip${c.complete ? ' done' : ''}">${esc(c.name)} <b>${esc(count)}</b></span>`;
+        }).join('')}</div>`
+      : '<span class="al-sin">—</span>';
+    const prox = proximaClase(s);
+    const proxHtml = prox
+      ? `<div class="al-prox"><b>${esc(fechaCorta(prox.fecha))}</b><span>${esc(tituloDe(prox))}</span></div>`
+      : '<span class="al-sin">sin programar</span>';
+    const nClases = Array.isArray(s.clases) ? s.clases.length : 0;
+    return `<tr class="al-fila${baja ? ' baja' : ''}" data-ficha="${esc(s.email || '')}">
+      <td><div class="al-quien"><b>${esc(nombre || s.email || '—')}</b>
+        <span>${esc(nombre ? s.email : (marca || 'sin nombre'))}</span></div>${
+        baja ? '<span class="panel-flag baja">Baja</span>' : ''}</td>
+      <td class="al-n">${nClases} <i class="ti ti-chevron-right" style="color:var(--muted)"></i></td>
+      <td class="al-n">${esc(s.exerciseCount || 0)}</td>
+      <td>${cursosHtml}</td>
+      <td>${esc(formatDate(s.updatedAt))}</td>
+      <td>${proxHtml}</td>
+    </tr>`;
+  }).join('');
+}
+
+if(busqEl) busqEl.addEventListener('input', pintaTabla);
+if(bajasEl) bajasEl.addEventListener('change', pintaTabla);
 
 async function loadStudents(){
   loadingEl.textContent = 'Cargando...';
@@ -107,69 +172,29 @@ async function loadStudents(){
     const students = [];
     snap.forEach(docSnap => students.push(docSnap.data()));
 
-    if(students.length === 0){
-      loadingEl.textContent = 'Todavía no hay alumnos registrados.';
-      refreshBtn.disabled = false;
-      return;
-    }
-
-    students.sort((a, b) => {
-      const ta = a.updatedAt && a.updatedAt.toMillis ? a.updatedAt.toMillis() : 0;
-      const tb = b.updatedAt && b.updatedAt.toMillis ? b.updatedAt.toMillis() : 0;
-      return tb - ta;
-    });
-
-    const totalStudents = students.length;
-    const totalExercises = students.reduce((sum, s) => sum + (s.exerciseCount || 0), 0);
-    const totalPasses = students.reduce((sum, s) => sum + passedLevels(s.levelStatus).length, 0);
-    const weekAgo = Date.now() - 7 * 24 * 60 * 60 * 1000;
-    const activeThisWeek = students.filter(s => s.updatedAt && s.updatedAt.toMillis && s.updatedAt.toMillis() > weekAgo).length;
-    const onlyVisited = students.filter(s => (s.visitCount || 0) > 0 && !(s.exerciseCount || 0)).length;
-    const allChips = students.map(courseChips);
-    const totalSteps = allChips.reduce((sum, cs) => sum + cs.reduce((n, c) => n + c.done, 0), 0);
-    const doingCourse = allChips.filter(cs => cs.some(c => !c.complete)).length;
-
-    statsEl.innerHTML = [
-      ['Alumnos', totalStudents],
-      ['Clases asignadas (total)', students.reduce((n, s) => n + (Array.isArray(s.clases) ? s.clases.length : 0), 0)],
-      ['Ejercicios hechos (total)', totalExercises],
-      ['Pasos de curso hechos (total)', totalSteps],
-      ['Con un curso en marcha', doingCourse],
-      ['Niveles superados (total)', totalPasses],
-      ['Activos últimos 7 días', activeThisWeek],
-      ['Solo han visitado (sin ejercicios)', onlyVisited]
-    ].map(([label, n]) => `<div class="panel-stat"><div class="n">${esc(n)}</div><div class="l">${esc(label)}</div></div>`).join('');
-
     porEmail.clear();
     students.forEach(s => { if(s.email) porEmail.set(s.email, s); });
 
-    bodyEl.innerHTML = students.map(s => {
-      const chips = passedLevels(s.levelStatus);
-      const chipsHtml = chips.length
-        ? `<div class="panel-levels">${chips.map(c => `<span class="panel-level-chip">${esc(c)}</span>`).join('')}</div>`
-        : '<span class="panel-empty">—</span>';
-      const onlyVisits = (s.visitCount || 0) > 0 && !(s.exerciseCount || 0);
-      const flag = onlyVisits ? '<span class="panel-flag">Solo visitas</span>' : '';
-      const cursos = courseChips(s);
-      const cursosHtml = cursos.length
-        ? `<div class="panel-levels">${cursos.map(c => {
-            const count = c.total ? `${c.done}/${c.total}` : `${c.done} pasos`;
-            return `<span class="panel-course-chip${c.complete ? ' done' : ''}">${esc(c.name)} <b>${esc(count)}</b></span>`;
-          }).join('')}</div>`
-        : '<span class="panel-empty">—</span>';
-      const nClases = Array.isArray(s.clases) ? s.clases.length : 0;
-      return `<tr>
-        <td>${esc(s.email || '—')}${flag}</td>
-        <td><button class="button button-secondary button-sm" data-ficha="${esc(s.email || '')}">${nClases} <i class="ti ti-chevron-right"></i></button></td>
-        <td>${esc(s.visitCount || 0)}</td>
-        <td>${esc(s.exerciseCount || 0)}</td>
-        <td>${cursosHtml}</td>
-        <td>${chipsHtml}</td>
-        <td>${esc(formatDate(s.updatedAt))}</td>
-      </tr>`;
-    }).join('');
+    // Cuatro números, no ocho: los que te dicen algo de un vistazo. Las
+    // visitas y los niveles superados se han quitado a propósito.
+    const altas = students.filter(s => s.activo !== false);
+    const weekAgo = Date.now() - 7 * 24 * 60 * 60 * 1000;
+    statsEl.innerHTML = [
+      ['Alumnos', altas.length],
+      ['Activos esta semana', altas.filter(s => s.updatedAt && s.updatedAt.toMillis && s.updatedAt.toMillis() > weekAgo).length],
+      ['Clases asignadas', altas.reduce((n, s) => n + (Array.isArray(s.clases) ? s.clases.length : 0), 0)],
+      ['Ejercicios hechos', altas.reduce((n, s) => n + (s.exerciseCount || 0), 0)]
+    ].map(([label, n]) => `<div class="panel-stat"><div class="n">${esc(n)}</div><div class="l">${esc(label)}</div></div>`).join('');
 
-    loadingEl.style.display = 'none';
+    pintaTabla();
+    // si tenías una ficha abierta, se queda abierta y con los datos frescos
+    // (sin volver a saltar hacia ella, que estabas mirándola)
+    if(emailAbierto && porEmail.has(emailAbierto)){
+      const abierto = porEmail.get(emailAbierto);
+      clasesAbiertas = Array.isArray(abierto.clases) ? abierto.clases.map(c => Object.assign({}, c)) : [];
+      pintaFicha();
+    }
+    miraSiFaltaAlguien();
   } catch(err) {
     loadingEl.textContent = 'No se han podido cargar los datos (revisa la conexión o vuelve a intentarlo). ' + (err && err.message ? err.message : '');
   } finally {
@@ -185,7 +210,6 @@ refreshBtn.addEventListener('click', loadStudents);
 // y nada más: "updatedAt" es la última actividad DEL ALUMNO y no debe
 // moverse porque el profesor abra su ficha.
 
-const porEmail = new Map();
 const ficha = document.getElementById('ficha');
 const fQuien = document.getElementById('ficha-quien');
 const fResumen = document.getElementById('ficha-resumen');
@@ -193,6 +217,8 @@ const fSelect = document.getElementById('ficha-clase');
 const fFecha = document.getElementById('ficha-fecha');
 const fLista = document.getElementById('ficha-lista');
 const fEstado = document.getElementById('ficha-estado');
+// sus datos: nombre, idioma, nivel y si puede entrar o no
+const PERFIL = { nombre: 'fi-nombre', idioma: 'fi-idioma', nivel: 'fi-nivel', activo: 'fi-activo' };
 
 let emailAbierto = null;
 let clasesAbiertas = [];
@@ -270,7 +296,12 @@ function pintaFicha(){
   }).join('') : '<p class="panel-empty">Todavía no tiene ninguna clase asignada.</p>';
 
   const n = clasesAbiertas.length;
-  if(fResumen) fResumen.textContent = n === 1 ? '1 clase asignada' : n + ' clases asignadas';
+  // el email va aquí: el título de la ficha ya lleva su nombre, pero el email
+  // es con lo que entra en la web y hay que poder verlo
+  if(fResumen){
+    fResumen.textContent = emailAbierto + ' · ' +
+      (n === 1 ? '1 clase asignada' : n + ' clases asignadas');
+  }
 }
 
 async function guarda(){
@@ -283,8 +314,36 @@ async function guarda(){
       { clases: clasesAbiertas, email: emailAbierto }, { merge: true }), 8000, 'setDoc');
     const s = porEmail.get(emailAbierto);
     if(s) s.clases = clasesAbiertas.slice();
+    pintaTabla();   // cambian sus columnas de clases y de próxima clase
     avisa('Guardado.', 'ok');
     setTimeout(() => avisa(''), 2000);
+  } catch(err) {
+    avisa('No se ha podido guardar: ' + (err && err.message ? err.message : 'error'), 'mal');
+  }
+}
+
+// Guarda solo los datos del alumno. Igual que con las clases: NO se escribe
+// "updatedAt", que es la última vez que estuvo él en la web.
+async function guardaPerfil(){
+  if(!emailAbierto) return;
+  const s = porEmail.get(emailAbierto) || {};
+  const campos = {
+    nombre: (document.getElementById(PERFIL.nombre).value || '').trim(),
+    idioma: document.getElementById(PERFIL.idioma).value || '',
+    nivel: document.getElementById(PERFIL.nivel).value || '',
+    activo: document.getElementById(PERFIL.activo).value !== 'no'
+  };
+  avisa('Guardando...');
+  try {
+    const db = getFirestore(app);
+    await withTimeout(setDoc(doc(db, 'students', emailAbierto),
+      Object.assign({ email: emailAbierto }, campos), { merge: true }), 8000, 'setDoc');
+    Object.assign(s, campos);
+    porEmail.set(emailAbierto, s);
+    if(fQuien) fQuien.textContent = campos.nombre || emailAbierto;
+    pintaTabla();
+    avisa(campos.activo ? 'Guardado.' : 'Guardado: ya no puede entrar en la web.', 'ok');
+    setTimeout(() => avisa(''), 2500);
   } catch(err) {
     avisa('No se ha podido guardar: ' + (err && err.message ? err.message : 'error'), 'mal');
   }
@@ -295,7 +354,11 @@ function abreFicha(email){
   if(!s || !ficha) return;
   emailAbierto = email;
   clasesAbiertas = Array.isArray(s.clases) ? s.clases.map(c => Object.assign({}, c)) : [];
-  if(fQuien) fQuien.textContent = email;
+  if(fQuien) fQuien.textContent = nombreDe(s) || email;
+  document.getElementById(PERFIL.nombre).value = nombreDe(s);
+  document.getElementById(PERFIL.idioma).value = s.idioma || '';
+  document.getElementById(PERFIL.nivel).value = s.nivel || '';
+  document.getElementById(PERFIL.activo).value = s.activo === false ? 'no' : 'si';
   if(fSelect){
     fSelect.innerHTML = (window.JN_CLASES || [])
       // con el catálogo creciendo, el nivel y la pista ahorran abrir la clase
@@ -341,12 +404,14 @@ document.addEventListener('click', function(e){
   }
 });
 
-// la fecha y la nota se guardan al salir del campo, no en cada tecla
+// la fecha, la nota y los datos del alumno se guardan al salir del campo,
+// no en cada tecla
 document.addEventListener('change', function(e){
   const f = e.target.closest('.fi-fecha');
-  if(f){ clasesAbiertas[+f.dataset.i].fecha = f.value; pintaFicha(); guarda(); return; }
+  if(f){ clasesAbiertas[+f.dataset.i].fecha = f.value; pintaFicha(); pintaTabla(); guarda(); return; }
   const n = e.target.closest('.fi-nota');
-  if(n){ clasesAbiertas[+n.dataset.i].nota = n.value; guarda(); }
+  if(n){ clasesAbiertas[+n.dataset.i].nota = n.value; guarda(); return; }
+  if(e.target && e.target.closest('.fi-perfil') && ficha.contains(e.target)) guardaPerfil();
 });
 
 // ──────────────────────── Clase rápida ────────────────────────
@@ -418,10 +483,14 @@ function pintaRapida(){
 }
 
 function pintaAlumnos(){
-  const emails = [...porEmail.keys()].sort();
-  rAlumnos.innerHTML = emails.length
-    ? emails.map(e => `<label class="rap-al${rQuien.indexOf(e) >= 0 ? ' on' : ''}">
-        <input type="checkbox" data-quien="${esc(e)}"${rQuien.indexOf(e) >= 0 ? ' checked' : ''}> ${esc(e)}</label>`).join('')
+  // los dados de baja no salen: una clase rápida es para quien está dando
+  // clase contigo ahora
+  const altas = [...porEmail.values()].filter(s => s.activo !== false)
+    .sort((a, b) => (nombreDe(a) || a.email).localeCompare(nombreDe(b) || b.email));
+  rAlumnos.innerHTML = altas.length
+    ? altas.map(s => `<label class="rap-al${rQuien.indexOf(s.email) >= 0 ? ' on' : ''}">
+        <input type="checkbox" data-quien="${esc(s.email)}"${rQuien.indexOf(s.email) >= 0 ? ' checked' : ''}> ${
+        esc(nombreDe(s) || s.email)}</label>`).join('')
     : '<span class="panel-empty">Todavía no hay alumnos.</span>';
 }
 
@@ -584,13 +653,67 @@ document.addEventListener('keydown', function(e){
 // ──────────────────── Catálogo de clases ────────────────────
 // Para poder abrirlas y revisarlas: hasta ahora solo salían como texto en
 // el desplegable de la ficha del alumno y no había manera de verlas.
+//
+// Va plegado y con filtros porque la lista ya no cabe de un vistazo, y
+// mientras das clase lo que quieres es la tabla de arriba, no el catálogo.
+
+const catFiltro = { perfil: '', nivel: '', pista: '', q: '' };
+
+// Los perfiles salen de las propias clases: así no hay que acordarse de
+// tocar esto cada vez que se escribe una clase para un perfil nuevo.
+function perfilesDelCatalogo(){
+  const vistos = [];
+  (window.JN_CLASES || []).forEach(c => {
+    if(c.perfil && vistos.indexOf(c.perfil) < 0) vistos.push(c.perfil);
+  });
+  return vistos.sort();
+}
+
+function pintaFiltros(){
+  const caja = document.getElementById('cat-filtros');
+  if(!caja) return;
+  // el rótulo va escrito, no en un icono: los iconos vienen de un CDN y si
+  // no carga quedarían tres filas de botones «todos» sin saber de qué
+  function grupo(campo, rotulo, opciones){
+    return `<div class="cat-fgrupo"><span class="cat-frot">${esc(rotulo)}</span>` +
+      [['', 'todos']].concat(opciones).map(([v, etq]) =>
+        `<button type="button" class="cat-fbtn${catFiltro[campo] === v ? ' on' : ''}"
+          data-filtro="${campo}" data-valor="${esc(v)}">${esc(etq)}</button>`).join('') +
+      '</div>';
+  }
+  caja.innerHTML =
+    grupo('perfil', 'Para quién', perfilesDelCatalogo().map(p => [p, p])) +
+    grupo('nivel', 'Nivel', ['A1', 'A2', 'B1', 'B2', 'C1'].map(n => [n, n])) +
+    grupo('pista', 'Idioma', [['es', 'ES'], ['it', 'IT'], ['en', 'EN']]) +
+    `<input type="search" class="cat-buscar" id="cat-buscar" placeholder="título o etiqueta..."
+      value="${esc(catFiltro.q)}" autocomplete="off">`;
+}
 
 function pintaCatalogo(){
   const caja = document.getElementById('cat-lista');
   const res = document.getElementById('cat-resumen');
   if(!caja) return;
-  const lista = window.JN_CLASES || [];
-  if(res) res.textContent = lista.length === 1 ? '1 clase escrita' : lista.length + ' clases escritas';
+  const todas = window.JN_CLASES || [];
+  const q = catFiltro.q.trim().toLowerCase();
+
+  const lista = todas.filter(c => {
+    if(catFiltro.perfil && c.perfil !== catFiltro.perfil) return false;
+    // «A2–B1» vale tanto para A2 como para B1
+    if(catFiltro.nivel && String(c.nivel || '').indexOf(catFiltro.nivel) < 0) return false;
+    if(catFiltro.pista && (c.pistas || ['es', 'it', 'en']).indexOf(catFiltro.pista) < 0) return false;
+    if(q){
+      const texto = [c.titulo.es, c.titulo.it, c.titulo.en]
+        .concat(c.etiquetas || []).join(' ').toLowerCase();
+      if(!texto.includes(q)) return false;
+    }
+    return true;
+  });
+
+  if(res){
+    res.textContent = (todas.length === 1 ? '1 clase escrita' : todas.length + ' clases escritas') +
+      (lista.length !== todas.length ? ' · ' + lista.length + ' con estos filtros' : '');
+  }
+
   caja.innerHTML = lista.length ? lista.map(c => {
     const chips = (c.etiquetas || []).map(e => `<span class="panel-course-chip">${esc(e)}</span>`).join('');
     // una clase solo existe en las pistas que diga; sin el campo, en las tres
@@ -603,11 +726,190 @@ function pintaCatalogo(){
         <span class="cat-niv">${esc(c.perfil || '')}</span></div>
       <div class="cat-abrir">${idiomas}</div>
     </div>`;
-  }).join('') : '<p class="panel-empty">Todavía no hay ninguna clase en el catálogo.</p>';
+  }).join('') : '<p class="panel-empty">Ninguna clase con estos filtros.</p>';
 }
 
 document.addEventListener('click', function(e){
-  if(e.target.closest('#rap-abrir2')){ abreRapida(); }
+  if(e.target.closest('#rap-abrir2')){ abreRapida(); return; }
+
+  const tog = e.target.closest('#cat-toggle');
+  if(tog){
+    const caja = document.getElementById('cat-caja');
+    const abierto = caja.style.display !== 'none';
+    caja.style.display = abierto ? 'none' : 'block';
+    tog.innerHTML = abierto
+      ? '<i class="ti ti-chevron-down"></i> Ver el catálogo'
+      : '<i class="ti ti-chevron-up"></i> Ocultar';
+    return;
+  }
+
+  const f = e.target.closest('[data-filtro]');
+  if(f){
+    const campo = f.dataset.filtro;
+    // volver a pulsar el filtro que ya está puesto lo quita
+    catFiltro[campo] = catFiltro[campo] === f.dataset.valor ? '' : f.dataset.valor;
+    pintaFiltros(); pintaCatalogo();
+  }
 });
 
+document.addEventListener('input', function(e){
+  if(e.target && e.target.id === 'cat-buscar'){ catFiltro.q = e.target.value; pintaCatalogo(); }
+});
+
+// ──────────────────── Dar de alta y dar de baja ────────────────────
+// Quién puede entrar en la web es la ficha del alumno en Firebase: existe y
+// no está dada de baja. Antes era una hoja de Google publicada como CSV, que
+// había que abrir aparte y que no sabía nada de quién era cada email.
+
+const altaCaja = document.getElementById('alta');
+const altaEstado = document.getElementById('alta-estado');
+
+function avisaAlta(txt, tipo){
+  if(altaEstado){
+    altaEstado.textContent = txt || '';
+    altaEstado.className = 'ficha-estado' + (tipo ? ' ' + tipo : '');
+  }
+}
+
+async function daDeAlta(){
+  const email = (document.getElementById('alta-email').value || '').trim().toLowerCase();
+  if(!email || email.indexOf('@') < 0){ avisaAlta('Escribe su email.', 'mal'); return; }
+  const ya = porEmail.get(email);
+  if(ya && ya.activo !== false){ avisaAlta('Ese email ya está dado de alta.', 'mal'); return; }
+
+  const campos = {
+    email: email,
+    nombre: (document.getElementById('alta-nombre').value || '').trim(),
+    idioma: document.getElementById('alta-idioma').value || '',
+    nivel: document.getElementById('alta-nivel').value || '',
+    activo: true
+  };
+  // "alta" es cuándo le diste acceso. Sirve para distinguir al alumno nuevo
+  // que todavía no ha entrado del que entró y lleva meses sin aparecer:
+  // "última actividad" la escribe él, no yo.
+  if(!ya) campos.alta = hoyISO();
+
+  avisaAlta('Guardando...');
+  try {
+    const db = getFirestore(app);
+    await withTimeout(setDoc(doc(db, 'students', email), campos, { merge: true }), 8000, 'setDoc');
+    porEmail.set(email, Object.assign({}, ya || {}, campos));
+    ['alta-email', 'alta-nombre'].forEach(id => { document.getElementById(id).value = ''; });
+    pintaTabla();
+    avisaAlta((campos.nombre || email) + ' ya puede entrar en la web.', 'ok');
+  } catch(err) {
+    avisaAlta('No se ha podido guardar: ' + (err && err.message ? err.message : 'error'), 'mal');
+  }
+}
+
+// ── La mudanza desde la hoja de Google ──
+// Mientras quede algún email en la hoja sin ficha aquí, el panel lo avisa
+// solo: si se migrara a mano se podría olvidar a alguien y dejarlo fuera de
+// la web sin enterarse. Cuando no falte nadie, el aviso no aparece y la hoja
+// se puede dejar de publicar.
+const SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTp3ALVArrf67RDanwYo7f9EA7dxBF3FDmi6qvXeB7MDJn2ApcV4kICTxJ-d-OGX4mz0ibXXELGdZNu/pub?gid=0&single=true&output=csv';
+
+function leeSheet(){
+  return fetch(SHEET_CSV_URL, { cache: 'no-store' })
+    .then(r => { if(!r.ok) throw new Error('respuesta ' + r.status); return r.text(); })
+    .then(csv => {
+      const emails = csv.split('\n')
+        .map(l => l.split(',')[0].trim().toLowerCase())
+        .filter(e => e.indexOf('@') > 0);
+      // Google contesta 200 con una página de error cuando dejas de publicar
+      // la hoja: sin esto, "no falta nadie" sería mentira.
+      if(!emails.length) throw new Error('la hoja no da ninguna lista de emails');
+      return emails;
+    });
+}
+
+function faltanDelSheet(){
+  return leeSheet().then(emails => emails.filter(e => !porEmail.has(e)));
+}
+
+function miraSiFaltaAlguien(){
+  const aviso = document.getElementById('al-aviso');
+  const txt = document.getElementById('al-aviso-txt');
+  if(!aviso) return;
+  faltanDelSheet().then(faltan => {
+    if(!faltan.length){ aviso.style.display = 'none'; return; }
+    txt.textContent = faltan.length === 1
+      ? 'Hay 1 alumno en la hoja de Google que todavía no tiene ficha aquí, así que no podría entrar en la web.'
+      : 'Hay ' + faltan.length + ' alumnos en la hoja de Google que todavía no tienen ficha aquí, así que no podrían entrar en la web.';
+    aviso.style.display = 'flex';
+  }).catch(() => {
+    // la hoja ya no se publica, o no hay red: no es un problema, el acceso
+    // ya no depende de ella
+    aviso.style.display = 'none';
+  });
+}
+
+async function importaDelSheet(estadoId){
+  const estado = document.getElementById(estadoId);
+  function di(txt, tipo){
+    if(estado){ estado.textContent = txt; estado.className = 'ficha-estado' + (tipo ? ' ' + tipo : ''); }
+  }
+  di('Leyendo la hoja de Google...');
+  try {
+    const faltan = await faltanDelSheet();
+    if(!faltan.length){ di('No falta nadie: ya están todos aquí.', 'ok'); return; }
+    const db = getFirestore(app);
+    for(const email of faltan){
+      await withTimeout(setDoc(doc(db, 'students', email),
+        { email: email, activo: true, alta: hoyISO() }, { merge: true }), 8000, 'setDoc');
+      porEmail.set(email, { email: email, activo: true, alta: hoyISO() });
+    }
+    pintaTabla();
+    miraSiFaltaAlguien();
+    di('Traídos ' + faltan.length + (faltan.length === 1 ? ' alumno. Ponle nombre en su ficha.'
+                                                         : ' alumnos. Ponles nombre en sus fichas.'), 'ok');
+  } catch(err) {
+    di('No se ha podido leer la hoja: ' + (err && err.message ? err.message : 'error'), 'mal');
+  }
+}
+
+document.addEventListener('click', function(e){
+  if(e.target.closest('#alta-abrir')){
+    altaCaja.style.display = 'block';
+    avisaAlta('');
+    document.getElementById('alta-email').focus();
+    return;
+  }
+  if(e.target.closest('#alta-cerrar')){ altaCaja.style.display = 'none'; return; }
+  if(e.target.closest('#alta-add')){ daDeAlta(); return; }
+  if(e.target.closest('#alta-sheet-btn')){ importaDelSheet('alta-sheet-estado'); return; }
+  if(e.target.closest('#al-importar')){
+    altaCaja.style.display = 'block';
+    importaDelSheet('alta-estado');
+  }
+});
+
+document.addEventListener('keydown', function(e){
+  if(e.key === 'Enter' && e.target && /^alta-(email|nombre)$/.test(e.target.id)){
+    e.preventDefault();
+    daDeAlta();
+  }
+});
+
+// ──────────────────────── Arranque ────────────────────────
+// Va al final a propósito: así todo lo que usa loadStudents() (la tabla, la
+// ficha, el alta) está ya declarado cuando se dispara.
+
+let autoLoadDone = false;
+function autoLoad(){
+  if(autoLoadDone) return;
+  autoLoadDone = true;
+  loadStudents();
+}
+
+document.addEventListener('jn-panel-unlocked', autoLoad, { once: true });
+
+// La puerta vive en un <script> clásico, que se ejecuta ANTES que este módulo
+// (los módulos van diferidos). Al recargar con la sesión ya desbloqueada, la
+// puerta lanza "jn-panel-unlocked" cuando aquí todavía no estábamos
+// escuchando, y el panel se quedaba en "Cargando..." para siempre. Por eso
+// comprobamos también el estado directamente.
+if(sessionStorage.getItem('jn_panel_unlocked') === 'true') autoLoad();
+
+pintaFiltros();
 pintaCatalogo();
