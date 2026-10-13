@@ -1155,3 +1155,8 @@ a.menu-button.current-page{background:rgba(255,255,255,.15)}
 .cl-apu-caja .apu-texto{min-height:120px}
 .track-aviso{order:3;flex-basis:100%;margin:10px 0 0;padding:9px 14px;background:var(--badge-gold-bg);color:var(--gold-dark);
   border-radius:10px;font-size:14px;font-weight:600;max-width:640px}
+/* Los mismos separadores, pero dentro de un submenú: más juntos y sin la
+   línea de arriba, que ahí ya la pone el propio submenú. */
+.submenu .menu-sep{margin:10px 0 4px;padding-top:9px}
+.submenu .menu-sep:first-child{margin-top:2px;padding-top:0;border-top:0}
+.submenu .menu-sep span{font-size:10.5px;padding:0 10px 0 12px}
