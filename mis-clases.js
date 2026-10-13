@@ -267,7 +267,7 @@
         '<a href="ejercicios-' + track + '.html?tema=' + esc(t.ejercicios || t.id) +
         // un tema fino es un sub-grupo dentro de otro: &g lo acota a él solo,
         // en vez de abrir el bloque entero
-        (t.ejercicios && t.g ? '&g=' + esc(t.g) : '') + '">' +
+        (t.ejercicios && t.g && hayPagina ? '&g=' + esc(t.g) : '') + '">' +
         '<i class="ti ti-pencil" aria-hidden="true"></i> ' + esc(T.practicar) + '</a>';
       return '<div class="cl-bloque"><b>' + esc(nom) + '</b><p>' + reg + '</p>' +
              '<div class="cl-links">' + links + '</div></div>';

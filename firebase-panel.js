@@ -444,8 +444,11 @@ function sugerencias(q){
     .filter(t => rSel.indexOf(t.id) < 0 && puntos(t) < 9)
     .sort((a, b) => puntos(a) - puntos(b) || a.nombre.es.localeCompare(b.nombre.es))
     .slice(0, 8);
+  // algunos temas solo existen en una pista —gustar o el sujeto que sobra
+  // solo le hacen falta a un inglés— y hay que verlo antes de elegirlos
+  const marca = t => (t.pistas || []).length ? ` · ${t.pistas.join('/').toUpperCase()}` : '';
   rSugs.innerHTML = hits.map(t =>
-    `<button data-tema="${esc(t.id)}">${esc(t.nombre.es)}<span class="cat">${esc(t.cat)}</span></button>`).join('')
+    `<button data-tema="${esc(t.id)}">${esc(t.nombre.es)}<span class="cat">${esc(t.cat)}${esc(marca(t))}</span></button>`).join('')
     || '<button disabled style="color:var(--muted)">Ningún tema con eso</button>';
   rSugs.classList.add('on');
 }
@@ -464,7 +467,8 @@ function pintaTodo(){
     return `<h5>${esc(CATS[cat])}</h5><div class="lista">` + items.map(t => {
       const ya = rSel.indexOf(t.id) >= 0;
       return `<button type="button" class="${ya ? 'ya' : ''}"${ya ? ' disabled' : ''}
-        data-tema="${esc(t.id)}" title="${esc(t.regla.es.replace(/<[^>]+>/g, ''))}">${esc(t.nombre.es)}</button>`;
+        data-tema="${esc(t.id)}" title="${esc(t.regla.es.replace(/<[^>]+>/g, ''))}">${esc(t.nombre.es)}${
+        (t.pistas || []).length ? ' · ' + esc(t.pistas.join('/').toUpperCase()) : ''}</button>`;
     }).join('') + '</div>';
   }).join('');
 }

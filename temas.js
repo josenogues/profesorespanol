@@ -354,19 +354,19 @@ window.JN_TEMAS = [
          it:'Non vale come aggettivo né come soggetto: lì ci vanno <b>infinito</b> o <b>que + verbo</b>.',
          en:'It can’t be an adjective or a subject: there you need an <b>infinitive</b> or <b>que + verb</b>.'} },
 
-{ id:'gustar', pagina:'especial-atencion-verbos', ejercicios:'atn-verbos', g:'gustar', cat:'verbos', etiquetas:['gustar','me gusta'],
+{ id:'gustar', pagina:'especial-atencion-verbos', ejercicios:'atn-verbos', g:'gustar', pistas:['en'], cat:'verbos', etiquetas:['gustar','me gusta'],
   nombre:{es:'Gustar y los que van al revés', it:'Gustar e quelli al contrario', en:'Gustar and the backwards verbs'},
   regla:{es:'No eres tú quien gusta: te gusta algo. <b>Me gusta</b> una cosa, <b>me gustan</b> varias.',
          it:'Non sei tu che piaci: ti piace qualcosa. <b>Me gusta</b> una cosa, <b>me gustan</b> più cose.',
          en:'You don’t like — something pleases you. <b>Me gusta</b> for one thing, <b>me gustan</b> for several.'} },
 
-{ id:'sujeto-innecesario', pagina:'especial-atencion-gramatica', ejercicios:'atn-gramatica', g:'sujeto', cat:'gramatica', etiquetas:['sujeto','yo','tú'],
+{ id:'sujeto-innecesario', pagina:'especial-atencion-gramatica', ejercicios:'atn-gramatica', g:'sujeto', pistas:['en'], cat:'gramatica', etiquetas:['sujeto','yo','tú'],
   nombre:{es:'El sujeto que no hace falta', it:'Il soggetto che non serve', en:'The subject you don’t need'},
   regla:{es:'La terminación ya dice quién es: <b>soy italiano</b>, no «yo soy italiano».',
          it:'La desinenza dice già chi è: <b>soy italiano</b>, non «yo soy italiano».',
          en:'The ending already says who: <b>soy italiano</b>, not «yo soy italiano».'} },
 
-{ id:'orden-adjetivo', pagina:'especial-atencion-gramatica', ejercicios:'atn-gramatica', g:'adjetivo', cat:'gramatica', etiquetas:['adjetivo','orden'],
+{ id:'orden-adjetivo', pagina:'especial-atencion-gramatica', ejercicios:'atn-gramatica', g:'adjetivo', pistas:['en'], cat:'gramatica', etiquetas:['adjetivo','orden'],
   nombre:{es:'Dónde va el adjetivo', it:'Dove va l’aggettivo', en:'Where the adjective goes'},
   regla:{es:'Detrás del nombre: <b>un coche rojo</b>. Delante cambia el sentido o suena a poesía.',
          it:'Dopo il nome: <b>un coche rojo</b>. Davanti cambia il senso o suona poetico.',
