@@ -779,6 +779,9 @@ a.closest(".menu-item").classList.add("active","current-section");
 
   let activeCategory = null; // key de la categoría elegida en el paso 1
   let activeTopics = new Set(); // subtemas activos dentro de esa categoría (vacío = todos los de la categoría)
+  // Sub-grupo dentro de un tema: «por/para» dentro de «Gramática que delata».
+  // Los ejercicios lo llevan en el campo g, que ya usan los pasos de curso.
+  let activeGroup = null;
   let activeLevelsFilter = new Set(); // niveles activos en "ejercicios libres" (vacío = todos los niveles); admite varios a la vez
   let mixMode = false;
   let activeLevel = null; // "A1".."C1" cuando se practica por nivel (recorrido completo, cruza todas las materias)
@@ -967,6 +970,7 @@ ${qHTML}`;
     }
     const count = mixMode ? 20 : (activeLevel ? 30 : 12);
     let pool = collectPool(topicKeys);
+    if(activeGroup) pool = pool.filter(it => it.g === activeGroup);
     if(activeLevel) pool = pool.filter(it => it.level === activeLevel);
     else if(activeLevelsFilter.size) pool = pool.filter(it => activeLevelsFilter.has(it.level));
     const picked = sample(pool, Math.min(count, pool.length));
@@ -974,6 +978,35 @@ ${qHTML}`;
       const withId = Object.assign({}, item, { exid: (item.exid||'ex') + '-' + uid() });
       return renderItemHTML(withId);
     }).join('') || (topicKeys.length ? '' : `<p class="subtitle">${cfg.labels.empty}</p>`);
+  }
+
+  // Avisa de que la tanda está acotada a un sub-grupo y deja quitarlo: si no
+  // se ve, el alumno cree que al tema le faltan ejercicios.
+  const SOLO = { es: 'Solo', it: 'Solo', en: 'Only' };
+  function pintaGrupo(){
+    let chapa = document.getElementById('ex-solo');
+    if(!activeGroup){ if(chapa) chapa.remove(); return; }
+    const t = window.jnTemaPorId && window.jnTemaPorId(activeGroup);
+    const nombre = (t && t.nombre && (t.nombre[cfg.lang] || t.nombre.es)) || activeGroup;
+    if(!chapa){
+      chapa = document.createElement('div');
+      chapa.id = 'ex-solo';
+      chapa.className = 'ex-solo';
+      container.parentNode.insertBefore(chapa, container);
+    }
+    chapa.innerHTML = '<span>' + (SOLO[cfg.lang] || SOLO.es) + ': <b></b></span>' +
+      '<button type="button" aria-label="\u00d7">\u00d7</button>';
+    chapa.querySelector('b').textContent = nombre;
+    chapa.querySelector('button').addEventListener('click', function(){
+      limpiaGrupo();
+      render();
+    });
+  }
+
+  function limpiaGrupo(){
+    if(!activeGroup) return;
+    activeGroup = null;
+    pintaGrupo();
   }
 
   function renderPills(){
@@ -990,6 +1023,7 @@ ${qHTML}`;
       btn.addEventListener('click', () => {
         const key = btn.dataset.topic;
         if(activeTopics.has(key)) activeTopics.delete(key); else activeTopics.add(key);
+        limpiaGrupo();
         renderPills();
         render();
       });
@@ -1050,6 +1084,7 @@ ${qHTML}`;
     levelBtns.forEach(b => b.classList.remove('active'));
     activeCategory = key;
     activeTopics.clear();
+    limpiaGrupo();
     catBtns.forEach(b => b.classList.toggle('active', b.dataset.cat === key));
     if(levelFilterStep) levelFilterStep.style.display = key === 'lectura' ? 'none' : '';
     if(key === 'lectura'){
@@ -1077,6 +1112,7 @@ ${qHTML}`;
     mixMode = false;
     activeCategory = null;
     activeTopics.clear();
+    limpiaGrupo();
     activeLevel = level;
     activeLevelCategory = null;
     if(mixBtn) mixBtn.classList.remove('active');
@@ -1743,6 +1779,7 @@ ${qHTML}`;
       activeCategory = null;
       activeLevel = null;
       activeTopics.clear();
+    limpiaGrupo();
       catBtns.forEach(b => b.classList.remove('active'));
       levelBtns.forEach(b => b.classList.remove('active'));
       step2.style.display = 'none';
@@ -2144,6 +2181,7 @@ ${nextHTML}<div class="ex-signal-btns">${btns}</div></div>`;
     activeLevelCategory = null;
     activeCategory = null;
     activeTopics.clear();
+    limpiaGrupo();
     if(mixBtn) mixBtn.classList.remove('active');
     catBtns.forEach(b => b.classList.remove('active'));
     levelBtns.forEach(b => b.classList.remove('active'));
@@ -2181,6 +2219,10 @@ ${nextHTML}<div class="ex-signal-btns">${btns}</div></div>`;
     showMode('tema');
     selectCategory(topicToCat[tema].key);
     activeTopics.add(tema);
+    // &g=por-para acota la tanda a ese sub-grupo dentro del tema
+    const grupo = params.get('g');
+    if(grupo && collectPool([tema]).some(it => it.g === grupo)) activeGroup = grupo;
+    pintaGrupo();
     renderPills();
     render();
   }

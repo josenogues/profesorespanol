@@ -242,8 +242,8 @@ footer{text-align:center;padding:30px;color:var(--muted);border-top:1px solid va
 
 @media(max-width:900px){.stats-bar{grid-template-columns:1fr}.steps{grid-template-columns:1fr}.reviews-grid{grid-template-columns:1fr}}
 
-.button-preply{background:#FF79AC;color:#fff}
-.button-preply:hover{background:#FF5C9B}
+.button-preply{background:#D6246E;color:#fff}
+.button-preply:hover{background:#B81A5C}
 
 .hero-bio-translation{color:var(--muted);font-size:14.5px;font-style:italic;margin-bottom:10px}
 
@@ -1160,3 +1160,9 @@ a.menu-button.current-page{background:rgba(255,255,255,.15)}
 .submenu .menu-sep{margin:10px 0 4px;padding-top:9px}
 .submenu .menu-sep:first-child{margin-top:2px;padding-top:0;border-top:0}
 .submenu .menu-sep span{font-size:10.5px;padding:0 10px 0 12px}
+/* Aviso de que la tanda de ejercicios está acotada a un sub-grupo */
+.ex-solo{display:inline-flex;align-items:center;gap:8px;margin:0 0 14px;padding:7px 10px 7px 14px;
+  background:var(--badge-gold-bg);color:var(--gold-dark);border-radius:20px;font-size:14px;font-weight:600}
+.ex-solo button{border:0;background:transparent;color:inherit;cursor:pointer;font-size:19px;
+  line-height:1;padding:2px 4px;border-radius:50%}
+.ex-solo button:hover{background:rgba(0,0,0,.12)}
