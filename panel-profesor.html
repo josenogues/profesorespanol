@@ -147,7 +147,24 @@ tbody tr.al-fila.baja{opacity:.55}
 .al-prox b{display:block;font-weight:800;font-variant-numeric:tabular-nums}
 .al-prox span{display:block;font-size:13px;color:var(--muted)}
 .al-sin{color:var(--muted);font-size:13.5px}
-/* Ficha: los datos del alumno */
+/* Ficha: se despega de la tabla y lleva la marca de la fila que has pulsado,
+   para que se vea que es «ese» alumno y no otra sección más de la página */
+#ficha{margin-top:30px;border-left:4px solid #7A5230;scroll-margin-top:20px}
+#ficha > .ficha-cab{padding-bottom:16px;border-bottom:1px solid var(--border)}
+/* cada cosa en su caja: los datos y el ponerle clase se mezclaban */
+.fi-bloque{background:var(--tint);border-radius:12px;padding:16px 18px;margin-top:18px}
+.fi-bh{font-family:var(--font-head);font-size:13px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin:0 0 12px}
+.fi-o{color:var(--muted);font-size:14px;padding:0 4px 10px}
+.fi-peligro{display:flex;gap:14px;align-items:center;flex-wrap:wrap;margin-top:26px;padding-top:18px;border-top:1px dashed var(--border)}
+.fi-peligro > div:first-child{flex:1;min-width:240px}
+.fi-peligro b{font-family:var(--font-head);font-size:15px}
+.fi-peligro p{margin:3px 0 0;font-size:13.5px;color:var(--muted);line-height:1.45}
+#fi-borrar{color:#b3261e;border-color:#e0a9a4}
+[data-theme="dark"] #fi-borrar{color:#e88078;border-color:#7a3b35}
+#fi-borrar:hover{background:#b3261e;border-color:#b3261e;color:#fff}
+.fi-seguro{flex-basis:100%;display:flex;gap:10px;align-items:center;flex-wrap:wrap;background:#FDECEA;border:1px solid #e0a9a4;border-radius:12px;padding:12px 16px;font-size:14.5px}
+[data-theme="dark"] .fi-seguro{background:#3a1d1a;border-color:#7a3b35}
+#fi-borrar-si{background:#b3261e;border-color:#b3261e;color:#fff}
 .fi-perfil{display:flex;gap:12px;flex-wrap:wrap;align-items:flex-end}
 .fi-perfil label{display:block;font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
 .fi-perfil input,.fi-perfil select{display:block;margin-top:5px;padding:9px 11px;border-radius:10px;border:1px solid var(--border);background:var(--card-bg);color:var(--text);font-family:var(--font-body);font-size:15px}
@@ -192,12 +209,13 @@ tbody tr.al-fila.baja{opacity:.55}
 </div>
 
 <div class="al-acciones">
-<button class="button button-primary" id="rap-abrir2"><i class="ti ti-bolt" aria-hidden="true"></i> Clase rápida</button>
 <button class="button button-secondary" id="alta-abrir"><i class="ti ti-user-plus" aria-hidden="true"></i> Dar de alta</button>
+<button class="button button-secondary" id="rap-abrir2" title="Para montar una clase y repartirla entre varios alumnos a la vez"><i class="ti ti-bolt" aria-hidden="true"></i> Clase rápida para varios</button>
 <div class="al-buscar"><i class="ti ti-search" aria-hidden="true"></i>
 <input type="search" id="al-buscar" placeholder="Buscar un alumno por nombre o email..." autocomplete="off"></div>
 <label class="al-switch"><input type="checkbox" id="al-bajas"> Ver también las bajas</label>
 </div>
+<p class="ficha-estado" id="al-estado" style="display:none;margin:-6px 0 14px"></p>
 
 <div class="panel-link" id="alta" style="display:none">
 <div class="ficha-cab">
@@ -238,25 +256,43 @@ no quede ninguno puedes dejar de publicarla y olvidarte de ella.</p>
 <button class="button button-secondary button-sm" id="ficha-cerrar"><i class="ti ti-x"></i> Cerrar</button>
 </div>
 
-<h3 class="ficha-h3">Sus datos</h3>
+<div class="fi-bloque">
+<h3 class="fi-bh">Sus datos</h3>
 <div class="fi-perfil">
 <label>Nombre<input type="text" id="fi-nombre" placeholder="como le llamas tú" autocomplete="off"></label>
 <label>Idioma<select id="fi-idioma"><option value="">—</option><option value="es">Español</option><option value="it">Italiano</option><option value="en">English</option></select></label>
 <label>Nivel<select id="fi-nivel"><option value="">—</option><option value="A1">A1</option><option value="A2">A2</option><option value="B1">B1</option><option value="B2">B2</option><option value="C1">C1</option></select></label>
 <label>Acceso<select id="fi-activo"><option value="si">Puede entrar</option><option value="no">Dado de baja</option></select></label>
 </div>
+</div>
 
-<h3 class="ficha-h3">Añadir una clase a su lista</h3>
+<div class="fi-bloque">
+<h3 class="fi-bh">Ponerle una clase</h3>
 <div class="ficha-alta">
-<label>Clase<select id="ficha-clase"></select></label>
+<label>Del catálogo<select id="ficha-clase"></select></label>
 <label>Fecha <span class="ficha-op">déjala vacía si no te acuerdas</span>
 <input type="date" id="ficha-fecha"></label>
 <button class="button button-primary" id="ficha-add"><i class="ti ti-plus"></i> Añadir</button>
+<span class="fi-o">o</span>
+<button class="button button-secondary" id="rap-abrir3"><i class="ti ti-bolt" aria-hidden="true"></i> Montar una clase rápida</button>
+</div>
 </div>
 
 <h3 class="ficha-h3">Sus clases</h3>
 <div id="ficha-lista"></div>
 <p class="ficha-estado" id="ficha-estado"></p>
+
+<div class="fi-peligro">
+<div><b>Borrar a este alumno</b>
+<p>Se va del todo: su ficha, sus clases y sus apuntes. No se puede deshacer.
+Si solo quieres que deje de entrar, ponle «dado de baja» ahí arriba.</p></div>
+<button class="button button-secondary button-sm" id="fi-borrar"><i class="ti ti-trash"></i> Borrar</button>
+<div class="fi-seguro" id="fi-seguro" style="display:none">
+<span id="fi-seguro-txt"></span>
+<button class="button button-sm" id="fi-borrar-si">Sí, bórralo</button>
+<button class="button button-secondary button-sm" id="fi-borrar-no">Cancelar</button>
+</div>
+</div>
 </div>
 
 <div class="panel-link" id="rapida" style="display:none">
@@ -465,6 +501,6 @@ no quede ninguno puedes dejar de publicarla y olvidarte de ella.</p>
 </script>
 <script src="clases.js?v=20261014h"></script>
 <script src="temas.js?v=20261014h"></script>
-<script type="module" src="firebase-panel.js?v=20261014j"></script>
+<script type="module" src="firebase-panel.js?v=20261014l"></script>
 </body>
 </html>

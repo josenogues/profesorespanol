@@ -6,7 +6,7 @@
 
 import { app } from "./firebase-init.js";
 import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
-import { getFirestore, collection, getDocs, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
+import { getFirestore, collection, getDocs, doc, setDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 
 function esc(s){
   return String(s == null ? '' : s).replace(/[&"<>]/g, c => ({'&':'&amp;','"':'&quot;','<':'&lt;','>':'&gt;'}[c]));
@@ -349,10 +349,56 @@ async function guardaPerfil(){
   }
 }
 
+// Borrar de verdad, no dar de baja: desaparece la ficha entera, con sus
+// clases y sus apuntes. Un perfil de prueba no tiene por qué quedarse para
+// siempre entre las bajas. Se pide confirmación porque no hay vuelta atrás.
+async function borraAlumno(){
+  if(!emailAbierto) return;
+  const quien = nombreDe(porEmail.get(emailAbierto) || {}) || emailAbierto;
+  avisa('Borrando...');
+  try {
+    const db = getFirestore(app);
+    await withTimeout(deleteDoc(doc(db, 'students', emailAbierto)), 8000, 'deleteDoc');
+    porEmail.delete(emailAbierto);
+    emailAbierto = null;
+    clasesAbiertas = [];
+    ficha.style.display = 'none';
+    pintaTabla();
+    // el aviso va encima de la tabla, que es donde se queda la vista al
+    // cerrarse la ficha
+    const linea = document.getElementById('al-estado');
+    if(linea){
+      linea.textContent = quien + ' se ha borrado del todo.';
+      linea.className = 'ficha-estado ok';
+      linea.style.display = 'block';
+      setTimeout(function(){ linea.style.display = 'none'; }, 6000);
+    }
+  } catch(err) {
+    avisa('No se ha podido borrar: ' + (err && err.message ? err.message : 'error'), 'mal');
+  }
+}
+
+function preguntaBorrar(abierta){
+  const caja = document.getElementById('fi-seguro');
+  const bot = document.getElementById('fi-borrar');
+  if(!caja) return;
+  caja.style.display = abierta ? 'flex' : 'none';
+  if(bot) bot.style.display = abierta ? 'none' : '';
+  if(abierta){
+    const s = porEmail.get(emailAbierto) || {};
+    const n = Array.isArray(s.clases) ? s.clases.length : 0;
+    document.getElementById('fi-seguro-txt').textContent =
+      '¿Seguro? Se borra ' + (nombreDe(s) || emailAbierto) +
+      (n === 1 ? ' con su clase' : n ? ' con sus ' + n + ' clases' : '') +
+      ', y no se puede deshacer.';
+  }
+}
+
 function abreFicha(email){
   const s = porEmail.get(email);
   if(!s || !ficha) return;
   emailAbierto = email;
+  preguntaBorrar(false);
   clasesAbiertas = Array.isArray(s.clases) ? s.clases.map(c => Object.assign({}, c)) : [];
   if(fQuien) fQuien.textContent = nombreDe(s) || email;
   document.getElementById(PERFIL.nombre).value = nombreDe(s);
@@ -381,6 +427,10 @@ document.addEventListener('click', function(e){
 
   const cerrar = e.target.closest('#ficha-cerrar');
   if(cerrar){ ficha.style.display = 'none'; emailAbierto = null; return; }
+
+  if(e.target.closest('#fi-borrar')){ preguntaBorrar(true); return; }
+  if(e.target.closest('#fi-borrar-no')){ preguntaBorrar(false); return; }
+  if(e.target.closest('#fi-borrar-si')){ borraAlumno(); return; }
 
   const add = e.target.closest('#ficha-add');
   if(add){
@@ -542,8 +592,11 @@ function pintaTodo(){
   }).join('');
 }
 
-function abreRapida(){
-  rSel = []; rMano = []; rQuien = [];
+// `para` es el alumno que ya tienes abierto: montar una clase rápida tiene
+// sentido cuando ya sabes a quién se la das, así que se marca él solo. Desde
+// el botón de arriba se abre sin nadie marcado, para repartirla entre varios.
+function abreRapida(para){
+  rSel = []; rMano = []; rQuien = para ? [para] : [];
   rTitulo.value = ''; rDeberes.value = ''; rBusca.value = '';
   rFecha.value = hoyISO();
   rEstado.textContent = ''; rEstado.className = 'ficha-estado';
@@ -731,6 +784,8 @@ function pintaCatalogo(){
 
 document.addEventListener('click', function(e){
   if(e.target.closest('#rap-abrir2')){ abreRapida(); return; }
+  // desde dentro de la ficha: ya sabemos a quién
+  if(e.target.closest('#rap-abrir3')){ abreRapida(emailAbierto); return; }
 
   const tog = e.target.closest('#cat-toggle');
   if(tog){
