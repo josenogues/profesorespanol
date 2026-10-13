@@ -42,8 +42,11 @@ window.jnCloudGetStudentDoc = async function(email){
   return snap.exists() ? snap.data() : null;
 };
 
-// fields: objeto plano, admite claves con puntos como rutas de campo,
-// p. ej. {'examPending.es.A2': {...}} solo toca ese campo anidado.
+// fields: el objeto a fusionar. Para tocar un campo de dentro se anida,
+// p. ej. {examPending: {es: {A2: {...}}}}: con merge los mapas se fusionan
+// clave a clave y lo demás se queda como estaba. OJO: no vale la clave
+// 'examPending.es.A2' — setDoc no lee los puntos como ruta (eso es updateDoc)
+// y crearía un campo llamado literalmente así.
 // Añade siempre "updatedAt" (hora del servidor) para poder ver en el panel
 // del profesor cuándo estuvo activo cada alumno por última vez.
 window.jnCloudSetFields = async function(email, fields){

@@ -202,13 +202,24 @@ function hoyISO(){
   return new Date(d.getTime() - d.getTimezoneOffset() * 60000).toISOString().slice(0, 10);
 }
 
-function tituloDe(id){
-  const c = window.jnClasePorId && window.jnClasePorId(id);
-  return c ? (c.titulo.es || id) : id;
+// Una clase rápida no está en el catálogo: su título y sus etiquetas van
+// dentro de la propia asignación. Sin esto su fila salía sin título.
+function tituloDe(a){
+  if(a && a.rapida) return a.rapida.titulo || '(clase rápida sin título)';
+  const c = window.jnClasePorId && window.jnClasePorId(a && a.id);
+  return c ? (c.titulo.es || a.id) : (a && a.id) || '';
 }
 
-function etiquetasDe(id){
-  const c = window.jnClasePorId && window.jnClasePorId(id);
+function etiquetasDe(a){
+  if(a && a.rapida){
+    const auto = [];
+    (a.rapida.temas || []).forEach(function(id){
+      const t = window.jnTemaPorId && window.jnTemaPorId(id);
+      (t ? t.etiquetas : []).forEach(function(e){ if(auto.indexOf(e) < 0) auto.push(e); });
+    });
+    return auto.concat(a.rapida.extra || []);
+  }
+  const c = window.jnClasePorId && window.jnClasePorId(a && a.id);
   return (c && c.etiquetas) || [];
 }
 
@@ -218,9 +229,18 @@ function avisa(txt, tipo){
   fEstado.className = 'ficha-estado' + (tipo ? ' ' + tipo : '');
 }
 
+// La clave con la que el alumno guarda sus apuntes de una clase. Tiene que
+// dar lo mismo que claveApuntes() de mis-clases.js.
+function claveApuntes(c){
+  if(!c.rapida) return c.id;
+  return c.rapida.rid || ('r-' + (c.fecha || 'sinfecha') + '-' +
+    (c.rapida.titulo || '').toLowerCase().replace(/[^a-z0-9]+/g, '').slice(0, 24));
+}
+
 function pintaFicha(){
   if(!fLista) return;
   const hoy = hoyISO();
+  const apuntes = (porEmail.get(emailAbierto) || {}).apuntes || {};
   // fechadas primero, de más reciente a más antigua; las sin fecha al final
   const orden = clasesAbiertas.map((c, i) => ({ c, i }))
     .sort((a, b) => {
@@ -231,15 +251,21 @@ function pintaFicha(){
     });
 
   fLista.innerHTML = orden.length ? orden.map(({ c, i }) => {
-    const chips = etiquetasDe(c.id).map(t => `<span class="panel-course-chip">${esc(t)}</span>`).join('');
+    const chips = etiquetasDe(c).map(t => `<span class="panel-course-chip">${esc(t)}</span>`).join('');
     const pend = c.fecha && c.fecha > hoy;
-    return `<div class="fi-row${pend ? ' pend' : ''}">
+    // lo que escribió el alumno durante la clase: se ve, no se toca
+    const suyo = apuntes[claveApuntes(c)];
+    const apu = (suyo && typeof suyo.t === 'string' && suyo.t.trim())
+      ? `<div class="fi-apu"><b><i class="ti ti-note"></i> Sus apuntes</b><p>${esc(suyo.t)}</p></div>`
+      : '';
+    return `<div class="fi-row${pend ? ' pend' : ''}${apu ? ' con-apu' : ''}">
       <input type="date" class="fi-fecha" data-i="${i}" value="${esc(c.fecha || '')}">
-      <div class="fi-tit">${esc(tituloDe(c.id))}</div>
+      <div class="fi-tit">${esc(tituloDe(c))}</div>
       <div class="fi-chips">${chips}</div>
       <input type="text" class="fi-nota" data-i="${i}" value="${esc(c.nota || '')}"
              placeholder="Nota para ti: cómo fue, qué repetir...">
       <button class="fi-quitar" data-quitar="${i}" title="Quitar de su lista">×</button>
+      ${apu}
     </div>`;
   }).join('') : '<p class="panel-empty">Todavía no tiene ninguna clase asignada.</p>';
 
@@ -460,6 +486,9 @@ async function guardaRapida(){
   if(!rQuien.length){ rEstado.textContent = '¿A qué alumno se la asigno?'; rEstado.className = 'ficha-estado mal'; return; }
   const clase = {
     rapida: {
+      // id propio desde el minuto uno: es la clave con la que el alumno
+      // guarda sus apuntes de esta clase, y no puede depender del título
+      rid: 'r-' + Date.now().toString(36),
       titulo: (rTitulo.value || '').trim(),
       temas: rSel.slice(),
       extra: rMano.slice(),

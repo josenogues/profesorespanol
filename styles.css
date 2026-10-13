@@ -1110,3 +1110,46 @@ a.menu-button.current-page{background:rgba(255,255,255,.15)}
 .cl-deberes{background:var(--tint);border-left:3px solid #7A5230;border-radius:8px;padding:12px 14px;margin-top:4px}
 .cl-deberes b{font-family:var(--font-head);font-size:15px;color:var(--text)}
 .cl-deberes p{margin:3px 0 0;font-size:14.5px;color:var(--text)}
+
+/* ── El cuaderno del alumno ──────────────────────────────────────────────
+   Botón fijo abajo a la derecha y panel en la esquina: así se escribe sin
+   perder de vista la clase ni tener que bajar al final de la página. */
+.apu-boton{position:fixed;right:22px;bottom:22px;z-index:70;display:flex;align-items:center;justify-content:center;gap:8px;min-height:48px;
+  border:0;border-radius:28px;padding:13px 20px;background:#7A5230;color:#fff;cursor:pointer;
+  font-family:var(--font-head);font-size:15px;font-weight:600;
+  box-shadow:0 6px 18px rgba(0,0,0,.22);transition:transform .12s,box-shadow .12s}
+.apu-boton:hover{transform:translateY(-2px);box-shadow:0 9px 22px rgba(0,0,0,.28)}
+.apu-boton .ti{font-size:20px}
+.apu-punto{width:9px;height:9px;border-radius:50%;background:var(--gold);
+  box-shadow:0 0 0 2px rgba(255,255,255,.65)}
+.apu-panel{position:fixed;right:22px;bottom:84px;z-index:71;width:360px;max-width:calc(100vw - 44px);
+  height:52vh;max-height:520px;display:flex;flex-direction:column;
+  background:var(--card-bg);border:1px solid var(--border);border-radius:14px;
+  box-shadow:0 14px 40px rgba(0,0,0,.26);overflow:hidden}
+.apu-panel[hidden]{display:none}
+.apu-cab{display:flex;align-items:center;justify-content:space-between;gap:10px;
+  padding:13px 16px;background:#7A5230;color:#fff}
+.apu-cab b{font-family:var(--font-head);font-size:16px}
+.apu-cerrar{border:0;background:transparent;color:#fff;cursor:pointer;font-size:19px;
+  line-height:1;padding:2px 4px;border-radius:6px}
+.apu-cerrar:hover{background:rgba(255,255,255,.18)}
+.apu-texto{flex:1;border:0;resize:none;padding:14px 16px;font-family:var(--font-body);
+  font-size:15px;line-height:1.6;color:var(--text);background:var(--card-bg)}
+.apu-texto:focus{outline:2px solid #7A5230;outline-offset:-2px}
+.apu-estado{margin:0;padding:8px 16px;border-top:1px solid var(--border);
+  font-size:12.5px;color:var(--muted);min-height:32px}
+[data-theme="dark"] .apu-boton,[data-theme="dark"] .apu-cab{background:#8d6440}
+[data-theme="dark"] .apu-texto:focus{outline-color:#b98a5c}
+@media(max-width:620px){
+  .apu-boton{right:14px;bottom:14px;padding:0;width:54px;height:54px;border-radius:50%}
+  .apu-boton-txt{display:none}
+  .apu-panel{right:10px;left:10px;bottom:74px;width:auto;max-width:none;height:62vh}
+}
+@media(prefers-reduced-motion:reduce){ .apu-boton{transition:none} .apu-boton:hover{transform:none} }
+.cl-apu-marca{margin-left:8px;font-size:15px;color:#7A5230;vertical-align:-1px}
+[data-theme="dark"] .cl-apu-marca{color:#c99b6e}
+.cl-apuntes{margin-top:12px}
+.cl-apuntes>b{font-family:var(--font-head);font-size:15px;color:var(--text)}
+.cl-apu-caja{margin-top:6px;border:1px solid var(--border);border-radius:10px;overflow:hidden;
+  background:var(--card-bg);display:flex;flex-direction:column}
+.cl-apu-caja .apu-texto{min-height:120px}

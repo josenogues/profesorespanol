@@ -30,7 +30,8 @@
       sinAcceso: 'Entra con tu email para ver tus clases.',
       error: 'No se han podido cargar tus clases. Revisa tu conexión y vuelve a intentarlo.',
       teoria: 'Teoría', practicar: 'Practicar', deberes: 'Deberes',
-      hoy: 'hoy', anteriores: 'Clases anteriores', sinF: 'sin fecha'
+      hoy: 'hoy', anteriores: 'Clases anteriores', sinF: 'sin fecha',
+      apuntes: 'Mis apuntes', conApuntes: 'Tienes apuntes en esta clase'
     },
     it: {
       titulo: 'Le tue lezioni',
@@ -50,7 +51,8 @@
       sinAcceso: 'Entra con la tua email per vedere le tue lezioni.',
       error: 'Non è stato possibile caricare le tue lezioni. Controlla la connessione e riprova.',
       teoria: 'Teoria', practicar: 'Esercitati', deberes: 'Compiti',
-      hoy: 'oggi', anteriores: 'Lezioni precedenti', sinF: 'senza data'
+      hoy: 'oggi', anteriores: 'Lezioni precedenti', sinF: 'senza data',
+      apuntes: 'I miei appunti', conApuntes: 'Hai appunti in questa lezione'
     },
     en: {
       titulo: 'Your classes',
@@ -70,7 +72,8 @@
       sinAcceso: 'Sign in with your email to see your classes.',
       error: 'Your classes could not be loaded. Check your connection and try again.',
       teoria: 'Theory', practicar: 'Practise', deberes: 'Homework',
-      hoy: 'today', anteriores: 'Earlier classes', sinF: 'no date'
+      hoy: 'today', anteriores: 'Earlier classes', sinF: 'no date',
+      apuntes: 'My notes', conApuntes: 'You have notes in this class'
     }
   }[track] || {};
 
@@ -106,11 +109,26 @@
            '<span class="l">' + esc(etiqueta) + '</span></div>';
   }
 
-  function render(asignadas){
+  // Clave con la que se guardan los apuntes de una clase. Las del catálogo
+  // tienen id; una rápida lleva el suyo desde que se crea, y las creadas
+  // antes de que existiera el cuaderno se apañan con fecha + título.
+  function claveApuntes(a){
+    if(!a.rapida) return a.id;
+    return a.rapida.rid || ('r-' + (a.fecha || 'sinfecha') + '-' +
+      (a.rapida.titulo || '').toLowerCase().replace(/[^a-z0-9]+/g, '').slice(0, 24));
+  }
+
+  function render(asignadas, apuntes){
+    apuntes = apuntes || {};
+    const hayApuntes = function(clave){
+      const n = apuntes[clave];
+      return !!(n && typeof n.t === 'string' && n.t.trim());
+    };
     // cada asignación: {id, fecha, nota}. La nota es de José y aquí no se usa.
     const filas = asignadas.map(a => {
       // una clase rápida se guarda entera dentro de la asignación; una del
       // catálogo solo por id, y el contenido vive en clases.js
+      const clave = claveApuntes(a);
       if(a.rapida){
         const r = a.rapida;
         const auto = [];
@@ -122,6 +140,8 @@
           titulo: r.titulo || (fechaLarga(a.fecha) || T.sinF),
           href: null,
           rapida: r,
+          clave: clave,
+          conApuntes: hayApuntes(clave),
           etiquetas: auto.concat(r.extra || []),
           fecha: a.fecha || ''
         };
@@ -135,6 +155,8 @@
       return {
         titulo: (c.titulo && (c.titulo[track] || c.titulo.es)) || a.id,
         href: c.pagina + '-' + pista + '.html',
+        clave: clave,
+        conApuntes: hayApuntes(clave),
         etiquetas: c.etiquetas || [],
         fecha: a.fecha || ''
       };
@@ -184,8 +206,12 @@
       const cuando = f.fecha ? (fechaLarga(f.fecha) || f.fecha) : T.sinF;
       const pendiente = f.fecha && f.fecha > hoy;
       const clases = 'cl-row' + (pendiente ? ' cl-prox-row' : '') + (f.rapida ? ' cl-abre' : '');
+      const marca = f.conApuntes
+        ? '<i class="ti ti-note cl-apu-marca" title="' + esc(T.conApuntes) + '" aria-label="' +
+          esc(T.conApuntes) + '"></i>'
+        : '';
       const cab = '<span class="cl-fecha">' + esc(cuando) + '</span>' +
-                  '<span class="cl-tit">' + esc(f.titulo) + '</span>' +
+                  '<span class="cl-tit">' + esc(f.titulo) + marca + '</span>' +
                   '<span class="cl-temas">' + chips + '</span>';
       if(!f.rapida){
         return '<a class="' + clases + '" href="' + esc(f.href) + '" data-busca="' + esc(busca) + '">' +
@@ -193,7 +219,7 @@
       }
       return '<div class="' + clases + '" data-busca="' + esc(busca) + '" tabindex="0" role="button">' +
              cab + '<i class="ti ti-chevron-down cl-flecha" aria-hidden="true"></i>' +
-             '<div class="cl-detalle">' + detalleRapida(f.rapida) + '</div></div>';
+             '<div class="cl-detalle">' + detalleRapida(f.rapida, f.clave) + '</div></div>';
     }).join('\n');
 
     pinta(
@@ -206,9 +232,17 @@
       '<p class="panel-empty" id="cl-vacio" style="display:none;margin-top:14px">' + esc(T.nada) + '</p>'
     );
     filtro();
+    document.querySelectorAll('[data-apu]').forEach(function(hueco){
+      window.jnApuntesCaja(hueco.dataset.apu, hueco);
+    });
     document.querySelectorAll('.cl-abre').forEach(function(el){
-      el.addEventListener('click', function(){ el.classList.toggle('abierta'); });
+      el.addEventListener('click', function(ev){
+        // escribir en los apuntes no debe plegar la clase
+        if(ev.target.closest('.cl-apuntes')) return;
+        el.classList.toggle('abierta');
+      });
       el.addEventListener('keydown', function(ev){
+        if(ev.target.closest('.cl-apuntes')) return;
         if(ev.key === 'Enter' || ev.key === ' '){ ev.preventDefault(); el.classList.toggle('abierta'); }
       });
     });
@@ -216,7 +250,7 @@
 
   // El contenido de una clase rápida: la regla de cada tema, con sus enlaces.
   // La regla vive en temas.js, así que si se mejora, mejora en todas.
-  function detalleRapida(r){
+  function detalleRapida(r, clave){
     const bloques = (r.temas || []).map(id => {
       const t = window.jnTemaPorId && window.jnTemaPorId(id);
       if(!t) return '';
@@ -238,7 +272,12 @@
     const deb = r.deberes
       ? '<div class="cl-deberes"><b>' + esc(T.deberes) + '</b><p>' + esc(r.deberes) + '</p></div>'
       : '';
-    return bloques + deb;
+    // el recuadro se rellena después de pintar: aquí solo queda el hueco
+    const apu = window.jnApuntesCaja
+      ? '<div class="cl-apuntes"><b>' + esc(T.apuntes) + '</b>' +
+        '<div class="cl-apu-caja" data-apu="' + esc(clave) + '"></div></div>'
+      : '';
+    return bloques + deb + apu;
   }
 
   function filtro(){
@@ -268,7 +307,8 @@
     (function poll(){
       if(window.jnCloudGetStudentDoc){
         window.jnCloudGetStudentDoc(email)
-          .then(doc => render((doc && Array.isArray(doc.clases)) ? doc.clases : []))
+          .then(doc => render((doc && Array.isArray(doc.clases)) ? doc.clases : [],
+                              doc && doc.apuntes))
           .catch(() => aviso(T.error));
         return;
       }
