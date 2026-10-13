@@ -127,6 +127,9 @@ body{padding:40px 24px}
 @media(max-width:900px){.rap-cols{grid-template-columns:1fr}.rap-prev{position:static}}
 @media(max-width:640px){.fi-row{grid-template-columns:1fr}.fi-fecha,.fi-tit,.fi-chips,.fi-nota{grid-column:1}.fi-fecha{grid-row:auto}.fi-quitar{grid-column:1;grid-row:auto;text-align:left}}
 
+/* La tabla era el único bloque de la página sin separación por abajo, así que
+   lo de debajo (el catálogo, o la ficha) se le quedaba pegado. */
+.table-wrap{margin-bottom:30px}
 /* Barra de acciones sobre la tabla de alumnos */
 .al-acciones{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:16px}
 .al-buscar{position:relative;flex:1;min-width:200px}
