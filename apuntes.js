@@ -15,7 +15,16 @@
 // recuadro en otro sitio (las clases rápidas, que no tienen página propia).
 
 (function(){
-  const track = localStorage.getItem('jn_track') || 'es';
+  // El idioma de ESTA página, no el de la web. Una clase para angloparlantes
+  // solo existe en inglés: si el alumno tiene la web en italiano, la clase
+  // sigue estando en inglés y el cuaderno tiene que ir a juego. Antes miraba
+  // la pista y salía «I miei appunti» sobre una página en inglés.
+  //
+  // Se saca del nombre del archivo —página-en.html— que es de donde lo saca
+  // toda la web. El atributo lang del <html> pone "es" en todas, así que no
+  // sirve para esto.
+  const porArchivo = (location.pathname.match(/-(es|it|en)\.html$/) || [])[1];
+  const track = porArchivo || localStorage.getItem('jn_track') || 'es';
   const T = {
     es: { abrir: 'Mis apuntes', titulo: 'Mis apuntes', cerrar: 'Cerrar',
           sitio: 'Escribe aquí lo que salga en clase: ejemplos, frases, dudas...',

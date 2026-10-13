@@ -165,6 +165,38 @@ a.closest(".menu-item").classList.add("active","current-section");
     });
   }
 
+  // Cuando la página no existe en el idioma que acaba de elegir: se queda
+  // donde estaba, con el resto de la web ya en su idioma, y se le explica.
+  const IDIOMAS = {
+    es: { es: 'español', it: 'italiano', en: 'inglés' },
+    it: { es: 'spagnolo', it: 'italiano', en: 'inglese' },
+    en: { es: 'Spanish', it: 'Italian', en: 'English' }
+  };
+  const AVISO = {
+    es: function(pide, hay){ return 'Esta página no existe en ' + IDIOMAS.es[pide] +
+      '. La tienes en ' + IDIOMAS.es[hay] + ', y el resto de la web ya está en ' +
+      IDIOMAS.es[pide] + '.'; },
+    it: function(pide, hay){ return 'Questa pagina non esiste in ' + IDIOMAS.it[pide] +
+      '. Ce l’hai in ' + IDIOMAS.it[hay] + ', e il resto del sito è già in ' +
+      IDIOMAS.it[pide] + '.'; },
+    en: function(pide, hay){ return 'This page is not available in ' + IDIOMAS.en[pide] +
+      '. You have it in ' + IDIOMAS.en[hay] + ', and the rest of the site is now in ' +
+      IDIOMAS.en[pide] + '.'; }
+  };
+
+  function avisaFaltaIdioma(pide, hay){
+    const zona = document.querySelector('.language-selector');
+    if(!zona) return;
+    const viejo = document.querySelector('.track-aviso');
+    if(viejo) viejo.remove();
+    const caja = document.createElement('p');
+    caja.className = 'track-aviso';
+    caja.setAttribute('role', 'status');
+    caja.textContent = (AVISO[pide] || AVISO.es)(pide, hay);
+    zona.parentNode.insertBefore(caja, zona.nextSibling);
+    setTimeout(function(){ caja.remove(); }, 9000);
+  }
+
   document.addEventListener('click', function(e){
     const trackLink = e.target.closest('.track-link');
     if(trackLink){
@@ -182,7 +214,17 @@ a.closest(".menu-item").classList.add("active","current-section");
       const current = location.pathname.split('/').pop() || '';
       const m = current.match(/^(.+)-(it|en|es)\.html$/);
       if(m && m[2] !== t){
-        window.location.href = m[1] + '-' + t + '.html';
+        // No todas las páginas existen en los tres idiomas: las clases para
+        // angloparlantes solo en inglés, los false friends no en español.
+        // Antes se saltaba a ciegas y el alumno acababa en un 404.
+        const destino = m[1] + '-' + t + '.html';
+        fetch(destino, { method: 'HEAD' })
+          .then(function(r){
+            if(r.ok) window.location.href = destino;
+            else avisaFaltaIdioma(t, m[2]);
+          })
+          // sin conexión no podemos comprobarlo: se intenta igual, como antes
+          .catch(function(){ window.location.href = destino; });
       }
       return;
     }
