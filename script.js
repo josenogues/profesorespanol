@@ -656,7 +656,12 @@ a.closest(".menu-item").classList.add("active","current-section");
           fuera:'Ese email no está en la lista. Escribe a José si crees que es un error.',
           nocomp:'No se ha podido comprobar el acceso. Revisa tu conexión y vuelve a intentarlo.',
           nomanda:'No se ha podido mandar el enlace. Inténtalo de nuevo en un momento.',
-          caduco:'Ese enlace ya no vale (se usan una sola vez y caducan). Pide uno nuevo.' },
+          caduco:'Ese enlace ya no vale (se usan una sola vez y caducan). Pide uno nuevo.',
+          confirma:'Confirma tu email',
+          confirmap:'Has abierto el enlace en otro navegador, así que no sé de quién es. Escribe el mismo email al que te lo mandé y entras.',
+          confirmab:'Entrar',
+          nocuadra:'Ese no es el email al que mandé este enlace. Escribe el mismo, o pide uno nuevo.',
+          enotro:'Si puedes, ábrelo en este mismo navegador: si lo abres en otro te pediré el email otra vez.' },
     it: { titulo:'Accesso per studenti',
           pide:'Scrivi l’email con cui prenoti le lezioni. Ti mando un link per entrare.',
           boton:'Mandami il link', mandando:'Invio...',
@@ -667,7 +672,12 @@ a.closest(".menu-item").classList.add("active","current-section");
           fuera:'Questa email non è in lista. Scrivi a José se pensi che sia un errore.',
           nocomp:'Non si è potuto verificare l’accesso. Controlla la connessione e riprova.',
           nomanda:'Non si è potuto mandare il link. Riprova tra un momento.',
-          caduco:'Quel link non vale più (si usano una volta sola e scadono). Chiedine uno nuovo.' },
+          caduco:'Quel link non vale più (si usano una volta sola e scadono). Chiedine uno nuovo.',
+          confirma:'Conferma la tua email',
+          confirmap:'Hai aperto il link in un altro browser, quindi non so di chi è. Scrivi la stessa email a cui te l’ho mandato ed entri.',
+          confirmab:'Entra',
+          nocuadra:'Non è l’email a cui ho mandato questo link. Scrivi la stessa, o chiedine uno nuovo.',
+          enotro:'Se puoi, aprilo in questo stesso browser: se lo apri in un altro ti richiederò l’email.' },
     en: { titulo:'Student access',
           pide:'Enter the email you book your lessons with. I’ll send you a link to get in.',
           boton:'Send me the link', mandando:'Sending...',
@@ -678,7 +688,12 @@ a.closest(".menu-item").classList.add("active","current-section");
           fuera:'That email isn’t on the list. Write to José if you think this is a mistake.',
           nocomp:'Couldn’t check your access. Check your connection and try again.',
           nomanda:'Couldn’t send the link. Try again in a moment.',
-          caduco:'That link no longer works (they’re single-use and they expire). Ask for a new one.' }
+          caduco:'That link no longer works (they’re single-use and they expire). Ask for a new one.',
+          confirma:'Confirm your email',
+          confirmap:'You opened the link in a different browser, so I don’t know whose it is. Enter the same email I sent it to and you’re in.',
+          confirmab:'Come in',
+          nocuadra:'That isn’t the email I sent this link to. Enter the same one, or ask for a new link.',
+          enotro:'If you can, open it in this same browser: if you open it elsewhere I’ll ask for your email again.' }
   };
   const t = T[localStorage.getItem('jn_track')] || T.es;
 
@@ -741,8 +756,40 @@ a.closest(".menu-item").classList.add("active","current-section");
     cuerpo.innerHTML =
       '<h3>' + esc(t.mirado) + '</h3>' +
       '<p>' + t.enviado.replace('%s', esc(email)) + '</p>' +
+      '<p style="font-size:13.5px">' + esc(t.enotro) + '</p>' +
       '<button class="access-gate-btn access-gate-otro">' + esc(t.otro) + '</button>';
     cuerpo.querySelector('.access-gate-otro').addEventListener('click', () => pidePaso(''));
+  }
+
+  // Cuando el enlace se abre en un navegador distinto del que lo pidió, hay
+  // que confirmar de quién es. Antes lo preguntaba window.prompt: una
+  // ventanita sin estilo, siempre en español y que parece de una web
+  // sospechosa justo en el momento de entrar.
+  function confirmaPaso(aviso){
+    cuerpo.innerHTML =
+      '<h3>' + esc(t.confirma) + '</h3>' +
+      '<p>' + esc(t.confirmap) + '</p>' +
+      '<input type="email" class="access-gate-input" placeholder="tu@email.com" autocomplete="email">' +
+      '<button class="access-gate-btn">' + esc(t.confirmab) + '</button>' +
+      '<p class="access-gate-error"></p>';
+    input = cuerpo.querySelector('.access-gate-input');
+    btn = cuerpo.querySelector('.access-gate-btn');
+    errorEl = cuerpo.querySelector('.access-gate-error');
+    if(aviso) errorEl.textContent = aviso;
+    function completa(){
+      const email = (input.value || '').trim().toLowerCase();
+      if(!email || email.indexOf('@') < 0){ errorEl.textContent = t.vacio; return; }
+      btn.disabled = true;
+      window.jnCloudEntraConEnlace(email).then(function(){
+        return compruebaFicha(email);
+      }, function(){
+        // el enlace ya se ha gastado al fallar: hay que pedir otro
+        pidePaso(t.nocuadra);
+      });
+    }
+    btn.addEventListener('click', completa);
+    input.addEventListener('keydown', function(e){ if(e.key === 'Enter') completa(); });
+    input.focus();
   }
 
   function manda(){
@@ -774,6 +821,14 @@ a.closest(".menu-item").classList.add("active","current-section");
     abrePuerta(aviso);
   }
 
+  function compruebaFicha(email){
+    return window.jnCloudGetStudentDoc(email).then(function(ficha){
+      if(ficha && ficha.activo !== false){ dentro(email); return; }
+      // ha entrado con un email que no es de alumno, o está de baja
+      return window.jnCloudSal().then(function(){ fuera(t.fuera); });
+    });
+  }
+
   // La pista de la última vez: si este navegador ya entró, la página se ve
   // enseguida y la comprobación va por detrás. Si no, la puerta sale cerrada
   // desde el principio. Así no parpadea ni se enseña el contenido a quien no
@@ -788,16 +843,18 @@ a.closest(".menu-item").classList.add("active","current-section");
         fuera(t.caduco);
         return;
       }
+      if(window.jnCloudPideEmail){
+        // hay enlace del correo, pero abierto en otro navegador
+        abrePuerta('');
+        confirmaPaso('');
+        return;
+      }
       if(!email){
         // no ha entrado nadie: la puerta, sin tratarlo como un error
         if(pista) fuera('');
         return;
       }
-      return window.jnCloudGetStudentDoc(email).then(function(ficha){
-        if(ficha && ficha.activo !== false){ dentro(email); return; }
-        // ha entrado con un email que no es de alumno, o está de baja
-        return window.jnCloudSal().then(function(){ fuera(t.fuera); });
-      });
+      return compruebaFicha(email);
     })
     .catch(function(){
       // No se ha podido preguntar: sin red, Firebase bloqueado... Al que ya

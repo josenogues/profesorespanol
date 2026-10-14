@@ -187,6 +187,42 @@ with sync_playwright() as p:
         print("   %s: %s" % (track, txt.split("\n")[1][:46]))
         if not ok: err.append("la puerta no sale en %s" % track)
         c.close()
+
+    # ── 9. el enlace abierto en otro navegador ──
+    # Es el caso normal: pides el enlace en el ordenador y abres el correo en
+    # el móvil. Firebase exige el email otra vez (interceptar el enlace no
+    # basta). Se simula borrando el email apuntado antes de abrir el enlace.
+    print("\n═══ enlace abierto en otro navegador ═══")
+    for email_confirma, espera in (("anna@x.com", "entra"), ("otro@x.com", "no entra")):
+        c = nuevo(br, True)
+        pg = c.new_page()
+        ventanitas = []
+        pg.on("dialog", lambda d: (ventanitas.append(d.message), d.dismiss()))
+        pg.on("pageerror", lambda e: err.append("JS: %s" % e))
+        pg.goto(B + PAG, wait_until="domcontentloaded"); pg.wait_for_timeout(900)
+        pg.fill(".access-gate-input", "anna@x.com")
+        pg.click(".access-gate-btn"); pg.wait_for_timeout(700)
+        # «otro navegador»: ya no sabemos a quién se lo mandamos
+        pg.evaluate("localStorage.removeItem('jn_email_pendiente')")
+        pg.goto(B + PAG + ENLACE_FALSO, wait_until="domcontentloaded")
+        pg.wait_for_timeout(1800)
+        if ventanitas:
+            err.append("sale una ventanita del navegador: %s" % ventanitas[0][:40])
+        titulo = pg.locator(".access-gate-modal h3").inner_text().strip()
+        print("   pantalla al volver:", titulo)
+        if "onfirma" not in titulo:
+            err.append("no pide confirmar el email: %r" % titulo)
+        pg.fill(".access-gate-input", email_confirma)
+        pg.click(".access-gate-btn"); pg.wait_for_timeout(1800)
+        dentro = not pg.locator(".access-gate-overlay").count()
+        print("   confirmando con %-12s -> %s" % (email_confirma, "entra" if dentro else "no entra"))
+        if (dentro and espera != "entra") or (not dentro and espera == "entra"):
+            err.append("confirmando con %s: esperaba %s" % (email_confirma, espera))
+        if not dentro:
+            print("   dice:", pg.locator(".access-gate-error").inner_text().strip()[:54])
+        if ventanitas:
+            err.append("ventanita del navegador en la confirmación")
+        c.close()
     br.close()
 
 print()
