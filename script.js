@@ -163,6 +163,13 @@ a.closest(".menu-item").classList.add("active","current-section");
     document.querySelectorAll('.hide-on-es').forEach(el=>{
       el.style.display = (t === 'es') ? 'none' : '';
     });
+    // Bloques largos escritos tres veces, uno por idioma: se enseña el que
+    // toca y se esconden los otros dos. Para textos que no caben en un
+    // atributo data-es/data-it/data-en, como la política de privacidad.
+    // Sin idioma elegido todavía, se queda el español.
+    document.querySelectorAll('.idioma-bloque').forEach(el=>{
+      el.style.display = (el.dataset.idioma === (t || 'es')) ? '' : 'none';
+    });
   }
 
   // Cuando la página no existe en el idioma que acaba de elegir: se queda
