@@ -220,6 +220,11 @@ footer{text-align:center;padding:30px;color:var(--muted);border-top:1px solid va
 .access-gate-btn:hover{background:var(--primary-dark)}
 .access-gate-btn:disabled{opacity:.6;cursor:default}
 .access-gate-error{color:#a3302d;font-size:13.5px;margin-top:10px;min-height:16px}
+/* El email al que se ha mandado el enlace, para que vea si se ha colado una letra */
+.access-gate-modal p b{color:var(--text);font-weight:700;word-break:break-all}
+/* «usar otro email»: segunda opción, no la principal */
+.access-gate-otro{background:transparent;color:var(--muted);border:1px solid var(--border);font-weight:600}
+.access-gate-otro:hover{background:var(--tint);color:var(--text)}
 
 .logo-img{display:block;height:84px;width:auto;margin:0 auto}
 .logo-header{display:flex;justify-content:center;margin:0 0 22px;padding:0}

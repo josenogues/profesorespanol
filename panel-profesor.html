@@ -10,7 +10,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
 <link rel="icon" type="image/png" href="favicon.png">
-<link rel="stylesheet" href="styles.css?v=20261014p">
+<link rel="stylesheet" href="styles.css?v=20261014r">
 <script>if(localStorage.getItem('jn_theme')==='dark')document.documentElement.setAttribute('data-theme','dark');</script>
 <style>
 body{padding:40px 24px}
@@ -185,9 +185,10 @@ tbody tr.al-fila.baja{opacity:.55}
 <div class="panel-gate-box">
 <i class="ti ti-lock" style="font-size:32px;color:var(--primary)"></i>
 <h3 style="margin-top:10px">Panel del profesor</h3>
-<p>Solo para José. Escribe la contraseña para entrar.</p>
-<input type="password" class="panel-gate-input" id="panel-gate-input" placeholder="Contraseña" autocomplete="off">
-<button class="button button-primary" id="panel-gate-btn" style="width:100%">Entrar</button>
+<p id="panel-gate-texto">Escribe tu email y te mando un enlace para entrar.</p>
+<input type="email" class="panel-gate-input" id="panel-gate-input" placeholder="tu@email.com" autocomplete="email">
+<button class="button button-primary" id="panel-gate-btn" style="width:100%">Mandarme el enlace</button>
+<button class="button button-secondary button-sm" id="panel-gate-salir" style="width:100%;margin-top:10px;display:none">Entrar con otro email</button>
 <p class="panel-gate-error" id="panel-gate-error"></p>
 </div>
 </div>
@@ -360,21 +361,30 @@ Si solo quieres que deje de entrar, ponle «dado de baja» ahí arriba.</p></div
 </div>
 
 <script>
-// Puerta de contraseña: script clásico (no módulo) a propósito, para que
-// funcione siempre aunque Firebase tarde en cargar o no cargue.
+// Puerta del panel. Va en un script clásico y no en un módulo porque tiene
+// que poder enseñar un aviso aunque Firebase no llegue a cargar nunca.
+//
+// Aquí había una contraseña escrita en el código fuente de una página
+// pública: cualquiera que mirase el fuente la tenía, y además no servía de
+// nada ante Firebase, porque la sesión era anónima y las reglas no podían
+// distinguir a José de un alumno. Ahora entra con su email, igual que ellos.
+//
+// Lo que de verdad protege los datos son las reglas de Firestore, que dan
+// permiso sobre toda la colección solo a este email. Esta ventanita es solo
+// para no enseñar el panel a quien no toca.
 (function(){
-  var PANEL_PASSWORD = "Nogues2026";
-  var UNLOCK_KEY = "jn_panel_unlocked";
+  var PROFESOR = "ncjosemaria@gmail.com";
   var gate = document.getElementById('panel-gate');
   var gateInput = document.getElementById('panel-gate-input');
   var gateBtn = document.getElementById('panel-gate-btn');
+  var gateSalir = document.getElementById('panel-gate-salir');
+  var gateTexto = document.getElementById('panel-gate-texto');
   var gateError = document.getElementById('panel-gate-error');
   var content = document.getElementById('panel-content');
 
-  function unlock(){
+  function abre(){
     gate.style.display = 'none';
     content.style.display = 'block';
-    sessionStorage.setItem(UNLOCK_KEY, 'true');
     document.dispatchEvent(new CustomEvent('jn-panel-unlocked'));
     // Si firebase-panel.js no llega a cargar (bloqueado, sin red...) nunca
     // marca window.jnPanelHandled, así que avisamos en vez de dejar
@@ -386,23 +396,57 @@ Si solo quieres que deje de entrar, ponle «dado de baja» ahí arriba.</p></div
     }, 12000);
   }
 
-  function tryUnlock(){
-    if(gateInput.value === PANEL_PASSWORD){
+  function esperaNube(ms){
+    var desde = Date.now();
+    return new Promise(function(ok, mal){
+      (function poll(){
+        if(window.jnCloudReady && window.jnCloudEnviaEnlace) return ok();
+        if(Date.now() - desde > ms) return mal(new Error('Firebase no disponible'));
+        setTimeout(poll, 50);
+      })();
+    });
+  }
+
+  function manda(){
+    var email = (gateInput.value || '').trim().toLowerCase();
+    if(!email || email.indexOf('@') < 0){ gateError.textContent = 'Escribe tu email.'; return; }
+    gateBtn.disabled = true;
+    gateBtn.textContent = 'Mandando...';
+    window.jnCloudEnviaEnlace(email).then(function(){
+      gateTexto.innerHTML = 'Te he mandado un enlace a <b>' + email.replace(/[&<>"]/g, '') +
+        '</b>. Ábrelo desde este mismo navegador y entras.';
+      gateInput.style.display = 'none';
+      gateBtn.style.display = 'none';
       gateError.textContent = '';
-      unlock();
-    } else {
-      gateError.textContent = 'Contraseña incorrecta.';
-    }
+    }, function(){
+      gateError.textContent = 'No se ha podido mandar el enlace. Inténtalo otra vez.';
+      gateBtn.disabled = false;
+      gateBtn.textContent = 'Mandarme el enlace';
+    });
   }
 
-  gateBtn.addEventListener('click', tryUnlock);
-  gateInput.addEventListener('keydown', function(e){ if(e.key === 'Enter') tryUnlock(); });
+  gateBtn.addEventListener('click', manda);
+  gateInput.addEventListener('keydown', function(e){ if(e.key === 'Enter') manda(); });
+  gateSalir.addEventListener('click', function(){
+    window.jnCloudSal().then(function(){ location.reload(); });
+  });
 
-  if(sessionStorage.getItem(UNLOCK_KEY) === 'true'){
-    unlock();
-  } else {
-    gateInput.focus();
-  }
+  gateInput.focus();
+  esperaNube(10000)
+    .then(function(){ return window.jnCloudReady; })
+    .then(function(email){
+      if(email === PROFESOR){ abre(); return; }
+      if(email){
+        // ha entrado, pero con un email que no es el del profesor
+        gateTexto.textContent = 'Has entrado como ' + email + ', y este panel no es para ese email.';
+        gateInput.style.display = 'none';
+        gateBtn.style.display = 'none';
+        gateSalir.style.display = 'block';
+      }
+    })
+    .catch(function(){
+      gateError.textContent = 'No se ha podido conectar con Firebase. Revisa tu conexión.';
+    });
 })();
 
 // Generador de enlaces de deberes. Los cursos se leen de la propia web
@@ -485,6 +529,7 @@ Si solo quieres que deje de entrar, ponle «dado de baja» ahí arriba.</p></div
 </script>
 <script src="clases.js?v=20261014h"></script>
 <script src="temas.js?v=20261014h"></script>
-<script type="module" src="firebase-panel.js?v=20261014m"></script>
+<script type="module" src="firebase-sync.js?v=20261014r"></script>
+<script type="module" src="firebase-panel.js?v=20261014r"></script>
 </body>
 </html>

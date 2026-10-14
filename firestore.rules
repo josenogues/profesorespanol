@@ -1,0 +1,76 @@
+// Reglas de seguridad de Firestore.
+//
+// Esto es lo que de verdad protege los datos de los alumnos: no la puerta de
+// la web, que es solo una ventanita, sino esto, que lo comprueba el servidor
+// de Google en cada lectura y cada escritura.
+//
+// Para ponerlas en marcha: consola de Firebase > Firestore Database >
+// pestaña «Reglas» > pegar esto > Publicar.
+//
+// ANTES de publicarlas tiene que estar funcionando la entrada por enlace de
+// correo. Con la sesión anónima de antes, request.auth.token.email está
+// vacío, así que estas reglas dejarían fuera a todo el mundo, alumnos y
+// profesor incluidos.
+
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // El email del profesor. Es el único que puede ver la lista entera, dar
+    // de alta, dar de baja y borrar.
+    function profesor() {
+      return 'ncjosemaria@gmail.com';
+    }
+
+    // Quién pregunta. Se exige email_verified porque al entrar por el enlace
+    // del correo Firebase lo marca: es la prueba de que esa persona abre de
+    // verdad ese buzón.
+    function yo() {
+      return request.auth != null
+          && request.auth.token.email != null
+          && request.auth.token.email_verified == true
+          ? request.auth.token.email.lower() : '';
+    }
+
+    function soyElProfesor() {
+      return yo() == profesor();
+    }
+
+    function esMiFicha(email) {
+      return yo() != '' && yo() == email.lower();
+    }
+
+    // Lo que un alumno puede tocar de su propia ficha: su progreso y sus
+    // apuntes, y nada más. En particular NO puede tocar «activo», que es lo
+    // que decide si entra o no: si pudiera, alguien dado de baja se daría de
+    // alta solo desde la consola del navegador. Tampoco su nombre, su nivel
+    // ni las clases que le has asignado: eso lo pones tú.
+    function soloSuProgreso() {
+      return request.resource.data.diff(resource.data).affectedKeys().hasOnly([
+        'email', 'updatedAt',
+        'exerciseCount', 'levelStatus', 'examPending',
+        'courseProgress', 'courseTotals',
+        'visitCount', 'lastVisitDate',
+        'apuntes'
+      ]);
+    }
+
+    match /students/{email} {
+      // leer la ficha: la suya, o el profesor cualquiera
+      allow get: if esMiFicha(email) || soyElProfesor();
+      // la lista entera, solo el profesor: esto es lo que impide que un
+      // alumno se descargue los emails y los apuntes de los demás
+      allow list: if soyElProfesor();
+      // dar de alta y borrar, solo el profesor
+      allow create, delete: if soyElProfesor();
+      // escribir: el profesor lo que quiera; el alumno, solo lo suyo
+      allow update: if soyElProfesor() || (esMiFicha(email) && soloSuProgreso());
+    }
+
+    // Todo lo demás, cerrado.
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

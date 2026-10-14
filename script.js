@@ -630,113 +630,181 @@ a.closest(".menu-item").classList.add("active","current-section");
 })();
 
 // --- Puerta de acceso para alumnos ---
-// Quién puede entrar es su ficha en Firebase (colección "students"): entra
-// quien tiene ficha y no está dado de baja. Se gestiona desde el panel del
-// profesor, en la misma tabla donde se ve su progreso.
+// Se entra con un enlace por correo: el alumno escribe su email, le llega un
+// enlace, lo pulsa y vuelve aquí ya dentro. Lo hace todo firebase-sync.js;
+// aquí solo está la ventanita y la decisión de dejar pasar o no.
 //
-// Antes la lista era un Google Sheet publicado como CSV. Se cambió por dos
-// razones: había que mantenerla aparte y no sabía quién era cada email, y
-// Google contesta 200 con una página de error cuando dejas de publicar la
-// hoja, lo que podía echar a todos los alumnos de golpe. La mudanza ya está
-// hecha, así que la hoja no pinta nada aquí.
+// Quién puede entrar es su ficha en Firebase: tiene ficha y no está dado de
+// baja. Antes era una hoja de Google, y antes de eso bastaba con escribir un
+// email de la lista — ahora hay que poder abrir ese correo.
 (function(){
   const ACCESS_GATE_ENABLED = true; // ponlo en false para abrir la web a todos
   const ACCESS_KEY = 'jn_access_granted';
 
   if(!ACCESS_GATE_ENABLED) return;
 
-  // firebase-sync.js es un módulo y se carga después de este script clásico,
-  // así que se espera (con límite) a que window.jnCloud* aparezca.
+  // Los textos, en las tres pistas. La puerta sale antes que nada, así que no
+  // puede depender del sistema de i18n del resto de la web.
+  const T = {
+    es: { titulo:'Acceso para alumnos',
+          pide:'Escribe el email con el que reservas tus clases. Te mando un enlace para entrar.',
+          boton:'Mandarme el enlace', mandando:'Mandando...',
+          vacio:'Escribe tu email.',
+          mirado:'Mira tu correo',
+          enviado:'Te he mandado un enlace a <b>%s</b>. Ábrelo y entras directamente, sin contraseñas. Si no lo ves, mira en spam.',
+          otro:'Usar otro email',
+          fuera:'Ese email no está en la lista. Escribe a José si crees que es un error.',
+          nocomp:'No se ha podido comprobar el acceso. Revisa tu conexión y vuelve a intentarlo.',
+          nomanda:'No se ha podido mandar el enlace. Inténtalo de nuevo en un momento.',
+          caduco:'Ese enlace ya no vale (se usan una sola vez y caducan). Pide uno nuevo.' },
+    it: { titulo:'Accesso per studenti',
+          pide:'Scrivi l’email con cui prenoti le lezioni. Ti mando un link per entrare.',
+          boton:'Mandami il link', mandando:'Invio...',
+          vacio:'Scrivi la tua email.',
+          mirado:'Guarda la tua posta',
+          enviado:'Ti ho mandato un link a <b>%s</b>. Aprilo ed entri direttamente, senza password. Se non lo vedi, guarda nello spam.',
+          otro:'Usare un’altra email',
+          fuera:'Questa email non è in lista. Scrivi a José se pensi che sia un errore.',
+          nocomp:'Non si è potuto verificare l’accesso. Controlla la connessione e riprova.',
+          nomanda:'Non si è potuto mandare il link. Riprova tra un momento.',
+          caduco:'Quel link non vale più (si usano una volta sola e scadono). Chiedine uno nuovo.' },
+    en: { titulo:'Student access',
+          pide:'Enter the email you book your lessons with. I’ll send you a link to get in.',
+          boton:'Send me the link', mandando:'Sending...',
+          vacio:'Enter your email.',
+          mirado:'Check your inbox',
+          enviado:'I’ve sent a link to <b>%s</b>. Open it and you’re straight in, no password. If you can’t see it, check your spam.',
+          otro:'Use a different email',
+          fuera:'That email isn’t on the list. Write to José if you think this is a mistake.',
+          nocomp:'Couldn’t check your access. Check your connection and try again.',
+          nomanda:'Couldn’t send the link. Try again in a moment.',
+          caduco:'That link no longer works (they’re single-use and they expire). Ask for a new one.' }
+  };
+  const t = T[localStorage.getItem('jn_track')] || T.es;
+
+  function esc(s){
+    return String(s == null ? '' : s).replace(/[&"<>]/g, c => ({'&':'&amp;','"':'&quot;','<':'&lt;','>':'&gt;'}[c]));
+  }
+
+  // firebase-sync.js es un módulo y se carga después de este script clásico.
   function esperaNube(ms){
     const desde = Date.now();
     return new Promise(function(ok, mal){
       (function poll(){
-        if(window.jnCloudGetStudentDoc) return ok();
+        if(window.jnCloudReady && window.jnCloudEnviaEnlace) return ok();
         if(Date.now() - desde > ms) return mal(new Error('Firebase no disponible'));
         setTimeout(poll, 50);
       })();
     });
   }
 
-  // Resuelve con su ficha si puede entrar. Distingue a propósito dos maneras
-  // de no entrar, porque no se tratan igual:
-  //   - Firebase contesta y no tiene ficha, o está de baja  → err.fuera
-  //   - no se ha podido preguntar (sin red, bloqueado...)   → sin err.fuera
-  function compruebaAcceso(email){
-    return esperaNube(8000)
-      .then(function(){ return window.jnCloudGetStudentDoc(email); })
-      .then(function(ficha){
-        if(ficha && ficha.activo !== false) return ficha;
-        const err = new Error('sin acceso');
-        err.fuera = true;
-        throw err;
-      });
+  // ───────────────── la ventanita ─────────────────
+  let overlay = null, input = null, btn = null, errorEl = null, cuerpo = null;
+
+  function abrePuerta(aviso){
+    if(!overlay){
+      overlay = document.createElement('div');
+      overlay.className = 'access-gate-overlay';
+      overlay.innerHTML =
+        '<div class="access-gate-modal">' +
+          '<div class="logo-mark">🇪🇸 Aprende Español</div>' +
+          '<div class="access-gate-body"></div>' +
+        '</div>';
+      document.body.appendChild(overlay);
+      cuerpo = overlay.querySelector('.access-gate-body');
+    }
+    pidePaso(aviso);
   }
 
-  // El permiso se guardaba para siempre en el navegador y no se volvía a
-  // comprobar: dar de baja a alguien no lo echaba del portátil donde ya
-  // había entrado. Ahora se revisa por detrás en cada carga.
-  function revisarPermiso(email){
-    compruebaAcceso(email).catch(function(err){
-      // Solo se echa a alguien cuando Firebase CONTESTA y dice que no está.
-      // Sin red, o con Firebase bloqueado, no se toca nada.
-      if(!err || !err.fuera) return;
-      localStorage.removeItem(ACCESS_KEY);
-      localStorage.removeItem('jn_student_email');
-      location.reload();
+  function cierraPuerta(){
+    if(overlay && overlay.parentNode) overlay.parentNode.removeChild(overlay);
+    overlay = null;
+  }
+
+  function pidePaso(aviso){
+    cuerpo.innerHTML =
+      '<h3>' + esc(t.titulo) + '</h3>' +
+      '<p>' + esc(t.pide) + '</p>' +
+      '<input type="email" class="access-gate-input" placeholder="tu@email.com" autocomplete="email">' +
+      '<button class="access-gate-btn">' + esc(t.boton) + '</button>' +
+      '<p class="access-gate-error"></p>';
+    input = cuerpo.querySelector('.access-gate-input');
+    btn = cuerpo.querySelector('.access-gate-btn');
+    errorEl = cuerpo.querySelector('.access-gate-error');
+    if(aviso) errorEl.textContent = aviso;
+    btn.addEventListener('click', manda);
+    input.addEventListener('keydown', e => { if(e.key === 'Enter') manda(); });
+    input.focus();
+  }
+
+  function esperaPaso(email){
+    cuerpo.innerHTML =
+      '<h3>' + esc(t.mirado) + '</h3>' +
+      '<p>' + t.enviado.replace('%s', esc(email)) + '</p>' +
+      '<button class="access-gate-btn access-gate-otro">' + esc(t.otro) + '</button>';
+    cuerpo.querySelector('.access-gate-otro').addEventListener('click', () => pidePaso(''));
+  }
+
+  function manda(){
+    const email = (input.value || '').trim().toLowerCase();
+    if(!email || email.indexOf('@') < 0){ errorEl.textContent = t.vacio; return; }
+    btn.disabled = true;
+    btn.textContent = t.mandando;
+    window.jnCloudEnviaEnlace(email).then(function(){
+      esperaPaso(email);
+    }, function(){
+      errorEl.textContent = t.nomanda;
+      btn.disabled = false;
+      btn.textContent = t.boton;
     });
   }
 
-  const yaDentro = localStorage.getItem(ACCESS_KEY) === 'true' && localStorage.getItem('jn_student_email');
-  if(yaDentro){
-    const email = localStorage.getItem('jn_student_email');
+  // ───────────────── dejar pasar o no ─────────────────
+  function dentro(email){
+    localStorage.setItem(ACCESS_KEY, 'true');
+    localStorage.setItem('jn_student_email', email);
+    cierraPuerta();
     jnRegisterVisit(email);
-    revisarPermiso(email);   // por detrás: la página ya se ve, no espera a Google
-    return;
+    document.dispatchEvent(new CustomEvent('jn-access-granted'));
   }
 
-  const overlay = document.createElement('div');
-  overlay.className = 'access-gate-overlay';
-  overlay.innerHTML = `
-    <div class="access-gate-modal">
-      <div class="logo-mark">🇪🇸 Aprende Español</div>
-      <h3>Acceso para alumnos</h3>
-      <p>Escribe el email con el que reservas tus clases para entrar.</p>
-      <input type="email" class="access-gate-input" placeholder="tu@email.com" autocomplete="email">
-      <button class="access-gate-btn">Entrar</button>
-      <p class="access-gate-error"></p>
-    </div>`;
-  document.body.appendChild(overlay);
+  function fuera(aviso){
+    localStorage.removeItem(ACCESS_KEY);
+    localStorage.removeItem('jn_student_email');
+    abrePuerta(aviso);
+  }
 
-  const input = overlay.querySelector('.access-gate-input');
-  const btn = overlay.querySelector('.access-gate-btn');
-  const errorEl = overlay.querySelector('.access-gate-error');
+  // La pista de la última vez: si este navegador ya entró, la página se ve
+  // enseguida y la comprobación va por detrás. Si no, la puerta sale cerrada
+  // desde el principio. Así no parpadea ni se enseña el contenido a quien no
+  // debe verlo.
+  const pista = localStorage.getItem(ACCESS_KEY) === 'true' && localStorage.getItem('jn_student_email');
+  if(!pista) abrePuerta('');
 
-  function attempt(){
-    const email = input.value.trim().toLowerCase();
-    if(!email){ errorEl.textContent = 'Escribe tu email.'; return; }
-
-    btn.disabled = true;
-    btn.textContent = 'Comprobando...';
-    compruebaAcceso(email)
-      .then(function(){
-        localStorage.setItem(ACCESS_KEY, 'true');
-        localStorage.setItem('jn_student_email', email);
-        jnRegisterVisit(email);
-        document.body.removeChild(overlay);
-        document.dispatchEvent(new CustomEvent('jn-access-granted'));
-      })
-      .catch(function(err){
-        errorEl.textContent = (err && err.fuera)
-          ? 'Ese email no está en la lista. Escribe a José si crees que es un error.'
-          : 'No se ha podido comprobar el acceso. Revisa tu conexión y vuelve a intentarlo.';
-        btn.disabled = false;
-        btn.textContent = 'Entrar';
+  esperaNube(10000)
+    .then(function(){ return window.jnCloudReady; })
+    .then(function(email){
+      if(window.jnCloudFalloEnlace && !email){
+        fuera(t.caduco);
+        return;
+      }
+      if(!email){
+        // no ha entrado nadie: la puerta, sin tratarlo como un error
+        if(pista) fuera('');
+        return;
+      }
+      return window.jnCloudGetStudentDoc(email).then(function(ficha){
+        if(ficha && ficha.activo !== false){ dentro(email); return; }
+        // ha entrado con un email que no es de alumno, o está de baja
+        return window.jnCloudSal().then(function(){ fuera(t.fuera); });
       });
-  }
-
-  btn.addEventListener('click', attempt);
-  input.addEventListener('keydown', e => { if(e.key === 'Enter') attempt(); });
+    })
+    .catch(function(){
+      // No se ha podido preguntar: sin red, Firebase bloqueado... Al que ya
+      // estaba dentro NO se le echa; al que llega de nuevas se le dice que no
+      // se sabe, en vez de dejarle pasar.
+      if(!pista) abrePuerta(t.nocomp);
+    });
 })();
 
 // --- Hub de ejercicios: elige materia, luego subtema, o mezcla al azar de todo ---

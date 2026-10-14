@@ -1,11 +1,15 @@
 // Panel del profesor: muestra el progreso de los alumnos leyendo la
-// colección "students" de Firestore. La puerta de contraseña vive en un
-// script clásico dentro de panel-profesor.html (para que funcione aunque
-// este módulo tarde en cargar o Firebase no esté disponible) y avisa a
-// este módulo mediante el evento "jn-panel-unlocked".
+// colección "students" de Firestore. La puerta vive en un script clásico
+// dentro de panel-profesor.html (para que pueda avisar aunque este módulo
+// tarde en cargar o Firebase no esté disponible) y, cuando José ha entrado
+// con su enlace del correo, avisa aquí con el evento "jn-panel-unlocked".
+//
+// Quién entra lo decide firebase-sync.js, que es el mismo que usan los
+// alumnos. Aquí no se vuelve a iniciar sesión: antes se llamaba a
+// signInAnonymously, y ahora eso tiraría abajo la sesión con la que el
+// profesor acaba de entrar y dejaría al panel sin permisos.
 
 import { app } from "./firebase-init.js";
-import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
 import { getFirestore, collection, getDocs, doc, setDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 
 function esc(s){
@@ -164,8 +168,7 @@ async function loadStudents(){
   bodyEl.innerHTML = '';
   refreshBtn.disabled = true;
   try {
-    const auth = getAuth(app);
-    await withTimeout(signInAnonymously(auth), 8000, 'auth');
+    await withTimeout(window.jnCloudReady, 10000, 'auth');
     const db = getFirestore(app);
     const snap = await withTimeout(getDocs(collection(db, 'students')), 10000, 'getDocs');
 
@@ -885,14 +888,12 @@ function autoLoad(){
   loadStudents();
 }
 
+// La puerta avisa cuando Firebase confirma que ha entrado el profesor. Eso
+// pasa siempre después de que los módulos se hayan cargado (hay que esperar
+// a Firebase), así que aquí ya estamos escuchando: ya no hace falta mirar
+// también sessionStorage, como cuando la puerta era una contraseña y se
+// abría antes de que este módulo existiera.
 document.addEventListener('jn-panel-unlocked', autoLoad, { once: true });
-
-// La puerta vive en un <script> clásico, que se ejecuta ANTES que este módulo
-// (los módulos van diferidos). Al recargar con la sesión ya desbloqueada, la
-// puerta lanza "jn-panel-unlocked" cuando aquí todavía no estábamos
-// escuchando, y el panel se quedaba en "Cargando..." para siempre. Por eso
-// comprobamos también el estado directamente.
-if(sessionStorage.getItem('jn_panel_unlocked') === 'true') autoLoad();
 
 pintaFiltros();
 pintaCatalogo();

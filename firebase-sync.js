@@ -1,13 +1,21 @@
-// Sincronización de progreso (examen de nivel, niveles superados, contador de
-// ejercicios) contra Firebase, usando el email ya validado por la puerta de
-// acceso como clave — sin usuarios ni contraseñas propias.
+// Entrada de los alumnos y sincronización de su progreso contra Firebase.
 //
-// Si Firebase no carga (bloqueado, sin conexión, cuota agotada...) el sitio
-// sigue funcionando exactamente igual que antes, solo con localStorage.
+// Se entra con un enlace por correo (sign-in link): el alumno escribe su
+// email, le llega un enlace, lo pulsa y ya está dentro. Sin contraseñas que
+// recordar y, sobre todo, con una identidad de verdad: antes la sesión era
+// anónima, así que Firebase no podía saber quién era quién y las reglas no
+// tenían nada que comprobar — cualquiera podía leer las fichas de todos.
+//
+// Si Firebase no carga (bloqueado, sin conexión...) el sitio sigue
+// funcionando con lo que haya en localStorage; lo que no se puede es entrar
+// por primera vez.
 
 import { app } from "./firebase-init.js";
-import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
-import { getFirestore, doc, getDoc, setDoc, deleteField, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
+import { getAuth, onAuthStateChanged, sendSignInLinkToEmail,
+         isSignInWithEmailLink, signInWithEmailLink, signOut }
+  from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
+import { getFirestore, doc, getDoc, setDoc, deleteField, serverTimestamp }
+  from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 
 function withTimeout(promise, ms, label){
   return Promise.race([
@@ -16,23 +24,81 @@ function withTimeout(promise, ms, label){
   ]);
 }
 
+const auth = getAuth(app);
 const db = getFirestore(app);
 
-// Promesa que resuelve cuando hay sesión anónima lista para leer/escribir.
-// Si Firebase no está disponible en 6s (bloqueado, sin red...), se rechaza
-// y el resto del sitio sigue funcionando solo con localStorage.
+// Dónde se apunta el email mientras el alumno va a mirar su correo. Firebase
+// lo pide de vuelta al volver del enlace, para que un enlace interceptado no
+// sirva por sí solo.
+const PENDIENTE = 'jn_email_pendiente';
+
+function limpia(email){
+  return String(email || '').trim().toLowerCase();
+}
+
+// Resuelve con el email de quien ha entrado, o con null si no ha entrado
+// nadie. NO rechaza por «no hay nadie»: eso no es un error, es el estado
+// normal de quien llega por primera vez. Solo rechaza si Firebase no
+// responde, que es lo que la puerta trata como «no se sabe».
 window.jnCloudReady = (async () => {
-  const auth = getAuth(app);
-  await withTimeout(new Promise((resolve, reject) => {
-    onAuthStateChanged(auth, user => { if(user) resolve(user); });
-    signInAnonymously(auth).catch(reject);
-  }), 6000, 'auth');
+  // ¿venimos del enlace del correo? entonces aquí se termina de entrar
+  if(isSignInWithEmailLink(auth, location.href)){
+    let email = localStorage.getItem(PENDIENTE);
+    // si abre el enlace en otro navegador (del móvil, por ejemplo) ya no
+    // tenemos su email apuntado y hay que pedírselo otra vez
+    if(!email) email = window.prompt('Para terminar de entrar, escribe otra vez tu email:');
+    if(email){
+      try {
+        await signInWithEmailLink(auth, limpia(email), location.href);
+        localStorage.removeItem(PENDIENTE);
+      } catch(err){
+        window.jnCloudFalloEnlace = (err && err.code) || 'error';
+      }
+    }
+    // el enlace lleva el código pegado en la barra de direcciones: se quita
+    // para que no quede en el historial ni se comparta sin querer
+    try { history.replaceState(null, '', location.pathname + location.hash); } catch(e){}
+  }
+
+  return await withTimeout(new Promise(ok => {
+    let hecho = false;
+    const para = onAuthStateChanged(auth, u => {
+      if(hecho) return;
+      hecho = true;
+      ok(u ? limpia(u.email) : null);
+      setTimeout(() => { try { para(); } catch(e){} }, 0);
+    });
+  }), 10000, 'auth');
 })();
+
+// El email con el que se ha entrado. Es la única fuente buena: lo que haya en
+// localStorage es solo una pista para no parpadear al cargar.
+window.jnCloudEmail = function(){
+  return (auth.currentUser && limpia(auth.currentUser.email)) || null;
+};
+
+window.jnCloudEnviaEnlace = async function(email){
+  const e = limpia(email);
+  if(!e || e.indexOf('@') < 0) throw new Error('email vacío');
+  // se guarda ANTES de mandar: si la pestaña se cierra, al volver del enlace
+  // seguimos sabiendo a quién se lo mandamos
+  localStorage.setItem(PENDIENTE, e);
+  await withTimeout(sendSignInLinkToEmail(auth, e, {
+    // el enlace devuelve al alumno a la misma página donde estaba
+    url: location.href,
+    handleCodeInApp: true
+  }), 12000, 'sendLink');
+};
+
+window.jnCloudSal = async function(){
+  try { await signOut(auth); } catch(e){}
+  localStorage.removeItem(PENDIENTE);
+};
 
 window.jnCloudDeleteField = deleteField;
 
 function studentRef(email){
-  return doc(db, 'students', email.trim().toLowerCase());
+  return doc(db, 'students', limpia(email));
 }
 
 window.jnCloudGetStudentDoc = async function(email){
@@ -52,7 +118,6 @@ window.jnCloudGetStudentDoc = async function(email){
 window.jnCloudSetFields = async function(email, fields){
   if(!email) return;
   await window.jnCloudReady;
-  const payload = Object.assign({}, fields, { updatedAt: serverTimestamp(), email: email.trim().toLowerCase() });
+  const payload = Object.assign({}, fields, { updatedAt: serverTimestamp(), email: limpia(email) });
   await withTimeout(setDoc(studentRef(email), payload, { merge: true }), 6000, 'setDoc');
 };
-
