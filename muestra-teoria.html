@@ -10,44 +10,29 @@
 <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@400;600;700;800&family=Caveat:wght@700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
 <link rel="icon" type="image/png" href="favicon.png">
-<link rel="stylesheet" href="styles.css?v=20261014i">
+<link rel="stylesheet" href="styles.css?v=20261014n">
 <script>if(localStorage.getItem('jn_theme')==='dark')document.documentElement.setAttribute('data-theme','dark');</script>
 <style>
-/* ===== Muestra: una página de teoría escrita sobre el papel =====
+/* ===== Muestra: solo fuera la caja grande del fondo =====
+   Lo de dentro (SER/ESTAR, la nota, las tablas) se queda igual que hoy.
    Nada de esto toca styles.css: vive solo en esta página. */
 
-/* 1. Fuera la tarjeta blanca que tapaba el cuaderno entero. */
 .grammar-section{background:transparent;border:0;border-radius:0;padding:0 0 10px;margin-bottom:38px}
 @media(max-width:900px){.grammar-section{padding:0 0 10px}}
 
-/* 2. El título, con una línea debajo como la que subrayas a mano. */
-.grammar-section > h2{font-size:34px;margin:14px 0 0;position:relative;display:block;width:fit-content}
+/* Sin la caja, el título necesita algo que lo sostenga: una raya debajo,
+   de las que subrayas a mano. */
+.grammar-section > h2{margin:14px 0 0;position:relative;display:block;width:fit-content}
 .grammar-section > h2::after{content:"";position:absolute;left:-2px;right:-6px;bottom:-5px;height:4px;
   background:var(--gold);opacity:.55;border-radius:2px;transform:rotate(-.4deg)}
 .grammar-section > .subtitle:first-of-type{margin-top:20px}
 
-/* 3. SER y ESTAR: dos columnas en la hoja, separadas por una raya,
-      no dos tarjetas con borde y esquinas redondeadas. */
-.compare-grid{gap:0;margin:26px 0 8px;border-top:2px solid var(--border);padding-top:4px}
-.compare-card{background:transparent;border:0;border-radius:0;padding:18px 26px 6px 0}
-.compare-card + .compare-card{border-left:1px solid var(--border);padding-left:30px}
-@media(max-width:900px){.compare-card + .compare-card{border-left:0;padding-left:0;
-  border-top:1px solid var(--border)}}
-.compare-card h4{font-family:var(--font-head);font-weight:600;font-size:19px;line-height:1.3;
-  color:var(--primary-dark);margin-bottom:12px}
-[data-theme="dark"] .compare-card h4{color:#c3cbe8}
-.compare-card ul{list-style:none}
-.compare-card li{padding:5px 0 5px 20px;position:relative;font-size:16.5px}
-/* el guion del margen, como cuando enumeras a mano */
-.compare-card li::before{content:"–";position:absolute;left:2px;color:var(--muted)}
+/* Y los apartados de más abajo, igual: sin la caja se perdían. */
+.grammar-section h3{padding-bottom:7px;border-bottom:2px solid var(--border)}
 
-/* 4. La nota adhesiva se queda: es lo único que de verdad es «un objeto»
-      en la hoja, y por eso ahora se ve. */
-.tip-box{margin-top:26px}
-
-/* 5. Los apartados de más abajo: título con su raya, sin caja. */
-.grammar-section h3{font-size:22px;margin-top:34px;padding-bottom:7px;
-  border-bottom:2px solid var(--border)}
+/* Las tarjetas de SER y ESTAR se quedan como están, pero ahora que el fondo
+   es el papel necesitan separarse un poco entre ellas. */
+.compare-grid{gap:16px}
 </style>
 </head>
 <body data-category="verbos">
@@ -342,7 +327,7 @@
 <div class="ex-cta"><a href="ejercicios-es.html?tema=ser-estar" class="button button-primary"><i class="ti ti-pencil"></i> Ponte a prueba con ejercicios</a></div>
 </section>
 </main>
-<footer>© 2026 José N. · Profesor de español · <a href="privacidad.html">Privacidad</a></footer>
+<footer>© 2026 José N. · Profesor de español · <a href="sobre-mi.html"><span class="i18n" data-es="Sobre mí" data-it="Chi sono" data-en="About me">Sobre mí</span></a> · <a href="privacidad.html">Privacidad</a></footer>
 <script type="module" src="firebase-init.js?v=20260809"></script>
 <script type="module" src="firebase-sync.js?v=20261014j"></script>
 <script src="script.js?v=20261014m"></script>

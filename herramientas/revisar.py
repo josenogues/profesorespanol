@@ -151,8 +151,7 @@ for s in CUERPO.values():
 # Las dos muestras son propuestas de diseño a las que se llega por su URL
 # a secas, para poder compararlas con la página de verdad. Si se aceptan, el
 # diseño pasa a styles.css y estos apaños se borran; si no, se borran ellas.
-SUELTAS_OK = {"index.html", "panel-profesor.html",
-              "muestra-inicio.html", "muestra-teoria.html"}
+SUELTAS_OK = {"index.html", "panel-profesor.html", "muestra-teoria.html"}
 # a las clases se llega desde «Mis clases», que las pinta con JavaScript
 SUELTAS_OK |= {p for p in PAGINAS if p.startswith("clase-")}
 for pag in PAGINAS:
