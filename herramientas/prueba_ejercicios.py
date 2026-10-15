@@ -41,6 +41,19 @@ BIEN = {
  'clase-bando-en.html': {"ba1":"la","ba2":"el","ba3":"el","ba4":"la","ba5":"el","ba6":"la",
    "ba7":"blanca","ba8":"alta","ba9":"rojos","ba10":"los","ba11":"ciudades",
    "ba12":"los coches rojos"},
+ 'clase-menos-piezas-en.html': {"mp1":"Trabajo en Madrid","mp2":"Vive aquí","mp3":"tienes",
+   "mp4":"trabajamos","mp5":"hablan","mp6":"Ella vive aquí","mp7":"Yo voy, tú te quedas",
+   "mp8":"yo","mp9":"el","mp10":"Vivo en Madrid","mp11":"Como con Ana el viernes",
+   "mp12":"vivo en Madrid"},
+ 'clase-dos-sentidos-en.html': {"ds1":"Es","ds2":"Está","ds3":"Es","ds4":"Está","ds5":"Está",
+   "ds6":"Es","ds7":"Está","ds8":"Está","ds9":"Está","ds10":"Es","ds11":"Está",
+   "ds12":"la sopa esta rica"},
+ 'clase-dos-verbos-en.html': {"dv1":"Sé","dv2":"conozco","dv3":"Pregunté","dv4":"Pedí",
+   "dv5":"Llevo","dv6":"¡Voy!","dv7":"hora","dv8":"tiempo","dv9":"vez","dv10":"Juego",
+   "dv11":"funciona","dv12":"deje las llaves en casa"},
+ 'clase-falsos-amigos-en.html': {"fa1":"avergonzada","fa2":"pregnant","fa3":"constipado",
+   "fa4":"emocionado","fa5":"molestarte","fa6":"estoy embarazada","fa7":"success",
+   "fa8":"salida","fa9":"currently","fa10":"sensible","fa11":"sensato","fa12":"soporto"},
 }
 
 # una respuesta mala por clase, para comprobar que no cuela
@@ -48,7 +61,11 @@ MAL = {'clase-gustar-en.html': ("g2", "gusta"),
        'clase-to-be-en.html': ("tb1", "Estoy"),
        'clase-frio-en.html': ("fr1", "Soy"),
        'clase-sin-do-en.html': ("sd3", "Qué"),
-       'clase-bando-en.html': ("ba2", "la")}
+       'clase-bando-en.html': ("ba2", "la"),
+       'clase-menos-piezas-en.html': ("mp1", "Yo trabajo en Madrid"),
+       'clase-dos-sentidos-en.html': ("ds2", "Es"),
+       'clase-dos-verbos-en.html': ("dv6", "¡Vengo!"),
+       'clase-falsos-amigos-en.html': ("fa1", "embarazada")}
 
 SIEMBRA = ("localStorage.setItem('__falso_usuario','anna@x.com');"
            "localStorage.setItem('jn_access_granted','true');"
@@ -123,5 +140,6 @@ with sync_playwright() as p:
     br.close()
 
 print()
-print("\n".join(err) if err else "SIN ERRORES — 60 respuestas buenas aceptadas, 5 malas rechazadas")
+print("\n".join(err) if err else "SIN ERRORES — %d respuestas buenas aceptadas, %d malas rechazadas"
+      % (sum(len(v) for v in BIEN.values()), len(MAL)))
 sys.exit(1 if err else 0)
