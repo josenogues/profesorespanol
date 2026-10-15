@@ -19,6 +19,7 @@
       clases: 'clases', clase: 'clase',
       temas: 'temas tocados', tema: 'tema tocado',
       meses: 'meses juntos', mes: 'mes juntos', sinFecha: 'por confirmar',
+      ejercicios: 'ejercicios hechos', ejercicio: 'ejercicio hecho',
       proxima: 'La próxima:', porDefinir: 'por definir',
       buscar: 'Buscar por tema: subjuntivo, pasados, por/para...',
       nada: 'Ninguna de tus clases habla de eso.',
@@ -41,6 +42,7 @@
       clases: 'lezioni', clase: 'lezione',
       temas: 'argomenti visti', tema: 'argomento visto',
       meses: 'mesi insieme', mes: 'mese insieme', sinFecha: 'da confermare',
+      ejercicios: 'esercizi fatti', ejercicio: 'esercizio fatto',
       proxima: 'La prossima:', porDefinir: 'da definire',
       buscar: 'Cerca per argomento: subjuntivo, pasados, por/para...',
       nada: 'Nessuna delle tue lezioni parla di questo.',
@@ -63,6 +65,7 @@
       clases: 'classes', clase: 'class',
       temas: 'topics covered', tema: 'topic covered',
       meses: 'months together', mes: 'month together', sinFecha: 'to be confirmed',
+      ejercicios: 'exercises done', ejercicio: 'exercise done',
       proxima: 'Next up:', porDefinir: 'to be decided',
       buscar: 'Search by topic: subjuntivo, pasados, por/para...',
       nada: 'None of your classes is about that.',
@@ -106,11 +109,24 @@
     return Math.max(1, (h.getFullYear() - d.getFullYear()) * 12 + (h.getMonth() - d.getMonth()));
   }
 
-  function tarjeta(n, etiqueta, apagada){
-    return '<div class="cl-num' + (apagada ? ' sin' : '') + '">' +
+  function tarjeta(n, etiqueta, apagada, id){
+    return '<div class="cl-num' + (apagada ? ' sin' : '') + '"' +
+           (id ? ' id="' + id + '"' : '') + '>' +
            '<span class="n">' + esc(n) + '</span>' +
            '<span class="l">' + esc(etiqueta) + '</span></div>';
   }
+
+  // El contador de ejercicios puede subir después de pintar: cuando el alumno
+  // acierta uno en otra pestaña, o cuando la nube trae un número más alto que
+  // el del navegador. Así la tarjeta no se queda con un número viejo.
+  function refrescaEjercicios(){
+    const caja = document.getElementById('cl-ejercicios');
+    if(!caja) return;
+    const n = window.jnGetExerciseCount ? window.jnGetExerciseCount() : 0;
+    caja.querySelector('.n').textContent = n;
+    caja.querySelector('.l').textContent = n === 1 ? T.ejercicio : T.ejercicios;
+  }
+  document.addEventListener('jn-counter-updated', refrescaEjercicios);
 
   // Clave con la que se guardan los apuntes de una clase. Las del catálogo
   // tienen id; una rápida lleva el suyo desde que se crea, y las creadas
@@ -195,6 +211,11 @@
                tarjeta(temas.size, temas.size === 1 ? T.tema : T.temas);
     nums += meses ? tarjeta(meses, meses === 1 ? T.mes : T.meses)
                   : tarjeta('—', T.sinFecha, true);
+    // los ejercicios acertados, junto a las clases y los meses: es el número
+    // que el alumno puede subir él solo, y aquí lo tiene a la vista cada vez
+    // que entra a mirar sus clases
+    const hechos = window.jnGetExerciseCount ? window.jnGetExerciseCount() : 0;
+    nums += tarjeta(hechos, hechos === 1 ? T.ejercicio : T.ejercicios, false, 'cl-ejercicios');
 
     const prox = proxima
       ? '<p class="cl-prox"><i class="ti ti-calendar-event" aria-hidden="true"></i> <b>' +

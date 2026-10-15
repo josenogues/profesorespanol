@@ -87,7 +87,7 @@ h1,h2,h3,h4,.logo,.button,.tab-btn,.menu-title{font-family:var(--font-head)}
 .grammar-section > h2{margin:14px 0 0;position:relative;display:block;width:fit-content}
 .grammar-section > h2::after{content:"";position:absolute;left:-2px;right:-6px;bottom:-5px;height:4px;background:var(--gold);opacity:.55;border-radius:2px;transform:rotate(-.4deg)}
 .grammar-section > .subtitle:first-of-type{margin-top:20px}
-.grammar-section h3{padding-bottom:7px;border-bottom:2px solid var(--border)}
+.grammar-section > h3{padding-bottom:7px;border-bottom:2px solid var(--border)}
 /* Un párrafo justo después de una lista se quedaba pegado al último punto,
    y parecía otro elemento más de la lista. */
 .grammar-section ul{margin-bottom:16px}
@@ -419,8 +419,12 @@ footer{text-align:center;padding:30px;color:var(--muted);border-top:1px solid va
 .ex-construction-note p{margin:0;font-size:11.5px;line-height:1.4;color:var(--gold-dark);font-weight:600}
 @media(max-width:700px){.ex-construction-note{position:static;width:auto;transform:none;margin-bottom:16px}}
 
-.ex-mode-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-bottom:8px}
-.ex-mode-card{border:1px solid var(--border);background:var(--card-bg);border-radius:16px;padding:26px 22px;cursor:pointer;text-align:left;transition:.15s;font-family:var(--font-body)}
+/* Tres maneras de hacer ejercicios, las tres igual de grandes y en fila.
+   Antes «Cursos» ocupaba el ancho entero y las otras dos iban debajo, y
+   eso no se leía como tres opciones sino como un cajón desordenado. */
+.ex-mode-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:8px}
+@media(max-width:880px){.ex-mode-grid{grid-template-columns:1fr}}
+.ex-mode-card{display:flex;flex-direction:column;border:1px solid var(--border);background:var(--card-bg);border-radius:16px;padding:26px 22px;cursor:pointer;text-align:left;transition:.15s;font-family:var(--font-body)}
 .ex-mode-card:hover{transform:translateY(-3px);box-shadow:0 8px 20px rgba(58,69,112,.14);border-color:var(--primary)}
 .ex-mode-card i{font-size:26px;color:var(--primary-dark);display:block;margin-bottom:12px}
 .ex-mode-card h3{margin:0 0 6px;font-size:18px;font-weight:600;color:var(--text);font-family:var(--font-head)}
@@ -821,9 +825,7 @@ a.prof-card:hover{transform:translateY(-2px);box-shadow:0 4px 10px rgba(0,0,0,.0
    La ruta reutiliza el lenguaje visual de la línea de niveles (punto lleno =
    hecho, punto grande = el siguiente), pero con el color de cada curso: el
    dorado se reserva para los exámenes de nivel, que son otra cosa. */
-.ex-mode-card-lead{grid-column:1/-1;background:var(--tint);border-color:var(--primary)}
-.ex-mode-card-lead i{font-size:30px}
-.ex-mode-card-lead h3{font-size:20px}
+
 
 .ex-resume{display:flex;align-items:center;gap:16px;background:var(--primary);color:#fff;
   border-radius:14px;padding:16px 20px;margin-bottom:28px;box-shadow:0 3px 0 var(--primary-dark);

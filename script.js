@@ -370,6 +370,34 @@ a.closest(".menu-item").classList.add("active","current-section");
   document.addEventListener('jn-counter-updated', pintaRacha);
   pintaRacha();
 
+  // El número de ejercicios acertados vive en el navegador, pero también en
+  // la ficha del alumno, para que no empiece de cero al estrenar móvil. Se
+  // traía solo dentro del hub, así que en una clase o en «Mis clases» salía
+  // el número del dispositivo y no el suyo de verdad. Se queda siempre con
+  // el más alto de los dos: así no se le quita nunca nada de lo hecho.
+  function traeContadorDeLaNube(){
+    const email = localStorage.getItem('jn_student_email');
+    if(!email || !window.jnCloudGetStudentDoc) return;
+    window.jnCloudGetStudentDoc(email).then(function(cloud){
+      if(!cloud || typeof cloud.exerciseCount !== 'number') return;
+      if(cloud.exerciseCount > window.jnGetExerciseCount()){
+        localStorage.setItem(COUNTER_KEY, String(cloud.exerciseCount));
+        document.dispatchEvent(new CustomEvent('jn-counter-updated',
+          { detail: { count: cloud.exerciseCount } }));
+      }
+    }).catch(function(){ /* sin Firebase se sigue con lo del navegador */ });
+  }
+  (function esperaNube(){
+    const desde = Date.now();
+    (function poll(){
+      if(window.jnCloudGetStudentDoc) return traeContadorDeLaNube();
+      if(Date.now() - desde > 8000) return;
+      setTimeout(poll, 60);
+    })();
+  })();
+  // y otra vez cuando el alumno acaba de entrar, que entonces ya sabemos quién es
+  document.addEventListener('jn-access-granted', traeContadorDeLaNube);
+
   const ACCENT_APOSTROPHE = { a: 'á', e: 'é', i: 'í', o: 'ó', u: 'ú' };
   function normalizeAnswer(s){
     return s.trim().toLowerCase()
@@ -1426,13 +1454,9 @@ ${qHTML}`;
         }
       }
 
-      if(typeof cloud.exerciseCount === 'number' && window.jnGetExerciseCount){
-        const localCount = window.jnGetExerciseCount();
-        if(cloud.exerciseCount > localCount){
-          localStorage.setItem('jn_total_done', String(cloud.exerciseCount));
-          document.dispatchEvent(new CustomEvent('jn-counter-updated', { detail: { count: cloud.exerciseCount } }));
-        }
-      }
+      // el contador de ejercicios se sincroniza fuera de aquí, en el motor
+      // de ejercicios, porque hace falta en todas las páginas y no solo
+      // en el hub: también lo enseñan las clases y «Mis clases»
     } catch(e) { /* sin conexión a Firebase: seguimos solo con localStorage */ }
   }
 
