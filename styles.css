@@ -1254,3 +1254,16 @@ a.menu-button.current-page{background:rgba(255,255,255,.15)}
 /* ---------- Actividad de hablar ---------- */
 ol.hablar{margin:0 0 0 20px}
 ol.hablar li{padding:6px 0 6px 4px;font-size:16.5px;line-height:1.55}
+
+/* ---------- Contador de ejercicios dentro de una clase ---------- */
+/* Sale justo después de los ejercicios de la clase: acabas de acertar unos
+   cuantos, ves el número y al lado tienes adónde ir a subirlo. */
+.jn-racha{display:flex;gap:18px;align-items:center;flex-wrap:wrap;justify-content:space-between;
+  background:var(--badge-gold-bg);border:1px solid #e8c96a;border-radius:14px;padding:18px 22px;margin-top:26px}
+[data-theme="dark"] .jn-racha{background:#332a12;border-color:#6b5a26}
+.jn-racha-txt{flex:1;min-width:230px}
+.jn-racha-n{margin:0;font-size:17px;color:var(--gold-dark)}
+.jn-racha-n strong{font-family:var(--font-head);font-size:24px;color:var(--gold-dark)}
+[data-theme="dark"] .jn-racha-n,[data-theme="dark"] .jn-racha-n strong{color:var(--gold)}
+.jn-racha-pie{margin:4px 0 0;font-size:14.5px;color:var(--muted);line-height:1.5}
+.jn-racha .button{white-space:nowrap}

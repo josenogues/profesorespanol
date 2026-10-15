@@ -251,16 +251,34 @@ a.closest(".menu-item").classList.add("active","current-section");
     es: {
       ok: ['¡Muy bien!','¡Perfecto!','¡Excelente!','¡Así se hace!','¡Genial, sigue así!','¡Correcto!'],
       ko: ['Casi, prueba otra vez','No es eso, ¡tú puedes!','Sigue intentando','Revísalo con calma'],
-      answer: 'respuesta'
+      answer: 'respuesta',
+      racha0: 'Todavía no has hecho ningún ejercicio.',
+      racha1: 'Llevas {n} ejercicio hecho.',
+      rachaN: 'Llevas {n} ejercicios hechos.',
+      rachaPie: 'Haz unos cuantos más y sube el número. Eliges tema o nivel, o te los mezclo yo.',
+      rachaPie0: 'Empieza por unos pocos: el número sube solo con cada uno que aciertes.',
+      rachaBtn: 'Más ejercicios'
     },
     it: {
       ok: ['Molto bene!','Perfetto!','Eccellente!','Così si fa!','Ottimo, continua così!','Corretto!'],
       ko: ['Ci sei quasi, riprova','Non è questo, ce la fai!','Continua a provare','Rileggilo con calma'],
-      answer: 'risposta'
+      answer: 'risposta',
+      racha0: 'Non hai ancora fatto nessun esercizio.',
+      racha1: 'Sei a {n} esercizio fatto.',
+      rachaN: 'Sei a {n} esercizi fatti.',
+      rachaPie: 'Fanne qualcuno in più e alza il numero. Scegli argomento o livello, o te li mescolo io.',
+      rachaPie0: 'Comincia con qualcuno: il numero sale da solo a ogni risposta giusta.',
+      rachaBtn: 'Altri esercizi'
     },
     en: {
       ok: ['Well done!','Perfect!','Excellent!','That’s the way!','Great, keep going!','Correct!'],
       ko: ['Almost, try again','Not that one, you can do it!','Keep trying','Take another careful look'],
+      racha0: 'You haven’t done any exercises yet.',
+      racha1: 'You’re on {n} exercise done.',
+      rachaN: 'You’re on {n} exercises done.',
+      rachaPie: 'Do a few more and push the number up. Pick a topic or a level, or I’ll mix them for you.',
+      rachaPie0: 'Start with a handful: the number goes up on its own with every one you get right.',
+      rachaBtn: 'More exercises',
       answer: 'answer'
     }
   };
@@ -326,6 +344,31 @@ a.closest(".menu-item").classList.add("active","current-section");
     fb.className = 'exercise-feedback incorrect';
     return reveal;
   }
+
+  // ─── Contador de ejercicios, en cualquier página ───
+  // El del hub (#ex-global-counter) solo vive dentro del hub. Este funciona
+  // allá donde se ponga un <div class="jn-racha" data-ir="ejercicios-XX.html">,
+  // y se actualiza en el momento en que el alumno acierta: terminar los
+  // ejercicios de una clase y ver el número subir es justo lo que invita a
+  // seguir, y el botón de al lado le dice adónde.
+  function pintaRacha(){
+    const caja = document.querySelector('.jn-racha');
+    if(!caja) return;
+    const m = msgs();
+    if(!m.rachaBtn) return;   // idioma sin textos de contador
+    const n = window.jnGetExerciseCount ? window.jnGetExerciseCount() : 0;
+    const txt = (n === 0 ? m.racha0 : n === 1 ? m.racha1 : m.rachaN)
+      .replace('{n}', '<strong>' + n + '</strong>');
+    const ir = caja.dataset.ir || 'ejercicios-es.html';
+    caja.innerHTML =
+      '<div class="jn-racha-txt"><p class="jn-racha-n">' +
+        '<span aria-hidden="true">🔥</span> ' + txt + '</p>' +
+        '<p class="jn-racha-pie">' + (n === 0 ? m.rachaPie0 : m.rachaPie) + '</p></div>' +
+      '<a class="button button-primary" href="' + ir + '">' + m.rachaBtn +
+        ' <i class="ti ti-arrow-right" aria-hidden="true"></i></a>';
+  }
+  document.addEventListener('jn-counter-updated', pintaRacha);
+  pintaRacha();
 
   const ACCENT_APOSTROPHE = { a: 'á', e: 'é', i: 'í', o: 'ó', u: 'ú' };
   function normalizeAnswer(s){
