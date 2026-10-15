@@ -1088,6 +1088,14 @@ a.menu-button.current-page{background:rgba(255,255,255,.15)}
 [data-theme="dark"] .cl-num .n{color:#c99a68}
 .cl-num .l{display:block;font-size:13px;color:var(--muted);margin-top:3px}
 .cl-num.sin .n{color:var(--muted)}
+/* La de ejercicios es la única que lleva a algún sitio: se marca y lo dice. */
+.cl-num-ir{display:block;background:var(--badge-gold-bg);border-color:#e8c96a;transition:.15s}
+.cl-num-ir:hover{transform:translateY(-2px);box-shadow:0 6px 16px rgba(0,0,0,.1)}
+.cl-num-ir .n{color:var(--gold-dark)}
+.cl-num-ir .ir{display:block;margin-top:8px;font-family:var(--font-head);font-weight:600;
+  font-size:13px;color:var(--gold-dark)}
+[data-theme="dark"] .cl-num-ir{background:#332a12;border-color:#6b5a26}
+[data-theme="dark"] .cl-num-ir .n,[data-theme="dark"] .cl-num-ir .ir{color:var(--gold)}
 .cl-prox{background:var(--tint);border-radius:12px;padding:12px 16px;margin-bottom:20px;font-size:15px}
 .cl-prox.sin{color:var(--muted)}
 .cl-cuando{color:var(--muted);font-size:13.5px}

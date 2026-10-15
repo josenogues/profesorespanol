@@ -26,7 +26,7 @@
       sinClases: 'Todavía no hay nada aquí',
       sinClasesP: 'En cuanto deis una clase, José la pondrá aquí: lo que visteis, ' +
                   'las reglas para repasarlo y los deberes de ese día.',
-      irEj: 'Mientras tanto, practica',
+      irEj: 'Mientras tanto, practica', masEj: 'Haz más ejercicios',
       cargando: 'Cargando tus clases...',
       sinAcceso: 'Entra con tu email para ver tus clases.',
       error: 'No se han podido cargar tus clases. Revisa tu conexión y vuelve a intentarlo.',
@@ -49,7 +49,7 @@
       sinClases: 'Qui non c’è ancora niente',
       sinClasesP: 'Appena farete una lezione, José la metterà qui: quello che avete visto, ' +
                   'le regole per ripassare e i compiti di quel giorno.',
-      irEj: 'Intanto, esercitati',
+      irEj: 'Intanto, esercitati', masEj: 'Fai più esercizi',
       cargando: 'Carico le tue lezioni...',
       sinAcceso: 'Entra con la tua email per vedere le tue lezioni.',
       error: 'Non è stato possibile caricare le tue lezioni. Controlla la connessione e riprova.',
@@ -72,7 +72,7 @@
       sinClases: 'Nothing here yet',
       sinClasesP: 'As soon as you have a class, José will put it here: what you covered, ' +
                   'the rules to go over it again and that day’s homework.',
-      irEj: 'In the meantime, practise',
+      irEj: 'In the meantime, practise', masEj: 'Do more exercises',
       cargando: 'Loading your classes...',
       sinAcceso: 'Sign in with your email to see your classes.',
       error: 'Your classes could not be loaded. Check your connection and try again.',
@@ -109,12 +109,21 @@
     return Math.max(1, (h.getFullYear() - d.getFullYear()) * 12 + (h.getMonth() - d.getMonth()));
   }
 
-  function tarjeta(n, etiqueta, apagada, id){
-    return '<div class="cl-num' + (apagada ? ' sin' : '') + '"' +
-           (id ? ' id="' + id + '"' : '') + '>' +
+  // Las tres primeras tarjetas son números que pones tú; la de ejercicios es
+  // la única que el alumno puede subir solo, así que además de contar, lleva.
+  function tarjeta(n, etiqueta, apagada, id, href){
+    const etq = href ? 'a' : 'div';
+    const clases = 'cl-num' + (apagada ? ' sin' : '') + (href ? ' cl-num-ir' : '');
+    return '<' + etq + ' class="' + clases + '"' +
+           (id ? ' id="' + id + '"' : '') +
+           (href ? ' href="' + esc(href) + '"' : '') + '>' +
            '<span class="n">' + esc(n) + '</span>' +
-           '<span class="l">' + esc(etiqueta) + '</span></div>';
+           '<span class="l">' + esc(etiqueta) + '</span>' +
+           (href ? '<span class="ir">' + esc(T.masEj) +
+                   ' <i class="ti ti-arrow-right" aria-hidden="true"></i></span>' : '') +
+           '</' + etq + '>';
   }
+
 
   // El contador de ejercicios puede subir después de pintar: cuando el alumno
   // acierta uno en otra pestaña, o cuando la nube trae un número más alto que
@@ -215,7 +224,8 @@
     // que el alumno puede subir él solo, y aquí lo tiene a la vista cada vez
     // que entra a mirar sus clases
     const hechos = window.jnGetExerciseCount ? window.jnGetExerciseCount() : 0;
-    nums += tarjeta(hechos, hechos === 1 ? T.ejercicio : T.ejercicios, false, 'cl-ejercicios');
+    nums += tarjeta(hechos, hechos === 1 ? T.ejercicio : T.ejercicios, false,
+                    'cl-ejercicios', 'ejercicios-' + track + '.html');
 
     const prox = proxima
       ? '<p class="cl-prox"><i class="ti ti-calendar-event" aria-hidden="true"></i> <b>' +
