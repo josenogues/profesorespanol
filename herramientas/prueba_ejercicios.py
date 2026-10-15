@@ -54,6 +54,15 @@ BIEN = {
  'clase-falsos-amigos-en.html': {"fa1":"avergonzada","fa2":"pregnant","fa3":"constipado",
    "fa4":"emocionado","fa5":"molestarte","fa6":"estoy embarazada","fa7":"success",
    "fa8":"salida","fa9":"currently","fa10":"sensible","fa11":"sensato","fa12":"soporto"},
+ 'clase-seis-formas-es.html': {"sf1":"hemos hablado","sf2":"hablando","sf3":"hablar","sf4":"comido","sf5":"comiendo","sf6":"han","sf7":"Vivo en Madrid","sf8":"hablare","sf9":"vamos","sf10":"participio","sf11":"hable","sf12":"estamos comiendo"},
+ 'clase-seis-formas-it.html': {"sf1":"hemos hablado","sf2":"hablando","sf3":"hablar","sf4":"comido","sf5":"comiendo","sf6":"han","sf7":"Vivo en Madrid","sf8":"hablare","sf9":"vamos","sf10":"participio","sf11":"hable","sf12":"estamos comiendo"},
+ 'clase-seis-formas-en.html': {"sf1":"hemos hablado","sf2":"hablando","sf3":"hablar","sf4":"comido","sf5":"comiendo","sf6":"han","sf7":"Vivo en Madrid","sf8":"hablare","sf9":"vamos","sf10":"participio","sf11":"hable","sf12":"estamos comiendo"},
+ 'clase-tres-pasados-es.html': {"tp1":"llovía","tp2":"Sonó","tp3":"comía","tp4":"comí","tp5":"vivia","tp6":"hablaba","tp7":"he comido","tp8":"Has estado","tp9":"he visto","tp10":"comi","tp11":"he vivido","tp12":"anoche llovia"},
+ 'clase-tres-pasados-it.html': {"tp1":"llovía","tp2":"Sonó","tp3":"comía","tp4":"comí","tp5":"vivia","tp6":"hablaba","tp7":"he comido","tp8":"Has estado","tp9":"he visto","tp10":"comi","tp11":"he vivido","tp12":"anoche llovia"},
+ 'clase-tres-pasados-en.html': {"tp1":"llovía","tp2":"Sonó","tp3":"comía","tp4":"comí","tp5":"vivia","tp6":"hablaba","tp7":"he comido","tp8":"Has estado","tp9":"he visto","tp10":"comi","tp11":"he vivido","tp12":"anoche llovia"},
+ 'clase-formas-pasado-es.html': {"fp1":"hable","fp2":"comio","fp3":"vivieron","fp4":"hablaste","fp5":"vivido","fp6":"habeis","fp7":"abierto","fp8":"hecho","fp9":"puesto","fp10":"escrito","fp11":"vuelto","fp12":"he roto el vaso"},
+ 'clase-formas-pasado-it.html': {"fp1":"hable","fp2":"comio","fp3":"vivieron","fp4":"hablaste","fp5":"vivido","fp6":"habeis","fp7":"abierto","fp8":"hecho","fp9":"puesto","fp10":"escrito","fp11":"vuelto","fp12":"he roto el vaso"},
+ 'clase-formas-pasado-en.html': {"fp1":"hable","fp2":"comio","fp3":"vivieron","fp4":"hablaste","fp5":"vivido","fp6":"habeis","fp7":"abierto","fp8":"hecho","fp9":"puesto","fp10":"escrito","fp11":"vuelto","fp12":"he roto el vaso"},
 }
 
 # una respuesta mala por clase, para comprobar que no cuela
@@ -65,7 +74,16 @@ MAL = {'clase-gustar-en.html': ("g2", "gusta"),
        'clase-menos-piezas-en.html': ("mp1", "Yo trabajo en Madrid"),
        'clase-dos-sentidos-en.html': ("ds2", "Es"),
        'clase-dos-verbos-en.html': ("dv6", "¡Vengo!"),
-       'clase-falsos-amigos-en.html': ("fa1", "embarazada")}
+       'clase-falsos-amigos-en.html': ("fa1", "embarazada"),
+       'clase-seis-formas-es.html': ("sf3", "hablando"),
+       'clase-seis-formas-it.html': ("sf3", "hablando"),
+       'clase-seis-formas-en.html': ("sf3", "hablando"),
+       'clase-tres-pasados-es.html': ("tp2", "Sonaba"),
+       'clase-tres-pasados-it.html': ("tp2", "Sonaba"),
+       'clase-tres-pasados-en.html': ("tp2", "Sonaba"),
+       'clase-formas-pasado-es.html': ("fp7", "abrido"),
+       'clase-formas-pasado-it.html': ("fp7", "abrido"),
+       'clase-formas-pasado-en.html': ("fp7", "abrido")}
 
 SIEMBRA = ("localStorage.setItem('__falso_usuario','anna@x.com');"
            "localStorage.setItem('jn_access_granted','true');"
@@ -102,7 +120,8 @@ with sync_playwright() as p:
     for pag, respuestas in BIEN.items():
         c = br.new_context(viewport={"width": 1280, "height": 900})
         monta(c, DB)
-        c.add_init_script(SIEMBRA)
+        pista = pag[-7:-5] if pag[-7:-5] in ('es', 'it', 'en') else 'en'
+        c.add_init_script(SIEMBRA.replace("'jn_track','en'", "'jn_track','" + pista + "'"))
         pg = c.new_page()
         pg.on("pageerror", lambda e, q=pag: err.append("[%s] JS: %s" % (q, e)))
         pg.goto(B + "/" + pag, wait_until="domcontentloaded")
@@ -128,7 +147,9 @@ with sync_playwright() as p:
         if n != 12: err.append("%s: %d ejercicios, esperaba 12" % (pag, n))
         if fallos: err.append("%s: respuestas buenas dadas por malas: %s" % (pag, fallos))
         if cuenta != 12: err.append("%s: el contador marca %s" % (pag, cuenta))
-        if destino != 'ejercicios-en.html': err.append("%s: el botón va a %s" % (pag, destino))
+        # el botón lleva al hub del idioma de la página, no siempre al inglés
+        if destino != 'ejercicios-%s.html' % pista:
+            err.append("%s: el botón va a %s y debería ir al hub en %s" % (pag, destino, pista))
 
         # y que una mala no cuele
         pg.reload(); pg.wait_for_timeout(1300)
