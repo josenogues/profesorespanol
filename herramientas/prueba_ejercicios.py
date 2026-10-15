@@ -1,0 +1,127 @@
+# -*- coding: utf-8 -*-
+"""Que los ejercicios de las clases funcionen: uno por uno.
+
+Se usa con el sitio servido en el 8947:
+    python3 -m http.server 8947 --directory .   (en otra terminal)
+    python3 herramientas/prueba_ejercicios.py
+
+Al añadir ejercicios a una clase nueva, se apuntan aquí sus respuestas
+buenas (BIEN) y una mala (MAL). Las respuestas se escriben a mano a
+propósito: si se leyeran de la página, la prueba no comprobaría nada.
+
+Para cada clase: se responde bien a los doce y se comprueba que los doce se
+dan por buenos, que el contador sube de cero a doce en directo, que el botón
+lleva al hub del idioma que toca, y que una respuesta mala avisa en vez de
+pasar por alto.
+"""
+import sys
+sys.path.insert(0, '/home/user/profesorespanol/herramientas')
+from firebase_falso import monta, hora
+from playwright.sync_api import sync_playwright
+
+B = "http://localhost:8947"
+err = []
+DB = {"anna@x.com": {"email": "anna@x.com", "activo": True, "updatedAt": hora(-1)}}
+
+# la respuesta correcta de cada ejercicio, escrita aquí aparte a propósito:
+# si se copiara de la página, la prueba no comprobaría nada
+BIEN = {
+ 'clase-gustar-en.html': {"g1":"Me","g2":"gustan","g3":"gusta","g4":"le","g5":"apetece",
+   "g6":"duele","g7":"duelen","g8":"faltan","g9":"también","g10":"tampoco","g11":"sí",
+   "g12":"Me encanta Madrid"},
+ 'clase-to-be-en.html': {"tb1":"Soy","tb2":"Estoy","tb3":"es","tb4":"estoy","tb5":"es",
+   "tb6":"son","tb7":"Hay","tb8":"está","tb9":"está","tb10":"Hay","tb11":"está",
+   "tb12":"hay dos libros"},
+ 'clase-frio-en.html': {"fr1":"Tengo","fr2":"hace","fr3":"está","fr4":"tengo","fr5":"está",
+   "fr6":"Hace","fr7":"sed","fr8":"mucho","fr9":"calor","fr10":"tienes",
+   "fr11":"tengo treinta años","fr12":"hace frío hoy"},
+ 'clase-sin-do-en.html': {"sd1":"¿Hablas español?","sd2":"no","sd3":"Dónde","sd4":"qué",
+   "sd5":"¿no?","sd6":"tienes un coche","sd7":"nada","sd8":"nada","sd9":"Nadie",
+   "sd10":"nunca","sd11":"digo","sd12":"no quiero nada"},
+ 'clase-bando-en.html': {"ba1":"la","ba2":"el","ba3":"el","ba4":"la","ba5":"el","ba6":"la",
+   "ba7":"blanca","ba8":"alta","ba9":"rojos","ba10":"los","ba11":"ciudades",
+   "ba12":"los coches rojos"},
+}
+
+# una respuesta mala por clase, para comprobar que no cuela
+MAL = {'clase-gustar-en.html': ("g2", "gusta"),
+       'clase-to-be-en.html': ("tb1", "Estoy"),
+       'clase-frio-en.html': ("fr1", "Soy"),
+       'clase-sin-do-en.html': ("sd3", "Qué"),
+       'clase-bando-en.html': ("ba2", "la")}
+
+SIEMBRA = ("localStorage.setItem('__falso_usuario','anna@x.com');"
+           "localStorage.setItem('jn_access_granted','true');"
+           "localStorage.setItem('jn_student_email','anna@x.com');"
+           "localStorage.setItem('jn_track','en');")
+
+
+def responde(pg, exid, resp):
+    b = pg.locator('[data-exid="%s"]' % exid)
+    if not b.count():
+        return None
+    if b.locator(".option-btn").count():
+        bot = b.locator('.option-btn[data-value="%s"]' % resp)
+        if not bot.count():
+            return 'no existe esa opción'
+        bot.click()
+    else:
+        b.locator(".exercise-input").fill(resp)
+        b.locator(".exercise-check").click()
+    pg.wait_for_timeout(120)
+    # OJO: «incorrect» contiene «correct», así que buscar la subcadena daba
+    # por bueno todo, se acertara o se fallara. Hay que mirar la clase
+    # entera, no un trozo de ella.
+    clases = (b.locator(".exercise-feedback").get_attribute("class") or "").split()
+    if "correct" in clases:
+        return True
+    if "incorrect" in clases:
+        return False
+    return "el motor no ha contestado"
+
+
+with sync_playwright() as p:
+    br = p.chromium.launch(executable_path="/opt/pw-browsers/chromium")
+    for pag, respuestas in BIEN.items():
+        c = br.new_context(viewport={"width": 1280, "height": 900})
+        monta(c, DB)
+        c.add_init_script(SIEMBRA)
+        pg = c.new_page()
+        pg.on("pageerror", lambda e, q=pag: err.append("[%s] JS: %s" % (q, e)))
+        pg.goto(B + "/" + pag, wait_until="domcontentloaded")
+        pg.wait_for_timeout(1500)
+
+        n = pg.locator(".exercise-block").count()
+        fallos = []
+        for exid, resp in respuestas.items():
+            r = responde(pg, exid, resp)
+            if r is None:
+                fallos.append(exid + ' (no está)')
+            elif r is not True:
+                fallos.append('%s=%s%s' % (exid, resp, '' if r is False else ' · ' + r))
+
+        cuenta = pg.evaluate("window.jnGetExerciseCount()")
+        racha = pg.locator(".jn-racha")
+        boton = racha.locator("a.button")
+        destino = boton.get_attribute("href") if boton.count() else '(sin botón)'
+
+        print("%-26s %2d ejercicios · contador %2d · botón → %s %s"
+              % (pag.replace('clase-', '').replace('-en.html', ''), n, cuenta, destino,
+                 '' if not fallos else '  ✗ ' + ', '.join(fallos)))
+        if n != 12: err.append("%s: %d ejercicios, esperaba 12" % (pag, n))
+        if fallos: err.append("%s: respuestas buenas dadas por malas: %s" % (pag, fallos))
+        if cuenta != 12: err.append("%s: el contador marca %s" % (pag, cuenta))
+        if destino != 'ejercicios-en.html': err.append("%s: el botón va a %s" % (pag, destino))
+
+        # y que una mala no cuele
+        pg.reload(); pg.wait_for_timeout(1300)
+        exid, mala = MAL[pag]
+        r = responde(pg, exid, mala)
+        if r is not False:
+            err.append("%s: %s=%s se da por buena y no lo es" % (pag, exid, mala))
+        c.close()
+    br.close()
+
+print()
+print("\n".join(err) if err else "SIN ERRORES — 60 respuestas buenas aceptadas, 5 malas rechazadas")
+sys.exit(1 if err else 0)
