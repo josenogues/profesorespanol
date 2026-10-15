@@ -1243,3 +1243,14 @@ a.menu-button.current-page{background:rgba(255,255,255,.15)}
 .sobre-estrellas{display:inline-flex;align-items:center;gap:7px;font-size:15px;color:var(--muted);margin-bottom:16px}
 .sobre-estrellas b{font-family:var(--font-head);font-size:18px;color:var(--text)}
 .sobre-estrellas .s{color:var(--gold);letter-spacing:1px}
+
+/* ---------- Diálogo de clase, para leer en voz alta ---------- */
+.dialogo{background:var(--tint);border-radius:12px;padding:16px 20px;margin-top:4px}
+.dialogo p{margin:0 0 8px;font-size:16.5px;line-height:1.55}
+.dialogo p:last-child{margin-bottom:0}
+.dialogo p b{color:var(--primary);margin-right:6px}
+/* el turno de cada uno se alterna, para saber qué toca leer a quién */
+.dialogo p:nth-child(even){padding-left:22px;color:var(--text-secondary)}
+/* ---------- Actividad de hablar ---------- */
+ol.hablar{margin:0 0 0 20px}
+ol.hablar li{padding:6px 0 6px 4px;font-size:16.5px;line-height:1.55}
