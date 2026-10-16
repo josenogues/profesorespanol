@@ -221,6 +221,36 @@ window.JN_CLASES = [
                 'estoy casado', 'por la mañana', 'mi familia']
   },
   {
+    id: 'sonidos',
+    pagina: 'clase-sonidos',
+    nivel: 'A1',
+    perfil: 'angloparlantes',
+    pistas: ['en'],
+    titulo: {
+      es: 'Sonidos españoles, no ingleses',
+      it: 'Suoni spagnoli, non inglesi',
+      en: 'Spanish sounds, not English sounds'
+    },
+    etiquetas: ['pronunciación', 'fonética', 'vocales', 'la jota', 'be y uve',
+                'pero y perro', 'erre', 'hache muda', 'que y qui', 'gue y gui',
+                'diéresis', 'pingüino', 'tilde', 'acento']
+  },
+  {
+    id: 'futuro',
+    pagina: 'clase-futuro',
+    nivel: 'A1–A2',
+    perfil: 'angloparlantes',
+    pistas: ['en'],
+    titulo: {
+      es: 'El futuro, y lo que se dice en su lugar',
+      it: 'Il futuro, e quello che si dice al suo posto',
+      en: 'The future, and what people say instead'
+    },
+    etiquetas: ['futuro simple', 'hablaré', 'ir a', 'voy a', 'tendré', 'haré',
+                'futuro irregular', 'planes', 'predicciones', 'serán las tres',
+                'futuro de probabilidad']
+  },
+  {
     id: 'marcadores',
     pagina: 'clase-marcadores',
     nivel: 'A1–A2',

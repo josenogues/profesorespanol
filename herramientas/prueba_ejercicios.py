@@ -93,6 +93,14 @@ BIEN = {
  'clase-sobre-ti-en.html': {"tm1":"me","tm2":"de","tm3":"vivo","tm4":"Soy ingeniero",
    "tm5":"Tengo treinta años","tm6":"en","tm7":"Estoy","tm8":"tengo","tm9":"No tengo",
    "tm10":"Por","tm11":"de","tm12":"Vivo en Madrid"},
+ 'clase-sonidos-en.html': {"fo1":"one short o, no slide","fo2":"is silent","fo3":"sounds",
+   "fo4":"h","fo5":"exactly the same","fo6":"the th in «think»",
+   "fo7":"the j in «jamón»","fo8":"u","fo9":"perro","fo10":"the strong rolled r",
+   "fo11":"three different words","fo12":"caro"},
+ 'clase-futuro-en.html': {"fu1":"hablaré","fu2":"comeremos","fu3":"vivirán",
+   "fu4":"hablaremos","fu5":"comer","fu6":"Hablaré","fu7":"Mañana voy a trabajar",
+   "fu8":"tendré","fu9":"haré","fu10":"the stem — the endings stay",
+   "fu11":"It must be about three","fu12":"llamaré"},
 }
 
 # una respuesta mala por clase, para comprobar que no cuela
@@ -131,7 +139,9 @@ MAL = {'clase-gustar-en.html': ("g2", "gusta"),
        'clase-reunion-en.html': ("re3", "interrumpo"),
        'clase-italiano-trabajo-it.html': ("it2", "¿Quién habla?"),
        'clase-saludos-en.html': ("sa11", "Adiós"),
-       'clase-sobre-ti-en.html': ("tm4", "Soy un ingeniero")}
+       'clase-sobre-ti-en.html': ("tm4", "Soy un ingeniero"),
+       'clase-sonidos-en.html': ("fo9", "pero"),
+       'clase-futuro-en.html': ("fu7", "Mañana trabajaré")}
 
 SIEMBRA = ("localStorage.setItem('__falso_usuario','anna@x.com');"
            "localStorage.setItem('jn_access_granted','true');"
