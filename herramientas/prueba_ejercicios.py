@@ -90,6 +90,9 @@ BIEN = {
  'clase-saludos-en.html': {"sa1":"Buenos días","sa2":"Buenas tardes","sa3":"estás",
    "sa4":"está","sa5":"te","sa6":"tu","sa7":"me","sa8":"de","sa9":"Encantado",
    "sa10":"Encantada","sa11":"Hasta luego","sa12":"encantado"},
+ 'clase-sobre-ti-en.html': {"tm1":"me","tm2":"de","tm3":"vivo","tm4":"Soy ingeniero",
+   "tm5":"Tengo treinta años","tm6":"en","tm7":"Estoy","tm8":"tengo","tm9":"No tengo",
+   "tm10":"Por","tm11":"de","tm12":"Vivo en Madrid"},
 }
 
 # una respuesta mala por clase, para comprobar que no cuela
@@ -127,7 +130,8 @@ MAL = {'clase-gustar-en.html': ("g2", "gusta"),
        'clase-reunion-it.html': ("re3", "interrumpo"),
        'clase-reunion-en.html': ("re3", "interrumpo"),
        'clase-italiano-trabajo-it.html': ("it2", "¿Quién habla?"),
-       'clase-saludos-en.html': ("sa11", "Adiós")}
+       'clase-saludos-en.html': ("sa11", "Adiós"),
+       'clase-sobre-ti-en.html': ("tm4", "Soy un ingeniero")}
 
 SIEMBRA = ("localStorage.setItem('__falso_usuario','anna@x.com');"
            "localStorage.setItem('jn_access_granted','true');"

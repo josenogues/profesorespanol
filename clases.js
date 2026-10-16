@@ -206,6 +206,21 @@ window.JN_CLASES = [
                 'encantado', 'me llamo', 'hasta luego', 'despedirse']
   },
   {
+    id: 'sobre-ti',
+    pagina: 'clase-sobre-ti',
+    nivel: 'A1',
+    perfil: 'angloparlantes',
+    pistas: ['en'],
+    titulo: {
+      es: 'Háblame de ti',
+      it: 'Parlami di te',
+      en: 'Tell me about you'
+    },
+    etiquetas: ['presentarse', 'de dónde eres', 'a qué te dedicas', 'cuántos años tienes',
+                'soy ingeniero', 'tengo treinta años', 'trabajo en', 'trabajo de',
+                'estoy casado', 'por la mañana', 'mi familia']
+  },
+  {
     id: 'marcadores',
     pagina: 'clase-marcadores',
     nivel: 'A1–A2',
