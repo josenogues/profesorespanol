@@ -191,6 +191,50 @@ window.JN_CLASES = [
                 'actualmente', 'sensible', 'librería', 'molestar']
   },
 
+  {
+    id: 'marcadores',
+    pagina: 'clase-marcadores',
+    nivel: 'A1–A2',
+    perfil: 'angloparlantes',
+    pistas: ['en'],
+    titulo: {
+      es: 'Las palabras que sujetan una historia',
+      it: 'Le parole che reggono una storia',
+      en: 'The words that hold a story together'
+    },
+    etiquetas: ['marcadores temporales', 'conectores', 'anteayer', 'pasado mañana',
+                'hace tres días', 'dentro de tres días', 'sin embargo', 'así que',
+                'porque', 'como']
+  },
+  {
+    id: 'presente',
+    pagina: 'clase-presente',
+    nivel: 'A1',
+    perfil: 'angloparlantes',
+    pistas: ['en'],
+    titulo: {
+      es: 'El presente, y los que lo rompen',
+      it: 'Il presente, e quelli che lo rompono',
+      en: 'The present, and the ones that break it'
+    },
+    etiquetas: ['presente', 'conjugación', 'regulares', 'irregulares', 'hago', 'salgo',
+                'e→ie', 'o→ue', 'ser', 'estar', 'ir', 'tener']
+  },
+  {
+    id: 'costumbre',
+    pagina: 'clase-costumbre',
+    nivel: 'A1–A2',
+    perfil: 'angloparlantes',
+    pistas: ['en'],
+    titulo: {
+      es: 'Tres verbos que llevan a otro',
+      it: 'Tre verbi che ne portano un altro',
+      en: 'Three verbs that carry another one'
+    },
+    etiquetas: ['soler', 'ir a + infinitivo', 'tener que', 'hay que', 'perífrasis',
+                'costumbre', 'obligación']
+  },
+
   // ─── Español para el trabajo ───
   {
     id: 'llamada',

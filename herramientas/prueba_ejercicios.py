@@ -63,8 +63,18 @@ BIEN = {
  'clase-formas-pasado-es.html': {"fp1":"hable","fp2":"comio","fp3":"vivieron","fp4":"hablaste","fp5":"vivido","fp6":"habeis","fp7":"abierto","fp8":"hecho","fp9":"puesto","fp10":"escrito","fp11":"vuelto","fp12":"he roto el vaso"},
  'clase-formas-pasado-it.html': {"fp1":"hable","fp2":"comio","fp3":"vivieron","fp4":"hablaste","fp5":"vivido","fp6":"habeis","fp7":"abierto","fp8":"hecho","fp9":"puesto","fp10":"escrito","fp11":"vuelto","fp12":"he roto el vaso"},
  'clase-formas-pasado-en.html': {"fp1":"hable","fp2":"comio","fp3":"vivieron","fp4":"hablaste","fp5":"vivido","fp6":"habeis","fp7":"abierto","fp8":"hecho","fp9":"puesto","fp10":"escrito","fp11":"vuelto","fp12":"he roto el vaso"},
+ 'clase-marcadores-en.html': {"mk1":"hace tres días","mk2":"anteayer","mk3":"anoche",
+   "mk4":"de vez en cuando","mk5":"Currently","mk6":"era","mk7":"pasado",
+   "mk8":"dentro de tres días","mk9":"hace tres días","mk10":"viene","mk11":"algun",
+   "mk12":"voy manana","mk13":"pero","mk14":"así que","mk15":"Como","mk16":"embargo",
+   "mk17":"luego","mk18":"resumen"},
+ 'clase-presente-en.html': {"pr1":"hablo","pr2":"comemos","pr3":"vivimos","pr4":"trabajan",
+   "pr5":"bebes","pr6":"escribe","pr7":"hago","pr8":"salgo","pr9":"puedo","pr10":"queremos",
+   "pr11":"tengo","pr12":"salgo los viernes"},
+ 'clase-costumbre-en.html': {"co1":"suelo","co2":"Solemos","co3":"comer","co4":"vamos",
+   "co5":"suelen","co6":"Voy a comiendo","co7":"tengo","co8":"tienes","co9":"Hay",
+   "co10":"hayo que","co11":"tenemos","co12":"suelo trabajar desde casa"},
 }
-
 # una respuesta mala por clase, para comprobar que no cuela
 MAL = {'clase-gustar-en.html': ("g2", "gusta"),
        'clase-to-be-en.html': ("tb1", "Estoy"),
@@ -83,7 +93,10 @@ MAL = {'clase-gustar-en.html': ("g2", "gusta"),
        'clase-tres-pasados-en.html': ("tp2", "Sonaba"),
        'clase-formas-pasado-es.html': ("fp7", "abrido"),
        'clase-formas-pasado-it.html': ("fp7", "abrido"),
-       'clase-formas-pasado-en.html': ("fp7", "abrido")}
+       'clase-formas-pasado-en.html': ("fp7", "abrido"),
+       'clase-marcadores-en.html': ("mk1", "tres días hace"),
+       'clase-presente-en.html': ("pr9", "podo"),
+       'clase-costumbre-en.html': ("co2", "Suelemos")}
 
 SIEMBRA = ("localStorage.setItem('__falso_usuario','anna@x.com');"
            "localStorage.setItem('jn_access_granted','true');"
@@ -141,12 +154,16 @@ with sync_playwright() as p:
         boton = racha.locator("a.button")
         destino = boton.get_attribute("href") if boton.count() else '(sin botón)'
 
-        print("%-26s %2d ejercicios · contador %2d · botón → %s %s"
+        print("%-28s %2d ejercicios · contador %2d · botón → %s %s"
               % (pag.replace('clase-', '').replace('-en.html', ''), n, cuenta, destino,
                  '' if not fallos else '  ✗ ' + ', '.join(fallos)))
-        if n != 12: err.append("%s: %d ejercicios, esperaba 12" % (pag, n))
+        esperados = len(respuestas)
+        if n != esperados:
+            err.append("%s: %d ejercicios en la página y %d respuestas apuntadas"
+                       % (pag, n, esperados))
         if fallos: err.append("%s: respuestas buenas dadas por malas: %s" % (pag, fallos))
-        if cuenta != 12: err.append("%s: el contador marca %s" % (pag, cuenta))
+        if cuenta != esperados:
+            err.append("%s: el contador marca %s y debería marcar %d" % (pag, cuenta, esperados))
         # el botón lleva al hub del idioma de la página, no siempre al inglés
         if destino != 'ejercicios-%s.html' % pista:
             err.append("%s: el botón va a %s y debería ir al hub en %s" % (pag, destino, pista))
