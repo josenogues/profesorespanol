@@ -74,8 +74,20 @@ BIEN = {
  'clase-costumbre-en.html': {"co1":"suelo","co2":"Solemos","co3":"comer","co4":"vamos",
    "co5":"suelen","co6":"Voy a comiendo","co7":"tengo","co8":"tienes","co9":"Hay",
    "co10":"hayo que","co11":"tenemos","co12":"suelo trabajar desde casa"},
-}
-# una respuesta mala por clase, para comprobar que no cuela
+ 'clase-motor-es.html': {"mo1":"estaba","mo2":"habia","mo3":"iba","mo4":"gerundio","mo5":"estuve","mo6":"estare","mo7":"habia","mo8":"participio","mo9":"infinitivo","mo10":"iba","mo11":"estaria","mo12":"habia comido"},
+ 'clase-motor-it.html': {"mo1":"estaba","mo2":"habia","mo3":"iba","mo4":"gerundio","mo5":"estuve","mo6":"estare","mo7":"habia","mo8":"participio","mo9":"infinitivo","mo10":"iba","mo11":"estaria","mo12":"habia comido"},
+ 'clase-motor-en.html': {"mo1":"estaba","mo2":"habia","mo3":"iba","mo4":"gerundio","mo5":"estuve","mo6":"estare","mo7":"habia","mo8":"participio","mo9":"infinitivo","mo10":"iba","mo11":"estaria","mo12":"habia comido"},
+ 'clase-llamada-es.html': {"ll1":"Logística, dígame.","ll2":"parte","ll3":"por","ll4":"Ahora mismo le paso.","ll5":"cuelgue","ll6":"encuentra","ll7":"recado","ll8":"repetir","ll9":"deletrea","ll10":"disculpe","ll11":"quedamos","ll12":"de parte de quien"},
+ 'clase-llamada-it.html': {"ll1":"Logística, dígame.","ll2":"parte","ll3":"por","ll4":"Ahora mismo le paso.","ll5":"cuelgue","ll6":"encuentra","ll7":"recado","ll8":"repetir","ll9":"deletrea","ll10":"disculpe","ll11":"quedamos","ll12":"de parte de quien"},
+ 'clase-llamada-en.html': {"ll1":"Logística, dígame.","ll2":"parte","ll3":"por","ll4":"Ahora mismo le paso.","ll5":"cuelgue","ll6":"encuentra","ll7":"recado","ll8":"repetir","ll9":"deletrea","ll10":"disculpe","ll11":"quedamos","ll12":"de parte de quien"},
+ 'clase-suavizar-es.html': {"su1":"¿Podría mandarme el albarán?","su2":"podria","su3":"quería","su4":"seria","su5":"venia","su6":"subjuntivo","su7":"mandara","su8":"acuerdo","su9":"Eso está mal.","su10":"sea","su11":"perdone","su12":"podria ayudarme"},
+ 'clase-suavizar-it.html': {"su1":"¿Podría mandarme el albarán?","su2":"podria","su3":"quería","su4":"seria","su5":"venia","su6":"subjuntivo","su7":"mandara","su8":"acuerdo","su9":"Eso está mal.","su10":"sea","su11":"perdone","su12":"podria ayudarme"},
+ 'clase-suavizar-en.html': {"su1":"¿Podría mandarme el albarán?","su2":"podria","su3":"quería","su4":"seria","su5":"venia","su6":"subjuntivo","su7":"mandara","su8":"acuerdo","su9":"Eso está mal.","su10":"sea","su11":"perdone","su12":"podria ayudarme"},
+ 'clase-reunion-es.html': {"re1":"parece","re2":"puntos","re3":"interrumpa","re4":"subjuntivo","re5":"pasamos","re6":"Puedo","re7":"vista","re8":"veo","re9":"en","re10":"haces","re11":"quedamos","re12":"perdona que te interrumpa"},
+ 'clase-reunion-it.html': {"re1":"parece","re2":"puntos","re3":"interrumpa","re4":"subjuntivo","re5":"pasamos","re6":"Puedo","re7":"vista","re8":"veo","re9":"en","re10":"haces","re11":"quedamos","re12":"perdona que te interrumpa"},
+ 'clase-reunion-en.html': {"re1":"parece","re2":"puntos","re3":"interrumpa","re4":"subjuntivo","re5":"pasamos","re6":"Puedo","re7":"vista","re8":"veo","re9":"en","re10":"haces","re11":"quedamos","re12":"perdona que te interrumpa"},
+ 'clase-italiano-trabajo-it.html': {"it1":"¿Diga?","it2":"¿De parte de quién?","it3":"No cuelgue.","it4":"No le oigo.","it5":"Le vuelvo a llamar.","it6":"recado","it7":"Tienes el micro silenciado.","it8":"Comparto pantalla.","it9":"Ya hablamos.","it10":"Se ha cortado.","it11":"oyes","it12":"pasa"},
+}# una respuesta mala por clase, para comprobar que no cuela
 MAL = {'clase-gustar-en.html': ("g2", "gusta"),
        'clase-to-be-en.html': ("tb1", "Estoy"),
        'clase-frio-en.html': ("fr1", "Soy"),
@@ -96,7 +108,20 @@ MAL = {'clase-gustar-en.html': ("g2", "gusta"),
        'clase-formas-pasado-en.html': ("fp7", "abrido"),
        'clase-marcadores-en.html': ("mk1", "tres días hace"),
        'clase-presente-en.html': ("pr9", "podo"),
-       'clase-costumbre-en.html': ("co2", "Suelemos")}
+       'clase-costumbre-en.html': ("co2", "Suelemos"),
+       'clase-motor-es.html': ("mo1", "estuve"),
+       'clase-motor-it.html': ("mo1", "estuve"),
+       'clase-motor-en.html': ("mo1", "estuve"),
+       'clase-llamada-es.html': ("ll8", "colgar"),
+       'clase-llamada-it.html': ("ll8", "colgar"),
+       'clase-llamada-en.html': ("ll8", "colgar"),
+       'clase-suavizar-es.html': ("su3", "quiero"),
+       'clase-suavizar-it.html': ("su3", "quiero"),
+       'clase-suavizar-en.html': ("su3", "quiero"),
+       'clase-reunion-es.html': ("re3", "interrumpo"),
+       'clase-reunion-it.html': ("re3", "interrumpo"),
+       'clase-reunion-en.html': ("re3", "interrumpo"),
+       'clase-italiano-trabajo-it.html': ("it2", "¿Quién habla?")}
 
 SIEMBRA = ("localStorage.setItem('__falso_usuario','anna@x.com');"
            "localStorage.setItem('jn_access_granted','true');"
