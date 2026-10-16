@@ -192,6 +192,20 @@ window.JN_CLASES = [
   },
 
   {
+    id: 'saludos',
+    pagina: 'clase-saludos',
+    nivel: 'A1',
+    perfil: 'angloparlantes',
+    pistas: ['en'],
+    titulo: {
+      es: 'Los dos primeros minutos',
+      it: 'I primi due minuti',
+      en: 'The first two minutes'
+    },
+    etiquetas: ['saludos', 'tú y usted', 'buenos días', 'buenas tardes', 'buenas noches',
+                'encantado', 'me llamo', 'hasta luego', 'despedirse']
+  },
+  {
     id: 'marcadores',
     pagina: 'clase-marcadores',
     nivel: 'A1–A2',

@@ -87,7 +87,12 @@ BIEN = {
  'clase-reunion-it.html': {"re1":"parece","re2":"puntos","re3":"interrumpa","re4":"subjuntivo","re5":"pasamos","re6":"Puedo","re7":"vista","re8":"veo","re9":"en","re10":"haces","re11":"quedamos","re12":"perdona que te interrumpa"},
  'clase-reunion-en.html': {"re1":"parece","re2":"puntos","re3":"interrumpa","re4":"subjuntivo","re5":"pasamos","re6":"Puedo","re7":"vista","re8":"veo","re9":"en","re10":"haces","re11":"quedamos","re12":"perdona que te interrumpa"},
  'clase-italiano-trabajo-it.html': {"it1":"¿Diga?","it2":"¿De parte de quién?","it3":"No cuelgue.","it4":"No le oigo.","it5":"Le vuelvo a llamar.","it6":"recado","it7":"Tienes el micro silenciado.","it8":"Comparto pantalla.","it9":"Ya hablamos.","it10":"Se ha cortado.","it11":"oyes","it12":"pasa"},
-}# una respuesta mala por clase, para comprobar que no cuela
+ 'clase-saludos-en.html': {"sa1":"Buenos días","sa2":"Buenas tardes","sa3":"estás",
+   "sa4":"está","sa5":"te","sa6":"tu","sa7":"me","sa8":"de","sa9":"Encantado",
+   "sa10":"Encantada","sa11":"Hasta luego","sa12":"encantado"},
+}
+
+# una respuesta mala por clase, para comprobar que no cuela
 MAL = {'clase-gustar-en.html': ("g2", "gusta"),
        'clase-to-be-en.html': ("tb1", "Estoy"),
        'clase-frio-en.html': ("fr1", "Soy"),
@@ -121,7 +126,8 @@ MAL = {'clase-gustar-en.html': ("g2", "gusta"),
        'clase-reunion-es.html': ("re3", "interrumpo"),
        'clase-reunion-it.html': ("re3", "interrumpo"),
        'clase-reunion-en.html': ("re3", "interrumpo"),
-       'clase-italiano-trabajo-it.html': ("it2", "¿Quién habla?")}
+       'clase-italiano-trabajo-it.html': ("it2", "¿Quién habla?"),
+       'clase-saludos-en.html': ("sa11", "Adiós")}
 
 SIEMBRA = ("localStorage.setItem('__falso_usuario','anna@x.com');"
            "localStorage.setItem('jn_access_granted','true');"
