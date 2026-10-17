@@ -213,6 +213,16 @@ with sync_playwright() as p:
         if destino != 'ejercicios-%s.html' % pista:
             err.append("%s: el botón va a %s y debería ir al hub en %s" % (pag, destino, pista))
 
+        # repetir un acierto NO suma: el contador cuenta ejercicios hechos, no
+        # clics. Antes subía en cada acierto, así que bastaba con darle cuatro
+        # veces a «Comprobar» sobre una respuesta ya buena para inflarlo.
+        exid0, resp0 = list(respuestas.items())[0]
+        responde(pg, exid0, resp0)
+        responde(pg, exid0, resp0)
+        if pg.evaluate("window.jnGetExerciseCount()") != esperados:
+            err.append("%s: repetir %s sube el contador a %s, y debería quedarse en %d"
+                       % (pag, exid0, pg.evaluate("window.jnGetExerciseCount()"), esperados))
+
         # y que una mala no cuele
         pg.reload(); pg.wait_for_timeout(1300)
         exid, mala = MAL[pag]

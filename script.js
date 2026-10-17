@@ -304,10 +304,17 @@ a.closest(".menu-item").classList.add("active","current-section");
   function getDone(){
     try { return JSON.parse(localStorage.getItem(pageKey) || '[]'); } catch(e){ return []; }
   }
+  // Devuelve true solo la primera vez que se acierta ESE ejercicio en ESTA
+  // página. De eso depende el contador: antes subía en cada acierto, así que
+  // pulsar «Comprobar» cuatro veces sobre una respuesta ya buena sumaba
+  // cuatro, y recargar y repetir sumaba otra vez. El número que ve José en la
+  // ficha del alumno tiene que ser ejercicios hechos, no clics.
   function markDone(id){
     const done = getDone();
-    if(!done.includes(id)){ done.push(id); localStorage.setItem(pageKey, JSON.stringify(done)); }
+    const primera = !done.includes(id);
+    if(primera){ done.push(id); localStorage.setItem(pageKey, JSON.stringify(done)); }
     updateProgress();
+    return primera;
   }
   function updateProgress(){
     const total = document.querySelectorAll('.exercise-block').length;
@@ -331,8 +338,7 @@ a.closest(".menu-item").classList.add("active","current-section");
       fb.className = 'exercise-feedback correct';
       block.classList.add('is-done');
       block.dataset.tries = '0';
-      markDone(block.dataset.exid);
-      window.jnCountExercise();
+      if(markDone(block.dataset.exid)) window.jnCountExercise();
       return false;
     }
     const tries = parseInt(block.dataset.tries || '0', 10) + 1;
