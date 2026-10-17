@@ -13,8 +13,9 @@
 <link rel="stylesheet" href="styles.css?v=20261015i">
 <script>if(localStorage.getItem('jn_theme')==='dark')document.documentElement.setAttribute('data-theme','dark');</script>
 <style>
-body{padding:40px 24px}
-.panel-wrap{max-width:1100px;margin:0 auto}
+body{padding:40px clamp(12px,3vw,48px)}
+.panel-wrap{width:100%;max-width:none;margin:0 auto}
+@media(max-width:1100px){.panel-wrap table{font-size:14px}.panel-wrap table thead th,.panel-wrap table tbody td,.panel-wrap table tfoot td{padding:9px 10px}}
 .panel-header{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:28px;flex-wrap:wrap}
 .panel-header h1{font-size:28px}
 .panel-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:14px;margin-bottom:28px}
@@ -130,6 +131,7 @@ body{padding:40px 24px}
 /* La tabla era el único bloque de la página sin separación por abajo, así que
    lo de debajo (el catálogo, o la ficha) se le quedaba pegado. */
 .table-wrap{margin-bottom:30px}
+table tfoot td{border-top:2px solid var(--border);background:var(--tint);font-weight:700;padding:11px 16px}
 /* Barra de acciones sobre la tabla de alumnos */
 .al-acciones{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:16px}
 .al-buscar{position:relative;flex:1;min-width:200px}
