@@ -753,6 +753,12 @@ a.closest(".menu-item").classList.add("active","current-section");
 (function(){
   const ACCESS_GATE_ENABLED = true; // ponlo en false para abrir la web a todos
   const ACCESS_KEY = 'jn_access_granted';
+  // El profesor. Se guarda aparte de los alumnos a propósito: esta marca abre
+  // la puerta pero no convierte a nadie en alumno. Esto es la ventanita, no
+  // la cerradura: quien decide de verdad quién lee qué son las reglas de
+  // Firestore, que ya le dejan leerlo todo a él y solo lo suyo a cada alumno.
+  const PROFESOR = 'ncjosemaria@gmail.com';
+  const PROFE_KEY = 'jn_profe';
 
   if(!ACCESS_GATE_ENABLED) return;
 
@@ -931,10 +937,21 @@ a.closest(".menu-item").classList.add("active","current-section");
   function fuera(aviso){
     localStorage.removeItem(ACCESS_KEY);
     localStorage.removeItem('jn_student_email');
+    localStorage.removeItem(PROFE_KEY);
     abrePuerta(aviso);
   }
 
   function compruebaFicha(email){
+    // El profesor entra en las páginas de clase sin tener ficha de alumno:
+    // son suyas, y desde el panel abre la clase de cada alumno para verla.
+    // Se le abre la puerta pero NO se le apunta como alumno: ni visita, ni
+    // jn_student_email, porque si no aparecería en su propia lista y sus
+    // ejercicios de prueba se sumarían a una ficha fantasma.
+    if(email === PROFESOR){
+      localStorage.setItem(PROFE_KEY, 'true');
+      cierraPuerta();
+      return Promise.resolve();
+    }
     return window.jnCloudGetStudentDoc(email).then(function(ficha){
       if(ficha && ficha.activo !== false){ dentro(email); return; }
       // ha entrado con un email que no es de alumno, o está de baja
@@ -946,7 +963,8 @@ a.closest(".menu-item").classList.add("active","current-section");
   // enseguida y la comprobación va por detrás. Si no, la puerta sale cerrada
   // desde el principio. Así no parpadea ni se enseña el contenido a quien no
   // debe verlo.
-  const pista = localStorage.getItem(ACCESS_KEY) === 'true' && localStorage.getItem('jn_student_email');
+  const pista = localStorage.getItem(PROFE_KEY) === 'true' ||
+    (localStorage.getItem(ACCESS_KEY) === 'true' && localStorage.getItem('jn_student_email'));
   if(!pista) abrePuerta('');
 
   esperaNube(10000)

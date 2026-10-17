@@ -23,7 +23,8 @@ function withTimeout(promise, ms, label){
   ]);
 }
 
-const statsEl = document.getElementById('panel-stats');
+const agendaEl = document.getElementById('panel-agenda');
+const cuentaEl = document.getElementById('al-cuenta');
 const bodyEl = document.getElementById('panel-table-body');
 const loadingEl = document.getElementById('panel-loading');
 const refreshBtn = document.getElementById('panel-refresh');
@@ -97,6 +98,107 @@ function fechaCorta(iso){
   return partes[2].replace(/^0/, '') + ' ' + (MESES[+partes[1] - 1] || '');
 }
 
+// Cuántos días hace. Null si nunca ha hecho nada.
+function diasDesde(ts){
+  if(!ts || typeof ts.toMillis !== 'function') return null;
+  return Math.floor((Date.now() - ts.toMillis()) / 86400000);
+}
+
+// «hoy», «ayer», «hace 4 días» y, a partir de ahí, la fecha: una fecha con
+// hora y minutos ocupaba media columna y no decía nada que esto no diga.
+function haceCuanto(ts){
+  const d = diasDesde(ts);
+  if(d === null) return '<span class="al-sin">nunca</span>';
+  if(d <= 0) return 'hoy';
+  if(d === 1) return 'ayer';
+  if(d < 30) return 'hace ' + d + ' días';
+  return formatDate(ts).slice(0, 10);
+}
+
+// Lo mismo mirando hacia delante, para la agenda.
+function cuandoCorto(iso){
+  const hoy = hoyISO();
+  if(iso === hoy) return 'hoy';
+  const d = new Date(iso + 'T12:00:00');
+  const manana = new Date(new Date(hoy + 'T12:00:00').getTime() + 86400000);
+  if(d.toISOString().slice(0, 10) === manana.toISOString().slice(0, 10)) return 'mañana';
+  const DIAS = ['dom', 'lun', 'mar', 'mié', 'jue', 'vie', 'sáb'];
+  return DIAS[d.getDay()] + ' ' + fechaCorta(iso);
+}
+
+function euros(n){
+  if(n === null || n === undefined || n === '' || isNaN(+n)) return '';
+  const v = +n;
+  return (Math.round(v * 100) % 100 === 0 ? String(Math.round(v)) : v.toFixed(2)) + ' €';
+}
+
+// La página de una clase del catálogo, en el idioma que le toca a ese alumno.
+// Una clase sin «pistas» existe en los tres; una con pistas solo en esas, así
+// que a un italiano con una clase de angloparlantes se le abre la inglesa,
+// que es la única que hay.
+function paginaDeClase(a, idioma){
+  if(!a || a.rapida) return null;
+  const c = window.jnClasePorId && window.jnClasePorId(a.id);
+  if(!c || !c.pagina) return null;
+  const pistas = (c.pistas && c.pistas.length) ? c.pistas : ['es', 'it', 'en'];
+  const pista = pistas.indexOf(idioma) >= 0 ? idioma : pistas[0];
+  return c.pagina + '-' + pista + '.html';
+}
+
+// ───────────────── Lo que tienes por delante ─────────────────
+// Esto ocupa el sitio de los cuatro números de antes. Un número que dice
+// «10 alumnos» no se mira dos veces; esto se mira todos los días: qué clases
+// vienen en los próximos siete, y a quién no le has preparado la siguiente.
+// Todo sale de lo que ya está cargado, sin pedirle nada más a Firebase.
+
+function pintaAgenda(){
+  if(!agendaEl) return;
+  const hoy = hoyISO();
+  const tope = new Date(new Date(hoy + 'T12:00:00').getTime() + 7 * 86400000)
+    .toISOString().slice(0, 10);
+  const altas = [...porEmail.values()].filter(s => s.activo !== false);
+
+  const proximas = [];
+  altas.forEach(s => {
+    (Array.isArray(s.clases) ? s.clases : []).forEach(c => {
+      if(c.fecha && c.fecha >= hoy && c.fecha <= tope){
+        proximas.push({ fecha: c.fecha, email: s.email, quien: nombreDe(s) || s.email,
+                        que: tituloDe(c) });
+      }
+    });
+  });
+  proximas.sort((a, b) => a.fecha.localeCompare(b.fecha));
+
+  // sin clase futura: los que hay que mover. Primero el que lleva más tiempo.
+  const sueltos = altas.filter(s => !proximaClase(s))
+    .sort((a, b) => (diasDesde(b.updatedAt) || 9999) - (diasDesde(a.updatedAt) || 9999));
+
+  const listaHtml = proximas.length
+    ? proximas.map(p => `<div class="ag-dia${p.fecha === hoy ? ' hoy' : ''}" data-ficha="${esc(p.email)}">
+        <span class="ag-cuando">${esc(cuandoCorto(p.fecha))}</span>
+        <span class="ag-quien">${esc(p.quien)}</span>
+        <span class="ag-que">${esc(p.que)}</span></div>`).join('')
+    : '<p class="ag-vacio">No hay ninguna clase con fecha en los próximos siete días.</p>';
+
+  const chipsHtml = sueltos.length
+    ? '<div class="ag-chips">' + sueltos.map(s => {
+        const d = diasDesde(s.updatedAt);
+        const cuanto = d === null ? 'nunca ha entrado'
+          : d <= 0 ? 'hoy' : d === 1 ? 'ayer' : 'hace ' + d + ' d';
+        return `<button class="ag-chip" data-ficha="${esc(s.email)}">${
+          esc(nombreDe(s) || s.email)} <span>${esc(cuanto)}</span></button>`;
+      }).join('') + '</div>'
+    : '<p class="ag-vacio">Todos tienen su próxima clase puesta.</p>';
+
+  agendaEl.innerHTML =
+    `<div class="ag-caja"><h3 class="ag-h"><i class="ti ti-calendar"></i> Los próximos siete días</h3>${listaHtml}</div>` +
+    `<div class="ag-caja"><h3 class="ag-h"><i class="ti ti-alarm"></i> Sin próxima clase</h3>${chipsHtml}</div>`;
+}
+
+// Todo lo que cambia cuando cambian los datos: la agenda de arriba también,
+// que si no, al ponerle una clase a alguien seguía diciendo que no la tiene.
+function repinta(){ pintaAgenda(); pintaTabla(); }
+
 // ───────────────── La tabla de alumnos ─────────────────
 // Se vuelve a pintar sin tocar Firebase cuando escribes en el buscador o
 // pides ver las bajas: los datos ya están en porEmail.
@@ -133,29 +235,54 @@ function pintaTabla(){
     const baja = s.activo === false;
     const nombre = nombreDe(s);
     const marca = [s.nivel, (s.idioma || '').toUpperCase()].filter(Boolean).join(' · ');
+    // los cursos se metieron dentro de «Práctica»: casi siempre están vacíos y
+    // una columna entera para un guion no se gana el sitio
     const cursos = courseChips(s);
     const cursosHtml = cursos.length
-      ? `<div class="panel-levels">${cursos.map(c => {
+      ? `<div class="panel-levels" style="margin-top:4px">${cursos.map(c => {
           const count = c.total ? `${c.done}/${c.total}` : `${c.done} pasos`;
           return `<span class="panel-course-chip${c.complete ? ' done' : ''}">${esc(c.name)} <b>${esc(count)}</b></span>`;
         }).join('')}</div>`
-      : '<span class="al-sin">—</span>';
+      : '';
     const prox = proximaClase(s);
     const proxHtml = prox
       ? `<div class="al-prox"><b>${esc(fechaCorta(prox.fecha))}</b><span>${esc(tituloDe(prox))}</span></div>`
       : '<span class="al-sin">sin programar</span>';
     const nClases = Array.isArray(s.clases) ? s.clases.length : 0;
+    // el botón de las clases: antes era un número suelto y no se veía que
+    // llevara a ninguna parte
+    const clasesHtml = nClases
+      ? `<span class="al-vercl">${nClases === 1 ? 'Ver su clase' : 'Ver sus ' + nClases + ' clases'
+        } <i class="ti ti-arrow-right"></i></span>`
+      : '<span class="al-vercl cero">Ponerle una <i class="ti ti-arrow-right"></i></span>';
+    const pagadoHtml = (s.pagado || s.pagado === 0)
+      ? `<span class="al-eur">${esc(euros(s.pagado))}</span>${
+          s.pagadoAt ? `<span class="al-desde">al ${esc(fechaCorta(s.pagadoAt))}</span>` : ''}`
+      : '<span class="al-sin">—</span>';
     return `<tr class="al-fila${baja ? ' baja' : ''}" data-ficha="${esc(s.email || '')}">
       <td><div class="al-quien"><b>${esc(nombre || s.email || '—')}</b>
         <span>${esc(nombre ? s.email : (marca || 'sin nombre'))}</span></div>${
         baja ? '<span class="panel-flag baja">Baja</span>' : ''}</td>
-      <td class="al-n">${nClases} <i class="ti ti-chevron-right" style="color:var(--muted)"></i></td>
-      <td class="al-n">${esc(s.exerciseCount || 0)}</td>
-      <td>${cursosHtml}</td>
-      <td>${esc(formatDate(s.updatedAt))}</td>
+      <td>${clasesHtml}</td>
+      <td class="al-n">${esc(s.exerciseCount || 0)}${cursosHtml}</td>
+      <td class="al-n">${s.tarifa ? `<span class="al-eur">${esc(euros(s.tarifa))}</span>` : '<span class="al-sin">—</span>'}</td>
+      <td class="al-n">${pagadoHtml}</td>
+      <td>${haceCuanto(s.updatedAt)}</td>
       <td>${proxHtml}</td>
     </tr>`;
   }).join('');
+
+  // el contador que pedía: al final de la tabla y sin ocupar media pantalla
+  if(cuentaEl){
+    const altas = [...porEmail.values()].filter(s => s.activo !== false).length;
+    const bajas = porEmail.size - altas;
+    const cobrado = [...porEmail.values()].reduce((n, s) => n + (+s.pagado || 0), 0);
+    cuentaEl.innerHTML = esc(
+      (altas === 1 ? '1 alumno' : altas + ' alumnos') +
+      (bajas ? (bajas === 1 ? ' · 1 de baja' : ' · ' + bajas + ' de baja') : '') +
+      (q || verBajas ? ' en total' : '')) +
+      (cobrado ? ' · <b>' + esc(euros(cobrado)) + '</b> cobrado en total' : '');
+  }
 }
 
 if(busqEl) busqEl.addEventListener('input', pintaTabla);
@@ -164,7 +291,8 @@ if(bajasEl) bajasEl.addEventListener('change', pintaTabla);
 async function loadStudents(){
   loadingEl.textContent = 'Cargando...';
   loadingEl.style.display = 'block';
-  statsEl.innerHTML = '';
+  if(agendaEl) agendaEl.innerHTML = '';
+  if(cuentaEl) cuentaEl.innerHTML = '';
   bodyEl.innerHTML = '';
   refreshBtn.disabled = true;
   try {
@@ -178,17 +306,7 @@ async function loadStudents(){
     porEmail.clear();
     students.forEach(s => { if(s.email) porEmail.set(s.email, s); });
 
-    // Cuatro números, no ocho: los que te dicen algo de un vistazo. Las
-    // visitas y los niveles superados se han quitado a propósito.
-    const altas = students.filter(s => s.activo !== false);
-    const weekAgo = Date.now() - 7 * 24 * 60 * 60 * 1000;
-    statsEl.innerHTML = [
-      ['Alumnos', altas.length],
-      ['Activos esta semana', altas.filter(s => s.updatedAt && s.updatedAt.toMillis && s.updatedAt.toMillis() > weekAgo).length],
-      ['Clases asignadas', altas.reduce((n, s) => n + (Array.isArray(s.clases) ? s.clases.length : 0), 0)],
-      ['Ejercicios hechos', altas.reduce((n, s) => n + (s.exerciseCount || 0), 0)]
-    ].map(([label, n]) => `<div class="panel-stat"><div class="n">${esc(n)}</div><div class="l">${esc(label)}</div></div>`).join('');
-
+    pintaAgenda();
     pintaTabla();
     // si tenías una ficha abierta, se queda abierta y con los datos frescos
     // (sin volver a saltar hacia ella, que estabas mirándola)
@@ -286,9 +404,16 @@ function pintaFicha(){
     const apu = (suyo && typeof suyo.t === 'string' && suyo.t.trim())
       ? `<div class="fi-apu"><b><i class="ti ti-note"></i> Sus apuntes</b><p>${esc(suyo.t)}</p></div>`
       : '';
+    // el título abre la clase tal y como la ve el alumno, en otra pestaña:
+    // antes había que ir al catálogo y buscarla a mano
+    const url = paginaDeClase(c, (porEmail.get(emailAbierto) || {}).idioma || 'es');
+    const tit = url
+      ? `<a href="${esc(url)}" target="_blank" rel="noopener" title="Abrir la clase en otra pestaña">${
+          esc(tituloDe(c))}<i class="ti ti-external-link"></i></a>`
+      : esc(tituloDe(c)) + (c.rapida ? '<span class="fi-rap">clase rápida</span>' : '');
     return `<div class="fi-row${pend ? ' pend' : ''}${apu ? ' con-apu' : ''}">
       <input type="date" class="fi-fecha" data-i="${i}" value="${esc(c.fecha || '')}">
-      <div class="fi-tit">${esc(tituloDe(c))}</div>
+      <div class="fi-tit">${tit}</div>
       <div class="fi-chips">${chips}</div>
       <input type="text" class="fi-nota" data-i="${i}" value="${esc(c.nota || '')}"
              placeholder="Nota para ti: cómo fue, qué repetir...">
@@ -316,7 +441,7 @@ async function guarda(){
       { clases: clasesAbiertas, email: emailAbierto }, { merge: true }), 8000, 'setDoc');
     const s = porEmail.get(emailAbierto);
     if(s) s.clases = clasesAbiertas.slice();
-    pintaTabla();   // cambian sus columnas de clases y de próxima clase
+    repinta();   // cambian sus columnas de clases, de próxima clase y la agenda
     avisa('Guardado.', 'ok');
     setTimeout(() => avisa(''), 2000);
   } catch(err) {
@@ -329,11 +454,21 @@ async function guarda(){
 async function guardaPerfil(){
   if(!emailAbierto) return;
   const s = porEmail.get(emailAbierto) || {};
+  // el dinero lo escribe él a mano: aquí no se multiplica nada ni se deduce
+  // nada de las clases dadas. Vacío se guarda como null, no como 0, para
+  // poder distinguir «no cobra» de «no lo he puesto».
+  const num = function(id){
+    const v = (document.getElementById(id).value || '').trim();
+    return v === '' || isNaN(+v) ? null : +v;
+  };
   const campos = {
     nombre: (document.getElementById(PERFIL.nombre).value || '').trim(),
     idioma: document.getElementById(PERFIL.idioma).value || '',
     nivel: document.getElementById(PERFIL.nivel).value || '',
-    activo: document.getElementById(PERFIL.activo).value !== 'no'
+    activo: document.getElementById(PERFIL.activo).value !== 'no',
+    tarifa: num('fi-tarifa'),
+    pagado: num('fi-pagado'),
+    pagadoAt: document.getElementById('fi-pagado-fecha').value || ''
   };
   avisa('Guardando...');
   try {
@@ -343,7 +478,7 @@ async function guardaPerfil(){
     Object.assign(s, campos);
     porEmail.set(emailAbierto, s);
     if(fQuien) fQuien.textContent = campos.nombre || emailAbierto;
-    pintaTabla();
+    repinta();
     avisa(campos.activo ? 'Guardado.' : 'Guardado: ya no puede entrar en la web.', 'ok');
     setTimeout(() => avisa(''), 2500);
   } catch(err) {
@@ -365,7 +500,7 @@ async function borraAlumno(){
     emailAbierto = null;
     clasesAbiertas = [];
     ficha.style.display = 'none';
-    pintaTabla();
+    repinta();
     // el aviso va encima de la tabla, que es donde se queda la vista al
     // cerrarse la ficha
     const linea = document.getElementById('al-estado');
@@ -407,6 +542,9 @@ function abreFicha(email){
   document.getElementById(PERFIL.idioma).value = s.idioma || '';
   document.getElementById(PERFIL.nivel).value = s.nivel || '';
   document.getElementById(PERFIL.activo).value = s.activo === false ? 'no' : 'si';
+  document.getElementById('fi-tarifa').value = (s.tarifa || s.tarifa === 0) ? s.tarifa : '';
+  document.getElementById('fi-pagado').value = (s.pagado || s.pagado === 0) ? s.pagado : '';
+  document.getElementById('fi-pagado-fecha').value = s.pagadoAt || '';
   if(fSelect){
     fSelect.innerHTML = (window.JN_CLASES || [])
       // con el catálogo creciendo, el nivel y la pista ahorran abrir la clase
@@ -429,6 +567,14 @@ document.addEventListener('click', function(e){
 
   const cerrar = e.target.closest('#ficha-cerrar');
   if(cerrar){ ficha.style.display = 'none'; emailAbierto = null; return; }
+
+  // «Actualizar a hoy»: no calcula nada, solo deja la fecha de hoy en el
+  // campo y guarda. Es la marca de hasta cuándo están cuadradas las cuentas.
+  if(e.target.closest('#fi-cobro-hoy')){
+    const f = document.getElementById('fi-pagado-fecha');
+    if(f){ f.value = hoyISO(); guardaPerfil(); }
+    return;
+  }
 
   if(e.target.closest('#fi-borrar')){ preguntaBorrar(true); return; }
   if(e.target.closest('#fi-borrar-no')){ preguntaBorrar(false); return; }
@@ -460,7 +606,7 @@ document.addEventListener('click', function(e){
 // no en cada tecla
 document.addEventListener('change', function(e){
   const f = e.target.closest('.fi-fecha');
-  if(f){ clasesAbiertas[+f.dataset.i].fecha = f.value; pintaFicha(); pintaTabla(); guarda(); return; }
+  if(f){ clasesAbiertas[+f.dataset.i].fecha = f.value; pintaFicha(); repinta(); guarda(); return; }
   const n = e.target.closest('.fi-nota');
   if(n){ clasesAbiertas[+n.dataset.i].nota = n.value; guarda(); return; }
   if(e.target && e.target.closest('.fi-perfil') && ficha.contains(e.target)) guardaPerfil();
@@ -852,7 +998,7 @@ async function daDeAlta(){
     await withTimeout(setDoc(doc(db, 'students', email), campos, { merge: true }), 8000, 'setDoc');
     porEmail.set(email, Object.assign({}, ya || {}, campos));
     ['alta-email', 'alta-nombre'].forEach(id => { document.getElementById(id).value = ''; });
-    pintaTabla();
+    repinta();   // el alumno nuevo entra ya en «sin próxima clase»
     avisaAlta((campos.nombre || email) + ' ya puede entrar en la web.', 'ok');
   } catch(err) {
     avisaAlta('No se ha podido guardar: ' + (err && err.message ? err.message : 'error'), 'mal');
