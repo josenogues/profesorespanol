@@ -23,7 +23,6 @@ function withTimeout(promise, ms, label){
   ]);
 }
 
-const agendaEl = document.getElementById('panel-agenda');
 const cuentaEl = document.getElementById('al-cuenta');
 const bodyEl = document.getElementById('panel-table-body');
 const loadingEl = document.getElementById('panel-loading');
@@ -153,42 +152,8 @@ function paginaDeClase(a, idioma){
   return c.pagina + '-' + pista + '.html';
 }
 
-// ───────────────── A quién hace tiempo que no ves ─────────────────
-// Aquí vivía una agenda de los próximos siete días y una lista de «sin
-// próxima clase». Fuera las dos: de lo que viene se encarga Google Calendar,
-// y tener la misma cita en dos sitios solo sirve para que un día no cuadren.
-//
-// Lo que queda no mira hacia delante, sino hacia atrás, que es lo que el
-// calendario no sabe: cuánto hace que cada alumno no entra en la web. Son
-// los que se están enfriando, el que más arriba. Sale de updatedAt, que es
-// la última actividad DEL ALUMNO, y no tiene nada que ver con las clases que
-// le hayas fechado.
-
-const DIAS_FRIO = 7;
-
-function pintaAgenda(){
-  if(!agendaEl) return;
-  const frios = [...porEmail.values()]
-    .filter(s => s.activo !== false)
-    .map(s => ({ s: s, d: diasDesde(s.updatedAt) }))
-    .filter(x => x.d === null || x.d >= DIAS_FRIO)
-    .sort((a, b) => (b.d === null ? 1e9 : b.d) - (a.d === null ? 1e9 : a.d));
-
-  const chipsHtml = frios.length
-    ? '<div class="ag-chips">' + frios.map(x => {
-        const cuanto = x.d === null ? 'nunca ha entrado' : 'hace ' + x.d + ' d';
-        return `<button class="ag-chip" data-ficha="${esc(x.s.email)}">${
-          esc(nombreDe(x.s) || x.s.email)} <span>${esc(cuanto)}</span></button>`;
-      }).join('') + '</div>'
-    : `<p class="ag-vacio">Todos han entrado en los últimos ${DIAS_FRIO} días.</p>`;
-
-  agendaEl.innerHTML =
-    `<div class="ag-caja"><h3 class="ag-h"><i class="ti ti-alarm"></i> Hace más de ${DIAS_FRIO} días que no entran</h3>${chipsHtml}</div>`;
-}
-
-// Todo lo que cambia cuando cambian los datos: la agenda de arriba también,
-// que si no, al ponerle una clase a alguien seguía diciendo que no la tiene.
-function repinta(){ pintaAgenda(); pintaTabla(); }
+// Queda por si vuelve a haber algo arriba de la tabla que repintar con ella.
+function repinta(){ pintaTabla(); }
 
 // ───────────────── La tabla de alumnos ─────────────────
 // Se vuelve a pintar sin tocar Firebase cuando escribes en el buscador o
@@ -250,6 +215,18 @@ function pintaPie(){
   // dada es una clase dada, la cobres o no
   const dadas = todos.reduce((n, s) => n + (+s.clasesDadas || 0), 0);
 
+  // Dos medias idénticas una encima de otra no dicen nada y hacen dudar de
+  // las dos. Y van a salir idénticas casi siempre: solo se separan si tienes
+  // a alguien DE BAJA con sus dos números puestos, porque es lo único que
+  // entra en una y no en la otra. Un alumno de baja sin tarifa ni pagos no
+  // suma nada a ningún lado.
+  //
+  // Así que la de los activos va siempre —es la que contesta «cuánto cobro
+  // ahora»— y la otra aparece solo cuando de verdad da otro número.
+  const mActivos = media(activos), mTodos = media(todos);
+  const distintas = mTodos.v !== null && mActivos.v !== null &&
+    Math.abs(mTodos.v - mActivos.v) >= 0.005;
+
   pieEl.innerHTML =
     `<tr><td colspan="3">Clases dadas en total</td>
       <td class="al-n">${dadas ? '<b>' + esc(dadas) + '</b>' : '<span class="al-sin">—</span>'}</td>
@@ -258,8 +235,8 @@ function pintaPie(){
       <td class="al-n">${cobrado ? '<span class="al-eur">' + esc(euros(cobrado)) + '</span>'
         : '<span class="al-sin">—</span>'}</td>
       <td colspan="2"></td></tr>` +
-    linea('Tarifa media · todos los alumnos', media(todos)) +
-    linea('Tarifa media · solo los activos', media(activos));
+    linea('Tarifa media', mActivos) +
+    (distintas ? linea('Tarifa media contando también a los de baja', mTodos) : '');
 }
 
 function pintaTabla(){
@@ -350,7 +327,6 @@ if(bajasEl) bajasEl.addEventListener('change', pintaTabla);
 async function loadStudents(){
   loadingEl.textContent = 'Cargando...';
   loadingEl.style.display = 'block';
-  if(agendaEl) agendaEl.innerHTML = '';
   if(cuentaEl) cuentaEl.innerHTML = '';
   bodyEl.innerHTML = '';
   refreshBtn.disabled = true;
@@ -365,7 +341,6 @@ async function loadStudents(){
     porEmail.clear();
     students.forEach(s => { if(s.email) porEmail.set(s.email, s); });
 
-    pintaAgenda();
     pintaTabla();
     // si tenías una ficha abierta, se queda abierta y con los datos frescos
     // (sin volver a saltar hacia ella, que estabas mirándola)

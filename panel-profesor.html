@@ -182,21 +182,6 @@ tbody tr.al-fila.baja{opacity:.55}
 .cat-fbtn.on{background:var(--primary);border-color:var(--primary);color:#fff;font-weight:700}
 .cat-buscar{flex:1;min-width:180px;padding:9px 12px;border-radius:10px;border:1px solid var(--border);background:var(--card-bg);color:var(--text);font-family:var(--font-body);font-size:14.5px}
 
-/* ── Lo que tienes por delante, donde antes estaban los cuatro números ──
-   Los números decían cuántos alumnos tengo, y eso ya lo sé. Esto dice qué
-   clases vienen esta semana y a quién no le he preparado la siguiente, que
-   es lo que de verdad hay que hacer hoy. */
-.ag{margin-bottom:26px}
-.ag-caja{background:var(--card-bg);border:1px solid var(--border);border-radius:14px;padding:15px 18px 10px}
-.ag-h{font-family:var(--font-head);font-size:12.5px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin:0 0 10px}
-.ag-h i{margin-right:5px}
-.ag-vacio{color:var(--muted);font-size:14px;margin:0 0 10px}
-.ag-chips{display:flex;flex-wrap:wrap;gap:7px;padding-bottom:6px}
-.ag-chip{display:inline-flex;align-items:baseline;gap:6px;background:var(--tint);border:0;border-radius:10px;padding:6px 11px;font-size:14px;font-weight:600;color:var(--text);cursor:pointer;font-family:var(--font-body)}
-.ag-chip span{font-size:12.5px;font-weight:600;color:var(--muted)}
-.ag-chip:hover{background:var(--primary);color:#fff}
-.ag-chip:hover span{color:#fff;opacity:.8}
-
 /* ── La tabla ── */
 .al-cuenta{color:var(--muted);font-size:14px;margin:-22px 0 30px}
 .al-vercl{display:inline-flex;align-items:center;gap:6px;background:var(--tint);border:1px solid transparent;border-radius:10px;padding:6px 12px;font-size:14px;font-weight:700;color:var(--primary-dark);white-space:nowrap;font-variant-numeric:tabular-nums}
@@ -253,8 +238,6 @@ tbody tr.al-fila:hover .al-vercl{background:var(--primary);border-color:var(--pr
 <h1><i class="ti ti-users" aria-hidden="true"></i> Mis alumnos</h1>
 <button class="button button-secondary button-sm" id="panel-refresh"><i class="ti ti-refresh"></i> Actualizar</button>
 </div>
-
-<div class="ag" id="panel-agenda"></div>
 
 <div class="al-acciones">
 <button class="button button-secondary" id="alta-abrir"><i class="ti ti-user-plus" aria-hidden="true"></i> Dar de alta</button>
@@ -601,6 +584,6 @@ Si solo quieres que deje de entrar, ponle «dado de baja» ahí arriba.</p></div
 <script src="clases.js?v=20261016d"></script>
 <script src="temas.js?v=20261017a"></script>
 <script type="module" src="firebase-sync.js?v=20261014s"></script>
-<script type="module" src="firebase-panel.js?v=20261017d"></script>
+<script type="module" src="firebase-panel.js?v=20261017e"></script>
 </body>
 </html>

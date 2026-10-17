@@ -91,7 +91,8 @@ with sync_playwright() as p:
     fila = pg.locator('tr[data-ficha="anna@x.com"]')
     comprueba("25 €" in fila.inner_text(), "la tarifa media sale calculada (400 ÷ 16)")
     pie = pg.locator("#panel-table-foot").inner_text()
-    comprueba(pie.count("25 €") == 2, "el pie da la tarifa media de todos y de los activos (%s)" % pie.replace("\n", " "))
+    comprueba(pie.count("Tarifa media") == 1,
+              "el pie da UNA tarifa media mientras las dos salgan iguales (%s)" % pie.replace("\n", " ")[:90])
     comprueba("400 €" in pie, "y lo cobrado en total")
     comprueba("Clases dadas en total" in pie and "24" in pie,
               "y el total de clases dadas, sumando también las que no se cobran (%s)" % pie.replace("\n", " ")[:70])
@@ -108,17 +109,10 @@ with sync_playwright() as p:
     comprueba("400 €" in fila.inner_text(), "lo pagado sale en su fila")
     comprueba("ayer" in fila.inner_text(), "la última actividad se dice en días, no en fecha y hora")
 
-    print("\n═══ a quién hace tiempo que no ves ═══")
-    # de lo que viene se encarga Google Calendar: aquí no se habla de clases
-    # futuras en ninguna parte
-    comprueba(pg.locator(".ag-dia").count() == 0, "no queda agenda de próximas clases")
     comprueba("róxima clase" not in pg.locator("#panel-content").inner_text(),
-              "y la palabra «próxima clase» no sale en todo el panel")
-    chips = [b.inner_text() for b in pg.locator(".ag-chip").all()]
-    comprueba(any("Nora" in t for t in chips), "Nora, que lleva 20 días sin entrar, sí sale")
-    comprueba(not any("Brandon" in t for t in chips), "Brandon no, que entró hoy")
-    comprueba(not any("antiguo" in t for t in chips), "el de baja tampoco sale")
-    comprueba(chips and "Nora" in chips[0], "y el primero es el que lleva más tiempo")
+              "«próxima clase» no sale en ninguna parte del panel")
+    comprueba(pg.locator("#panel-agenda").count() == 0,
+              "y el panel empieza directamente por la tabla, sin caja encima")
 
     print("\n═══ llegar a sus clases ═══")
     pg.locator('tr[data-ficha="anna@x.com"] .al-vercl').click(); pg.wait_for_timeout(700)
@@ -141,10 +135,6 @@ with sync_playwright() as p:
     guardadas = pg.evaluate("window.__DB['anna@x.com'].clases.map(c => c.id || 'rapida')")
     comprueba(len(guardadas) == antes + 1 and "sobre-ti" in guardadas,
               "la clase se guarda en su ficha de verdad (%s)" % guardadas)
-    # la caja de arriba NO se mueve por esto: habla de cuándo entró él, no de
-    # lo que yo le ponga. Si un día vuelve a depender de las clases, salta.
-    comprueba("Anna" not in pg.locator("#panel-agenda").inner_text(),
-              "ponerle una clase no la mete ni la saca de «hace tiempo que no entran»")
     comprueba("Ver sus 4 clases" in pg.locator('tr[data-ficha="anna@x.com"]').inner_text(),
               "y el botón de su fila ya dice 4")
 
@@ -192,6 +182,35 @@ with sync_playwright() as p:
     comprueba(pg.locator("#panel-table-foot").inner_text() == media_con,
               "y volver a marcarla la deja como estaba")
     pg.locator("#ficha-cerrar").click(); pg.wait_for_timeout(300)
+
+    print("\n═══ la segunda media, cuando de verdad es otra ═══")
+    # Las dos medias solo se separan si hay alguien DE BAJA con sus dos
+    # números puestos: es lo único que entra en una y no en la otra. Mientras
+    # no lo haya, enseñar dos veces la misma cifra solo hace dudar.
+    # antes hay que devolverle a Anna sus números, que la prueba de arriba se
+    # los ha vaciado a propósito: sin ningún activo con datos no hay media que
+    # comparar
+    pg.locator('tr[data-ficha="anna@x.com"] .al-vercl').click(); pg.wait_for_timeout(700)
+    pg.fill("#fi-clases-dadas", "16")
+    pg.fill("#fi-pagado", "400")
+    pg.locator("#fi-pagado-fecha").click(); pg.wait_for_timeout(900)
+
+    pg.locator("#al-bajas").check(); pg.wait_for_timeout(400)
+    pg.locator('tr[data-ficha="viejo@x.com"] .al-vercl').click(); pg.wait_for_timeout(700)
+    pg.fill("#fi-clases-dadas", "4")
+    pg.fill("#fi-pagado", "400")
+    pg.locator("#fi-pagado-fecha").click(); pg.wait_for_timeout(900)
+    pie2 = pg.locator("#panel-table-foot").inner_text()
+    comprueba(pie2.count("Tarifa media") == 2,
+              "con un alumno de baja que sí pagaba, aparece la segunda")
+    comprueba("contando también a los de baja" in pie2,
+              "y se llama por lo que es (%s)" % pie2.replace("\n", " ")[:110])
+    pg.fill("#fi-pagado", "")
+    pg.locator("#fi-pagado-fecha").click(); pg.wait_for_timeout(900)
+    comprueba(pg.locator("#panel-table-foot").inner_text().count("Tarifa media") == 1,
+              "y al quitarle los números vuelve a haber una sola")
+    pg.locator("#ficha-cerrar").click()
+    pg.locator("#al-bajas").uncheck(); pg.wait_for_timeout(400)
 
     print("\n═══ buscar algo que no está ═══")
     pg.fill("#al-buscar", "zzzz"); pg.wait_for_timeout(500)
