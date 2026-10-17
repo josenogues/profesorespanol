@@ -126,6 +126,14 @@ function cuandoCorto(iso){
   return DIAS[d.getDay()] + ' ' + fechaCorta(iso);
 }
 
+// La tarifa no se escribe: sale de lo pagado entre las clases dadas, y solo
+// existe si están los dos números (y hay al menos una clase).
+function tarifaDe(s){
+  const p = s.pagado, c = s.clasesDadas;
+  if(p === null || p === undefined || c === null || c === undefined || !(+c > 0)) return null;
+  return +p / +c;
+}
+
 function euros(n){
   if(n === null || n === undefined || n === '' || isNaN(+n)) return '';
   const v = +n;
@@ -203,6 +211,7 @@ function repinta(){ pintaAgenda(); pintaTabla(); }
 // Se vuelve a pintar sin tocar Firebase cuando escribes en el buscador o
 // pides ver las bajas: los datos ya están en porEmail.
 
+const pieEl = document.getElementById('panel-table-foot');
 const busqEl = document.getElementById('al-buscar');
 const bajasEl = document.getElementById('al-bajas');
 
@@ -265,12 +274,29 @@ function pintaTabla(){
         baja ? '<span class="panel-flag baja">Baja</span>' : ''}</td>
       <td>${clasesHtml}</td>
       <td class="al-n">${esc(s.exerciseCount || 0)}${cursosHtml}</td>
-      <td class="al-n">${s.tarifa ? `<span class="al-eur">${esc(euros(s.tarifa))}</span>` : '<span class="al-sin">—</span>'}</td>
+      <td class="al-n">${(s.clasesDadas || s.clasesDadas === 0) ? esc(s.clasesDadas) : '<span class="al-sin">—</span>'}</td>
       <td class="al-n">${pagadoHtml}</td>
+      <td class="al-n">${tarifaDe(s) !== null ? `<span class="al-eur">${esc(euros(tarifaDe(s)))}</span>` : '<span class="al-sin">—</span>'}</td>
       <td>${haceCuanto(s.updatedAt)}</td>
       <td>${proxHtml}</td>
     </tr>`;
   }).join('');
+
+  // tarifa media: lo pagado entre las clases dadas, sumando a todos (no la
+  // media de las tarifas de cada uno, que daría el mismo peso a quien ha dado
+  // 2 clases que a quien ha dado 100). Solo cuentan los que tienen los dos datos.
+  if(pieEl){
+    const media = function(arr){
+      const v = arr.filter(x => tarifaDe(x) !== null);
+      const cl = v.reduce((n, x) => n + (+x.clasesDadas), 0);
+      return cl ? v.reduce((n, x) => n + (+x.pagado), 0) / cl : null;
+    };
+    const todos = [...porEmail.values()];
+    const m1 = media(todos), m2 = media(todos.filter(x => x.activo !== false));
+    const fmt = m => m === null ? '<span class="al-sin">—</span>' : '<span class="al-eur">' + esc(euros(m)) + '</span>';
+    pieEl.innerHTML = '<tr><td colspan="5">Tarifa media · todos los alumnos (activos y de baja)</td><td class="al-n">' + fmt(m1) + '</td><td></td></tr>' +
+      '<tr><td colspan="5">Tarifa media · solo alumnos activos</td><td class="al-n">' + fmt(m2) + '</td><td></td></tr>';
+  }
 
   // el contador que pedía: al final de la tabla y sin ocupar media pantalla
   if(cuentaEl){
@@ -454,8 +480,8 @@ async function guarda(){
 async function guardaPerfil(){
   if(!emailAbierto) return;
   const s = porEmail.get(emailAbierto) || {};
-  // el dinero lo escribe él a mano: aquí no se multiplica nada ni se deduce
-  // nada de las clases dadas. Vacío se guarda como null, no como 0, para
+  // clases dadas y pagado los escribe él a mano; la tarifa sale de dividirlos
+  // (tarifaDe) y no se guarda. Vacío se guarda como null, no como 0, para
   // poder distinguir «no cobra» de «no lo he puesto».
   const num = function(id){
     const v = (document.getElementById(id).value || '').trim();
@@ -466,7 +492,7 @@ async function guardaPerfil(){
     idioma: document.getElementById(PERFIL.idioma).value || '',
     nivel: document.getElementById(PERFIL.nivel).value || '',
     activo: document.getElementById(PERFIL.activo).value !== 'no',
-    tarifa: num('fi-tarifa'),
+    clasesDadas: num('fi-clases-dadas'),
     pagado: num('fi-pagado'),
     pagadoAt: document.getElementById('fi-pagado-fecha').value || ''
   };
@@ -542,7 +568,7 @@ function abreFicha(email){
   document.getElementById(PERFIL.idioma).value = s.idioma || '';
   document.getElementById(PERFIL.nivel).value = s.nivel || '';
   document.getElementById(PERFIL.activo).value = s.activo === false ? 'no' : 'si';
-  document.getElementById('fi-tarifa').value = (s.tarifa || s.tarifa === 0) ? s.tarifa : '';
+  document.getElementById('fi-clases-dadas').value = (s.clasesDadas || s.clasesDadas === 0) ? s.clasesDadas : '';
   document.getElementById('fi-pagado').value = (s.pagado || s.pagado === 0) ? s.pagado : '';
   document.getElementById('fi-pagado-fecha').value = s.pagadoAt || '';
   if(fSelect){

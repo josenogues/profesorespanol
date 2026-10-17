@@ -44,7 +44,7 @@ DB = {s["email"]: s for s in [
       {"id": "gustar", "fecha": mas(-2), "nota": ""},
       {"rapida": {"titulo": "Por y para, de una vez", "temas": ["por-para"]},
        "fecha": mas(4), "nota": ""}],
-     ej=140, tarifa=25, pagado=400, pagadoAt=mas(-16)),
+     ej=140, clasesDadas=16, pagado=400, pagadoAt=mas(-16)),
   al("brandon@x.com", "Brandon", "en", "A1", 0,
      [{"id": "saludos", "fecha": mas(1), "nota": ""}], ej=24),
   # sin ninguna clase futura: tiene que salir en «sin próxima clase»
@@ -84,7 +84,9 @@ with sync_playwright() as p:
     comprueba("3 alumnos" in cuenta and "1 de baja" in cuenta,
               "el contador del final dice «3 alumnos · 1 de baja» (%s)" % cuenta[:46])
     fila = pg.locator('tr[data-ficha="anna@x.com"]')
-    comprueba("25 €" in fila.inner_text(), "la tarifa sale en su fila")
+    comprueba("25 €" in fila.inner_text(), "la tarifa media sale calculada (400 ÷ 16)")
+    pie = pg.locator("#panel-table-foot").inner_text()
+    comprueba(pie.count("25 €") == 2, "el pie de tabla da la tarifa media de todos y de activos (%s)" % pie.replace("\n", " "))
     comprueba("400 €" in fila.inner_text(), "lo pagado sale en su fila")
     comprueba("ayer" in fila.inner_text(), "la última actividad se dice en días, no en fecha y hora")
 
@@ -130,20 +132,22 @@ with sync_playwright() as p:
               "y se puede quitar")
 
     print("\n═══ lo que paga ═══")
-    pg.fill("#fi-tarifa", "30")
+    pg.fill("#fi-clases-dadas", "10")
     pg.fill("#fi-pagado", "505")
     pg.locator("#fi-cobro-hoy").click(); pg.wait_for_timeout(900)
-    d = pg.evaluate("({t: window.__DB['anna@x.com'].tarifa, p: window.__DB['anna@x.com'].pagado,"
+    d = pg.evaluate("({t: window.__DB['anna@x.com'].clasesDadas, p: window.__DB['anna@x.com'].pagado,"
                     " f: window.__DB['anna@x.com'].pagadoAt})")
-    comprueba(d["t"] == 30 and d["p"] == 505, "se guarda tal cual se escribe (%s)" % d)
+    comprueba(d["t"] == 10 and d["p"] == 505, "se guarda tal cual se escribe (%s)" % d)
     comprueba(d["f"] == HOY, "«Actualizar a hoy» deja la fecha de hoy y nada más (%s)" % d["f"])
     comprueba("505 €" in pg.locator('tr[data-ficha="anna@x.com"]').inner_text(),
               "y la tabla lo enseña al momento")
+    comprueba("50.50 €" in pg.locator('tr[data-ficha="anna@x.com"]').inner_text(),
+              "y la tarifa se recalcula sola (505 ÷ 10)")
     # vaciarlo tiene que borrarlo, no dejar un 0
-    pg.fill("#fi-tarifa", "")
+    pg.fill("#fi-clases-dadas", "")
     pg.locator("#fi-pagado").click(); pg.wait_for_timeout(900)
-    comprueba(pg.evaluate("window.__DB['anna@x.com'].tarifa") is None,
-              "vaciar la tarifa la deja vacía, no en cero")
+    comprueba(pg.evaluate("window.__DB['anna@x.com'].clasesDadas") is None,
+              "vaciar las clases dadas las deja vacía, no en cero")
 
     print("\n═══ el profesor no se cuela como alumno ═══")
     comprueba(pg.evaluate("window.__DB['%s'] === undefined" % PROF),

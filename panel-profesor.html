@@ -234,7 +234,7 @@ tbody tr.al-fila:hover .al-vercl{background:var(--primary);border-color:var(--pr
 [data-theme="dark"] .fi-tit a:hover{color:#c99b6e;border-bottom-color:#c99b6e}
 .fi-tit i{font-size:14px;color:var(--muted);margin-left:5px;vertical-align:baseline}
 .fi-rap{display:inline-block;background:var(--tint);color:var(--muted);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;padding:2px 8px;border-radius:9px;margin-left:8px;vertical-align:middle}
-#fi-tarifa,#fi-pagado{min-width:120px}
+#fi-clases-dadas,#fi-pagado{min-width:120px}
 </style>
 </head>
 <body>
@@ -286,8 +286,9 @@ tbody tr.al-fila:hover .al-vercl{background:var(--primary);border-color:var(--pr
 </div>
 
 <div class="table-wrap"><table>
-<thead><tr><th>Alumno</th><th>Sus clases</th><th>Práctica</th><th>Tarifa</th><th>Pagado</th><th>Últ. actividad</th><th>Próxima clase</th></tr></thead>
+<thead><tr><th>Alumno</th><th>Sus clases</th><th>Práctica</th><th>Clases dadas</th><th>Pagado</th><th>Tarifa media</th><th>Últ. actividad</th><th>Próxima clase</th></tr></thead>
 <tbody id="panel-table-body"></tbody>
+<tfoot id="panel-table-foot"></tfoot>
 </table></div>
 <p class="panel-empty" id="panel-loading">Cargando...</p>
 <p class="al-cuenta" id="al-cuenta"></p>
@@ -329,12 +330,12 @@ tbody tr.al-fila:hover .al-vercl{background:var(--primary);border-color:var(--pr
 <div class="fi-bloque fi-cobros">
 <h3 class="fi-bh"><i class="ti ti-cash" aria-hidden="true"></i> Lo que paga</h3>
 <div class="fi-perfil">
-<label>Tarifa <span class="ficha-op">€ por clase</span><input type="number" id="fi-tarifa" min="0" step="0.5" placeholder="25" autocomplete="off"></label>
+<label>Clases dadas hasta hoy <span class="ficha-op">nº en total</span><input type="number" id="fi-clases-dadas" min="0" step="1" placeholder="0" autocomplete="off"></label>
 <label>Pagado hasta la fecha <span class="ficha-op">€ en total</span><input type="number" id="fi-pagado" min="0" step="0.5" placeholder="0" autocomplete="off"></label>
 <label>Al día a fecha de<input type="date" id="fi-pagado-fecha"></label>
 <button class="button button-secondary" id="fi-cobro-hoy"><i class="ti ti-check"></i> Actualizar a hoy</button>
 </div>
-<p class="fi-como">Los números los pones tú: aquí no se multiplica nada. «Actualizar a hoy» solo deja la fecha de hoy, para que sepas hasta cuándo está cuadrado.</p>
+<p class="fi-como">Las clases dadas y lo pagado los pones tú; la tarifa media sale sola (pagado ÷ clases dadas). «Actualizar a hoy» solo deja la fecha de hoy, para que sepas hasta cuándo está cuadrado.</p>
 </div>
 
 <div class="fi-peligro">
