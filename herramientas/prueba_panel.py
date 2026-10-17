@@ -93,6 +93,8 @@ with sync_playwright() as p:
     pie = pg.locator("#panel-table-foot").inner_text()
     comprueba(pie.count("25 €") == 2, "el pie da la tarifa media de todos y de los activos (%s)" % pie.replace("\n", " "))
     comprueba("400 €" in pie, "y lo cobrado en total")
+    comprueba("Clases dadas en total" in pie and "24" in pie,
+              "y el total de clases dadas, sumando también las que no se cobran (%s)" % pie.replace("\n", " ")[:70])
     comprueba("sale de 1 alumno" in pie,
               "y dice en una frase de cuántos sale, no «1 de 4» (%s)" % pie.replace("\n", " ")[:80])
     comprueba("2 no cuentan" in pie,
@@ -106,15 +108,17 @@ with sync_playwright() as p:
     comprueba("400 €" in fila.inner_text(), "lo pagado sale en su fila")
     comprueba("ayer" in fila.inner_text(), "la última actividad se dice en días, no en fecha y hora")
 
-    print("\n═══ lo que tienes por delante ═══")
-    ag = pg.locator(".ag-dia")
-    comprueba(ag.count() == 2, "dos clases en los próximos siete días (%d)" % ag.count())
-    comprueba("Brandon" in ag.first.inner_text() and "mañana" in ag.first.inner_text(),
-              "la de mañana es la de Brandon y lo dice así")
+    print("\n═══ a quién hace tiempo que no ves ═══")
+    # de lo que viene se encarga Google Calendar: aquí no se habla de clases
+    # futuras en ninguna parte
+    comprueba(pg.locator(".ag-dia").count() == 0, "no queda agenda de próximas clases")
+    comprueba("róxima clase" not in pg.locator("#panel-content").inner_text(),
+              "y la palabra «próxima clase» no sale en todo el panel")
     chips = [b.inner_text() for b in pg.locator(".ag-chip").all()]
-    comprueba(any("Nora" in t for t in chips), "Nora sale en «sin próxima clase»")
-    comprueba(not any("Anna" in t for t in chips), "Anna no, que tiene una puesta")
+    comprueba(any("Nora" in t for t in chips), "Nora, que lleva 20 días sin entrar, sí sale")
+    comprueba(not any("Brandon" in t for t in chips), "Brandon no, que entró hoy")
     comprueba(not any("antiguo" in t for t in chips), "el de baja tampoco sale")
+    comprueba(chips and "Nora" in chips[0], "y el primero es el que lleva más tiempo")
 
     print("\n═══ llegar a sus clases ═══")
     pg.locator('tr[data-ficha="anna@x.com"] .al-vercl').click(); pg.wait_for_timeout(700)
@@ -137,8 +141,10 @@ with sync_playwright() as p:
     guardadas = pg.evaluate("window.__DB['anna@x.com'].clases.map(c => c.id || 'rapida')")
     comprueba(len(guardadas) == antes + 1 and "sobre-ti" in guardadas,
               "la clase se guarda en su ficha de verdad (%s)" % guardadas)
-    comprueba(any("Háblame de ti" in d.inner_text() for d in pg.locator(".ag-dia").all()),
-              "y la agenda de arriba se entera sin recargar")
+    # la caja de arriba NO se mueve por esto: habla de cuándo entró él, no de
+    # lo que yo le ponga. Si un día vuelve a depender de las clases, salta.
+    comprueba("Anna" not in pg.locator("#panel-agenda").inner_text(),
+              "ponerle una clase no la mete ni la saca de «hace tiempo que no entran»")
     comprueba("Ver sus 4 clases" in pg.locator('tr[data-ficha="anna@x.com"]').inner_text(),
               "y el botón de su fila ya dice 4")
 

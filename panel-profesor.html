@@ -149,8 +149,6 @@ tbody tr.al-fila.baja{opacity:.55}
 .al-quien span{display:block;font-size:13px;color:var(--muted);font-weight:400}
 .panel-flag.baja{background:var(--border);color:var(--muted)}
 .al-n{font-variant-numeric:tabular-nums}
-.al-prox b{display:block;font-weight:800;font-variant-numeric:tabular-nums}
-.al-prox span{display:block;font-size:13px;color:var(--muted)}
 .al-sin{color:var(--muted);font-size:13.5px}
 /* Ficha: se despega de la tabla y lleva la marca de la fila que has pulsado,
    para que se vea que es «ese» alumno y no otra sección más de la página */
@@ -188,20 +186,10 @@ tbody tr.al-fila.baja{opacity:.55}
    Los números decían cuántos alumnos tengo, y eso ya lo sé. Esto dice qué
    clases vienen esta semana y a quién no le he preparado la siguiente, que
    es lo que de verdad hay que hacer hoy. */
-.ag{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:16px;margin-bottom:26px;align-items:start}
-@media(max-width:820px){.ag{grid-template-columns:1fr}}
+.ag{margin-bottom:26px}
 .ag-caja{background:var(--card-bg);border:1px solid var(--border);border-radius:14px;padding:15px 18px 10px}
 .ag-h{font-family:var(--font-head);font-size:12.5px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin:0 0 10px}
 .ag-h i{margin-right:5px}
-.ag-dia{display:flex;gap:12px;align-items:baseline;padding:8px 6px;margin:0 -6px;border-top:1px solid var(--border);cursor:pointer;border-radius:8px}
-.ag-dia:first-of-type{border-top:0}
-.ag-dia:hover{background:var(--tint)}
-.ag-cuando{font-weight:800;font-size:13.5px;min-width:72px;color:#7A5230;font-variant-numeric:tabular-nums}
-[data-theme="dark"] .ag-cuando{color:#c99b6e}
-.ag-dia.hoy .ag-cuando{color:#b3261e}
-[data-theme="dark"] .ag-dia.hoy .ag-cuando{color:#e88078}
-.ag-quien{font-weight:700;font-size:15px;white-space:nowrap}
-.ag-que{color:var(--muted);font-size:13.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .ag-vacio{color:var(--muted);font-size:14px;margin:0 0 10px}
 .ag-chips{display:flex;flex-wrap:wrap;gap:7px;padding-bottom:6px}
 .ag-chip{display:inline-flex;align-items:baseline;gap:6px;background:var(--tint);border:0;border-radius:10px;padding:6px 11px;font-size:14px;font-weight:600;color:var(--text);cursor:pointer;font-family:var(--font-body)}
@@ -296,7 +284,7 @@ tbody tr.al-fila:hover .al-vercl{background:var(--primary);border-color:var(--pr
 </div>
 
 <div class="table-wrap"><table>
-<thead><tr><th>Alumno</th><th>Sus clases</th><th>Práctica</th><th>Clases dadas</th><th>Pagado</th><th>Tarifa media</th><th>Últ. actividad</th><th>Próxima clase</th></tr></thead>
+<thead><tr><th>Alumno</th><th>Sus clases</th><th>Práctica</th><th>Clases dadas</th><th>Pagado</th><th>Tarifa media</th><th>Últ. actividad</th></tr></thead>
 <tbody id="panel-table-body"></tbody>
 <tfoot id="panel-table-foot"></tfoot>
 </table></div>
@@ -613,6 +601,6 @@ Si solo quieres que deje de entrar, ponle «dado de baja» ahí arriba.</p></div
 <script src="clases.js?v=20261016d"></script>
 <script src="temas.js?v=20261017a"></script>
 <script type="module" src="firebase-sync.js?v=20261014s"></script>
-<script type="module" src="firebase-panel.js?v=20261017c"></script>
+<script type="module" src="firebase-panel.js?v=20261017d"></script>
 </body>
 </html>

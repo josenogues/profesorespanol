@@ -80,16 +80,6 @@ function nombreDe(s){
   return (s && typeof s.nombre === 'string' && s.nombre.trim()) ? s.nombre.trim() : '';
 }
 
-// La próxima clase es, simplemente, la clase fechada en el futuro que le
-// hayas creado y que toque antes. Si no hay ninguna, no se la has preparado
-// todavía: esa es toda la información que da esta columna.
-function proximaClase(s){
-  const hoy = hoyISO();
-  return (Array.isArray(s.clases) ? s.clases : [])
-    .filter(c => c.fecha && c.fecha > hoy)
-    .sort((a, b) => a.fecha.localeCompare(b.fecha))[0] || null;
-}
-
 function fechaCorta(iso){
   const partes = String(iso || '').split('-');
   if(partes.length !== 3) return iso || '';
@@ -113,17 +103,6 @@ function haceCuanto(ts){
   if(d === 1) return 'ayer';
   if(d < 30) return 'hace ' + d + ' días';
   return formatDate(ts).slice(0, 10);
-}
-
-// Lo mismo mirando hacia delante, para la agenda.
-function cuandoCorto(iso){
-  const hoy = hoyISO();
-  if(iso === hoy) return 'hoy';
-  const d = new Date(iso + 'T12:00:00');
-  const manana = new Date(new Date(hoy + 'T12:00:00').getTime() + 86400000);
-  if(d.toISOString().slice(0, 10) === manana.toISOString().slice(0, 10)) return 'mañana';
-  const DIAS = ['dom', 'lun', 'mar', 'mié', 'jue', 'vie', 'sáb'];
-  return DIAS[d.getDay()] + ' ' + fechaCorta(iso);
 }
 
 // La tarifa no se escribe: sale de lo pagado entre las clases dadas, y solo
@@ -174,54 +153,37 @@ function paginaDeClase(a, idioma){
   return c.pagina + '-' + pista + '.html';
 }
 
-// ───────────────── Lo que tienes por delante ─────────────────
-// Esto ocupa el sitio de los cuatro números de antes. Un número que dice
-// «10 alumnos» no se mira dos veces; esto se mira todos los días: qué clases
-// vienen en los próximos siete, y a quién no le has preparado la siguiente.
-// Todo sale de lo que ya está cargado, sin pedirle nada más a Firebase.
+// ───────────────── A quién hace tiempo que no ves ─────────────────
+// Aquí vivía una agenda de los próximos siete días y una lista de «sin
+// próxima clase». Fuera las dos: de lo que viene se encarga Google Calendar,
+// y tener la misma cita en dos sitios solo sirve para que un día no cuadren.
+//
+// Lo que queda no mira hacia delante, sino hacia atrás, que es lo que el
+// calendario no sabe: cuánto hace que cada alumno no entra en la web. Son
+// los que se están enfriando, el que más arriba. Sale de updatedAt, que es
+// la última actividad DEL ALUMNO, y no tiene nada que ver con las clases que
+// le hayas fechado.
+
+const DIAS_FRIO = 7;
 
 function pintaAgenda(){
   if(!agendaEl) return;
-  const hoy = hoyISO();
-  const tope = new Date(new Date(hoy + 'T12:00:00').getTime() + 7 * 86400000)
-    .toISOString().slice(0, 10);
-  const altas = [...porEmail.values()].filter(s => s.activo !== false);
+  const frios = [...porEmail.values()]
+    .filter(s => s.activo !== false)
+    .map(s => ({ s: s, d: diasDesde(s.updatedAt) }))
+    .filter(x => x.d === null || x.d >= DIAS_FRIO)
+    .sort((a, b) => (b.d === null ? 1e9 : b.d) - (a.d === null ? 1e9 : a.d));
 
-  const proximas = [];
-  altas.forEach(s => {
-    (Array.isArray(s.clases) ? s.clases : []).forEach(c => {
-      if(c.fecha && c.fecha >= hoy && c.fecha <= tope){
-        proximas.push({ fecha: c.fecha, email: s.email, quien: nombreDe(s) || s.email,
-                        que: tituloDe(c) });
-      }
-    });
-  });
-  proximas.sort((a, b) => a.fecha.localeCompare(b.fecha));
-
-  // sin clase futura: los que hay que mover. Primero el que lleva más tiempo.
-  const sueltos = altas.filter(s => !proximaClase(s))
-    .sort((a, b) => (diasDesde(b.updatedAt) || 9999) - (diasDesde(a.updatedAt) || 9999));
-
-  const listaHtml = proximas.length
-    ? proximas.map(p => `<div class="ag-dia${p.fecha === hoy ? ' hoy' : ''}" data-ficha="${esc(p.email)}">
-        <span class="ag-cuando">${esc(cuandoCorto(p.fecha))}</span>
-        <span class="ag-quien">${esc(p.quien)}</span>
-        <span class="ag-que">${esc(p.que)}</span></div>`).join('')
-    : '<p class="ag-vacio">No hay ninguna clase con fecha en los próximos siete días.</p>';
-
-  const chipsHtml = sueltos.length
-    ? '<div class="ag-chips">' + sueltos.map(s => {
-        const d = diasDesde(s.updatedAt);
-        const cuanto = d === null ? 'nunca ha entrado'
-          : d <= 0 ? 'hoy' : d === 1 ? 'ayer' : 'hace ' + d + ' d';
-        return `<button class="ag-chip" data-ficha="${esc(s.email)}">${
-          esc(nombreDe(s) || s.email)} <span>${esc(cuanto)}</span></button>`;
+  const chipsHtml = frios.length
+    ? '<div class="ag-chips">' + frios.map(x => {
+        const cuanto = x.d === null ? 'nunca ha entrado' : 'hace ' + x.d + ' d';
+        return `<button class="ag-chip" data-ficha="${esc(x.s.email)}">${
+          esc(nombreDe(x.s) || x.s.email)} <span>${esc(cuanto)}</span></button>`;
       }).join('') + '</div>'
-    : '<p class="ag-vacio">Todos tienen su próxima clase puesta.</p>';
+    : `<p class="ag-vacio">Todos han entrado en los últimos ${DIAS_FRIO} días.</p>`;
 
   agendaEl.innerHTML =
-    `<div class="ag-caja"><h3 class="ag-h"><i class="ti ti-calendar"></i> Los próximos siete días</h3>${listaHtml}</div>` +
-    `<div class="ag-caja"><h3 class="ag-h"><i class="ti ti-alarm"></i> Sin próxima clase</h3>${chipsHtml}</div>`;
+    `<div class="ag-caja"><h3 class="ag-h"><i class="ti ti-alarm"></i> Hace más de ${DIAS_FRIO} días que no entran</h3>${chipsHtml}</div>`;
 }
 
 // Todo lo que cambia cuando cambian los datos: la agenda de arriba también,
@@ -246,8 +208,9 @@ const bajasEl = document.getElementById('al-bajas');
 // cálculo —no hay manera de inventárselo— y eso tiene que verse, que si no
 // parece que la media es de todos cuando es de la mitad.
 //
-// La tabla tiene OCHO columnas: cada fila del pie tiene que sumar ocho entre
-// colspans o se queda coja y el navegador la cuadra como puede.
+// La tabla tiene SIETE columnas: cada fila del pie tiene que sumar siete
+// entre colspans o se queda coja y el navegador la cuadra como puede. La
+// prueba las cuenta contra las cabeceras, así que esto no se puede olvidar.
 function pintaPie(){
   if(!pieEl) return;
   const todos = [...porEmail.values()];
@@ -278,18 +241,25 @@ function pintaPie(){
       <span class="al-sin pie-nota">${esc(partes.join(' · '))}</span></td>
       <td class="al-n">${m.v === null ? '<span class="al-sin">—</span>'
         : '<span class="al-eur">' + esc(euros(m.v)) + '</span>'}</td>
-      <td colspan="2"></td></tr>`;
+      <td></td></tr>`;
   };
 
   const cobrado = todos.filter(cuentaParaDinero)
     .reduce((n, s) => n + (+s.pagado || 0), 0);
+  // las clases dadas se suman de todos, también de quien no paga: una clase
+  // dada es una clase dada, la cobres o no
+  const dadas = todos.reduce((n, s) => n + (+s.clasesDadas || 0), 0);
+
   pieEl.innerHTML =
-    linea('Tarifa media · todos los alumnos', media(todos)) +
-    linea('Tarifa media · solo los activos', media(activos)) +
+    `<tr><td colspan="3">Clases dadas en total</td>
+      <td class="al-n">${dadas ? '<b>' + esc(dadas) + '</b>' : '<span class="al-sin">—</span>'}</td>
+      <td colspan="3"></td></tr>` +
     `<tr><td colspan="4">Cobrado en total</td>
       <td class="al-n">${cobrado ? '<span class="al-eur">' + esc(euros(cobrado)) + '</span>'
         : '<span class="al-sin">—</span>'}</td>
-      <td colspan="3"></td></tr>`;
+      <td colspan="2"></td></tr>` +
+    linea('Tarifa media · todos los alumnos', media(todos)) +
+    linea('Tarifa media · solo los activos', media(activos));
 }
 
 function pintaTabla(){
@@ -333,10 +303,6 @@ function pintaTabla(){
           return `<span class="panel-course-chip${c.complete ? ' done' : ''}">${esc(c.name)} <b>${esc(count)}</b></span>`;
         }).join('')}</div>`
       : '';
-    const prox = proximaClase(s);
-    const proxHtml = prox
-      ? `<div class="al-prox"><b>${esc(fechaCorta(prox.fecha))}</b><span>${esc(tituloDe(prox))}</span></div>`
-      : '<span class="al-sin">sin programar</span>';
     const nClases = Array.isArray(s.clases) ? s.clases.length : 0;
     // el botón de las clases: antes era un número suelto y no se veía que
     // llevara a ninguna parte
@@ -360,7 +326,6 @@ function pintaTabla(){
         : tarifaDe(s) !== null ? `<span class="al-eur">${esc(euros(tarifaDe(s)))}</span>`
         : '<span class="al-sin">—</span>'}</td>
       <td>${haceCuanto(s.updatedAt)}</td>
-      <td>${proxHtml}</td>
     </tr>`;
   }).join('');
 
