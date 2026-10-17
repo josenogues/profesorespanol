@@ -6,6 +6,35 @@ function jnEscapeHtml(s){
   return String(s).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 }
 
+// ¿En qué idioma le hablamos a quien está delante?
+//
+// Hasta ahora, en todos los sitios donde la web le habla al alumno, la regla
+// era «jn_track, y si no hay, español». Pero jn_track solo existe cuando ya
+// ha elegido recorrido, y un alumno nuevo todavía no ha elegido nada: a uno
+// de Reino Unido que entró por primera vez el cartel de acceso —el que dice
+// que le mando el enlace— le salió en español.
+//
+// El orden es: lo que haya elegido él, que manda sobre todo lo demás; si no,
+// el idioma de su navegador; si no, el de la página (una -it o una -en lo son
+// de verdad); y español como último recurso, que es el idioma de la casa.
+//
+// OJO: esto es para el texto que le decimos nosotros. NO sirve para decidir
+// qué contenido existe ni qué resultados enseña el buscador: ahí «no ha
+// elegido» significa «enséñalo todo», y adivinar escondería páginas.
+window.jnIdioma = function(){
+  const elegido = localStorage.getItem('jn_track');
+  if(elegido === 'es' || elegido === 'it' || elegido === 'en') return elegido;
+  const delNavegador = (navigator.languages && navigator.languages.length)
+    ? navigator.languages : [navigator.language || ''];
+  for(let i = 0; i < delNavegador.length; i++){
+    const c = String(delNavegador[i]).slice(0, 2).toLowerCase();
+    if(c === 'es' || c === 'it' || c === 'en') return c;
+  }
+  const dePagina = (document.documentElement.getAttribute('lang') || '').slice(0, 2);
+  if(dePagina === 'it' || dePagina === 'en') return dePagina;
+  return 'es';
+};
+
 // Registra una visita (una vez al día por alumno, no en cada página que abra
 // el mismo día) para que el profesor pueda ver en el panel quién entra en la
 // web pero nunca llega a hacer ejercicios. firebase-sync.js es un módulo y
@@ -282,7 +311,7 @@ a.closest(".menu-item").classList.add("active","current-section");
       answer: 'answer'
     }
   };
-  function msgs(){ return MSGS[localStorage.getItem('jn_track') || 'es'] || MSGS.es; }
+  function msgs(){ return MSGS[window.jnIdioma()] || MSGS.es; }
   // lo usa también el modo curso al reanudar un paso a medias
   window.jnPraise = function(){ return randomOf(msgs().ok); };
   const pageKey = 'ex_done_' + (location.pathname.split('/').pop() || 'home');
@@ -779,7 +808,7 @@ a.closest(".menu-item").classList.add("active","current-section");
           nocuadra:'That isn’t the email I sent this link to. Enter the same one, or ask for a new link.',
           enotro:'If you can, open it in this same browser: if you open it elsewhere I’ll ask for your email again.' }
   };
-  const t = T[localStorage.getItem('jn_track')] || T.es;
+  const t = T[window.jnIdioma()] || T.es;
 
   function esc(s){
     return String(s == null ? '' : s).replace(/[&"<>]/g, c => ({'&':'&amp;','"':'&quot;','<':'&lt;','>':'&gt;'}[c]));
@@ -2555,7 +2584,7 @@ ${nextHTML}<div class="ex-signal-btns">${btns}</div></div>`;
   };
   const l = labels[cat];
   if(!l) return;
-  const track = localStorage.getItem('jn_track') || 'es';
+  const track = window.jnIdioma();
   const span = document.createElement('span');
   span.className = 'handwritten-title i18n';
   span.dataset.es = l.es; span.dataset.it = l.it; span.dataset.en = l.en;

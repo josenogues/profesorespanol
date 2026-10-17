@@ -8,7 +8,9 @@
   const cont = document.getElementById('mc-cont');
   if(!cont) return;
 
-  const track = localStorage.getItem('jn_track') || 'es';
+  // el idioma en que le hablamos, que no es siempre el que eligió: ver
+  // window.jnIdioma en script.js (un alumno nuevo no ha elegido nada)
+  const track = window.jnIdioma();
   const LOCALE = { es: 'es-ES', it: 'it-IT', en: 'en-GB' }[track] || 'es-ES';
 
   const T = {

@@ -28,10 +28,18 @@ DB = {
 PAG = "/ser-estar-es.html"
 
 
-def nuevo(br, reglas, track="es", ancho=1200):
-    c = br.new_context(viewport={"width": ancho, "height": 900})
+def nuevo(br, reglas, track="es", ancho=1200, navegador=None):
+    """track=None es un alumno nuevo de verdad: no ha elegido recorrido.
+
+    `navegador` es el idioma del suyo (en-GB, it-IT...), que es lo que se mira
+    cuando no ha elegido nada."""
+    opts = {"viewport": {"width": ancho, "height": 900}}
+    if navegador:
+        opts["locale"] = navegador
+    c = br.new_context(**opts)
     monta(c, json.loads(json.dumps(DB)), reglas=reglas, profesor=PROF)
-    c.add_init_script("localStorage.setItem('jn_track','%s');" % track)
+    if track:
+        c.add_init_script("localStorage.setItem('jn_track','%s');" % track)
     return c
 
 
@@ -187,6 +195,39 @@ with sync_playwright() as p:
         print("   %s: %s" % (track, txt.split("\n")[1][:46]))
         if not ok: err.append("la puerta no sale en %s" % track)
         c.close()
+
+    # ── 8bis. un alumno nuevo, que todavía no ha elegido recorrido ──
+    # El fallo: jn_track no existe hasta que elige, y la puerta se iba al
+    # español. Un alumno de Reino Unido entró por primera vez y le salió en
+    # español el cartel del enlace. Ahora manda su navegador, y si tampoco
+    # dice nada, el idioma de la página.
+    print("\n═══ alumno nuevo, sin recorrido elegido ═══")
+    CASOS = (
+        ("en-GB", "/ser-estar-es.html",     "Enter the email",  "inglés en una página española"),
+        ("it-IT", "/ser-estar-es.html",     "Scrivi l’email",   "italiano en una página española"),
+        ("es-ES", "/ser-estar-es.html",     "Escribe el email", "español"),
+        ("de-DE", "/clase-sonidos-en.html", "Enter the email",  "navegador raro, página inglesa"),
+        ("de-DE", "/ser-estar-es.html",     "Escribe el email", "navegador raro, página española"),
+    )
+    for navegador, pag, trozo, qué in CASOS:
+        c = nuevo(br, True, track=None, navegador=navegador)
+        pg = c.new_page()
+        pg.goto(B + pag, wait_until="domcontentloaded"); pg.wait_for_timeout(900)
+        txt = pg.locator(".access-gate-modal").inner_text()
+        print("   %-6s %-24s %s" % (navegador, pag.strip("/"), txt.split("\n")[1][:42]))
+        if trozo not in txt:
+            err.append("sin recorrido elegido (%s): la puerta no sale como toca" % qué)
+        c.close()
+
+    # y lo que él haya elegido manda sobre el navegador
+    c = nuevo(br, True, track="es", navegador="en-GB")
+    pg = c.new_page()
+    pg.goto(B + "/clase-sonidos-en.html", wait_until="domcontentloaded"); pg.wait_for_timeout(900)
+    txt = pg.locator(".access-gate-modal").inner_text()
+    print("   eligió es, navegador en-GB, página en: %s" % txt.split("\n")[1][:42])
+    if "Escribe el email" not in txt:
+        err.append("su elección tiene que mandar sobre el idioma del navegador")
+    c.close()
 
     # ── 9. el enlace abierto en otro navegador ──
     # Es el caso normal: pides el enlace en el ordenador y abres el correo en
