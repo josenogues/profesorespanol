@@ -12,6 +12,7 @@ Qué entra: todas las páginas menos las que llevan «noindex» (las clases y
 «Mis clases», que son de cada alumno) y el panel del profesor.
 """
 import glob
+import hashlib
 import html
 import json
 import os
@@ -73,10 +74,29 @@ def main():
             saltadas.append((os.path.basename(ruta), "noindex o sin contenido"))
 
     destino = os.path.join(RAIZ, "search-index.js")
+    texto = ("window.SEARCH_INDEX = "
+             + json.dumps(entradas, ensure_ascii=False) + ";\n")
     with open(destino, "w", encoding="utf-8") as f:
-        f.write("window.SEARCH_INDEX = ")
-        json.dump(entradas, f, ensure_ascii=False)
-        f.write(";\n")
+        f.write(texto)
+
+    # El índice no se pide desde ninguna página: lo carga script.js a mano
+    # cuando el alumno toca el buscador, con su propio ?v=. Esa versión se
+    # quedó en 20260916 mientras el índice se regeneraba una y otra vez, así
+    # que quien hubiera buscado algo antes seguía con el índice de entonces y
+    # no encontraba nada de lo nuevo. Ahora la huella del contenido se escribe
+    # aquí: cambia el índice, cambia la versión, y nadie se queda con el viejo.
+    huella = hashlib.sha1(texto.encode("utf-8")).hexdigest()[:10]
+    sj = os.path.join(RAIZ, "script.js")
+    s = open(sj, encoding="utf-8").read()
+    nuevo, n = re.subn(r"search-index\.js\?v=[0-9a-z]+",
+                       "search-index.js?v=" + huella, s)
+    if n != 1:
+        print(f"OJO: en script.js hay {n} sitios donde se pide search-index.js, "
+              "esperaba exactamente uno. Versión sin tocar.")
+    elif nuevo != s:
+        open(sj, "w", encoding="utf-8").write(nuevo)
+        print(f"script.js ahora pide search-index.js?v={huella} "
+              "— acuérdate de subirle la versión a script.js en las páginas.")
 
     print(f"{len(entradas)} páginas indexadas → search-index.js")
     print(f"{len(saltadas)} fuera del índice:")

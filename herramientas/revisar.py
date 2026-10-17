@@ -9,7 +9,7 @@ cuadran, temas de ejercicios que no existen, páginas huérfanas y el idioma
 declarado de cada página. Las pruebas de siempre miran que las cosas
 funcionen; esto mira que nada se haya quedado colgando.
 """
-import glob, os, re, subprocess, sys
+import glob, hashlib, os, re, subprocess, sys
 from collections import Counter, defaultdict
 
 REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -134,13 +134,30 @@ for archivo in sorted(versiones):
                f"{archivo}: se tocó después de poner ?v={v}")
 
 # ── I. el índice del buscador, al día ───────────────────────────────────
-idx = open(os.path.join(REPO, "search-index.js"), encoding="utf-8").read()
-antes = idx
+# OJO con el orden: indexar.py no solo regenera el índice, también deja su
+# huella en script.js. Así que hay que quedarse con el script.js de ANTES de
+# llamarlo; si se mira el de después, el propio arreglo tapa el fallo y la
+# comprobación no salta nunca.
+antes = open(os.path.join(REPO, "search-index.js"), encoding="utf-8").read()
+script_antes = open(os.path.join(REPO, "script.js"), encoding="utf-8").read()
 subprocess.run([sys.executable, os.path.join(REPO, "herramientas", "indexar.py")],
                capture_output=True, text=True)
 ahora = open(os.path.join(REPO, "search-index.js"), encoding="utf-8").read()
 if antes != ahora:
     apunta("índice del buscador", "estaba desfasado respecto a las páginas (ya regenerado)")
+
+# el índice no se pide desde ninguna página, sino desde dentro de script.js,
+# así que la comprobación G no lo ve. Aquí se mira aparte: la huella del
+# archivo tiene que ser la del ?v= con el que se pide.
+huella = hashlib.sha1(ahora.encode("utf-8")).hexdigest()[:10]
+pedido = re.search(r"search-index\.js\?v=([0-9a-z]+)", script_antes)
+if not pedido:
+    apunta("índice del buscador", "script.js ya no pide search-index.js con ?v=")
+elif pedido.group(1) != huella:
+    apunta("índice del buscador",
+           f"script.js lo pedía con ?v={pedido.group(1)} y el archivo es {huella}: "
+           "quien ya lo tuviera guardado se quedaba con el viejo (ya corregido en "
+           "script.js, pero hay que subirle la versión en las páginas)")
 
 # ── J. páginas a las que no llega nadie ──────────────────────────────────
 enlazadas = set()

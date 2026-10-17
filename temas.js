@@ -34,6 +34,16 @@ window.JN_TEMAS = [
          it:'Non c’è regola, e sono proprio i più usati. Si imparano come parole singole.',
          en:'There is no rule, and they are the most used ones. Learn them as words.'} },
 
+// El mapa entero, para una clase de orientación: qué tiempos hay y cuál toca.
+// No es un tema del hub de ejercicios, así que practica con los del indicativo.
+{ id:'tiempos-verbales', pagina:'tiempos-verbales', ejercicios:'indicativo', cat:'verbos',
+  etiquetas:['tiempos verbales','modos','indicativo','subjuntivo','imperativo',
+             'formas no personales','qué tiempo uso'],
+  nombre:{es:'Qué tiempo uso', it:'Che tempo uso', en:'Which tense do I use'},
+  regla:{es:'Lo difícil no es aprenderse dieciséis tiempos: es elegir entre dos. <i>Hablé</i> o <i>he hablado</i>, <i>hablaba</i> o <i>hablé</i>, indicativo o subjuntivo.',
+         it:'Il difficile non è impararsi sedici tempi: è sceglierne uno fra due. <i>Hablé</i> o <i>he hablado</i>, <i>hablaba</i> o <i>hablé</i>, indicativo o congiuntivo.',
+         en:'The hard part is not learning sixteen tenses: it is choosing between two. <i>Hablé</i> or <i>he hablado</i>, <i>hablaba</i> or <i>hablé</i>, indicative or subjunctive.'} },
+
 { id:'indicativo', pagina:'indicativo', cat:'verbos', etiquetas:['indicativo','presente','pasado','futuro'],
   nombre:{es:'Indicativo', it:'Indicativo', en:'Indicative'},
   regla:{es:'El modo de los hechos: lo que pasa, lo que pasó y lo que pasará.',
