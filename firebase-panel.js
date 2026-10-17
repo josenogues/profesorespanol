@@ -134,6 +134,22 @@ function tarifaDe(s){
   return +p / +c;
 }
 
+// Quién entra en las cuentas del dinero.
+//
+// En la lista hay fichas que no son clientes: la del propio José, que está
+// para poder mirar la web como la ve un alumno, y la de quien recibe clases
+// pero las paga otra persona (Sabrina las paga Anna). Si cuentan, su cero
+// entra en la media y la hunde: no es que cobre poco, es que ahí no se cobra.
+//
+// Se marca a mano con una casilla en su ficha. La del profesor viene marcada
+// de salida —cobrarse a uno mismo no es un ingreso— pero puede desmarcarla.
+const PROFESOR = 'ncjosemaria@gmail.com';
+
+function cuentaParaDinero(s){
+  if(typeof s.sinCobro === 'boolean') return !s.sinCobro;
+  return (s.email || '').toLowerCase() !== PROFESOR;
+}
+
 // En español la coma es la decimal: «26,68 €», no «26.68 €». Daba igual
 // mientras los importes eran redondos; con la tarifa media salen decimales
 // casi siempre.
@@ -238,20 +254,35 @@ function pintaPie(){
   const activos = todos.filter(s => s.activo !== false);
 
   const media = function(arr){
-    const con = arr.filter(s => tarifaDe(s) !== null);
+    const cobran = arr.filter(cuentaParaDinero);
+    const con = cobran.filter(s => tarifaDe(s) !== null);
     const clases = con.reduce((n, s) => n + (+s.clasesDadas), 0);
     return { v: clases ? con.reduce((n, s) => n + (+s.pagado), 0) / clases : null,
-             con: con.length, de: arr.length };
+             con: con.length,
+             fuera: arr.length - cobran.length,
+             sinDatos: cobran.length - con.length };
   };
+
+  // Antes ponía «(8 de 11 con los dos datos)» y no había quien lo entendiera.
+  // Ahora lo dice en una frase: de cuántos sale, a cuántos les falta algo y
+  // cuántos no cuentan.
   const linea = function(rotulo, m){
-    const falta = m.con < m.de ? ` <span class="al-sin">(${m.con} de ${m.de} con los dos datos)</span>` : '';
-    return `<tr><td colspan="5">${esc(rotulo)}${falta}</td>
+    const partes = [];
+    partes.push(m.con === 1 ? 'sale de 1 alumno' : 'sale de ' + m.con + ' alumnos');
+    // «sin rellenar» no valía: quien tiene 0 clases dadas sí lo ha rellenado,
+    // pero tampoco da media. Esto es verdad en los dos casos.
+    if(m.sinDatos) partes.push(m.sinDatos === 1 ? '1 todavía sin media'
+                                                : m.sinDatos + ' todavía sin media');
+    if(m.fuera) partes.push(m.fuera === 1 ? '1 no cuenta' : m.fuera + ' no cuentan');
+    return `<tr><td colspan="5">${esc(rotulo)}
+      <span class="al-sin pie-nota">${esc(partes.join(' · '))}</span></td>
       <td class="al-n">${m.v === null ? '<span class="al-sin">—</span>'
         : '<span class="al-eur">' + esc(euros(m.v)) + '</span>'}</td>
       <td colspan="2"></td></tr>`;
   };
 
-  const cobrado = todos.reduce((n, s) => n + (+s.pagado || 0), 0);
+  const cobrado = todos.filter(cuentaParaDinero)
+    .reduce((n, s) => n + (+s.pagado || 0), 0);
   pieEl.innerHTML =
     linea('Tarifa media · todos los alumnos', media(todos)) +
     linea('Tarifa media · solo los activos', media(activos)) +
@@ -325,7 +356,9 @@ function pintaTabla(){
       <td class="al-n">${esc(s.exerciseCount || 0)}${cursosHtml}</td>
       <td class="al-n">${(s.clasesDadas || s.clasesDadas === 0) ? esc(s.clasesDadas) : '<span class="al-sin">—</span>'}</td>
       <td class="al-n">${pagadoHtml}</td>
-      <td class="al-n">${tarifaDe(s) !== null ? `<span class="al-eur">${esc(euros(tarifaDe(s)))}</span>` : '<span class="al-sin">—</span>'}</td>
+      <td class="al-n">${!cuentaParaDinero(s) ? '<span class="al-sin">no cuenta</span>'
+        : tarifaDe(s) !== null ? `<span class="al-eur">${esc(euros(tarifaDe(s)))}</span>`
+        : '<span class="al-sin">—</span>'}</td>
       <td>${haceCuanto(s.updatedAt)}</td>
       <td>${proxHtml}</td>
     </tr>`;
@@ -529,7 +562,8 @@ async function guardaPerfil(){
     activo: document.getElementById(PERFIL.activo).value !== 'no',
     clasesDadas: num('fi-clases-dadas'),
     pagado: num('fi-pagado'),
-    pagadoAt: document.getElementById('fi-pagado-fecha').value || ''
+    pagadoAt: document.getElementById('fi-pagado-fecha').value || '',
+    sinCobro: !!document.getElementById('fi-sincobro').checked
   };
   avisa('Guardando...');
   try {
@@ -606,6 +640,8 @@ function abreFicha(email){
   document.getElementById('fi-clases-dadas').value = (s.clasesDadas || s.clasesDadas === 0) ? s.clasesDadas : '';
   document.getElementById('fi-pagado').value = (s.pagado || s.pagado === 0) ? s.pagado : '';
   document.getElementById('fi-pagado-fecha').value = s.pagadoAt || '';
+  // sin marcar nunca: la del profesor sale marcada de salida (cuentaParaDinero)
+  document.getElementById('fi-sincobro').checked = !cuentaParaDinero(s);
   if(fSelect){
     fSelect.innerHTML = (window.JN_CLASES || [])
       // con el catálogo creciendo, el nivel y la pista ahorran abrir la clase
@@ -670,6 +706,8 @@ document.addEventListener('change', function(e){
   if(f){ clasesAbiertas[+f.dataset.i].fecha = f.value; pintaFicha(); repinta(); guarda(); return; }
   const n = e.target.closest('.fi-nota');
   if(n){ clasesAbiertas[+n.dataset.i].nota = n.value; guarda(); return; }
+  // la casilla de «no cuenta para el dinero» vive fuera de .fi-perfil
+  if(e.target && e.target.id === 'fi-sincobro'){ guardaPerfil(); return; }
   if(e.target && e.target.closest('.fi-perfil') && ficha.contains(e.target)) guardaPerfil();
 });
 

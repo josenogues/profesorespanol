@@ -50,6 +50,11 @@ DB = {s["email"]: s for s in [
   # sin ninguna clase futura: tiene que salir en «sin próxima clase»
   al("nora@x.com", "Nora", "en", "B1", 20, [], ej=0),
   al("viejo@x.com", "Un antiguo", "es", "B2", 120, [], ej=5, activo=False),
+  # su propia ficha: está para mirar la web como la ve un alumno, no es cliente
+  al(PROF, "Yo", "es", "C1", 0, [], ej=3, clasesDadas=0, pagado=0),
+  # recibe clases pero las paga otra: un cero que no es una tarifa de cero
+  al("sabrina@x.com", "Sabrina", "it", "A2", 2, [], ej=18,
+     clasesDadas=8, pagado=0, sinCobro=True),
 ]}
 
 err = []
@@ -76,20 +81,22 @@ with sync_playwright() as p:
     pg.wait_for_timeout(2600)
 
     print("\n═══ la tabla ═══")
-    comprueba(pg.locator(".al-fila").count() == 3, "salen los 3 de alta y no el de baja")
+    comprueba(pg.locator(".al-fila").count() == 5, "salen los 5 de alta y no el de baja")
     pg.locator("#al-bajas").check(); pg.wait_for_timeout(300)
-    comprueba(pg.locator(".al-fila").count() == 4, "marcando «ver las bajas» sale el cuarto")
+    comprueba(pg.locator(".al-fila").count() == 6, "marcando «ver las bajas» sale el sexto")
     pg.locator("#al-bajas").uncheck(); pg.wait_for_timeout(300)
     cuenta = pg.locator("#al-cuenta").inner_text()
-    comprueba("3 alumnos" in cuenta and "1 de baja" in cuenta,
-              "el contador del final dice «3 alumnos · 1 de baja» (%s)" % cuenta[:46])
+    comprueba("5 alumnos" in cuenta and "1 de baja" in cuenta,
+              "el contador del final dice «5 alumnos · 1 de baja» (%s)" % cuenta[:46])
     fila = pg.locator('tr[data-ficha="anna@x.com"]')
     comprueba("25 €" in fila.inner_text(), "la tarifa media sale calculada (400 ÷ 16)")
     pie = pg.locator("#panel-table-foot").inner_text()
     comprueba(pie.count("25 €") == 2, "el pie da la tarifa media de todos y de los activos (%s)" % pie.replace("\n", " "))
     comprueba("400 €" in pie, "y lo cobrado en total")
-    comprueba("1 de 4 con los dos datos" in pie,
-              "y dice de cuántos sale la media, que no todos tienen los dos números")
+    comprueba("sale de 1 alumno" in pie,
+              "y dice en una frase de cuántos sale, no «1 de 4» (%s)" % pie.replace("\n", " ")[:80])
+    comprueba("2 no cuentan" in pie,
+              "y cuántos se quedan fuera a propósito: él mismo y la que paga otra")
     # las ocho columnas: una fila de pie coja descuadra la tabla entera
     celdas = pg.evaluate("""[...document.querySelectorAll('#panel-table-foot tr')]
         .map(tr => [...tr.children].reduce((n, td) => n + (+td.colSpan || 1), 0))""")
@@ -158,6 +165,28 @@ with sync_playwright() as p:
     comprueba(pg.evaluate("window.__DB['anna@x.com'].clasesDadas") is None,
               "vaciar las clases dadas las deja vacía, no en cero")
 
+    print("\n═══ quién cuenta para el dinero ═══")
+    # Sabrina da 8 clases y paga 0 porque paga otra: si contara, la media se
+    # hundiría. Y la ficha del propio profesor tampoco es un cliente.
+    fila_sab = pg.locator('tr[data-ficha="sabrina@x.com"]').inner_text()
+    comprueba("no cuenta" in fila_sab, "la que paga otra persona sale marcada «no cuenta»")
+    comprueba("no cuenta" in pg.locator('tr[data-ficha="%s"]' % PROF).inner_text(),
+              "y la ficha del propio profesor, también, sin tocar nada")
+    media_con = pg.locator("#panel-table-foot").inner_text()
+    pg.locator('tr[data-ficha="sabrina@x.com"] .al-vercl').click(); pg.wait_for_timeout(700)
+    comprueba(pg.locator("#fi-sincobro").is_checked(), "su casilla sale marcada en la ficha")
+    pg.locator("#fi-sincobro").uncheck(); pg.wait_for_timeout(900)
+    comprueba(pg.evaluate("window.__DB['sabrina@x.com'].sinCobro") is False,
+              "desmarcarla se guarda")
+    comprueba(pg.locator("#panel-table-foot").inner_text() != media_con,
+              "y entonces sí entra en la media, que cambia")
+    comprueba("1 no cuenta" in pg.locator("#panel-table-foot").inner_text(),
+              "y ya solo queda uno fuera")
+    pg.locator("#fi-sincobro").check(); pg.wait_for_timeout(900)
+    comprueba(pg.locator("#panel-table-foot").inner_text() == media_con,
+              "y volver a marcarla la deja como estaba")
+    pg.locator("#ficha-cerrar").click(); pg.wait_for_timeout(300)
+
     print("\n═══ buscar algo que no está ═══")
     pg.fill("#al-buscar", "zzzz"); pg.wait_for_timeout(500)
     comprueba(pg.locator(".al-fila").count() == 0, "no sale ninguna fila")
@@ -167,8 +196,10 @@ with sync_playwright() as p:
     comprueba("€" in pg.locator("#panel-table-foot").inner_text(), "y vuelven al borrar la búsqueda")
 
     print("\n═══ el profesor no se cuela como alumno ═══")
-    comprueba(pg.evaluate("window.__DB['%s'] === undefined" % PROF),
-              "abrir el panel no le crea ficha de alumno")
+    # Tiene ficha a propósito, para poder mirar la web como la ve un alumno.
+    # Lo que no puede pasar es que la web le apunte visitas o ejercicios ahí.
+    comprueba(pg.evaluate("window.__DB['%s'].visitCount === undefined" % PROF),
+              "abrir el panel no le apunta ninguna visita en su ficha")
 
     c.close()
 
@@ -188,8 +219,8 @@ with sync_playwright() as p:
     comprueba(pg.locator("main .grammar-section").count() > 0, "y se ve el contenido")
     comprueba(pg.evaluate("localStorage.getItem('jn_student_email')") is None,
               "y no se le guarda como email de alumno")
-    comprueba(pg.evaluate("window.__DB['%s'] === undefined" % PROF),
-              "ni se le apunta la visita en una ficha fantasma")
+    comprueba(pg.evaluate("window.__DB['%s'].visitCount === undefined" % PROF),
+              "ni se le apunta la visita, aunque tenga ficha")
     c.close()
     br.close()
 
