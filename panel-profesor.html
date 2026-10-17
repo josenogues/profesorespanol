@@ -13,8 +13,11 @@
 <link rel="stylesheet" href="styles.css?v=20261015i">
 <script>if(localStorage.getItem('jn_theme')==='dark')document.documentElement.setAttribute('data-theme','dark');</script>
 <style>
+/* El ancho: con ocho columnas, los 1100px de antes se quedaban cortos. Pero
+   sin tope la tabla llega a 2400px en un monitor grande y leer una fila es
+   un viaje de punta a punta. Crece con la pantalla y para a 1480. */
 body{padding:40px clamp(12px,3vw,48px)}
-.panel-wrap{width:100%;max-width:none;margin:0 auto}
+.panel-wrap{width:100%;max-width:1480px;margin:0 auto}
 @media(max-width:1100px){.panel-wrap table{font-size:14px}.panel-wrap table thead th,.panel-wrap table tbody td,.panel-wrap table tfoot td{padding:9px 10px}}
 .panel-header{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:28px;flex-wrap:wrap}
 .panel-header h1{font-size:28px}
@@ -603,6 +606,6 @@ Si solo quieres que deje de entrar, ponle «dado de baja» ahí arriba.</p></div
 <script src="clases.js?v=20261016d"></script>
 <script src="temas.js?v=20261017a"></script>
 <script type="module" src="firebase-sync.js?v=20261014s"></script>
-<script type="module" src="firebase-panel.js?v=20261017a"></script>
+<script type="module" src="firebase-panel.js?v=20261017b"></script>
 </body>
 </html>

@@ -134,10 +134,15 @@ function tarifaDe(s){
   return +p / +c;
 }
 
+// En español la coma es la decimal: «26,68 €», no «26.68 €». Daba igual
+// mientras los importes eran redondos; con la tarifa media salen decimales
+// casi siempre.
 function euros(n){
   if(n === null || n === undefined || n === '' || isNaN(+n)) return '';
   const v = +n;
-  return (Math.round(v * 100) % 100 === 0 ? String(Math.round(v)) : v.toFixed(2)) + ' €';
+  return (Math.round(v * 100) % 100 === 0
+    ? String(Math.round(v))
+    : v.toFixed(2).replace('.', ',')) + ' €';
 }
 
 // La página de una clase del catálogo, en el idioma que le toca a ese alumno.
@@ -215,6 +220,47 @@ const pieEl = document.getElementById('panel-table-foot');
 const busqEl = document.getElementById('al-buscar');
 const bajasEl = document.getElementById('al-bajas');
 
+// El pie de la tabla: la tarifa media y lo cobrado.
+//
+// La media es lo pagado entre las clases dadas, sumando a todos a la vez, no
+// la media de las tarifas de cada uno: así quien ha dado cien clases pesa lo
+// que tiene que pesar y no lo mismo que quien ha dado dos.
+//
+// Y dice de cuántos sale. Quien no tenga los dos números se queda fuera del
+// cálculo —no hay manera de inventárselo— y eso tiene que verse, que si no
+// parece que la media es de todos cuando es de la mitad.
+//
+// La tabla tiene OCHO columnas: cada fila del pie tiene que sumar ocho entre
+// colspans o se queda coja y el navegador la cuadra como puede.
+function pintaPie(){
+  if(!pieEl) return;
+  const todos = [...porEmail.values()];
+  const activos = todos.filter(s => s.activo !== false);
+
+  const media = function(arr){
+    const con = arr.filter(s => tarifaDe(s) !== null);
+    const clases = con.reduce((n, s) => n + (+s.clasesDadas), 0);
+    return { v: clases ? con.reduce((n, s) => n + (+s.pagado), 0) / clases : null,
+             con: con.length, de: arr.length };
+  };
+  const linea = function(rotulo, m){
+    const falta = m.con < m.de ? ` <span class="al-sin">(${m.con} de ${m.de} con los dos datos)</span>` : '';
+    return `<tr><td colspan="5">${esc(rotulo)}${falta}</td>
+      <td class="al-n">${m.v === null ? '<span class="al-sin">—</span>'
+        : '<span class="al-eur">' + esc(euros(m.v)) + '</span>'}</td>
+      <td colspan="2"></td></tr>`;
+  };
+
+  const cobrado = todos.reduce((n, s) => n + (+s.pagado || 0), 0);
+  pieEl.innerHTML =
+    linea('Tarifa media · todos los alumnos', media(todos)) +
+    linea('Tarifa media · solo los activos', media(activos)) +
+    `<tr><td colspan="4">Cobrado en total</td>
+      <td class="al-n">${cobrado ? '<span class="al-eur">' + esc(euros(cobrado)) + '</span>'
+        : '<span class="al-sin">—</span>'}</td>
+      <td colspan="3"></td></tr>`;
+}
+
 function pintaTabla(){
   const q = (busqEl && busqEl.value || '').trim().toLowerCase();
   const verBajas = !!(bajasEl && bajasEl.checked);
@@ -231,6 +277,9 @@ function pintaTabla(){
 
   if(!lista.length){
     bodyEl.innerHTML = '';
+    // el pie también: una tabla sin filas y con totales debajo no se entiende
+    if(pieEl) pieEl.innerHTML = '';
+    if(cuentaEl) cuentaEl.innerHTML = '';
     loadingEl.textContent = q
       ? 'Ningún alumno con eso.'
       : (porEmail.size ? 'Todos tus alumnos están dados de baja. Marca «ver también las bajas».'
@@ -282,32 +331,18 @@ function pintaTabla(){
     </tr>`;
   }).join('');
 
-  // tarifa media: lo pagado entre las clases dadas, sumando a todos (no la
-  // media de las tarifas de cada uno, que daría el mismo peso a quien ha dado
-  // 2 clases que a quien ha dado 100). Solo cuentan los que tienen los dos datos.
-  if(pieEl){
-    const media = function(arr){
-      const v = arr.filter(x => tarifaDe(x) !== null);
-      const cl = v.reduce((n, x) => n + (+x.clasesDadas), 0);
-      return cl ? v.reduce((n, x) => n + (+x.pagado), 0) / cl : null;
-    };
-    const todos = [...porEmail.values()];
-    const m1 = media(todos), m2 = media(todos.filter(x => x.activo !== false));
-    const fmt = m => m === null ? '<span class="al-sin">—</span>' : '<span class="al-eur">' + esc(euros(m)) + '</span>';
-    pieEl.innerHTML = '<tr><td colspan="5">Tarifa media · todos los alumnos (activos y de baja)</td><td class="al-n">' + fmt(m1) + '</td><td></td></tr>' +
-      '<tr><td colspan="5">Tarifa media · solo alumnos activos</td><td class="al-n">' + fmt(m2) + '</td><td></td></tr>';
-  }
+  pintaPie();
 
-  // el contador que pedía: al final de la tabla y sin ocupar media pantalla
+  // el contador que pedía: al final de la tabla y sin ocupar media pantalla.
+  // El dinero ya no va aquí: vive entero en el pie de la tabla, que es donde
+  // se mira, y así no está la misma cifra en dos sitios.
   if(cuentaEl){
     const altas = [...porEmail.values()].filter(s => s.activo !== false).length;
     const bajas = porEmail.size - altas;
-    const cobrado = [...porEmail.values()].reduce((n, s) => n + (+s.pagado || 0), 0);
-    cuentaEl.innerHTML = esc(
+    cuentaEl.textContent =
       (altas === 1 ? '1 alumno' : altas + ' alumnos') +
       (bajas ? (bajas === 1 ? ' · 1 de baja' : ' · ' + bajas + ' de baja') : '') +
-      (q || verBajas ? ' en total' : '')) +
-      (cobrado ? ' · <b>' + esc(euros(cobrado)) + '</b> cobrado en total' : '');
+      (q || verBajas ? ' en total' : '');
   }
 }
 

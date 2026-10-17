@@ -86,7 +86,16 @@ with sync_playwright() as p:
     fila = pg.locator('tr[data-ficha="anna@x.com"]')
     comprueba("25 €" in fila.inner_text(), "la tarifa media sale calculada (400 ÷ 16)")
     pie = pg.locator("#panel-table-foot").inner_text()
-    comprueba(pie.count("25 €") == 2, "el pie de tabla da la tarifa media de todos y de activos (%s)" % pie.replace("\n", " "))
+    comprueba(pie.count("25 €") == 2, "el pie da la tarifa media de todos y de los activos (%s)" % pie.replace("\n", " "))
+    comprueba("400 €" in pie, "y lo cobrado en total")
+    comprueba("1 de 4 con los dos datos" in pie,
+              "y dice de cuántos sale la media, que no todos tienen los dos números")
+    # las ocho columnas: una fila de pie coja descuadra la tabla entera
+    celdas = pg.evaluate("""[...document.querySelectorAll('#panel-table-foot tr')]
+        .map(tr => [...tr.children].reduce((n, td) => n + (+td.colSpan || 1), 0))""")
+    cols = pg.evaluate("document.querySelectorAll('thead th').length")
+    comprueba(all(x == cols for x in celdas),
+              "cada fila del pie suma las %d columnas de la tabla (%s)" % (cols, celdas))
     comprueba("400 €" in fila.inner_text(), "lo pagado sale en su fila")
     comprueba("ayer" in fila.inner_text(), "la última actividad se dice en días, no en fecha y hora")
 
@@ -141,13 +150,21 @@ with sync_playwright() as p:
     comprueba(d["f"] == HOY, "«Actualizar a hoy» deja la fecha de hoy y nada más (%s)" % d["f"])
     comprueba("505 €" in pg.locator('tr[data-ficha="anna@x.com"]').inner_text(),
               "y la tabla lo enseña al momento")
-    comprueba("50.50 €" in pg.locator('tr[data-ficha="anna@x.com"]').inner_text(),
-              "y la tarifa se recalcula sola (505 ÷ 10)")
+    comprueba("50,50 €" in pg.locator('tr[data-ficha="anna@x.com"]').inner_text(),
+              "y la tarifa se recalcula sola, con la coma decimal española (505 ÷ 10)")
     # vaciarlo tiene que borrarlo, no dejar un 0
     pg.fill("#fi-clases-dadas", "")
     pg.locator("#fi-pagado").click(); pg.wait_for_timeout(900)
     comprueba(pg.evaluate("window.__DB['anna@x.com'].clasesDadas") is None,
               "vaciar las clases dadas las deja vacía, no en cero")
+
+    print("\n═══ buscar algo que no está ═══")
+    pg.fill("#al-buscar", "zzzz"); pg.wait_for_timeout(500)
+    comprueba(pg.locator(".al-fila").count() == 0, "no sale ninguna fila")
+    comprueba(pg.locator("#panel-table-foot").inner_text().strip() == "",
+              "y el pie se queda vacío: unos totales debajo de una tabla sin filas no se entienden")
+    pg.fill("#al-buscar", ""); pg.wait_for_timeout(500)
+    comprueba("€" in pg.locator("#panel-table-foot").inner_text(), "y vuelven al borrar la búsqueda")
 
     print("\n═══ el profesor no se cuela como alumno ═══")
     comprueba(pg.evaluate("window.__DB['%s'] === undefined" % PROF),
