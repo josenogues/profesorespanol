@@ -234,6 +234,46 @@ for pag, s in CUERPO.items():
     if "<title>" not in s:
         apunta("sin título", pag)
 
+# ── L2. la miga de pan dice en qué página estás ─────────────────────────
+# Las clases se escriben copiando otra y cambiando el texto. Si se cambia el
+# título pero no el último trozo de la miga, la página se presenta con el
+# nombre de la clase de la que se copió. Pasó con siete clases italianas de
+# golpe, y desde fuera no se nota: hay que mirar arriba del todo.
+# No vale comparar la miga con el título a secas: en las páginas de teoría el
+# título lleva el idioma detrás —«Casa (español)»— y en la pista inglesa está
+# traducido. Lo que sí es siempre un fallo es que la miga sea el título de OTRA
+# página de la misma pista: eso solo pasa copiando y olvidándose de la miga.
+import html as _html
+
+
+def _limpia(x):
+    x = _html.unescape(re.sub(r"<[^>]+>", "", x))
+    x = re.sub(r"\s*\((español|italiano|English)\)\s*$", "", x.strip())
+    return x.lower().replace("’", "'").replace("«", "").replace("»", "").strip()
+
+
+def _pista(p):
+    return p[-7:-5] if re.search(r"-(es|it|en)\.html$", p) else "es"
+
+
+TITULO = {}
+for pag, s in CUERPO.items():
+    t = re.search(r"<title>(.*?)</title>", s, re.S)
+    if t:
+        TITULO[pag] = _limpia(t.group(1).split(" | ")[0])
+for pag, s in CUERPO.items():
+    m = re.search(r'<div class="breadcrumb">(.*?)</div>', s, re.S)
+    if not m or pag not in TITULO:
+        continue
+    miga = _limpia(m.group(1).split("/")[-1])
+    if not miga or miga == TITULO[pag]:
+        continue
+    otras = [o for o, t in TITULO.items()
+             if t == miga and o != pag and _pista(o) == _pista(pag)]
+    if otras:
+        apunta("la miga de pan es la de otra página",
+               f"{pag}: dice «{miga}», que es el título de {otras[0]}")
+
 # ── L. restos de páginas retiradas ──────────────────────────────────────
 for muerta in ("verbos-regulares", "verbos-irregulares"):
     for pag, s in CUERPO.items():

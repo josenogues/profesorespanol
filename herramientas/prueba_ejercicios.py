@@ -129,6 +129,12 @@ BIEN = {
  'clase-desinenze-it.html': {"de1":"hablamos","de2":"coméis","de3":"vivimos",
    "de4":"hablan","de5":"hablaba","de6":"vivíamos","de7":"hablé","de8":"comió",
    "de9":"fui","de10":"hablaré","de11":"viviríamos","de12":"comerían"},
+ 'clase-rompe-it.html': {"ro1":"puedo","ro2":"podemos","ro3":"pienso","ro4":"pensamos",
+   "ro5":"duermen","ro6":"juego","ro7":"debo","ro8":"pido","ro9":"repite",
+   "ro10":"queréis","ro11":"empieza","ro12":"durmiendo"},
+ 'clase-yo-it.html': {"yo1":"hago","yo2":"sale","yo3":"pongo","yo4":"conozco",
+   "yo5":"conduzco","yo6":"sé","yo7":"tendré","yo8":"saldremos","yo9":"haría",
+   "yo10":"diría","yo11":"pondría","yo12":"ponga"},
 }
 
 # una respuesta mala por clase, para comprobar que no cuela
@@ -179,7 +185,9 @@ MAL = {'clase-gustar-en.html': ("g2", "gusta"),
        'clase-suoni-it.html': ("so2", "si sente"),
        'clase-piccole-it.html': ("pi2", "Muy"),
        'clase-verbi-it.html': ("ve2", "Pido"),
-       'clase-desinenze-it.html': ("de10", "hableré")}
+       'clase-desinenze-it.html': ("de10", "hableré"),
+       'clase-rompe-it.html': ("ro4", "piensamos"),
+       'clase-yo-it.html': ("yo5", "conduco")}
 
 SIEMBRA = ("localStorage.setItem('__falso_usuario','anna@x.com');"
            "localStorage.setItem('jn_access_granted','true');"

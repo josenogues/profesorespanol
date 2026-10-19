@@ -279,8 +279,20 @@ with sync_playwright() as p:
     BANDA = {"A1": 1, "A1–A2": 2, "A2": 3, "A2–B1": 4, "B1–B2": 5, "B2": 6}
     malas = [d for d in datos if BANDA.get(d["niv"]) != d["n"] // 100]
     comprueba(not malas, "la centena de cada número es su nivel (%s)" % malas[:3])
-    comprueba(all(d["n"] % 10 == 0 for d in datos),
-              "y todas acaban en 0, dejando nueve huecos entre cada dos")
+    # La rejilla va de diez en diez, y un número que no acaba en 0 solo vale
+    # si es una clase metida en un hueco: entre dos decenas que ya existen.
+    # Así la #395 (la A2 tenía las nueve decenas ocupadas) es legítima y un
+    # 347 puesto al azar, con la 340 libre, no lo es.
+    decenas = sorted(d["n"] for d in datos if d["n"] % 10 == 0)
+    metidas = [d["n"] for d in datos if d["n"] % 10]
+    sueltas = [n for n in metidas
+               if n % 5
+               or (n // 10) * 10 not in decenas
+               or ((n // 10) * 10 + 10 not in decenas
+                   and ((n // 10) * 10 + 10) // 100 == n // 100)]
+    comprueba(not sueltas,
+              "la rejilla va de diez en diez y las metidas a mano caen en un hueco (%s)"
+              % sueltas)
     nums = [d["n"] for d in datos]
     comprueba(nums == sorted(nums), "el catálogo sale ordenado por número")
     # y la prueba de fuego: meter una clase en el hueco no mueve a ninguna.

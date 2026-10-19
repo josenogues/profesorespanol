@@ -369,6 +369,22 @@ window.JN_CLASES = [
                 'hablé', 'hablaré', 'hablaría', 'tres conjugaciones']
   },
   {
+    num: 395,
+    id: 'rompe-it',
+    pagina: 'clase-rompe',
+    nivel: 'A2',
+    perfil: 'italianos',
+    pistas: ['it'],
+    titulo: {
+      es: 'El presente se rompe por dentro',
+      it: 'Il presente si rompe da dentro',
+      en: 'The present breaks from the inside'
+    },
+    etiquetas: ['presente irregular', 'diptongación', 'e→ie', 'o→ue', 'u→ue', 'e→i',
+                'pienso', 'puedo', 'juego', 'pido', 'duermo', 'quiero', 'empiezo',
+                'la bota', 'acento', 'durmiendo', 'ser', 'ir', 'estar', 'dar', 'ver']
+  },
+  {
     num: 410,
     id: 'la-a',
     pagina: 'clase-la-a',
@@ -490,6 +506,24 @@ window.JN_CLASES = [
     etiquetas: ['pedir y preguntar', 'llevar y traer', 'tomar y coger',
                 'ponerse', 'hacerse', 'volverse', 'preguntar por', 'llevo gafas',
                 'llevo dos años', 'se puso rojo', 'se hizo médico', 'se volvió loco']
+  },
+  {
+    num: 490,
+    id: 'yo-it',
+    continua: 'rompe-it',
+    pagina: 'clase-yo',
+    nivel: 'A2–B1',
+    perfil: 'italianos',
+    pistas: ['it'],
+    titulo: {
+      es: 'El «yo» que va por libre',
+      it: 'L’«io» che va per conto suo',
+      en: 'The «yo» that goes its own way'
+    },
+    etiquetas: ['hago', 'salgo', 'pongo', 'tengo', 'vengo', 'digo', 'conozco',
+                'conduzco', 'sé', 'doy', 'veo', 'futuro irregular', 'tendré',
+                'saldré', 'haré', 'diré', 'condicional irregular', 'subjuntivo',
+                'imperativo de usted']
   },
   {
     num: 510,
