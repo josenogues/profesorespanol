@@ -376,6 +376,22 @@ window.JN_CLASES = [
                 'haber', 'estar', 'ir']
   },
   {
+    num: 460,
+    id: 'falsos-amigos-it',
+    pagina: 'clase-falsos-amigos',
+    nivel: 'A2–B1',
+    perfil: 'italianos',
+    pistas: ['it'],
+    titulo: {
+      es: 'Las palabras que parecen las mismas',
+      it: 'Le parole che sembrano le stesse',
+      en: 'The words that look the same'
+    },
+    etiquetas: ['falsos amigos', 'burro', 'aceite', 'gamba', 'topo', 'salir y subir',
+                'todavía', 'largo', 'guardar y mirar', 'esperar', 'género distinto',
+                'la leche', 'el domingo']
+  },
+  {
     num: 510,
     id: 'motor',
     pagina: 'clase-motor',
@@ -434,6 +450,7 @@ window.JN_CLASES = [
   {
     num: 620,
     id: 'italiano-trabajo',
+    profundiza: 'falsos-amigos-it',
     pagina: 'clase-italiano-trabajo',
     nivel: 'B2',
     perfil: 'italianos',

@@ -108,6 +108,9 @@ BIEN = {
  'clase-would-en.html': {"wc1":"hablaría","wc2":"comeríamos","wc3":"tendría","wc4":"comer",
    "wc5":"Podría","wc6":"podía","wc7":"deberías","wc8":"gustaría","wc9":"iba","wc10":"iría",
    "wc11":"Quería un café","wc12":"podrías"},
+ 'clase-falsos-amigos-it.html': {"fi1":"mantequilla","fi2":"Aceite","fi3":"pierna",
+   "fi4":"Subo","fi5":"todavía","fi6":"equipaje","fi7":"Mira","fi8":"espero",
+   "fi9":"sufrido","fi10":"quita","fi11":"La","fi12":"el"},
 }
 
 # una respuesta mala por clase, para comprobar que no cuela
@@ -151,7 +154,8 @@ MAL = {'clase-gustar-en.html': ("g2", "gusta"),
        'clase-futuro-en.html': ("fu7", "Mañana como con mi madre"),
        'clase-por-para-en.html': ("pp1", "por"),
        'clase-la-a-en.html': ("pa2", "a"),
-       'clase-would-en.html': ("wc6", "podría")}
+       'clase-would-en.html': ("wc6", "podría"),
+       'clase-falsos-amigos-it.html': ("fi1", "burro")}
 
 SIEMBRA = ("localStorage.setItem('__falso_usuario','anna@x.com');"
            "localStorage.setItem('jn_access_granted','true');"
