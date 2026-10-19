@@ -952,8 +952,15 @@ a.closest(".menu-item").classList.add("active","current-section");
       cierraPuerta();
       return Promise.resolve();
     }
+    // Quién entra no es lo mismo que quién está de alta. Un alumno de baja
+    // puede seguir viendo la web si José lo deja así —para acabar lo que
+    // tenía a medias— y uno de alta puede quedarse fuera un tiempo. El campo
+    // «acceso» manda; si no está puesto, se sigue mirando «activo», que es
+    // como se portaba antes y así ninguna ficha vieja cambia sola.
     return window.jnCloudGetStudentDoc(email).then(function(ficha){
-      if(ficha && ficha.activo !== false){ dentro(email); return; }
+      const entra = ficha && (typeof ficha.acceso === 'boolean'
+        ? ficha.acceso : ficha.activo !== false);
+      if(entra){ dentro(email); return; }
       // ha entrado con un email que no es de alumno, o está de baja
       return window.jnCloudSal().then(function(){ fuera(t.fuera); });
     });

@@ -22,6 +22,12 @@ DB = {
                  "updatedAt": hora(-1), "exerciseCount": 12,
                  "clases": [{"id": "motor", "fecha": "2026-10-25", "nota": ""}]},
   "baja@x.com": {"email": "baja@x.com", "nombre": "Marta", "activo": False},
+  # de baja, pero José le ha dejado el acceso para que acabe lo que tenía
+  "bajaentra@x.com": {"email": "bajaentra@x.com", "nombre": "Dídac",
+                      "activo": False, "acceso": True},
+  # de alta, pero con el acceso cortado a propósito
+  "altafuera@x.com": {"email": "altafuera@x.com", "nombre": "Olga",
+                      "activo": True, "acceso": False},
   PROF: {"email": PROF, "nombre": "Yo", "activo": True, "updatedAt": hora(0)}
 }
 
@@ -127,6 +133,22 @@ with sync_playwright() as p:
         if not pg.locator(".access-gate-overlay").count():
             err.append("%s: entra alguien dado de baja" % etiqueta)
         c.close()
+
+        # ── 3bis. estar de alta y poder entrar son dos cosas distintas ──
+        # Hay quien se da de baja y sigue viendo la web un tiempo, y quien
+        # está de alta y se queda fuera. Lo decide el campo «acceso», que
+        # manda sobre «activo».
+        for email, quien, debe_entrar in (("bajaentra@x.com", "de baja con acceso", True),
+                                          ("altafuera@x.com", "de alta sin acceso", False)):
+            c = nuevo(br, reglas)
+            pg = c.new_page(); pg.on("pageerror", lambda e: err.append("JS: %s" % e))
+            entra(pg, email)
+            dentro = not pg.locator(".access-gate-overlay").count()
+            print("3b· %-20s %s" % (quien, "entra" if dentro else "fuera"))
+            if dentro != debe_entrar:
+                err.append("%s: %s %s" % (etiqueta, quien,
+                           "no entra y debería" if debe_entrar else "entra y no debería"))
+            c.close()
 
         # ── 4. el panel ──
         c = nuevo(br, reglas)

@@ -65,11 +65,6 @@ body{padding:40px clamp(12px,3vw,48px)}
 .fi-nota{grid-column:2;grid-row:3;width:100%;margin-top:4px;padding:7px 10px;border-radius:8px;border:1px dashed var(--border);background:transparent;color:var(--text);font-family:var(--font-body);font-size:14px}
 .fi-fecha{grid-column:1;grid-row:1/4;padding:7px 9px;border-radius:8px;border:1px solid var(--border);background:var(--card-bg);color:var(--text);font-family:var(--font-body);font-size:14px;width:100%}
 .fi-quitar{grid-column:3;grid-row:1/4;background:none;border:0;color:var(--muted);font-size:20px;cursor:pointer;padding:0 4px}
-.fi-apu{grid-column:1/-1;grid-row:4;margin-top:4px;background:var(--tint);border-radius:8px;padding:9px 12px}
-.fi-apu b{font-family:var(--font-head);font-size:13.5px;color:#7A5230;display:block;margin-bottom:3px}
-[data-theme="dark"] .fi-apu b{color:#c99b6e}
-.fi-apu p{margin:0;font-size:14px;color:var(--text);white-space:pre-wrap}
-@media(max-width:640px){.fi-apu{grid-row:auto}}
 .ficha-estado{font-size:14px;color:var(--muted);min-height:20px;margin-top:10px}
 .ficha-estado.ok{color:#1c6b38}
 .ficha-estado.mal{color:#b3261e}
@@ -148,6 +143,10 @@ tbody tr.al-fila.baja{opacity:.55}
 .al-quien b{display:block;font-family:var(--font-head);font-size:16px}
 .al-quien span{display:block;font-size:13px;color:var(--muted);font-weight:400}
 .panel-flag.baja{background:var(--border);color:var(--muted)}
+.panel-flag.sinacceso{background:#FDECEA;color:#b3261e}
+[data-theme="dark"] .panel-flag.sinacceso{background:#3a1d1a;color:#e88078}
+.panel-flag.conacceso{background:#DFF2E4;color:#1c6b38}
+[data-theme="dark"] .panel-flag.conacceso{background:#16301f;color:#7fd6a0}
 .al-n{font-variant-numeric:tabular-nums}
 .al-sin{color:var(--muted);font-size:13.5px}
 /* Ficha: se despega de la tabla y lleva la marca de la fila que has pulsado,
@@ -182,8 +181,31 @@ tbody tr.al-fila.baja{opacity:.55}
 .cat-fbtn.on{background:var(--primary);border-color:var(--primary);color:#fff;font-weight:700}
 .cat-buscar{flex:1;min-width:180px;padding:9px 12px;border-radius:10px;border:1px solid var(--border);background:var(--card-bg);color:var(--text);font-family:var(--font-body);font-size:14.5px}
 
+/* ── Los números de arriba ──
+   No son los de antes: aquellos decían cuántos alumnos tengo, y eso ya lo sé.
+   Estos son los del dinero y los de quién tira del carro. */
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(176px,1fr));gap:12px;margin-bottom:24px}
+.kpi{background:var(--card-bg);border:1px solid var(--border);border-radius:14px;padding:14px 16px}
+.kpi .n{font-family:var(--font-head);font-size:25px;font-weight:700;color:var(--primary-dark);line-height:1.15;font-variant-numeric:tabular-nums}
+.kpi .n.txt{font-size:19px}
+.kpi .l{font-size:12.5px;color:var(--muted);margin-top:3px}
+.kpi .s{font-size:12.5px;color:var(--muted);margin-top:2px;font-variant-numeric:tabular-nums}
+.kpi.dinero .n{color:#1c6b38}
+[data-theme="dark"] .kpi.dinero .n{color:#7fd6a0}
+
+/* ── Filtros de la tabla: estado y acceso son dos cosas distintas ── */
+.al-filtros{display:flex;gap:10px 22px;flex-wrap:wrap;align-items:center;margin:-4px 0 16px}
+.al-fgrupo{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.al-frot{font-size:11.5px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--muted)}
+.al-fbtn{background:var(--card-bg);border:1px solid var(--border);border-radius:9px;padding:5px 11px;font-size:13.5px;color:var(--muted);cursor:pointer;font-family:var(--font-body)}
+.al-fbtn:hover{border-color:var(--primary)}
+.al-fbtn.on{background:var(--primary);border-color:var(--primary);color:#fff;font-weight:700}
+
 /* ── La tabla ── */
-.al-cuenta{color:var(--muted);font-size:14px;margin:-22px 0 30px}
+th.al-orden{cursor:pointer;user-select:none;white-space:nowrap}
+th.al-orden:hover{text-decoration:underline}
+th.al-orden i{font-size:13px;margin-left:4px;opacity:.45}
+th.al-orden.on i{opacity:1}
 .al-vercl{display:inline-flex;align-items:center;gap:6px;background:var(--tint);border:1px solid transparent;border-radius:10px;padding:6px 12px;font-size:14px;font-weight:700;color:var(--primary-dark);white-space:nowrap;font-variant-numeric:tabular-nums}
 tbody tr.al-fila:hover .al-vercl{background:var(--primary);border-color:var(--primary);color:#fff}
 .al-vercl.cero{background:transparent;border:1px dashed var(--border);color:var(--muted);font-weight:600}
@@ -201,9 +223,8 @@ tbody tr.al-fila:hover .al-vercl{background:var(--primary);border-color:var(--pr
    enmarca y el contenido sigue leyéndose igual de bien */
 #ficha .fi-bloque,#ficha .fi-row,#ficha .cat-row{background:var(--card-bg);border:1px solid var(--ficha-bd)}
 #ficha .fi-row{border-left:4px solid #7A5230}
-#ficha .fi-apu{background:var(--ficha-bg)}
 .fi-paso{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;background:#7A5230;color:#fff;font-size:12px;font-weight:800;margin-right:7px;font-family:var(--font-body)}
-.fi-como{margin:-4px 0 14px;font-size:13.5px;color:var(--muted);line-height:1.5;max-width:62ch}
+.fi-como{margin:-4px 0 14px;font-size:13.5px;color:var(--muted);line-height:1.5}
 .fi-poner{border-left:4px solid #7A5230!important}
 .button-lg{padding:11px 20px;font-size:15.5px}
 /* el título de una clase asignada abre la clase, en otra pestaña */
@@ -216,7 +237,7 @@ tbody tr.al-fila:hover .al-vercl{background:var(--primary);border-color:var(--pr
 .fi-check{display:block;margin-top:14px;font-size:14.5px;cursor:pointer}
 .fi-check input{margin-right:7px;vertical-align:-1px}
 .fi-check b{font-weight:700}
-.fi-check span{display:block;margin:3px 0 0 24px;font-size:13.5px;color:var(--muted);line-height:1.5;max-width:62ch}
+.fi-check span{display:block;margin:3px 0 0 24px;font-size:13.5px;color:var(--muted);line-height:1.5}
 .pie-nota{display:block;font-weight:400;font-size:13px;margin-top:2px}
 </style>
 </head>
@@ -239,12 +260,23 @@ tbody tr.al-fila:hover .al-vercl{background:var(--primary);border-color:var(--pr
 <button class="button button-secondary button-sm" id="panel-refresh"><i class="ti ti-refresh"></i> Actualizar</button>
 </div>
 
+<div class="kpis" id="panel-kpis"></div>
+
 <div class="al-acciones">
 <button class="button button-secondary" id="alta-abrir"><i class="ti ti-user-plus" aria-hidden="true"></i> Dar de alta</button>
 <button class="button button-secondary" id="rap-abrir2" title="Para montar una clase y repartirla entre varios alumnos a la vez"><i class="ti ti-bolt" aria-hidden="true"></i> Clase rápida para varios</button>
 <div class="al-buscar"><i class="ti ti-search" aria-hidden="true"></i>
 <input type="search" id="al-buscar" placeholder="Buscar un alumno por nombre o email..." autocomplete="off"></div>
-<label class="al-switch"><input type="checkbox" id="al-bajas"> Ver también las bajas</label>
+</div>
+<div class="al-filtros">
+<div class="al-fgrupo"><span class="al-frot">Estado</span>
+<button class="al-fbtn on" data-f="estado" data-v="alta">De alta</button>
+<button class="al-fbtn" data-f="estado" data-v="baja">De baja</button>
+<button class="al-fbtn" data-f="estado" data-v="">Todos</button></div>
+<div class="al-fgrupo"><span class="al-frot">¿Ve la web?</span>
+<button class="al-fbtn" data-f="acceso" data-v="si">Entra</button>
+<button class="al-fbtn" data-f="acceso" data-v="no">No entra</button>
+<button class="al-fbtn on" data-f="acceso" data-v="">Todos</button></div>
 </div>
 <p class="ficha-estado" id="al-estado" style="display:none;margin:-6px 0 14px"></p>
 
@@ -267,12 +299,18 @@ tbody tr.al-fila:hover .al-vercl{background:var(--primary);border-color:var(--pr
 </div>
 
 <div class="table-wrap"><table>
-<thead><tr><th>Alumno</th><th>Sus clases</th><th>Práctica</th><th>Clases dadas</th><th>Pagado</th><th>Tarifa media</th><th>Últ. actividad</th></tr></thead>
+<thead><tr>
+<th class="al-orden" data-col="nombre">Alumno</th>
+<th class="al-orden" data-col="clases">Sus clases</th>
+<th class="al-orden" data-col="practica">Práctica</th>
+<th class="al-orden" data-col="dadas">Clases dadas</th>
+<th class="al-orden" data-col="pagado">Pagado</th>
+<th class="al-orden" data-col="tarifa">Tarifa media</th>
+<th class="al-orden" data-col="actividad">Últ. actividad</th>
+</tr></thead>
 <tbody id="panel-table-body"></tbody>
-<tfoot id="panel-table-foot"></tfoot>
 </table></div>
 <p class="panel-empty" id="panel-loading">Cargando...</p>
-<p class="al-cuenta" id="al-cuenta"></p>
 
 <div class="panel-link" id="ficha" style="display:none">
 <div class="ficha-cab">
@@ -287,10 +325,24 @@ tbody tr.al-fila:hover .al-vercl{background:var(--primary);border-color:var(--pr
 <label>Nombre<input type="text" id="fi-nombre" placeholder="como le llamas tú" autocomplete="off"></label>
 <label>Idioma<select id="fi-idioma"><option value="">—</option><option value="es">Español</option><option value="it">Italiano</option><option value="en">English</option></select></label>
 <label>Nivel<select id="fi-nivel"><option value="">—</option><option value="A1">A1</option><option value="A2">A2</option><option value="B1">B1</option><option value="B2">B2</option><option value="C1">C1</option></select></label>
-<label>Acceso<select id="fi-activo"><option value="si">Puede entrar</option><option value="no">Dado de baja</option></select></label>
+<label>Estado<select id="fi-activo"><option value="si">De alta</option><option value="no">De baja</option></select></label>
+<label>¿Ve la web?<select id="fi-acceso"><option value="si">Sí, entra</option><option value="no">No entra</option></select></label>
 </div>
+<p class="fi-como" id="fi-aviso-acceso"></p>
 </div>
 
+<div class="fi-bloque fi-cobros">
+<h3 class="fi-bh"><i class="ti ti-cash" aria-hidden="true"></i> Lo que paga</h3>
+<div class="fi-perfil">
+<label>Clases dadas hasta hoy <span class="ficha-op">nº en total</span><input type="number" id="fi-clases-dadas" min="0" step="1" placeholder="0" autocomplete="off"></label>
+<label>Pagado hasta la fecha <span class="ficha-op">€ en total</span><input type="number" id="fi-pagado" min="0" step="0.5" placeholder="0" autocomplete="off"></label>
+<label>Al día a fecha de<input type="date" id="fi-pagado-fecha"></label>
+<button class="button button-secondary" id="fi-cobro-hoy"><i class="ti ti-check"></i> Actualizar a hoy</button>
+</div>
+<label class="fi-check"><input type="checkbox" id="fi-sincobro"> <b>Este no cuenta para el dinero</b>
+<span>Para tu propia ficha, y para quien recibe clases pero las paga otra persona. Sigue saliendo en la tabla y con su acceso, pero se queda fuera de las medias y de lo cobrado: si no, su cero las hunde.</span></label>
+<p class="fi-como">Las clases dadas y lo pagado los pones tú; la tarifa media sale sola (pagado ÷ clases dadas). «Actualizar a hoy» solo deja la fecha de hoy, para que sepas hasta cuándo está cuadrado.</p>
+</div>
 <div class="fi-bloque fi-poner">
 <h3 class="fi-bh"><span class="fi-paso">1</span> Ponerle una clase</h3>
 <p class="fi-como">Elige una del catálogo, ponle el día y dale a <b>Añadir</b>. Aparece abajo, en «Sus clases», y él la ve al momento en su «Mis clases».</p>
@@ -308,23 +360,12 @@ tbody tr.al-fila:hover .al-vercl{background:var(--primary);border-color:var(--pr
 <div id="ficha-lista"></div>
 <p class="ficha-estado" id="ficha-estado"></p>
 
-<div class="fi-bloque fi-cobros">
-<h3 class="fi-bh"><i class="ti ti-cash" aria-hidden="true"></i> Lo que paga</h3>
-<div class="fi-perfil">
-<label>Clases dadas hasta hoy <span class="ficha-op">nº en total</span><input type="number" id="fi-clases-dadas" min="0" step="1" placeholder="0" autocomplete="off"></label>
-<label>Pagado hasta la fecha <span class="ficha-op">€ en total</span><input type="number" id="fi-pagado" min="0" step="0.5" placeholder="0" autocomplete="off"></label>
-<label>Al día a fecha de<input type="date" id="fi-pagado-fecha"></label>
-<button class="button button-secondary" id="fi-cobro-hoy"><i class="ti ti-check"></i> Actualizar a hoy</button>
-</div>
-<label class="fi-check"><input type="checkbox" id="fi-sincobro"> <b>Este no cuenta para el dinero</b>
-<span>Para tu propia ficha, y para quien recibe clases pero las paga otra persona. Sigue saliendo en la tabla y con su acceso, pero se queda fuera de las medias y de lo cobrado: si no, su cero las hunde.</span></label>
-<p class="fi-como">Las clases dadas y lo pagado los pones tú; la tarifa media sale sola (pagado ÷ clases dadas). «Actualizar a hoy» solo deja la fecha de hoy, para que sepas hasta cuándo está cuadrado.</p>
-</div>
+
 
 <div class="fi-peligro">
 <div><b>Borrar a este alumno</b>
-<p>Se va del todo: su ficha, sus clases y sus apuntes. No se puede deshacer.
-Si solo quieres que deje de entrar, ponle «dado de baja» ahí arriba.</p></div>
+<p>Se va del todo: su ficha, sus clases y lo que haya escrito. No se puede deshacer.
+Si solo quieres que deje de entrar, ponle «No entra» en «¿Ve la web?» ahí arriba.</p></div>
 <button class="button button-secondary button-sm" id="fi-borrar"><i class="ti ti-trash"></i> Borrar</button>
 <div class="fi-seguro" id="fi-seguro" style="display:none">
 <span id="fi-seguro-txt"></span>
@@ -584,6 +625,6 @@ Si solo quieres que deje de entrar, ponle «dado de baja» ahí arriba.</p></div
 <script src="clases.js?v=20261016d"></script>
 <script src="temas.js?v=20261017a"></script>
 <script type="module" src="firebase-sync.js?v=20261014s"></script>
-<script type="module" src="firebase-panel.js?v=20261017e"></script>
+<script type="module" src="firebase-panel.js?v=20261019a"></script>
 </body>
 </html>

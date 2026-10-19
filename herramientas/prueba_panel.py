@@ -44,7 +44,8 @@ DB = {s["email"]: s for s in [
       {"id": "gustar", "fecha": mas(-2), "nota": ""},
       {"rapida": {"titulo": "Por y para, de una vez", "temas": ["por-para"]},
        "fecha": mas(4), "nota": ""}],
-     ej=140, clasesDadas=16, pagado=400, pagadoAt=mas(-16)),
+     ej=140, clasesDadas=16, pagado=400, pagadoAt=mas(-16),
+     apuntes={"motor": {"t": "me lío con el pluscuamperfecto"}}),
   al("brandon@x.com", "Brandon", "en", "A1", 0,
      [{"id": "saludos", "fecha": mas(1), "nota": ""}], ej=24),
   # sin ninguna clase futura: tiene que salir en «sin próxima clase»
@@ -80,39 +81,50 @@ with sync_playwright() as p:
     pg.goto(B + "/panel-profesor.html", wait_until="domcontentloaded")
     pg.wait_for_timeout(2600)
 
-    print("\n═══ la tabla ═══")
-    comprueba(pg.locator(".al-fila").count() == 5, "salen los 5 de alta y no el de baja")
-    pg.locator("#al-bajas").check(); pg.wait_for_timeout(300)
-    comprueba(pg.locator(".al-fila").count() == 6, "marcando «ver las bajas» sale el sexto")
-    pg.locator("#al-bajas").uncheck(); pg.wait_for_timeout(300)
-    cuenta = pg.locator("#al-cuenta").inner_text()
-    comprueba("5 alumnos" in cuenta and "1 de baja" in cuenta,
-              "el contador del final dice «5 alumnos · 1 de baja» (%s)" % cuenta[:46])
+    print("\n═══ la tabla y sus filtros ═══")
+    comprueba(pg.locator(".al-fila").count() == 5, "de salida salen los 5 de alta y no el de baja")
+    pg.locator('.al-fbtn[data-f="estado"][data-v="baja"]').click(); pg.wait_for_timeout(350)
+    comprueba([r.locator(".al-quien b").inner_text() for r in pg.locator(".al-fila").all()] == ["Un antiguo"],
+              "el filtro de bajas enseña solo al de baja")
+    pg.locator('.al-fbtn[data-f="estado"][data-v=""]').click(); pg.wait_for_timeout(350)
+    comprueba(pg.locator(".al-fila").count() == 6, "y «todos» los enseña a los seis")
+    pg.locator('.al-fbtn[data-f="estado"][data-v="alta"]').click(); pg.wait_for_timeout(350)
+
     fila = pg.locator('tr[data-ficha="anna@x.com"]')
     comprueba("25 €" in fila.inner_text(), "la tarifa media sale calculada (400 ÷ 16)")
-    pie = pg.locator("#panel-table-foot").inner_text()
-    comprueba(pie.count("Tarifa media") == 1,
-              "el pie da UNA tarifa media mientras las dos salgan iguales (%s)" % pie.replace("\n", " ")[:90])
-    comprueba("400 €" in pie, "y lo cobrado en total")
-    comprueba("Clases dadas en total" in pie and "24" in pie,
-              "y el total de clases dadas, sumando también las que no se cobran (%s)" % pie.replace("\n", " ")[:70])
-    comprueba("sale de 1 alumno" in pie,
-              "y dice en una frase de cuántos sale, no «1 de 4» (%s)" % pie.replace("\n", " ")[:80])
-    comprueba("2 no cuentan" in pie,
-              "y cuántos se quedan fuera a propósito: él mismo y la que paga otra")
-    # las ocho columnas: una fila de pie coja descuadra la tabla entera
-    celdas = pg.evaluate("""[...document.querySelectorAll('#panel-table-foot tr')]
-        .map(tr => [...tr.children].reduce((n, td) => n + (+td.colSpan || 1), 0))""")
-    cols = pg.evaluate("document.querySelectorAll('thead th').length")
-    comprueba(all(x == cols for x in celdas),
-              "cada fila del pie suma las %d columnas de la tabla (%s)" % (cols, celdas))
     comprueba("400 €" in fila.inner_text(), "lo pagado sale en su fila")
     comprueba("ayer" in fila.inner_text(), "la última actividad se dice en días, no en fecha y hora")
 
-    comprueba("róxima clase" not in pg.locator("#panel-content").inner_text(),
-              "«próxima clase» no sale en ninguna parte del panel")
-    comprueba(pg.locator("#panel-agenda").count() == 0,
-              "y el panel empieza directamente por la tabla, sin caja encima")
+    print("\n═══ los números de arriba ═══")
+    kpis = pg.locator("#panel-kpis").inner_text()
+    comprueba("Alumnos de alta" in kpis and "5" in kpis, "cuántos hay de alta")
+    comprueba("400 €" in kpis and "Cobrado en total" in kpis, "lo cobrado")
+    comprueba("Tarifa media ahora" in kpis and "Tarifa media histórica" in kpis,
+              "las dos tarifas medias, cada una en su tarjeta")
+    comprueba("Clases dadas en total" in kpis and "24" in kpis,
+              "y el total de clases dadas, también las que no se cobran")
+    comprueba("El que más ha pagado" in kpis and "Anna" in kpis, "quién paga más")
+    comprueba("El de más clases" in kpis, "y quién tiene más clases dadas")
+    comprueba(pg.locator("#panel-table-foot").count() == 0,
+              "y no queda pie de tabla: los números están arriba")
+
+    print("\n═══ ordenar pulsando la cabecera ═══")
+    def columna(n):
+        return [td.inner_text().split("\n")[0] for td in pg.locator('.al-fila td:nth-child(%d)' % n).all()]
+    pg.locator('th[data-col="dadas"]').click(); pg.wait_for_timeout(350)
+    abajo = [x for x in columna(4) if x != "—"]
+    comprueba(abajo == sorted(abajo, key=int, reverse=True),
+              "un clic ordena de más a menos (%s)" % abajo)
+    pg.locator('th[data-col="dadas"]').click(); pg.wait_for_timeout(350)
+    arriba = [x for x in columna(4) if x != "—"]
+    comprueba(arriba == sorted(arriba, key=int),
+              "y el segundo, de menos a más (%s)" % arriba)
+    comprueba(pg.evaluate("document.querySelector('th.al-orden.on').dataset.col") == "dadas",
+              "la flecha se queda en la columna por la que ordena")
+    pg.locator('th[data-col="nombre"]').click(); pg.wait_for_timeout(350)
+    nombres = [r.locator(".al-quien b").inner_text() for r in pg.locator(".al-fila").all()]
+    comprueba(nombres == sorted(nombres, key=str.lower),
+              "los nombres empiezan por la A, no por lo más alto (%s)" % nombres[:3])
 
     print("\n═══ llegar a sus clases ═══")
     pg.locator('tr[data-ficha="anna@x.com"] .al-vercl').click(); pg.wait_for_timeout(700)
@@ -164,61 +176,71 @@ with sync_playwright() as p:
     print("\n═══ quién cuenta para el dinero ═══")
     # Sabrina da 8 clases y paga 0 porque paga otra: si contara, la media se
     # hundiría. Y la ficha del propio profesor tampoco es un cliente.
-    fila_sab = pg.locator('tr[data-ficha="sabrina@x.com"]').inner_text()
-    comprueba("no cuenta" in fila_sab, "la que paga otra persona sale marcada «no cuenta»")
+    comprueba("no cuenta" in pg.locator('tr[data-ficha="sabrina@x.com"]').inner_text(),
+              "la que paga otra persona sale marcada «no cuenta»")
     comprueba("no cuenta" in pg.locator('tr[data-ficha="%s"]' % PROF).inner_text(),
               "y la ficha del propio profesor, también, sin tocar nada")
-    media_con = pg.locator("#panel-table-foot").inner_text()
+    kpis_con = pg.locator("#panel-kpis").inner_text()
     pg.locator('tr[data-ficha="sabrina@x.com"] .al-vercl').click(); pg.wait_for_timeout(700)
     comprueba(pg.locator("#fi-sincobro").is_checked(), "su casilla sale marcada en la ficha")
     pg.locator("#fi-sincobro").uncheck(); pg.wait_for_timeout(900)
-    comprueba(pg.evaluate("window.__DB['sabrina@x.com'].sinCobro") is False,
-              "desmarcarla se guarda")
-    comprueba(pg.locator("#panel-table-foot").inner_text() != media_con,
+    comprueba(pg.evaluate("window.__DB['sabrina@x.com'].sinCobro") is False, "desmarcarla se guarda")
+    comprueba(pg.locator("#panel-kpis").inner_text() != kpis_con,
               "y entonces sí entra en la media, que cambia")
-    comprueba("1 no cuenta" in pg.locator("#panel-table-foot").inner_text(),
-              "y ya solo queda uno fuera")
     pg.locator("#fi-sincobro").check(); pg.wait_for_timeout(900)
-    comprueba(pg.locator("#panel-table-foot").inner_text() == media_con,
-              "y volver a marcarla la deja como estaba")
+    comprueba(pg.locator("#panel-kpis").inner_text() == kpis_con,
+              "y volver a marcarla lo deja como estaba")
     pg.locator("#ficha-cerrar").click(); pg.wait_for_timeout(300)
 
-    print("\n═══ la segunda media, cuando de verdad es otra ═══")
-    # Las dos medias solo se separan si hay alguien DE BAJA con sus dos
-    # números puestos: es lo único que entra en una y no en la otra. Mientras
-    # no lo haya, enseñar dos veces la misma cifra solo hace dudar.
-    # antes hay que devolverle a Anna sus números, que la prueba de arriba se
-    # los ha vaciado a propósito: sin ningún activo con datos no hay media que
-    # comparar
+    print("\n═══ de baja pero entrando, y de alta sin entrar ═══")
+    # Dar de baja y quitar el acceso son dos cosas distintas: hay quien se da
+    # de baja y sigue viendo la web un tiempo, y eso lo decide él.
     pg.locator('tr[data-ficha="anna@x.com"] .al-vercl').click(); pg.wait_for_timeout(700)
-    pg.fill("#fi-clases-dadas", "16")
-    pg.fill("#fi-pagado", "400")
-    pg.locator("#fi-pagado-fecha").click(); pg.wait_for_timeout(900)
-
-    pg.locator("#al-bajas").check(); pg.wait_for_timeout(400)
-    pg.locator('tr[data-ficha="viejo@x.com"] .al-vercl').click(); pg.wait_for_timeout(700)
-    pg.fill("#fi-clases-dadas", "4")
-    pg.fill("#fi-pagado", "400")
-    pg.locator("#fi-pagado-fecha").click(); pg.wait_for_timeout(900)
-    pie2 = pg.locator("#panel-table-foot").inner_text()
-    comprueba(pie2.count("Tarifa media") == 2,
-              "con un alumno de baja que sí pagaba, aparece la segunda")
-    comprueba("contando también a los de baja" in pie2,
-              "y se llama por lo que es (%s)" % pie2.replace("\n", " ")[:110])
-    pg.fill("#fi-pagado", "")
-    pg.locator("#fi-pagado-fecha").click(); pg.wait_for_timeout(900)
-    comprueba(pg.locator("#panel-table-foot").inner_text().count("Tarifa media") == 1,
-              "y al quitarle los números vuelve a haber una sola")
+    comprueba(pg.locator("#fi-activo").input_value() == "si" and
+              pg.locator("#fi-acceso").input_value() == "si",
+              "una ficha sin «acceso» puesto sigue a su estado, como antes")
+    pg.select_option("#fi-activo", "no"); pg.wait_for_timeout(900)
+    d = pg.evaluate("({a: window.__DB['anna@x.com'].activo, ac: window.__DB['anna@x.com'].acceso})")
+    comprueba(d["a"] is False and d["ac"] is True,
+              "darla de baja no le quita el acceso: son dos campos (%s)" % d)
+    comprueba("sigue entrando" in pg.locator("#fi-aviso-acceso").inner_text(),
+              "y la ficha lo avisa en una línea")
+    pg.locator('.al-fbtn[data-f="estado"][data-v="baja"]').click(); pg.wait_for_timeout(400)
+    comprueba("Sigue entrando" in pg.locator('tr[data-ficha="anna@x.com"]').inner_text(),
+              "la tabla la marca como baja que todavía entra")
+    pg.select_option("#fi-acceso", "no"); pg.wait_for_timeout(900)
+    comprueba(pg.evaluate("window.__DB['anna@x.com'].acceso") is False, "quitarle el acceso se guarda")
+    comprueba("No entra" in pg.locator('tr[data-ficha="anna@x.com"]').inner_text(),
+              "y la marca cambia a «No entra»")
+    pg.locator('.al-fbtn[data-f="acceso"][data-v="no"]').click(); pg.wait_for_timeout(400)
+    comprueba(any("Anna" in r.inner_text() for r in pg.locator(".al-fila").all()),
+              "y el filtro «no entra» la encuentra")
+    # devolverla a como estaba
+    pg.select_option("#fi-activo", "si"); pg.wait_for_timeout(600)
+    pg.select_option("#fi-acceso", "si"); pg.wait_for_timeout(900)
     pg.locator("#ficha-cerrar").click()
-    pg.locator("#al-bajas").uncheck(); pg.wait_for_timeout(400)
+    pg.locator('.al-fbtn[data-f="acceso"][data-v=""]').click()
+    pg.locator('.al-fbtn[data-f="estado"][data-v="alta"]').click(); pg.wait_for_timeout(400)
+
+    print("\n═══ los apuntes del alumno ═══")
+    pg.locator('tr[data-ficha="anna@x.com"] .al-vercl').click(); pg.wait_for_timeout(700)
+    comprueba(pg.locator("#ficha .fi-apu").count() == 0,
+              "lo que escribe el alumno ya no se enseña en el panel")
+    comprueba(pg.evaluate("window.__DB['anna@x.com'].apuntes !== undefined"),
+              "pero sus apuntes siguen guardados: solo se ha quitado de la vista")
+    print("\n═══ el orden de la ficha ═══")
+    bloques = [h.inner_text().strip().split("\n")[0]
+               for h in pg.locator("#ficha .fi-bh, #ficha .ficha-h3").all()]
+    comprueba(bloques[0].startswith("SUS DATOS") and "PAGA" in bloques[1] and "PONERLE" in bloques[2],
+              "sus datos, lo que paga, y las clases al final (%s)" % bloques)
+    pg.locator("#ficha-cerrar").click(); pg.wait_for_timeout(300)
 
     print("\n═══ buscar algo que no está ═══")
     pg.fill("#al-buscar", "zzzz"); pg.wait_for_timeout(500)
     comprueba(pg.locator(".al-fila").count() == 0, "no sale ninguna fila")
-    comprueba(pg.locator("#panel-table-foot").inner_text().strip() == "",
-              "y el pie se queda vacío: unos totales debajo de una tabla sin filas no se entienden")
+    comprueba("Ningún alumno" in pg.locator("#panel-loading").inner_text(), "y lo dice")
     pg.fill("#al-buscar", ""); pg.wait_for_timeout(500)
-    comprueba("€" in pg.locator("#panel-table-foot").inner_text(), "y vuelven al borrar la búsqueda")
+    comprueba(pg.locator(".al-fila").count() == 5, "y vuelven al borrar la búsqueda")
 
     print("\n═══ el profesor no se cuela como alumno ═══")
     # Tiene ficha a propósito, para poder mirar la web como la ve un alumno.

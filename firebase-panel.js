@@ -23,7 +23,6 @@ function withTimeout(promise, ms, label){
   ]);
 }
 
-const cuentaEl = document.getElementById('al-cuenta');
 const bodyEl = document.getElementById('panel-table-body');
 const loadingEl = document.getElementById('panel-loading');
 const refreshBtn = document.getElementById('panel-refresh');
@@ -152,115 +151,124 @@ function paginaDeClase(a, idioma){
   return c.pagina + '-' + pista + '.html';
 }
 
-// Queda por si vuelve a haber algo arriba de la tabla que repintar con ella.
-function repinta(){ pintaTabla(); }
+// Los números de arriba dependen de los mismos datos que la tabla, así que
+// se repintan con ella: si no, al cobrarle a alguien el KPI seguía en lo viejo.
+function repinta(){ pintaKpis(); pintaTabla(); }
 
 // ───────────────── La tabla de alumnos ─────────────────
 // Se vuelve a pintar sin tocar Firebase cuando escribes en el buscador o
 // pides ver las bajas: los datos ya están en porEmail.
 
-const pieEl = document.getElementById('panel-table-foot');
+const kpisEl = document.getElementById('panel-kpis');
 const busqEl = document.getElementById('al-buscar');
-const bajasEl = document.getElementById('al-bajas');
 
-// El pie de la tabla: la tarifa media y lo cobrado.
+// Dar de baja y quitar el acceso son dos cosas distintas. Un alumno de baja
+// puede seguir entrando un tiempo —para acabar lo que tenía a medias— y uno
+// de alta puede quedarse fuera si hace falta. Por eso hay dos campos.
 //
-// La media es lo pagado entre las clases dadas, sumando a todos a la vez, no
-// la media de las tarifas de cada uno: así quien ha dado cien clases pesa lo
-// que tiene que pesar y no lo mismo que quien ha dado dos.
+// «acceso» sin poner sigue a «activo», que es como se portaba hasta ahora:
+// así ninguna ficha de las que ya existen cambia de comportamiento sola.
+function puedeEntrar(s){
+  if(!s) return false;
+  if(typeof s.acceso === 'boolean') return s.acceso;
+  return s.activo !== false;
+}
+
+// Filtros: estado ('alta' | 'baja' | '') y acceso ('si' | 'no' | '')
+const filtros = { estado: 'alta', acceso: '' };
+// Orden: la columna y el sentido. Al abrir, por última actividad, el que
+// acaba de estar arriba, que es como estaba antes.
+const orden = { col: 'actividad', desc: true };
+
+const VALOR = {
+  nombre: s => (nombreDe(s) || s.email || '').toLowerCase(),
+  clases: s => (Array.isArray(s.clases) ? s.clases.length : 0),
+  practica: s => (+s.exerciseCount || 0),
+  dadas: s => (s.clasesDadas || s.clasesDadas === 0) ? +s.clasesDadas : null,
+  pagado: s => (s.pagado || s.pagado === 0) ? +s.pagado : null,
+  tarifa: s => cuentaParaDinero(s) ? tarifaDe(s) : null,
+  actividad: s => (s.updatedAt && s.updatedAt.toMillis) ? s.updatedAt.toMillis() : null
+};
+
+// ───────────────── Los números de arriba ─────────────────
+// Vivían al final de la tabla y gráficamente no pegaban. Suben, y de paso
+// contestan lo que de verdad se pregunta uno al abrir el panel: cuánto he
+// cobrado, a qué tarifa, y quién tira del carro.
 //
-// Y dice de cuántos sale. Quien no tenga los dos números se queda fuera del
-// cálculo —no hay manera de inventárselo— y eso tiene que verse, que si no
-// parece que la media es de todos cuando es de la mitad.
-//
-// La tabla tiene SIETE columnas: cada fila del pie tiene que sumar siete
-// entre colspans o se queda coja y el navegador la cuadra como puede. La
-// prueba las cuenta contra las cabeceras, así que esto no se puede olvidar.
-function pintaPie(){
-  if(!pieEl) return;
+// La tarifa media es lo pagado entre las clases dadas, sumando a todos a la
+// vez: así quien ha dado cien clases pesa lo que tiene que pesar y no lo
+// mismo que quien ha dado dos. Quien no tiene los dos números se queda fuera
+// del cálculo, y quien está marcado como «no cuenta para el dinero» también.
+function pintaKpis(){
+  if(!kpisEl) return;
   const todos = [...porEmail.values()];
-  const activos = todos.filter(s => s.activo !== false);
+  const altas = todos.filter(s => s.activo !== false);
+  const cobran = todos.filter(cuentaParaDinero);
 
   const media = function(arr){
-    const cobran = arr.filter(cuentaParaDinero);
-    const con = cobran.filter(s => tarifaDe(s) !== null);
+    const con = arr.filter(s => cuentaParaDinero(s) && tarifaDe(s) !== null);
     const clases = con.reduce((n, s) => n + (+s.clasesDadas), 0);
-    return { v: clases ? con.reduce((n, s) => n + (+s.pagado), 0) / clases : null,
-             con: con.length,
-             fuera: arr.length - cobran.length,
-             sinDatos: cobran.length - con.length };
+    return clases ? con.reduce((n, s) => n + (+s.pagado), 0) / clases : null;
+  };
+  const mejor = function(arr, f){
+    let g = null;
+    arr.forEach(s => { if(f(s) > 0 && (!g || f(s) > f(g))) g = s; });
+    return g;
   };
 
-  // Antes ponía «(8 de 11 con los dos datos)» y no había quien lo entendiera.
-  // Ahora lo dice en una frase: de cuántos sale, a cuántos les falta algo y
-  // cuántos no cuentan.
-  const linea = function(rotulo, m){
-    const partes = [];
-    partes.push(m.con === 1 ? 'sale de 1 alumno' : 'sale de ' + m.con + ' alumnos');
-    // «sin rellenar» no valía: quien tiene 0 clases dadas sí lo ha rellenado,
-    // pero tampoco da media. Esto es verdad en los dos casos.
-    if(m.sinDatos) partes.push(m.sinDatos === 1 ? '1 todavía sin media'
-                                                : m.sinDatos + ' todavía sin media');
-    if(m.fuera) partes.push(m.fuera === 1 ? '1 no cuenta' : m.fuera + ' no cuentan');
-    return `<tr><td colspan="5">${esc(rotulo)}
-      <span class="al-sin pie-nota">${esc(partes.join(' · '))}</span></td>
-      <td class="al-n">${m.v === null ? '<span class="al-sin">—</span>'
-        : '<span class="al-eur">' + esc(euros(m.v)) + '</span>'}</td>
-      <td></td></tr>`;
-  };
-
-  const cobrado = todos.filter(cuentaParaDinero)
-    .reduce((n, s) => n + (+s.pagado || 0), 0);
-  // las clases dadas se suman de todos, también de quien no paga: una clase
-  // dada es una clase dada, la cobres o no
+  const cobrado = cobran.reduce((n, s) => n + (+s.pagado || 0), 0);
   const dadas = todos.reduce((n, s) => n + (+s.clasesDadas || 0), 0);
+  const queMasPaga = mejor(cobran, s => +s.pagado || 0);
+  const queMasClases = mejor(todos, s => +s.clasesDadas || 0);
 
-  // Dos medias idénticas una encima de otra no dicen nada y hacen dudar de
-  // las dos. Y van a salir idénticas casi siempre: solo se separan si tienes
-  // a alguien DE BAJA con sus dos números puestos, porque es lo único que
-  // entra en una y no en la otra. Un alumno de baja sin tarifa ni pagos no
-  // suma nada a ningún lado.
-  //
-  // Así que la de los activos va siempre —es la que contesta «cuánto cobro
-  // ahora»— y la otra aparece solo cuando de verdad da otro número.
-  const mActivos = media(activos), mTodos = media(todos);
-  const distintas = mTodos.v !== null && mActivos.v !== null &&
-    Math.abs(mTodos.v - mActivos.v) >= 0.005;
+  const num = (n, l, extra, clase) =>
+    `<div class="kpi${clase ? ' ' + clase : ''}"><div class="n">${n}</div>
+      <div class="l">${esc(l)}</div>${extra ? `<div class="s">${esc(extra)}</div>` : ''}</div>`;
+  const nadie = '<span class="al-sin">—</span>';
 
-  pieEl.innerHTML =
-    `<tr><td colspan="3">Clases dadas en total</td>
-      <td class="al-n">${dadas ? '<b>' + esc(dadas) + '</b>' : '<span class="al-sin">—</span>'}</td>
-      <td colspan="3"></td></tr>` +
-    `<tr><td colspan="4">Cobrado en total</td>
-      <td class="al-n">${cobrado ? '<span class="al-eur">' + esc(euros(cobrado)) + '</span>'
-        : '<span class="al-sin">—</span>'}</td>
-      <td colspan="2"></td></tr>` +
-    linea('Tarifa media', mActivos) +
-    (distintas ? linea('Tarifa media contando también a los de baja', mTodos) : '');
+  kpisEl.innerHTML = [
+    num(esc(altas.length), 'Alumnos de alta',
+        todos.length === altas.length ? '' : todos.length + ' en total, con las bajas'),
+    num(cobrado ? esc(euros(cobrado)) : nadie, 'Cobrado en total', '', 'dinero'),
+    num(media(altas) === null ? nadie : esc(euros(media(altas))), 'Tarifa media ahora',
+        'solo los de alta'),
+    num(media(todos) === null ? nadie : esc(euros(media(todos))), 'Tarifa media histórica',
+        'contando también las bajas'),
+    num(esc(dadas), 'Clases dadas en total', 'también las que no cobras'),
+    num(queMasPaga ? `<span class="txt">${esc(nombreDe(queMasPaga) || queMasPaga.email)}</span>` : nadie,
+        'El que más ha pagado', queMasPaga ? euros(queMasPaga.pagado) : ''),
+    num(queMasClases ? `<span class="txt">${esc(nombreDe(queMasClases) || queMasClases.email)}</span>` : nadie,
+        'El de más clases', queMasClases ? queMasClases.clasesDadas + ' clases' : '')
+  ].join('');
 }
 
 function pintaTabla(){
   const q = (busqEl && busqEl.value || '').trim().toLowerCase();
-  const verBajas = !!(bajasEl && bajasEl.checked);
-  let lista = [...porEmail.values()];
-
-  lista = lista.filter(s => (verBajas || s.activo !== false) &&
+  let lista = [...porEmail.values()].filter(s =>
+    (!filtros.estado || (filtros.estado === 'alta' ? s.activo !== false : s.activo === false)) &&
+    (!filtros.acceso || (filtros.acceso === 'si' ? puedeEntrar(s) : !puedeEntrar(s))) &&
     (!q || (s.email + ' ' + nombreDe(s)).toLowerCase().includes(q)));
 
+  // Ordena por la columna que hayas pulsado. Lo que no tiene valor —un
+  // alumno sin tarifa, sin pagos— se va siempre al final, mires como mires:
+  // si no, al ordenar de menos a más la tabla empieza con una fila de
+  // guiones, que es justo lo que no estabas buscando.
+  const valor = VALOR[orden.col] || VALOR.actividad;
   lista.sort((a, b) => {
-    const ta = a.updatedAt && a.updatedAt.toMillis ? a.updatedAt.toMillis() : 0;
-    const tb = b.updatedAt && b.updatedAt.toMillis ? b.updatedAt.toMillis() : 0;
-    return tb - ta;
+    const va = valor(a), vb = valor(b);
+    if(va === null && vb === null) return 0;
+    if(va === null) return 1;
+    if(vb === null) return -1;
+    const cmp = typeof va === 'string' ? va.localeCompare(vb) : va - vb;
+    return orden.desc ? -cmp : cmp;
   });
+  pintaCabeceras();
 
   if(!lista.length){
     bodyEl.innerHTML = '';
-    // el pie también: una tabla sin filas y con totales debajo no se entiende
-    if(pieEl) pieEl.innerHTML = '';
-    if(cuentaEl) cuentaEl.innerHTML = '';
     loadingEl.textContent = q
       ? 'Ningún alumno con eso.'
-      : (porEmail.size ? 'Todos tus alumnos están dados de baja. Marca «ver también las bajas».'
+      : (porEmail.size ? 'Ningún alumno con esos filtros.'
                        : 'Todavía no hay alumnos. Dale a «Dar de alta».');
     loadingEl.style.display = 'block';
     return;
@@ -291,10 +299,16 @@ function pintaTabla(){
       ? `<span class="al-eur">${esc(euros(s.pagado))}</span>${
           s.pagadoAt ? `<span class="al-desde">al ${esc(fechaCorta(s.pagadoAt))}</span>` : ''}`
       : '<span class="al-sin">—</span>';
+    // dos marcas, no una: si está de baja, y si entra o no. Solo se enseña
+    // el acceso cuando dice algo que no se deduce del estado: un alumno de
+    // alta que no entra, o uno de baja que sí.
+    const entra = puedeEntrar(s);
+    const flags = (baja ? '<span class="panel-flag baja">Baja</span>' : '') +
+      (!entra ? '<span class="panel-flag sinacceso">No entra</span>'
+        : baja ? '<span class="panel-flag conacceso">Sigue entrando</span>' : '');
     return `<tr class="al-fila${baja ? ' baja' : ''}" data-ficha="${esc(s.email || '')}">
       <td><div class="al-quien"><b>${esc(nombre || s.email || '—')}</b>
-        <span>${esc(nombre ? s.email : (marca || 'sin nombre'))}</span></div>${
-        baja ? '<span class="panel-flag baja">Baja</span>' : ''}</td>
+        <span>${esc(nombre ? s.email : (marca || 'sin nombre'))}</span></div>${flags}</td>
       <td>${clasesHtml}</td>
       <td class="al-n">${esc(s.exerciseCount || 0)}${cursosHtml}</td>
       <td class="al-n">${(s.clasesDadas || s.clasesDadas === 0) ? esc(s.clasesDadas) : '<span class="al-sin">—</span>'}</td>
@@ -306,29 +320,44 @@ function pintaTabla(){
     </tr>`;
   }).join('');
 
-  pintaPie();
-
-  // el contador que pedía: al final de la tabla y sin ocupar media pantalla.
-  // El dinero ya no va aquí: vive entero en el pie de la tabla, que es donde
-  // se mira, y así no está la misma cifra en dos sitios.
-  if(cuentaEl){
-    const altas = [...porEmail.values()].filter(s => s.activo !== false).length;
-    const bajas = porEmail.size - altas;
-    cuentaEl.textContent =
-      (altas === 1 ? '1 alumno' : altas + ' alumnos') +
-      (bajas ? (bajas === 1 ? ' · 1 de baja' : ' · ' + bajas + ' de baja') : '') +
-      (q || verBajas ? ' en total' : '');
-  }
 }
 
 if(busqEl) busqEl.addEventListener('input', pintaTabla);
-if(bajasEl) bajasEl.addEventListener('change', pintaTabla);
+
+// La flecha en la cabecera de la columna por la que está ordenando.
+function pintaCabeceras(){
+  document.querySelectorAll('th.al-orden').forEach(th => {
+    const esta = th.dataset.col === orden.col;
+    th.classList.toggle('on', esta);
+    const flecha = esta ? (orden.desc ? 'arrow-down' : 'arrow-up') : 'arrows-sort';
+    th.innerHTML = th.textContent.replace(/\s*$/, '') +
+      ' <i class="ti ti-' + flecha + '" aria-hidden="true"></i>';
+  });
+}
+
+document.addEventListener('click', function(e){
+  const th = e.target.closest('th.al-orden');
+  if(th){
+    // la misma columna cambia el sentido; una nueva empieza por lo más alto,
+    // salvo los nombres, que empiezan por la A
+    if(orden.col === th.dataset.col) orden.desc = !orden.desc;
+    else { orden.col = th.dataset.col; orden.desc = th.dataset.col !== 'nombre'; }
+    pintaTabla();
+    return;
+  }
+  const f = e.target.closest('.al-fbtn');
+  if(f){
+    filtros[f.dataset.f] = f.dataset.v;
+    f.parentNode.querySelectorAll('.al-fbtn').forEach(b => b.classList.toggle('on', b === f));
+    pintaTabla();
+  }
+});
 
 async function loadStudents(){
   loadingEl.textContent = 'Cargando...';
   loadingEl.style.display = 'block';
-  if(cuentaEl) cuentaEl.innerHTML = '';
   bodyEl.innerHTML = '';
+  if(kpisEl) kpisEl.innerHTML = '';
   refreshBtn.disabled = true;
   try {
     await withTimeout(window.jnCloudReady, 10000, 'auth');
@@ -341,6 +370,7 @@ async function loadStudents(){
     porEmail.clear();
     students.forEach(s => { if(s.email) porEmail.set(s.email, s); });
 
+    pintaKpis();
     pintaTabla();
     // si tenías una ficha abierta, se queda abierta y con los datos frescos
     // (sin volver a saltar hacia ella, que estabas mirándola)
@@ -409,18 +439,9 @@ function avisa(txt, tipo){
   fEstado.className = 'ficha-estado' + (tipo ? ' ' + tipo : '');
 }
 
-// La clave con la que el alumno guarda sus apuntes de una clase. Tiene que
-// dar lo mismo que claveApuntes() de mis-clases.js.
-function claveApuntes(c){
-  if(!c.rapida) return c.id;
-  return c.rapida.rid || ('r-' + (c.fecha || 'sinfecha') + '-' +
-    (c.rapida.titulo || '').toLowerCase().replace(/[^a-z0-9]+/g, '').slice(0, 24));
-}
-
 function pintaFicha(){
   if(!fLista) return;
   const hoy = hoyISO();
-  const apuntes = (porEmail.get(emailAbierto) || {}).apuntes || {};
   // fechadas primero, de más reciente a más antigua; las sin fecha al final
   const orden = clasesAbiertas.map((c, i) => ({ c, i }))
     .sort((a, b) => {
@@ -433,11 +454,6 @@ function pintaFicha(){
   fLista.innerHTML = orden.length ? orden.map(({ c, i }) => {
     const chips = etiquetasDe(c).map(t => `<span class="panel-course-chip">${esc(t)}</span>`).join('');
     const pend = c.fecha && c.fecha > hoy;
-    // lo que escribió el alumno durante la clase: se ve, no se toca
-    const suyo = apuntes[claveApuntes(c)];
-    const apu = (suyo && typeof suyo.t === 'string' && suyo.t.trim())
-      ? `<div class="fi-apu"><b><i class="ti ti-note"></i> Sus apuntes</b><p>${esc(suyo.t)}</p></div>`
-      : '';
     // el título abre la clase tal y como la ve el alumno, en otra pestaña:
     // antes había que ir al catálogo y buscarla a mano
     const url = paginaDeClase(c, (porEmail.get(emailAbierto) || {}).idioma || 'es');
@@ -445,14 +461,13 @@ function pintaFicha(){
       ? `<a href="${esc(url)}" target="_blank" rel="noopener" title="Abrir la clase en otra pestaña">${
           esc(tituloDe(c))}<i class="ti ti-external-link"></i></a>`
       : esc(tituloDe(c)) + (c.rapida ? '<span class="fi-rap">clase rápida</span>' : '');
-    return `<div class="fi-row${pend ? ' pend' : ''}${apu ? ' con-apu' : ''}">
+    return `<div class="fi-row${pend ? ' pend' : ''}">
       <input type="date" class="fi-fecha" data-i="${i}" value="${esc(c.fecha || '')}">
       <div class="fi-tit">${tit}</div>
       <div class="fi-chips">${chips}</div>
       <input type="text" class="fi-nota" data-i="${i}" value="${esc(c.nota || '')}"
              placeholder="Nota para ti: cómo fue, qué repetir...">
       <button class="fi-quitar" data-quitar="${i}" title="Quitar de su lista">×</button>
-      ${apu}
     </div>`;
   }).join('') : '<p class="panel-empty">Todavía no tiene ninguna clase asignada.</p>';
 
@@ -500,6 +515,7 @@ async function guardaPerfil(){
     idioma: document.getElementById(PERFIL.idioma).value || '',
     nivel: document.getElementById(PERFIL.nivel).value || '',
     activo: document.getElementById(PERFIL.activo).value !== 'no',
+    acceso: document.getElementById('fi-acceso').value !== 'no',
     clasesDadas: num('fi-clases-dadas'),
     pagado: num('fi-pagado'),
     pagadoAt: document.getElementById('fi-pagado-fecha').value || '',
@@ -514,7 +530,7 @@ async function guardaPerfil(){
     porEmail.set(emailAbierto, s);
     if(fQuien) fQuien.textContent = campos.nombre || emailAbierto;
     repinta();
-    avisa(campos.activo ? 'Guardado.' : 'Guardado: ya no puede entrar en la web.', 'ok');
+    avisa(campos.acceso ? 'Guardado.' : 'Guardado: ya no puede entrar en la web.', 'ok');
     setTimeout(() => avisa(''), 2500);
   } catch(err) {
     avisa('No se ha podido guardar: ' + (err && err.message ? err.message : 'error'), 'mal');
@@ -566,6 +582,20 @@ function preguntaBorrar(abierta){
   }
 }
 
+// Las dos combinaciones raras merecen una línea, porque son a propósito
+// pero no se adivinan mirando la ficha.
+function avisaAcceso(){
+  const caja = document.getElementById('fi-aviso-acceso');
+  if(!caja) return;
+  const alta = document.getElementById(PERFIL.activo).value !== 'no';
+  const entra = document.getElementById('fi-acceso').value !== 'no';
+  caja.innerHTML =
+    (alta && !entra) ? 'Está de alta pero no puede entrar en la web. Útil para cortarle el acceso un tiempo sin darle de baja.'
+    : (!alta && entra) ? 'Está de baja pero sigue entrando en la web, porque tú lo has dejado así. Mientras no lo cambies, ve sus clases y sus ejercicios.'
+    : (!alta && !entra) ? 'De baja y sin acceso: no puede entrar. Su ficha y sus clases se quedan guardadas.'
+    : '';
+}
+
 function abreFicha(email){
   const s = porEmail.get(email);
   if(!s || !ficha) return;
@@ -577,6 +607,8 @@ function abreFicha(email){
   document.getElementById(PERFIL.idioma).value = s.idioma || '';
   document.getElementById(PERFIL.nivel).value = s.nivel || '';
   document.getElementById(PERFIL.activo).value = s.activo === false ? 'no' : 'si';
+  document.getElementById('fi-acceso').value = puedeEntrar(s) ? 'si' : 'no';
+  avisaAcceso();
   document.getElementById('fi-clases-dadas').value = (s.clasesDadas || s.clasesDadas === 0) ? s.clasesDadas : '';
   document.getElementById('fi-pagado').value = (s.pagado || s.pagado === 0) ? s.pagado : '';
   document.getElementById('fi-pagado-fecha').value = s.pagadoAt || '';
@@ -648,7 +680,10 @@ document.addEventListener('change', function(e){
   if(n){ clasesAbiertas[+n.dataset.i].nota = n.value; guarda(); return; }
   // la casilla de «no cuenta para el dinero» vive fuera de .fi-perfil
   if(e.target && e.target.id === 'fi-sincobro'){ guardaPerfil(); return; }
-  if(e.target && e.target.closest('.fi-perfil') && ficha.contains(e.target)) guardaPerfil();
+  if(e.target && e.target.closest('.fi-perfil') && ficha.contains(e.target)){
+    if(e.target.id === PERFIL.activo || e.target.id === 'fi-acceso') avisaAcceso();
+    guardaPerfil();
+  }
 });
 
 // ──────────────────────── Clase rápida ────────────────────────
