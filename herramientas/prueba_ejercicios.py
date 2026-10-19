@@ -114,6 +114,15 @@ BIEN = {
  'clase-essere-it.html': {"se1":"Estoy","se2":"Soy","se3":"está","se4":"Estoy",
    "se5":"estás","se6":"está","se7":"es","se8":"Estoy","se9":"está","se10":"es",
    "se11":"son","se12":"soy"},
+ 'clase-avere-it.html': {"av1":"Tengo","av2":"He","av3":"He","av4":"he","av5":"hay",
+   "av6":"hemos","av7":"Hay","av8":"Tengo","av9":"tengo","av10":"tengo","av11":"ha",
+   "av12":"he"},
+ 'clase-suoni-it.html': {"so1":"la jota","so2":"è muta","so3":"si sente",
+   "so4":"il th inglese","so5":"cuatro","so6":"j","so7":"profesor","so8":"atención",
+   "so9":"ciudad","so10":"libertad","so11":"difícil","so12":"teléfono"},
+ 'clase-piccole-it.html': {"pi1":"Muy","pi2":"Mucho","pi3":"mucho","pi4":"en","pi5":"a",
+   "pi6":"desde","pi7":"también","pi8":"tampoco","pi9":"Todavía","pi10":"Ya","pi11":"en",
+   "pi12":"con"},
 }
 
 # una respuesta mala por clase, para comprobar que no cuela
@@ -159,7 +168,10 @@ MAL = {'clase-gustar-en.html': ("g2", "gusta"),
        'clase-la-a-en.html': ("pa2", "a"),
        'clase-would-en.html': ("wc6", "podría"),
        'clase-falsos-amigos-it.html': ("fi1", "burro"),
-       'clase-essere-it.html': ("se1", "Soy")}
+       'clase-essere-it.html': ("se1", "Soy"),
+       'clase-avere-it.html': ("av2", "Tengo"),
+       'clase-suoni-it.html': ("so2", "si sente"),
+       'clase-piccole-it.html': ("pi2", "Muy")}
 
 SIEMBRA = ("localStorage.setItem('__falso_usuario','anna@x.com');"
            "localStorage.setItem('jn_access_granted','true');"

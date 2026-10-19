@@ -316,6 +316,34 @@ window.JN_CLASES = [
                 'está bueno', 'la fiesta es en mi casa', 'son las tres']
   },
   {
+    num: 370,
+    id: 'avere-it',
+    pagina: 'clase-avere',
+    nivel: 'A2',
+    perfil: 'italianos',
+    pistas: ['it'],
+    titulo: {
+      es: '«Avere» se parte en dos',
+      it: '«Avere» si divide in due',
+      en: '«Avere» splits in two'
+    },
+    etiquetas: ['haber y tener', 'he comido', 'tengo un coche', 'he ido', 'hay', 'había', 'hay que', 'tener que', 'tengo hambre', 'participio invariable']
+  },
+  {
+    num: 380,
+    id: 'suoni-it',
+    pagina: 'clase-suoni',
+    nivel: 'A2',
+    perfil: 'italianos',
+    pistas: ['it'],
+    titulo: {
+      es: 'Lo que se oye y lo que se escribe',
+      it: 'Quello che si sente e quello che si scrive',
+      en: 'What you hear and what you write'
+    },
+    etiquetas: ['pronunciación', 'la jota', 'gente', 'cinco', 'zapato', 'guerra', 'queso', 'pingüino', 'consonantes dobles', 'profesor', '-ción', '-dad', 'teléfono', 'acento']
+  },
+  {
     num: 410,
     id: 'la-a',
     pagina: 'clase-la-a',
@@ -406,6 +434,20 @@ window.JN_CLASES = [
     etiquetas: ['falsos amigos', 'burro', 'aceite', 'gamba', 'topo', 'salir y subir',
                 'todavía', 'largo', 'guardar y mirar', 'esperar', 'género distinto',
                 'la leche', 'el domingo']
+  },
+  {
+    num: 470,
+    id: 'piccole-it',
+    pagina: 'clase-piccole',
+    nivel: 'A2–B1',
+    perfil: 'italianos',
+    pistas: ['it'],
+    titulo: {
+      es: 'Las palabras pequeñas, que son las peores',
+      it: 'Le parole piccole, che sono le peggiori',
+      en: 'The little words, which are the worst'
+    },
+    etiquetas: ['muy y mucho', 'a y en', 'vivo en Madrid', 'desde', 'a casa de', 'también', 'tampoco', 'todavía', 'ya', 'pensar en', 'soñar con', 'casarse con', 'preposiciones']
   },
   {
     num: 510,
