@@ -20,63 +20,66 @@
 window.JN_CLASES = [
   {
     num: 1,
-    id: 'seis-formas',
-    pagina: 'clase-seis-formas',
-    nivel: 'A2–B1',
-    perfil: 'cualquiera',
+    id: 'sonidos',
+    pagina: 'clase-sonidos',
+    nivel: 'A1',
+    perfil: 'angloparlantes',
+    pistas: ['en'],
     titulo: {
-      es: 'Las seis formas que lo dicen todo',
-      it: 'Le sei forme che dicono tutto',
-      en: 'The six forms that say it all'
+      es: 'Sonidos españoles, no ingleses',
+      it: 'Suoni spagnoli, non inglesi',
+      en: 'Spanish sounds, not English sounds'
     },
-    etiquetas: ['pretérito perfecto', 'estar + gerundio', 'ir a + infinitivo',
-                'haber', 'estar', 'ir']
+    etiquetas: ['pronunciación', 'fonética', 'vocales', 'la jota', 'be y uve',
+                'pero y perro', 'erre', 'hache muda', 'que y qui', 'gue y gui',
+                'diéresis', 'pingüino', 'tilde', 'acento']
   },
   {
     num: 2,
-    id: 'motor',
-    pagina: 'clase-motor',
-    nivel: 'B1–B2',
-    perfil: 'cualquiera',
+    id: 'saludos',
+    pagina: 'clase-saludos',
+    nivel: 'A1',
+    perfil: 'angloparlantes',
+    pistas: ['en'],
     titulo: {
-      es: 'El motor manda',
-      it: 'Il motore comanda',
-      en: 'The engine is in charge'
+      es: 'Los dos primeros minutos',
+      it: 'I primi due minuti',
+      en: 'The first two minutes'
     },
-    etiquetas: ['había comido', 'estaba comiendo', 'iba a comer',
-                'pluscuamperfecto', 'imperfecto continuo']
+    etiquetas: ['saludos', 'tú y usted', 'buenos días', 'buenas tardes', 'buenas noches',
+                'encantado', 'me llamo', 'hasta luego', 'despedirse']
   },
   {
     num: 3,
-    id: 'tres-pasados',
-    pagina: 'clase-tres-pasados',
-    nivel: 'A2–B1',
-    perfil: 'cualquiera',
+    id: 'sobre-ti',
+    pagina: 'clase-sobre-ti',
+    nivel: 'A1',
+    perfil: 'angloparlantes',
+    pistas: ['en'],
     titulo: {
-      es: 'Los tres pasados en la misma mesa',
-      it: 'I tre passati sullo stesso tavolo',
-      en: 'The three pasts on one table'
+      es: 'Háblame de ti',
+      it: 'Parlami di te',
+      en: 'Tell me about you'
     },
-    etiquetas: ['indefinido', 'imperfecto', 'perfecto compuesto',
-                'hablé', 'he hablado', 'hablaba']
+    etiquetas: ['presentarse', 'de dónde eres', 'a qué te dedicas', 'cuántos años tienes',
+                'soy ingeniero', 'tengo treinta años', 'trabajo en', 'trabajo de',
+                'estoy casado', 'por la mañana', 'mi familia']
   },
   {
     num: 4,
-    id: 'formas-pasado',
-    pagina: 'clase-formas-pasado',
-    nivel: 'A2–B1',
-    perfil: 'cualquiera',
+    id: 'presente',
+    pagina: 'clase-presente',
+    nivel: 'A1',
+    perfil: 'angloparlantes',
+    pistas: ['en'],
     titulo: {
-      es: 'Las formas del pasado',
-      it: 'Le forme del passato',
-      en: 'The forms of the past'
+      es: 'El presente, y los que lo rompen',
+      it: 'Il presente, e quelli che lo rompono',
+      en: 'The present, and the ones that break it'
     },
-    etiquetas: ['conjugación del pasado', 'participios irregulares',
-                'verbos irregulares', 'fui', 'hice', 'dije',
-                'busqué', 'leyó', 'durmió']
+    etiquetas: ['presente', 'conjugación', 'regulares', 'irregulares', 'hago', 'salgo',
+                'e→ie', 'o→ue', 'ser', 'estar', 'ir', 'tener']
   },
-
-  // ─── Para angloparlantes de nivel básico. Solo en inglés. ───
   {
     num: 5,
     id: 'to-be',
@@ -108,20 +111,6 @@ window.JN_CLASES = [
   },
   {
     num: 7,
-    id: 'gustar',
-    pagina: 'clase-gustar',
-    nivel: 'A1',
-    perfil: 'angloparlantes',
-    pistas: ['en'],
-    titulo: {
-      es: 'Las cosas te gustan a ti',
-      it: 'Le cose piacciono a te',
-      en: 'Things please you'
-    },
-    etiquetas: ['gustar', 'me gusta', 'encantar', 'doler', 'apetecer', 'pronombres']
-  },
-  {
-    num: 8,
     id: 'sin-do',
     pagina: 'clase-sin-do',
     nivel: 'A1',
@@ -133,6 +122,20 @@ window.JN_CLASES = [
       en: 'There is no «do» here'
     },
     etiquetas: ['preguntas', 'negación', 'no', 'nada', 'nadie', 'nunca', '¿verdad?']
+  },
+  {
+    num: 8,
+    id: 'gustar',
+    pagina: 'clase-gustar',
+    nivel: 'A1',
+    perfil: 'angloparlantes',
+    pistas: ['en'],
+    titulo: {
+      es: 'Las cosas te gustan a ti',
+      it: 'Le cose piacciono a te',
+      en: 'Things please you'
+    },
+    etiquetas: ['gustar', 'me gusta', 'encantar', 'doler', 'apetecer', 'pronombres']
   },
   {
     num: 9,
@@ -150,114 +153,23 @@ window.JN_CLASES = [
   },
   {
     num: 10,
-    id: 'menos-piezas',
-    pagina: 'clase-menos-piezas',
-    nivel: 'A2',
+    id: 'costumbre',
+    pagina: 'clase-costumbre',
+    nivel: 'A1–A2',
     perfil: 'angloparlantes',
     pistas: ['en'],
     titulo: {
-      es: 'Quita el «yo», quita el «estoy»',
-      it: 'Togli lo «yo», togli lo «estoy»',
-      en: 'Drop the «yo», drop the «estoy»'
+      es: 'Tres verbos que llevan a otro',
+      it: 'Tre verbi che ne portano un altro',
+      en: 'Three verbs that carry another one'
     },
-    etiquetas: ['sujeto innecesario', 'yo', 'estar + gerundio', 'estoy hablando',
-                'presente', 'me duele la cabeza']
-  },
-  {
-    num: 11,
-    id: 'dos-sentidos',
-    pagina: 'clase-dos-sentidos',
-    nivel: 'A2',
-    perfil: 'angloparlantes',
-    pistas: ['en'],
-    titulo: {
-      es: 'Cuando ser y estar cambian lo que dices',
-      it: 'Quando ser ed estar cambiano il senso',
-      en: 'One adjective, two meanings'
-    },
-    etiquetas: ['ser', 'estar', 'es aburrido', 'está aburrido', 'es listo',
-                'está bueno', 'adjetivos']
-  },
-  {
-    num: 12,
-    id: 'dos-verbos',
-    pagina: 'clase-dos-verbos',
-    nivel: 'A2',
-    perfil: 'angloparlantes',
-    pistas: ['en'],
-    titulo: {
-      es: 'Un verbo en inglés, dos en español',
-      it: 'Un verbo in inglese, due in spagnolo',
-      en: 'One English verb, two Spanish ones'
-    },
-    etiquetas: ['saber', 'conocer', 'pedir', 'preguntar', 'traer', 'llevar',
-                'ir', 'venir', 'tiempo', 'hora', 'vez', 'funcionar']
-  },
-  {
-    num: 13,
-    id: 'falsos-amigos-en',
-    pagina: 'clase-falsos-amigos',
-    nivel: 'A2',
-    perfil: 'angloparlantes',
-    pistas: ['en'],
-    titulo: {
-      es: 'Las que parecen inglesas y no lo son',
-      it: 'Quelle che sembrano inglesi e non lo sono',
-      en: 'The words that look English and aren’t'
-    },
-    etiquetas: ['falsos amigos', 'embarazada', 'constipado', 'éxito',
-                'actualmente', 'sensible', 'librería', 'molestar']
+    etiquetas: ['soler', 'ir a + infinitivo', 'tener que', 'hay que', 'perífrasis',
+                'costumbre', 'obligación']
   },
 
+  // ─── Español para el trabajo ───,
   {
-    num: 14,
-    id: 'saludos',
-    pagina: 'clase-saludos',
-    nivel: 'A1',
-    perfil: 'angloparlantes',
-    pistas: ['en'],
-    titulo: {
-      es: 'Los dos primeros minutos',
-      it: 'I primi due minuti',
-      en: 'The first two minutes'
-    },
-    etiquetas: ['saludos', 'tú y usted', 'buenos días', 'buenas tardes', 'buenas noches',
-                'encantado', 'me llamo', 'hasta luego', 'despedirse']
-  },
-  {
-    num: 15,
-    id: 'sobre-ti',
-    pagina: 'clase-sobre-ti',
-    nivel: 'A1',
-    perfil: 'angloparlantes',
-    pistas: ['en'],
-    titulo: {
-      es: 'Háblame de ti',
-      it: 'Parlami di te',
-      en: 'Tell me about you'
-    },
-    etiquetas: ['presentarse', 'de dónde eres', 'a qué te dedicas', 'cuántos años tienes',
-                'soy ingeniero', 'tengo treinta años', 'trabajo en', 'trabajo de',
-                'estoy casado', 'por la mañana', 'mi familia']
-  },
-  {
-    num: 16,
-    id: 'sonidos',
-    pagina: 'clase-sonidos',
-    nivel: 'A1',
-    perfil: 'angloparlantes',
-    pistas: ['en'],
-    titulo: {
-      es: 'Sonidos españoles, no ingleses',
-      it: 'Suoni spagnoli, non inglesi',
-      en: 'Spanish sounds, not English sounds'
-    },
-    etiquetas: ['pronunciación', 'fonética', 'vocales', 'la jota', 'be y uve',
-                'pero y perro', 'erre', 'hache muda', 'que y qui', 'gue y gui',
-                'diéresis', 'pingüino', 'tilde', 'acento']
-  },
-  {
-    num: 17,
+    num: 11,
     id: 'futuro',
     pagina: 'clase-futuro',
     nivel: 'A1–A2',
@@ -273,7 +185,7 @@ window.JN_CLASES = [
                 'futuro de probabilidad']
   },
   {
-    num: 18,
+    num: 12,
     id: 'marcadores',
     pagina: 'clase-marcadores',
     nivel: 'A1–A2',
@@ -289,39 +201,173 @@ window.JN_CLASES = [
                 'porque', 'como']
   },
   {
-    num: 19,
-    id: 'presente',
-    pagina: 'clase-presente',
-    nivel: 'A1',
+    num: 13,
+    id: 'menos-piezas',
+    pagina: 'clase-menos-piezas',
+    nivel: 'A2',
     perfil: 'angloparlantes',
     pistas: ['en'],
     titulo: {
-      es: 'El presente, y los que lo rompen',
-      it: 'Il presente, e quelli che lo rompono',
-      en: 'The present, and the ones that break it'
+      es: 'Quita el «yo», quita el «estoy»',
+      it: 'Togli lo «yo», togli lo «estoy»',
+      en: 'Drop the «yo», drop the «estoy»'
     },
-    etiquetas: ['presente', 'conjugación', 'regulares', 'irregulares', 'hago', 'salgo',
-                'e→ie', 'o→ue', 'ser', 'estar', 'ir', 'tener']
+    etiquetas: ['sujeto innecesario', 'yo', 'estar + gerundio', 'estoy hablando',
+                'presente', 'me duele la cabeza']
+  },
+  {
+    num: 14,
+    id: 'dos-sentidos',
+    pagina: 'clase-dos-sentidos',
+    nivel: 'A2',
+    perfil: 'angloparlantes',
+    pistas: ['en'],
+    titulo: {
+      es: 'Cuando ser y estar cambian lo que dices',
+      it: 'Quando ser ed estar cambiano il senso',
+      en: 'One adjective, two meanings'
+    },
+    etiquetas: ['ser', 'estar', 'es aburrido', 'está aburrido', 'es listo',
+                'está bueno', 'adjetivos']
+  },
+  {
+    num: 15,
+    id: 'dos-verbos',
+    pagina: 'clase-dos-verbos',
+    nivel: 'A2',
+    perfil: 'angloparlantes',
+    pistas: ['en'],
+    titulo: {
+      es: 'Un verbo en inglés, dos en español',
+      it: 'Un verbo in inglese, due in spagnolo',
+      en: 'One English verb, two Spanish ones'
+    },
+    etiquetas: ['saber', 'conocer', 'pedir', 'preguntar', 'traer', 'llevar',
+                'ir', 'venir', 'tiempo', 'hora', 'vez', 'funcionar']
+  },
+  {
+    num: 16,
+    id: 'falsos-amigos-en',
+    pagina: 'clase-falsos-amigos',
+    nivel: 'A2',
+    perfil: 'angloparlantes',
+    pistas: ['en'],
+    titulo: {
+      es: 'Las que parecen inglesas y no lo son',
+      it: 'Quelle che sembrano inglesi e non lo sono',
+      en: 'The words that look English and aren’t'
+    },
+    etiquetas: ['falsos amigos', 'embarazada', 'constipado', 'éxito',
+                'actualmente', 'sensible', 'librería', 'molestar']
+  },
+  {
+    num: 17,
+    id: 'por-para',
+    pagina: 'clase-por-para',
+    nivel: 'A2',
+    perfil: 'angloparlantes',
+    pistas: ['en'],
+    titulo: {
+      es: 'Por y para, de una vez',
+      it: 'Por e para, una volta per tutte',
+      en: 'Por and para, once and for all'
+    },
+    etiquetas: ['por', 'para', 'preposiciones', 'gracias por', 'por favor',
+                'para siempre', 'trabajo para', 'trabajo por', 'por la mañana',
+                'para qué', 'por qué']
+  },
+  {
+    num: 18,
+    id: 'la-a',
+    pagina: 'clase-la-a',
+    nivel: 'A2–B1',
+    perfil: 'angloparlantes',
+    pistas: ['en'],
+    titulo: {
+      es: 'La «a» que el inglés no tiene, y lo, la, le',
+      it: 'La «a» che l’inglese non ha, e lo, la, le',
+      en: 'The little «a», and lo, la, le'
+    },
+    etiquetas: ['a personal', 'veo a María', 'pronombres de objeto', 'lo', 'la',
+                'le', 'les', 'se lo', 'cómpralas', 'orden de las palabras']
+  },
+  {
+    num: 19,
+    id: 'would',
+    pagina: 'clase-would',
+    nivel: 'A2–B1',
+    perfil: 'angloparlantes',
+    pistas: ['en'],
+    titulo: {
+      es: 'Would, could, should',
+      it: 'Would, could, should',
+      en: 'Would, could, should'
+    },
+    etiquetas: ['condicional', 'hablaría', 'podría', 'debería', 'me gustaría',
+                'tendría que', 'quería un café', 'cortesía', 'imperfecto',
+                'de niño iba']
   },
   {
     num: 20,
-    id: 'costumbre',
-    pagina: 'clase-costumbre',
-    nivel: 'A1–A2',
-    perfil: 'angloparlantes',
-    pistas: ['en'],
+    id: 'formas-pasado',
+    pagina: 'clase-formas-pasado',
+    nivel: 'A2–B1',
+    perfil: 'cualquiera',
     titulo: {
-      es: 'Tres verbos que llevan a otro',
-      it: 'Tre verbi che ne portano un altro',
-      en: 'Three verbs that carry another one'
+      es: 'Las formas del pasado',
+      it: 'Le forme del passato',
+      en: 'The forms of the past'
     },
-    etiquetas: ['soler', 'ir a + infinitivo', 'tener que', 'hay que', 'perífrasis',
-                'costumbre', 'obligación']
+    etiquetas: ['conjugación del pasado', 'participios irregulares',
+                'verbos irregulares', 'fui', 'hice', 'dije',
+                'busqué', 'leyó', 'durmió']
   },
 
-  // ─── Español para el trabajo ───
+  // ─── Para angloparlantes de nivel básico. Solo en inglés. ───,
   {
     num: 21,
+    id: 'tres-pasados',
+    pagina: 'clase-tres-pasados',
+    nivel: 'A2–B1',
+    perfil: 'cualquiera',
+    titulo: {
+      es: 'Los tres pasados en la misma mesa',
+      it: 'I tre passati sullo stesso tavolo',
+      en: 'The three pasts on one table'
+    },
+    etiquetas: ['indefinido', 'imperfecto', 'perfecto compuesto',
+                'hablé', 'he hablado', 'hablaba']
+  },
+  {
+    num: 22,
+    id: 'seis-formas',
+    pagina: 'clase-seis-formas',
+    nivel: 'A2–B1',
+    perfil: 'cualquiera',
+    titulo: {
+      es: 'Las seis formas que lo dicen todo',
+      it: 'Le sei forme che dicono tutto',
+      en: 'The six forms that say it all'
+    },
+    etiquetas: ['pretérito perfecto', 'estar + gerundio', 'ir a + infinitivo',
+                'haber', 'estar', 'ir']
+  },
+  {
+    num: 23,
+    id: 'motor',
+    pagina: 'clase-motor',
+    nivel: 'B1–B2',
+    perfil: 'cualquiera',
+    titulo: {
+      es: 'El motor manda',
+      it: 'Il motore comanda',
+      en: 'The engine is in charge'
+    },
+    etiquetas: ['había comido', 'estaba comiendo', 'iba a comer',
+                'pluscuamperfecto', 'imperfecto continuo']
+  },
+  {
+    num: 24,
     id: 'llamada',
     pagina: 'clase-llamada',
     nivel: 'B1–B2',
@@ -335,21 +381,7 @@ window.JN_CLASES = [
                 '¿de parte de quién?']
   },
   {
-    num: 22,
-    id: 'reunion',
-    pagina: 'clase-reunion',
-    nivel: 'B2',
-    perfil: 'trabajo',
-    titulo: {
-      es: 'La reunión: entrar, opinar y cerrar',
-      it: 'La riunione: entrare, opinare e chiudere',
-      en: 'Meetings: getting in, weighing in, wrapping up'
-    },
-    etiquetas: ['reuniones', 'pedir la palabra', 'interrumpir', 'opinar', 'acuerdo',
-                'repartir tareas', 'videollamada']
-  },
-  {
-    num: 23,
+    num: 25,
     id: 'suavizar',
     pagina: 'clase-suavizar',
     nivel: 'B1–B2',
@@ -363,7 +395,21 @@ window.JN_CLASES = [
                 'pedir', 'discrepar']
   },
   {
-    num: 24,
+    num: 26,
+    id: 'reunion',
+    pagina: 'clase-reunion',
+    nivel: 'B2',
+    perfil: 'trabajo',
+    titulo: {
+      es: 'La reunión: entrar, opinar y cerrar',
+      it: 'La riunione: entrare, opinare e chiudere',
+      en: 'Meetings: getting in, weighing in, wrapping up'
+    },
+    etiquetas: ['reuniones', 'pedir la palabra', 'interrumpir', 'opinar', 'acuerdo',
+                'repartir tareas', 'videollamada']
+  },
+  {
+    num: 27,
     id: 'italiano-trabajo',
     pagina: 'clase-italiano-trabajo',
     nivel: 'B2',

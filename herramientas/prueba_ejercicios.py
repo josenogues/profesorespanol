@@ -73,7 +73,7 @@ BIEN = {
    "pr11":"tengo","pr12":"salgo los viernes"},
  'clase-costumbre-en.html': {"co1":"suelo","co2":"Solemos","co3":"comer","co4":"vamos",
    "co5":"suelen","co6":"Voy a comiendo","co7":"tengo","co8":"tienes","co9":"Hay",
-   "co10":"hayo que","co11":"tenemos","co12":"suelo trabajar desde casa"},
+   "co10":"hayo que","co11":"Mañana voy a trabajar","co12":"suelo trabajar desde casa"},
  'clase-motor-es.html': {"mo1":"estaba","mo2":"habia","mo3":"iba","mo4":"gerundio","mo5":"estuve","mo6":"estare","mo7":"habia","mo8":"participio","mo9":"infinitivo","mo10":"iba","mo11":"estaria","mo12":"habia comido"},
  'clase-motor-it.html': {"mo1":"estaba","mo2":"habia","mo3":"iba","mo4":"gerundio","mo5":"estuve","mo6":"estare","mo7":"habia","mo8":"participio","mo9":"infinitivo","mo10":"iba","mo11":"estaria","mo12":"habia comido"},
  'clase-motor-en.html': {"mo1":"estaba","mo2":"habia","mo3":"iba","mo4":"gerundio","mo5":"estuve","mo6":"estare","mo7":"habia","mo8":"participio","mo9":"infinitivo","mo10":"iba","mo11":"estaria","mo12":"habia comido"},
@@ -98,9 +98,16 @@ BIEN = {
    "fo7":"the j in «jamón»","fo8":"u","fo9":"perro","fo10":"the strong rolled r",
    "fo11":"three different words","fo12":"caro"},
  'clase-futuro-en.html': {"fu1":"hablaré","fu2":"comeremos","fu3":"vivirán",
-   "fu4":"hablaremos","fu5":"comer","fu6":"Hablaré","fu7":"Mañana voy a trabajar",
+   "fu4":"hablaremos","fu5":"comer","fu6":"Hablaré","fu7":"Te llamaré mañana, te lo prometo",
    "fu8":"tendré","fu9":"haré","fu10":"the stem — the endings stay",
    "fu11":"It must be about three","fu12":"llamaré"},
+ 'clase-por-para-en.html': {"pp1":"para","pp2":"por","pp3":"para","pp4":"por","pp5":"para",
+   "pp6":"por","pp7":"por","pp8":"para","pp9":"por","pp10":"para","pp11":"para ti","pp12":"por"},
+ 'clase-la-a-en.html': {"pa1":"a","pa2":"—","pa3":"a","pa4":"lo tengo","pa5":"la","pa6":"las",
+   "pa7":"le","pa8":"les","pa9":"se lo","pa10":"se lo doy","pa11":"cómpralas","pa12":"a"},
+ 'clase-would-en.html': {"wc1":"hablaría","wc2":"comeríamos","wc3":"tendría","wc4":"comer",
+   "wc5":"Podría","wc6":"podía","wc7":"deberías","wc8":"gustaría","wc9":"iba","wc10":"iría",
+   "wc11":"Quería un café","wc12":"podrías"},
 }
 
 # una respuesta mala por clase, para comprobar que no cuela
@@ -141,7 +148,10 @@ MAL = {'clase-gustar-en.html': ("g2", "gusta"),
        'clase-saludos-en.html': ("sa11", "Adiós"),
        'clase-sobre-ti-en.html': ("tm4", "Soy un ingeniero"),
        'clase-sonidos-en.html': ("fo9", "pero"),
-       'clase-futuro-en.html': ("fu7", "Mañana trabajaré")}
+       'clase-futuro-en.html': ("fu7", "Mañana como con mi madre"),
+       'clase-por-para-en.html': ("pp1", "por"),
+       'clase-la-a-en.html': ("pa2", "a"),
+       'clase-would-en.html': ("wc6", "podría")}
 
 SIEMBRA = ("localStorage.setItem('__falso_usuario','anna@x.com');"
            "localStorage.setItem('jn_access_granted','true');"
