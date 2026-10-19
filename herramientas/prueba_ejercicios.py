@@ -123,6 +123,9 @@ BIEN = {
  'clase-piccole-it.html': {"pi1":"Muy","pi2":"Mucho","pi3":"mucho","pi4":"en","pi5":"a",
    "pi6":"desde","pi7":"también","pi8":"tampoco","pi9":"Todavía","pi10":"Ya","pi11":"en",
    "pi12":"con","pi13":"para","pi14":"por"},
+ 'clase-verbi-it.html': {"ve1":"Pido","ve2":"Pregunto","ve3":"preguntó","ve4":"traes",
+   "ve5":"llevo","ve6":"llevo","ve7":"Tomo","ve8":"Coge","ve9":"puso","ve10":"hizo",
+   "ve11":"volvió","ve12":"pidió"},
 }
 
 # una respuesta mala por clase, para comprobar que no cuela
@@ -171,7 +174,8 @@ MAL = {'clase-gustar-en.html': ("g2", "gusta"),
        'clase-essere-it.html': ("se1", "Soy"),
        'clase-avere-it.html': ("av2", "Tengo"),
        'clase-suoni-it.html': ("so2", "si sente"),
-       'clase-piccole-it.html': ("pi2", "Muy")}
+       'clase-piccole-it.html': ("pi2", "Muy"),
+       'clase-verbi-it.html': ("ve2", "Pido")}
 
 SIEMBRA = ("localStorage.setItem('__falso_usuario','anna@x.com');"
            "localStorage.setItem('jn_access_granted','true');"

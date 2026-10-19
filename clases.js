@@ -450,6 +450,22 @@ window.JN_CLASES = [
     etiquetas: ['muy y mucho', 'a y en', 'vivo en Madrid', 'desde', 'a casa de', 'también', 'tampoco', 'todavía', 'ya', 'pensar en', 'soñar con', 'casarse con', 'preposiciones', 'por y para', 'para ti', 'por ti', 'durante']
   },
   {
+    num: 480,
+    id: 'verbi-it',
+    pagina: 'clase-verbi',
+    nivel: 'A2–B1',
+    perfil: 'italianos',
+    pistas: ['it'],
+    titulo: {
+      es: 'Un verbo tuyo, dos españoles',
+      it: 'Un verbo tuo, due spagnoli',
+      en: 'One verb of yours, two Spanish ones'
+    },
+    etiquetas: ['pedir y preguntar', 'llevar y traer', 'tomar y coger',
+                'ponerse', 'hacerse', 'volverse', 'preguntar por', 'llevo gafas',
+                'llevo dos años', 'se puso rojo', 'se hizo médico', 'se volvió loco']
+  },
+  {
     num: 510,
     id: 'motor',
     pagina: 'clase-motor',
