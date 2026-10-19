@@ -8,12 +8,18 @@
 // Las etiquetas van en español en las tres pistas: son el nombre de lo que
 // se está aprendiendo, y es lo que el alumno ve escrito en la ficha.
 //
+// `num` es el número de la clase, y es para José: los títulos están escritos
+// para el alumno y a él no le dicen de cuál se trata. Se pone una vez y no se
+// mueve nunca —ni se recalcula ni se reutiliza— porque es la referencia con
+// la que se acuerda de cada una. Una clase nueva coge el siguiente libre.
+//
 // `pistas` limita en qué idiomas existe una clase. Las clases para
 // angloparlantes están construidas sobre «en inglés dirías…», así que solo
 // tienen página en inglés. Si falta el campo, la clase vale para las tres.
 
 window.JN_CLASES = [
   {
+    num: 1,
     id: 'seis-formas',
     pagina: 'clase-seis-formas',
     nivel: 'A2–B1',
@@ -27,6 +33,7 @@ window.JN_CLASES = [
                 'haber', 'estar', 'ir']
   },
   {
+    num: 2,
     id: 'motor',
     pagina: 'clase-motor',
     nivel: 'B1–B2',
@@ -40,6 +47,7 @@ window.JN_CLASES = [
                 'pluscuamperfecto', 'imperfecto continuo']
   },
   {
+    num: 3,
     id: 'tres-pasados',
     pagina: 'clase-tres-pasados',
     nivel: 'A2–B1',
@@ -53,6 +61,7 @@ window.JN_CLASES = [
                 'hablé', 'he hablado', 'hablaba']
   },
   {
+    num: 4,
     id: 'formas-pasado',
     pagina: 'clase-formas-pasado',
     nivel: 'A2–B1',
@@ -69,6 +78,7 @@ window.JN_CLASES = [
 
   // ─── Para angloparlantes de nivel básico. Solo en inglés. ───
   {
+    num: 5,
     id: 'to-be',
     pagina: 'clase-to-be',
     nivel: 'A1',
@@ -82,6 +92,7 @@ window.JN_CLASES = [
     etiquetas: ['ser', 'estar', 'hay', 'to be', 'soy', 'estoy', 'there is']
   },
   {
+    num: 6,
     id: 'frio',
     pagina: 'clase-frio',
     nivel: 'A1',
@@ -96,6 +107,7 @@ window.JN_CLASES = [
                 'el tiempo', 'hace sol']
   },
   {
+    num: 7,
     id: 'gustar',
     pagina: 'clase-gustar',
     nivel: 'A1',
@@ -109,6 +121,7 @@ window.JN_CLASES = [
     etiquetas: ['gustar', 'me gusta', 'encantar', 'doler', 'apetecer', 'pronombres']
   },
   {
+    num: 8,
     id: 'sin-do',
     pagina: 'clase-sin-do',
     nivel: 'A1',
@@ -122,6 +135,7 @@ window.JN_CLASES = [
     etiquetas: ['preguntas', 'negación', 'no', 'nada', 'nadie', 'nunca', '¿verdad?']
   },
   {
+    num: 9,
     id: 'bando',
     pagina: 'clase-bando',
     nivel: 'A1',
@@ -135,6 +149,7 @@ window.JN_CLASES = [
     etiquetas: ['género', 'concordancia', 'el', 'la', 'adjetivos', 'plural', 'el agua']
   },
   {
+    num: 10,
     id: 'menos-piezas',
     pagina: 'clase-menos-piezas',
     nivel: 'A2',
@@ -149,6 +164,7 @@ window.JN_CLASES = [
                 'presente', 'me duele la cabeza']
   },
   {
+    num: 11,
     id: 'dos-sentidos',
     pagina: 'clase-dos-sentidos',
     nivel: 'A2',
@@ -163,6 +179,7 @@ window.JN_CLASES = [
                 'está bueno', 'adjetivos']
   },
   {
+    num: 12,
     id: 'dos-verbos',
     pagina: 'clase-dos-verbos',
     nivel: 'A2',
@@ -177,6 +194,7 @@ window.JN_CLASES = [
                 'ir', 'venir', 'tiempo', 'hora', 'vez', 'funcionar']
   },
   {
+    num: 13,
     id: 'falsos-amigos-en',
     pagina: 'clase-falsos-amigos',
     nivel: 'A2',
@@ -192,6 +210,7 @@ window.JN_CLASES = [
   },
 
   {
+    num: 14,
     id: 'saludos',
     pagina: 'clase-saludos',
     nivel: 'A1',
@@ -206,6 +225,7 @@ window.JN_CLASES = [
                 'encantado', 'me llamo', 'hasta luego', 'despedirse']
   },
   {
+    num: 15,
     id: 'sobre-ti',
     pagina: 'clase-sobre-ti',
     nivel: 'A1',
@@ -221,6 +241,7 @@ window.JN_CLASES = [
                 'estoy casado', 'por la mañana', 'mi familia']
   },
   {
+    num: 16,
     id: 'sonidos',
     pagina: 'clase-sonidos',
     nivel: 'A1',
@@ -236,6 +257,7 @@ window.JN_CLASES = [
                 'diéresis', 'pingüino', 'tilde', 'acento']
   },
   {
+    num: 17,
     id: 'futuro',
     pagina: 'clase-futuro',
     nivel: 'A1–A2',
@@ -251,6 +273,7 @@ window.JN_CLASES = [
                 'futuro de probabilidad']
   },
   {
+    num: 18,
     id: 'marcadores',
     pagina: 'clase-marcadores',
     nivel: 'A1–A2',
@@ -266,6 +289,7 @@ window.JN_CLASES = [
                 'porque', 'como']
   },
   {
+    num: 19,
     id: 'presente',
     pagina: 'clase-presente',
     nivel: 'A1',
@@ -280,6 +304,7 @@ window.JN_CLASES = [
                 'e→ie', 'o→ue', 'ser', 'estar', 'ir', 'tener']
   },
   {
+    num: 20,
     id: 'costumbre',
     pagina: 'clase-costumbre',
     nivel: 'A1–A2',
@@ -296,6 +321,7 @@ window.JN_CLASES = [
 
   // ─── Español para el trabajo ───
   {
+    num: 21,
     id: 'llamada',
     pagina: 'clase-llamada',
     nivel: 'B1–B2',
@@ -309,6 +335,7 @@ window.JN_CLASES = [
                 '¿de parte de quién?']
   },
   {
+    num: 22,
     id: 'reunion',
     pagina: 'clase-reunion',
     nivel: 'B2',
@@ -322,6 +349,7 @@ window.JN_CLASES = [
                 'repartir tareas', 'videollamada']
   },
   {
+    num: 23,
     id: 'suavizar',
     pagina: 'clase-suavizar',
     nivel: 'B1–B2',
@@ -335,6 +363,7 @@ window.JN_CLASES = [
                 'pedir', 'discrepar']
   },
   {
+    num: 24,
     id: 'italiano-trabajo',
     pagina: 'clase-italiano-trabajo',
     nivel: 'B2',

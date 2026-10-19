@@ -242,6 +242,39 @@ with sync_playwright() as p:
     pg.fill("#al-buscar", ""); pg.wait_for_timeout(500)
     comprueba(pg.locator(".al-fila").count() == 5, "y vuelven al borrar la búsqueda")
 
+    print("\n═══ el catálogo ═══")
+    pg.locator("#cat-toggle").click(); pg.wait_for_timeout(600)
+    rotulos = [g.inner_text().split("\n")[0] for g in pg.locator(".cat-fgrupo").all()]
+    comprueba(rotulos == ["NIVEL", "IDIOMA"] or rotulos == ["Nivel", "Idioma"],
+              "quedan dos filtros, nivel e idioma: «para quién» fuera (%s)" % rotulos)
+    comprueba(pg.locator('.cat-fbtn[data-valor=""]').count() == 0,
+              "y ningún botón «todos»: sin nada pulsado están todas")
+    todas = pg.locator(".cat-row").count()
+    comprueba(all(t.inner_text().startswith("#") for t in pg.locator(".cat-tit").all()),
+              "cada clase lleva su número delante")
+    # los números no se repiten: son la referencia con la que se acuerda
+    nums = pg.evaluate("(window.JN_CLASES||[]).map(c => c.num)")
+    comprueba(len(nums) == len(set(nums)) and all(isinstance(n, int) and n > 0 for n in nums),
+              "y no hay dos clases con el mismo (%d clases, %d números)" % (len(nums), len(set(nums))))
+    pg.locator('.cat-fbtn[data-filtro="nivel"][data-valor="A1"]').click(); pg.wait_for_timeout(300)
+    solo_a1 = pg.locator(".cat-row").count()
+    pg.locator('.cat-fbtn[data-filtro="nivel"][data-valor="A2"]').click(); pg.wait_for_timeout(300)
+    a1_y_a2 = pg.locator(".cat-row").count()
+    comprueba(0 < solo_a1 < a1_y_a2 < todas,
+              "A1 y A2 a la vez enseñan más que A1 sola (%d → %d de %d)" % (solo_a1, a1_y_a2, todas))
+    pg.locator('.cat-fbtn[data-filtro="nivel"][data-valor="A1"]').click(); pg.wait_for_timeout(300)
+    comprueba(pg.locator(".cat-row").count() == a1_y_a2 - solo_a1 + 0 or
+              pg.locator(".cat-row").count() < a1_y_a2,
+              "volver a pulsar A1 la quita del filtro")
+    pg.locator("#cat-limpia").click(); pg.wait_for_timeout(300)
+    comprueba(pg.locator(".cat-row").count() == todas, "«quitar filtros» las devuelve todas")
+    pg.fill("#cat-buscar", "17"); pg.wait_for_timeout(400)
+    comprueba(pg.locator(".cat-row").count() == 1 and
+              pg.locator(".cat-tit").first.inner_text().startswith("#17"),
+              "y se busca por número: escribes 17 y sale la 17")
+    pg.fill("#cat-buscar", ""); pg.wait_for_timeout(300)
+    pg.locator("#cat-toggle").click(); pg.wait_for_timeout(300)
+
     print("\n═══ el profesor no se cuela como alumno ═══")
     # Tiene ficha a propósito, para poder mirar la web como la ve un alumno.
     # Lo que no puede pasar es que la web le apunte visitas o ejercicios ahí.

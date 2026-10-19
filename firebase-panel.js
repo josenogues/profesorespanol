@@ -457,10 +457,12 @@ function pintaFicha(){
     // el título abre la clase tal y como la ve el alumno, en otra pestaña:
     // antes había que ir al catálogo y buscarla a mano
     const url = paginaDeClase(c, (porEmail.get(emailAbierto) || {}).idioma || 'es');
+    const cat = (!c.rapida && window.jnClasePorId) ? window.jnClasePorId(c.id) : null;
+    const nm = cat ? `<span class="cat-num">${esc(numDe(cat))}</span>` : '';
     const tit = url
-      ? `<a href="${esc(url)}" target="_blank" rel="noopener" title="Abrir la clase en otra pestaña">${
+      ? `${nm}<a href="${esc(url)}" target="_blank" rel="noopener" title="Abrir la clase en otra pestaña">${
           esc(tituloDe(c))}<i class="ti ti-external-link"></i></a>`
-      : esc(tituloDe(c)) + (c.rapida ? '<span class="fi-rap">clase rápida</span>' : '');
+      : nm + esc(tituloDe(c)) + (c.rapida ? '<span class="fi-rap">clase rápida</span>' : '');
     return `<div class="fi-row${pend ? ' pend' : ''}">
       <input type="date" class="fi-fecha" data-i="${i}" value="${esc(c.fecha || '')}">
       <div class="fi-tit">${tit}</div>
@@ -619,7 +621,9 @@ function abreFicha(email){
       // con el catálogo creciendo, el nivel y la pista ahorran abrir la clase
       .map(c => {
         const marca = [c.nivel, (c.pistas || []).join('/').toUpperCase()].filter(Boolean).join(' · ');
-        return `<option value="${esc(c.id)}">${esc(c.titulo.es)}${marca ? ' · ' + esc(marca) : ''}</option>`;
+        // el número delante: es con lo que se acuerda de cuál es cuál
+        return `<option value="${esc(c.id)}">${esc(numDe(c))} · ${esc(c.titulo.es)}${
+          marca ? ' · ' + esc(marca) : ''}</option>`;
       }).join('')
       || '<option value="">(todavía no hay clases en el catálogo)</option>';
   }
@@ -932,35 +936,39 @@ document.addEventListener('keydown', function(e){
 // Va plegado y con filtros porque la lista ya no cabe de un vistazo, y
 // mientras das clase lo que quieres es la tabla de arriba, no el catálogo.
 
-const catFiltro = { perfil: '', nivel: '', pista: '', q: '' };
+// Nivel e idioma se acumulan: pulsas A1 y A2 y salen las dos cosas. Por eso
+// son listas y no un valor suelto, y por eso no hace falta ningún botón de
+// «todos»: sin nada pulsado, están todas.
+//
+// El filtro «para quién» se ha quitado. Decía angloparlantes / italianos /
+// cualquiera / trabajo, y con el idioma ya se sabe para quién es: una clase
+// que solo existe en inglés es para un inglés.
+const catFiltro = { nivel: [], pista: [], q: '' };
 
-// Los perfiles salen de las propias clases: así no hay que acordarse de
-// tocar esto cada vez que se escribe una clase para un perfil nuevo.
-function perfilesDelCatalogo(){
-  const vistos = [];
-  (window.JN_CLASES || []).forEach(c => {
-    if(c.perfil && vistos.indexOf(c.perfil) < 0) vistos.push(c.perfil);
-  });
-  return vistos.sort();
+// El número de la clase, con el mismo aspecto en todas partes.
+function numDe(c){
+  return (c && c.num) ? '#' + (c.num < 10 ? '0' + c.num : c.num) : '';
 }
 
 function pintaFiltros(){
   const caja = document.getElementById('cat-filtros');
   if(!caja) return;
   // el rótulo va escrito, no en un icono: los iconos vienen de un CDN y si
-  // no carga quedarían tres filas de botones «todos» sin saber de qué
+  // no carga quedarían dos filas de botones sueltos sin saber de qué
   function grupo(campo, rotulo, opciones){
     return `<div class="cat-fgrupo"><span class="cat-frot">${esc(rotulo)}</span>` +
-      [['', 'todos']].concat(opciones).map(([v, etq]) =>
-        `<button type="button" class="cat-fbtn${catFiltro[campo] === v ? ' on' : ''}"
+      opciones.map(([v, etq]) =>
+        `<button type="button" class="cat-fbtn${catFiltro[campo].indexOf(v) >= 0 ? ' on' : ''}"
           data-filtro="${campo}" data-valor="${esc(v)}">${esc(etq)}</button>`).join('') +
       '</div>';
   }
+  const puestos = catFiltro.nivel.length + catFiltro.pista.length;
   caja.innerHTML =
-    grupo('perfil', 'Para quién', perfilesDelCatalogo().map(p => [p, p])) +
     grupo('nivel', 'Nivel', ['A1', 'A2', 'B1', 'B2', 'C1'].map(n => [n, n])) +
     grupo('pista', 'Idioma', [['es', 'ES'], ['it', 'IT'], ['en', 'EN']]) +
-    `<input type="search" class="cat-buscar" id="cat-buscar" placeholder="título o etiqueta..."
+    (puestos ? '<button type="button" class="cat-fbtn cat-flimpia" id="cat-limpia">' +
+               'Quitar filtros</button>' : '') +
+    `<input type="search" class="cat-buscar" id="cat-buscar" placeholder="número, título o etiqueta..."
       value="${esc(catFiltro.q)}" autocomplete="off">`;
 }
 
@@ -972,12 +980,16 @@ function pintaCatalogo(){
   const q = catFiltro.q.trim().toLowerCase();
 
   const lista = todas.filter(c => {
-    if(catFiltro.perfil && c.perfil !== catFiltro.perfil) return false;
-    // «A2–B1» vale tanto para A2 como para B1
-    if(catFiltro.nivel && String(c.nivel || '').indexOf(catFiltro.nivel) < 0) return false;
-    if(catFiltro.pista && (c.pistas || ['es', 'it', 'en']).indexOf(catFiltro.pista) < 0) return false;
+    // «A2–B1» vale tanto para A2 como para B1, y con varios niveles puestos
+    // basta con que encaje en uno
+    if(catFiltro.nivel.length &&
+       !catFiltro.nivel.some(n => String(c.nivel || '').indexOf(n) >= 0)) return false;
+    const pistas = c.pistas || ['es', 'it', 'en'];
+    if(catFiltro.pista.length &&
+       !catFiltro.pista.some(p => pistas.indexOf(p) >= 0)) return false;
     if(q){
-      const texto = [c.titulo.es, c.titulo.it, c.titulo.en]
+      // el número también se busca: escribes 7 y sale la 7
+      const texto = [numDe(c), String(c.num || ''), c.titulo.es, c.titulo.it, c.titulo.en]
         .concat(c.etiquetas || []).join(' ').toLowerCase();
       if(!texto.includes(q)) return false;
     }
@@ -995,10 +1007,9 @@ function pintaCatalogo(){
     const idiomas = (c.pistas || ['es', 'it', 'en']).map(l =>
       `<a href="${esc(c.pagina)}-${l}.html" target="_blank" rel="noopener">${l.toUpperCase()}</a>`).join('');
     return `<div class="cat-row">
-      <div class="cat-tit">${esc(c.titulo.es)}</div>
+      <div class="cat-tit"><span class="cat-num">${esc(numDe(c))}</span>${esc(c.titulo.es)}</div>
       <div class="cat-chips">${chips}</div>
-      <div class="cat-meta"><span class="cat-niv">${esc(c.nivel || '')}</span>
-        <span class="cat-niv">${esc(c.perfil || '')}</span></div>
+      <div class="cat-meta"><span class="cat-niv">${esc(c.nivel || '')}</span></div>
       <div class="cat-abrir">${idiomas}</div>
     </div>`;
   }).join('') : '<p class="panel-empty">Ninguna clase con estos filtros.</p>';
@@ -1022,9 +1033,15 @@ document.addEventListener('click', function(e){
 
   const f = e.target.closest('[data-filtro]');
   if(f){
-    const campo = f.dataset.filtro;
-    // volver a pulsar el filtro que ya está puesto lo quita
-    catFiltro[campo] = catFiltro[campo] === f.dataset.valor ? '' : f.dataset.valor;
+    // se acumulan: pulsar añade, volver a pulsar quita
+    const lista = catFiltro[f.dataset.filtro];
+    const i = lista.indexOf(f.dataset.valor);
+    if(i >= 0) lista.splice(i, 1); else lista.push(f.dataset.valor);
+    pintaFiltros(); pintaCatalogo();
+    return;
+  }
+  if(e.target.closest('#cat-limpia')){
+    catFiltro.nivel = []; catFiltro.pista = [];
     pintaFiltros(); pintaCatalogo();
   }
 });
