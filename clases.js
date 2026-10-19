@@ -83,6 +83,7 @@ window.JN_CLASES = [
   {
     num: 130,
     id: 'sobre-ti',
+    continua: 'saludos',
     pagina: 'clase-sobre-ti',
     nivel: 'A1',
     perfil: 'angloparlantes',
@@ -352,6 +353,22 @@ window.JN_CLASES = [
     etiquetas: ['pronunciación', 'la jota', 'gente', 'cinco', 'zapato', 'guerra', 'queso', 'pingüino', 'consonantes dobles', 'profesor', '-ción', '-dad', 'teléfono', 'acento']
   },
   {
+    num: 390,
+    id: 'desinenze-it',
+    pagina: 'clase-desinenze',
+    nivel: 'A2',
+    perfil: 'italianos',
+    pistas: ['it'],
+    titulo: {
+      es: 'Las terminaciones del indicativo',
+      it: 'Le desinenze dell’indicativo',
+      en: 'The indicative endings'
+    },
+    etiquetas: ['conjugación', 'terminaciones', 'presente', 'imperfecto',
+                'indefinido', 'futuro', 'condicional', 'hablo', 'hablaba',
+                'hablé', 'hablaré', 'hablaría', 'tres conjugaciones']
+  },
+  {
     num: 410,
     id: 'la-a',
     pagina: 'clase-la-a',
@@ -402,6 +419,7 @@ window.JN_CLASES = [
   {
     num: 440,
     id: 'tres-pasados',
+    continua: 'formas-pasado',
     pagina: 'clase-tres-pasados',
     nivel: 'A2–B1',
     perfil: 'cualquiera',
