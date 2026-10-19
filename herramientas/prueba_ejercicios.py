@@ -111,6 +111,9 @@ BIEN = {
  'clase-falsos-amigos-it.html': {"fi1":"mantequilla","fi2":"Aceite","fi3":"pierna",
    "fi4":"Subo","fi5":"todavía","fi6":"equipaje","fi7":"Mira","fi8":"espero",
    "fi9":"sufrido","fi10":"quita","fi11":"La","fi12":"el"},
+ 'clase-essere-it.html': {"se1":"Estoy","se2":"Soy","se3":"está","se4":"Estoy",
+   "se5":"estás","se6":"está","se7":"es","se8":"Estoy","se9":"está","se10":"es",
+   "se11":"son","se12":"soy"},
 }
 
 # una respuesta mala por clase, para comprobar que no cuela
@@ -155,7 +158,8 @@ MAL = {'clase-gustar-en.html': ("g2", "gusta"),
        'clase-por-para-en.html': ("pp1", "por"),
        'clase-la-a-en.html': ("pa2", "a"),
        'clase-would-en.html': ("wc6", "podría"),
-       'clase-falsos-amigos-it.html': ("fi1", "burro")}
+       'clase-falsos-amigos-it.html': ("fi1", "burro"),
+       'clase-essere-it.html': ("se1", "Soy")}
 
 SIEMBRA = ("localStorage.setItem('__falso_usuario','anna@x.com');"
            "localStorage.setItem('jn_access_granted','true');"

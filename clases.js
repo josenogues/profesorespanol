@@ -300,6 +300,22 @@ window.JN_CLASES = [
                 'para qué', 'por qué']
   },
   {
+    num: 360,
+    id: 'essere-it',
+    pagina: 'clase-essere',
+    nivel: 'A2',
+    perfil: 'italianos',
+    pistas: ['it'],
+    titulo: {
+      es: '«Essere» no es siempre ser',
+      it: '«Essere» non è sempre ser',
+      en: '«Essere» is not always ser'
+    },
+    etiquetas: ['ser y estar', 'estoy en casa', 'estoy cansado', 'es alto',
+                'está nervioso', 'es aburrido', 'está aburrido', 'es listo',
+                'está bueno', 'la fiesta es en mi casa', 'son las tres']
+  },
+  {
     num: 410,
     id: 'la-a',
     pagina: 'clase-la-a',
