@@ -268,10 +268,34 @@ with sync_playwright() as p:
               "volver a pulsar A1 la quita del filtro")
     pg.locator("#cat-limpia").click(); pg.wait_for_timeout(300)
     comprueba(pg.locator(".cat-row").count() == todas, "«quitar filtros» las devuelve todas")
-    pg.fill("#cat-buscar", "17"); pg.wait_for_timeout(400)
+    pg.fill("#cat-buscar", "350"); pg.wait_for_timeout(400)
     comprueba(pg.locator(".cat-row").count() == 1 and
-              pg.locator(".cat-tit").first.inner_text().startswith("#17"),
-              "y se busca por número: escribes 17 y sale la 17")
+              pg.locator(".cat-tit").first.inner_text().startswith("#350"),
+              "y se busca por número: escribes 350 y sale la 350")
+    pg.fill("#cat-buscar", ""); pg.wait_for_timeout(300)
+    # La centena es el nivel y la decena el sitio: así una clase nueva entra
+    # en el hueco (115, 345…) sin mover ninguna otra.
+    datos = pg.evaluate("(window.JN_CLASES||[]).map(c => ({n: c.num, niv: c.nivel}))")
+    BANDA = {"A1": 1, "A1–A2": 2, "A2": 3, "A2–B1": 4, "B1–B2": 5, "B2": 6}
+    malas = [d for d in datos if BANDA.get(d["niv"]) != d["n"] // 100]
+    comprueba(not malas, "la centena de cada número es su nivel (%s)" % malas[:3])
+    comprueba(all(d["n"] % 10 == 0 for d in datos),
+              "y todas acaban en 0, dejando nueve huecos entre cada dos")
+    nums = [d["n"] for d in datos]
+    comprueba(nums == sorted(nums), "el catálogo sale ordenado por número")
+    # y la prueba de fuego: meter una clase en el hueco no mueve a ninguna.
+    # Se cuela una de mentira con el 115 y tiene que caer entre la 110 y la 120.
+    pg.evaluate("""window.JN_CLASES.push({num:115, id:'__prueba', pagina:'clase-sonidos',
+        nivel:'A1', perfil:'angloparlantes', pistas:['en'],
+        titulo:{es:'De mentira', it:'Finta', en:'Fake'}, etiquetas:[]})""")
+    pg.locator('.cat-fbtn[data-filtro="nivel"][data-valor="A1"]').click()
+    pg.locator('.cat-fbtn[data-filtro="nivel"][data-valor="A1"]').click()
+    pg.wait_for_timeout(400)
+    orden = [t.locator(".cat-num").inner_text().strip() for t in pg.locator(".cat-tit").all()]
+    comprueba(orden[:3] == ["#110", "#115", "#120"],
+              "una clase nueva con el 115 entra entre la 110 y la 120, sin tocar las demás (%s)"
+              % orden[:4])
+    pg.evaluate("window.JN_CLASES = window.JN_CLASES.filter(c => c.id !== '__prueba')")
     pg.fill("#cat-buscar", ""); pg.wait_for_timeout(300)
     pg.locator("#cat-toggle").click(); pg.wait_for_timeout(300)
 

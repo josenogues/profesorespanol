@@ -617,7 +617,7 @@ function abreFicha(email){
   // sin marcar nunca: la del profesor sale marcada de salida (cuentaParaDinero)
   document.getElementById('fi-sincobro').checked = !cuentaParaDinero(s);
   if(fSelect){
-    fSelect.innerHTML = (window.JN_CLASES || [])
+    fSelect.innerHTML = porNumero()
       // con el catálogo creciendo, el nivel y la pista ahorran abrir la clase
       .map(c => {
         const marca = [c.nivel, (c.pistas || []).join('/').toUpperCase()].filter(Boolean).join(' · ');
@@ -945,9 +945,18 @@ document.addEventListener('keydown', function(e){
 // que solo existe en inglés es para un inglés.
 const catFiltro = { nivel: [], pista: [], q: '' };
 
-// El número de la clase, con el mismo aspecto en todas partes.
+// El número de la clase, con el mismo aspecto en todas partes. La centena
+// es el nivel (1xx A1, 2xx A1–A2, 3xx A2, 4xx A2–B1, 5xx B1–B2, 6xx B2) y
+// van de diez en diez para poder meter una en medio sin mover las demás.
 function numDe(c){
-  return (c && c.num) ? '#' + (c.num < 10 ? '0' + c.num : c.num) : '';
+  return (c && c.num) ? '#' + c.num : '';
+}
+
+// Por número, no por el orden del archivo: así una clase nueva se puede
+// escribir donde sea en clases.js y aparece en su sitio igualmente.
+function porNumero(){
+  return (window.JN_CLASES || []).slice()
+    .sort((a, b) => (a.num || 9999) - (b.num || 9999));
 }
 
 function pintaFiltros(){
@@ -976,7 +985,7 @@ function pintaCatalogo(){
   const caja = document.getElementById('cat-lista');
   const res = document.getElementById('cat-resumen');
   if(!caja) return;
-  const todas = window.JN_CLASES || [];
+  const todas = porNumero();
   const q = catFiltro.q.trim().toLowerCase();
 
   const lista = todas.filter(c => {
