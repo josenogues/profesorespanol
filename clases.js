@@ -447,7 +447,7 @@ window.JN_CLASES = [
       it: 'Le parole piccole, che sono le peggiori',
       en: 'The little words, which are the worst'
     },
-    etiquetas: ['muy y mucho', 'a y en', 'vivo en Madrid', 'desde', 'a casa de', 'también', 'tampoco', 'todavía', 'ya', 'pensar en', 'soñar con', 'casarse con', 'preposiciones']
+    etiquetas: ['muy y mucho', 'a y en', 'vivo en Madrid', 'desde', 'a casa de', 'también', 'tampoco', 'todavía', 'ya', 'pensar en', 'soñar con', 'casarse con', 'preposiciones', 'por y para', 'para ti', 'por ti', 'durante']
   },
   {
     num: 510,

@@ -122,7 +122,7 @@ BIEN = {
    "so9":"ciudad","so10":"libertad","so11":"acción","so12":"teléfono"},
  'clase-piccole-it.html': {"pi1":"Muy","pi2":"Mucho","pi3":"mucho","pi4":"en","pi5":"a",
    "pi6":"desde","pi7":"también","pi8":"tampoco","pi9":"Todavía","pi10":"Ya","pi11":"en",
-   "pi12":"con"},
+   "pi12":"con","pi13":"para","pi14":"por"},
 }
 
 # una respuesta mala por clase, para comprobar que no cuela
