@@ -952,6 +952,21 @@ function numDe(c){
   return (c && c.num) ? '#' + c.num : '';
 }
 
+// Dos clases sobre lo mismo a dos niveles no son una copia: son una base y
+// su versión a fondo, y hay que decirlo o lo parecen. La de abajo lo lleva
+// escrito en `profundiza`; la de arriba se entera preguntando quién apunta
+// a ella.
+function relacionDe(c){
+  const todas = window.JN_CLASES || [];
+  if(c.profundiza){
+    const base = todas.find(x => x.id === c.profundiza);
+    if(base) return 'A fondo sobre la ' + numDe(base) + ' · ' + base.titulo.es;
+  }
+  const hija = todas.find(x => x.profundiza === c.id);
+  if(hija) return 'Tiene versión a fondo: ' + numDe(hija) + ' · ' + hija.titulo.es;
+  return '';
+}
+
 // Por número, no por el orden del archivo: así una clase nueva se puede
 // escribir donde sea en clases.js y aparece en su sitio igualmente.
 function porNumero(){
@@ -1015,9 +1030,10 @@ function pintaCatalogo(){
     // una clase solo existe en las pistas que diga; sin el campo, en las tres
     const idiomas = (c.pistas || ['es', 'it', 'en']).map(l =>
       `<a href="${esc(c.pagina)}-${l}.html" target="_blank" rel="noopener">${l.toUpperCase()}</a>`).join('');
+    const rel = relacionDe(c);
     return `<div class="cat-row">
       <div class="cat-tit"><span class="cat-num">${esc(numDe(c))}</span>${esc(c.titulo.es)}</div>
-      <div class="cat-chips">${chips}</div>
+      <div class="cat-chips">${rel ? `<span class="cat-rel">${esc(rel)}</span>` : ''}${chips}</div>
       <div class="cat-meta"><span class="cat-niv">${esc(c.nivel || '')}</span></div>
       <div class="cat-abrir">${idiomas}</div>
     </div>`;

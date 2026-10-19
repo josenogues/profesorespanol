@@ -25,6 +25,17 @@
 // cambias el nivel, cambia de centena. Pasa poco y es una sola clase, no un
 // corrimiento de todas.
 //
+// `profundiza` dice que esta clase es la versión a fondo de otra: el mismo
+// asunto, más adentro y a otro nivel. Lleva el id de la clase base.
+//
+// Es decir: la clase de «por y para» a fondo, que sería de nivel B1–B2 y
+// por tanto del 5xx, lleva profundiza con el id de la de A2.
+//
+// No es un adorno: sin esto, dos clases sobre por y para parecen una copia
+// redundante, y son lo contrario —una pensada para A2 y otra para B1—. El
+// catálogo lo dice en las dos fichas, en la de arriba y en la de abajo, y
+// revisar.py comprueba que la clase a la que apunta exista de verdad.
+//
 // `pistas` limita en qué idiomas existe una clase. Las clases para
 // angloparlantes están construidas sobre «en inglés dirías…», así que solo
 // tienen página en inglés. Si falta el campo, la clase vale para las tres.

@@ -296,6 +296,24 @@ with sync_playwright() as p:
               "una clase nueva con el 115 entra entre la 110 y la 120, sin tocar las demás (%s)"
               % orden[:4])
     pg.evaluate("window.JN_CLASES = window.JN_CLASES.filter(c => c.id !== '__prueba')")
+
+    # La misma materia a dos niveles no es una copia: es una base y su versión
+    # a fondo. Sin decirlo, en el catálogo parecen dos clases repetidas.
+    pg.evaluate("""window.JN_CLASES.push({num:540, id:'__fondo', pagina:'clase-por-para',
+        nivel:'B1–B2', perfil:'angloparlantes', pistas:['en'], profundiza:'por-para',
+        titulo:{es:'Por y para a fondo', it:'A fondo', en:'Deep'}, etiquetas:[]})""")
+    pg.locator('.cat-fbtn[data-filtro="nivel"][data-valor="A2"]').click()
+    pg.locator('.cat-fbtn[data-filtro="nivel"][data-valor="A2"]').click()
+    pg.wait_for_timeout(400)
+    fila_base = [r for r in pg.locator(".cat-row").all()
+                 if r.locator(".cat-num").inner_text().strip() == "#350"][0]
+    fila_fondo = [r for r in pg.locator(".cat-row").all()
+                  if r.locator(".cat-num").inner_text().strip() == "#540"][0]
+    comprueba("A fondo sobre la #350" in fila_fondo.inner_text(),
+              "la clase a fondo dice de cuál lo es")
+    comprueba("Tiene versión a fondo: #540" in fila_base.inner_text(),
+              "y la de base dice que la tiene, sin que haya que escribirlo dos veces")
+    pg.evaluate("window.JN_CLASES = window.JN_CLASES.filter(c => c.id !== '__fondo')")
     pg.fill("#cat-buscar", ""); pg.wait_for_timeout(300)
     pg.locator("#cat-toggle").click(); pg.wait_for_timeout(300)
 

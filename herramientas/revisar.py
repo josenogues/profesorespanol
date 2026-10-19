@@ -95,16 +95,54 @@ for bloque in temas.split("{ id:")[1:]:
         apunta("temas.js: ejercicios que no existen", f"{tid} → {destino}")
 
 clases = open(os.path.join(REPO, "clases.js"), encoding="utf-8").read()
+ids_clase, nums_clase, profundizan = set(), {}, {}
 for bloque in clases.split("  {")[1:]:
     cid = re.search(r"id: '([a-z0-9-]+)'", bloque)
     pag = re.search(r"pagina: '([a-z0-9-]+)'", bloque)
     if not (cid and pag):
         continue
+    ids_clase.add(cid.group(1))
+    num = re.search(r"num: (\d+)", bloque)
+    if num:
+        nums_clase[cid.group(1)] = int(num.group(1))
+    prof = re.search(r"profundiza: '([a-z0-9-]+)'", bloque)
+    if prof:
+        profundizan[cid.group(1)] = prof.group(1)
     pistas = re.search(r"pistas: \[([^\]]*)\]", bloque)
     ls = re.findall(r"'([a-z]{2})'", pistas.group(1)) if pistas else list(PISTAS)
     for L in ls:
         if f"{pag.group(1)}-{L}.html" not in EXISTE:
             apunta("clases.js roto", f"{cid.group(1)} → {pag.group(1)}-{L}.html")
+
+# «profundiza» dice que una clase es la versión a fondo de otra. Si apunta a
+# una que no existe, el catálogo se calla y la clase parece una copia suelta,
+# que es justo lo que ese campo está para evitar.
+for hija, base in profundizan.items():
+    if base not in ids_clase:
+        apunta("clases.js: profundiza en una clase que no existe", f"{hija} → {base}")
+    elif base == hija:
+        apunta("clases.js: una clase se profundiza a sí misma", hija)
+    elif base in nums_clase and hija in nums_clase and nums_clase[hija] <= nums_clase[base]:
+        apunta("clases.js: la versión a fondo va antes que su base",
+               f"{hija} (#{nums_clase[hija]}) profundiza {base} (#{nums_clase[base]})")
+
+# los números: la centena es el nivel y todas acaban en 0, para poder meter
+# una clase en el hueco sin mover las demás
+BANDA = {"A1": 1, "A1–A2": 2, "A2": 3, "A2–B1": 4, "B1–B2": 5, "B2": 6}
+vistos = {}
+for bloque in clases.split("  {")[1:]:
+    cid = re.search(r"id: '([a-z0-9-]+)'", bloque)
+    num = re.search(r"num: (\d+)", bloque)
+    niv = re.search(r"nivel: '([^']+)'", bloque)
+    if not (cid and num and niv):
+        continue
+    n, nivel = int(num.group(1)), niv.group(1)
+    if n in vistos:
+        apunta("clases.js: dos clases con el mismo número", f"#{n}: {vistos[n]} y {cid.group(1)}")
+    vistos[n] = cid.group(1)
+    if nivel in BANDA and n // 100 != BANDA[nivel]:
+        apunta("clases.js: el número no cuadra con el nivel",
+               f"{cid.group(1)} es {nivel} y lleva el #{n}")
 
 # ── G. versiones de caché: mismo archivo, misma ?v= en todas las páginas ──
 versiones = defaultdict(set)
