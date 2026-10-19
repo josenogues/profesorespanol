@@ -314,6 +314,22 @@ with sync_playwright() as p:
     comprueba("Tiene versión a fondo: #540" in fila_base.inner_text(),
               "y la de base dice que la tiene, sin que haya que escribirlo dos veces")
     pg.evaluate("window.JN_CLASES = window.JN_CLASES.filter(c => c.id !== '__fondo')")
+
+    # El otro lazo: «continúa», que no es lo mismo que «a fondo». La #510 no
+    # es la versión profunda de la #450: es la siguiente, y sin la anterior no
+    # se entiende.
+    # los filtros de nivel son A1, A2, B1… no las bandas con guion, así que
+    # aquí no se filtra: se buscan las dos filas entre todas
+    pg.wait_for_timeout(300)
+    def fila(num):
+        return [r for r in pg.locator(".cat-row").all()
+                if r.locator(".cat-num").inner_text().strip() == num][0]
+    comprueba("Continúa la #450" in fila("#510").inner_text(),
+              "la #510 dice que continúa la #450")
+    comprueba("Continúa en la #510" in fila("#450").inner_text(),
+              "y la #450 dice que continúa en la #510, deducido solo")
+    comprueba("fondo" not in fila("#510").inner_text(),
+              "y no la llama «versión a fondo», que es otra cosa")
     pg.fill("#cat-buscar", ""); pg.wait_for_timeout(300)
     pg.locator("#cat-toggle").click(); pg.wait_for_timeout(300)
 

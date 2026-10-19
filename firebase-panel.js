@@ -952,18 +952,31 @@ function numDe(c){
   return (c && c.num) ? '#' + c.num : '';
 }
 
-// Dos clases sobre lo mismo a dos niveles no son una copia: son una base y
-// su versión a fondo, y hay que decirlo o lo parecen. La de abajo lo lleva
-// escrito en `profundiza`; la de arriba se entera preguntando quién apunta
-// a ella.
+// Dos clases pueden estar atadas de dos maneras, y no son la misma cosa:
+//
+//   `profundiza` — la misma materia más adentro y a otro nivel. Por y para
+//                  en A2 y por y para en B2 no son una copia.
+//   `continua`   — la siguiente, que necesita la anterior para entenderse.
+//                  «El motor manda» no se puede dar sin «Las seis formas».
+//
+// Solo se escribe en la de abajo; la de arriba se entera preguntando quién
+// apunta a ella, así que no hay manera de que una lo diga y la otra no.
+const LAZOS = [
+  { campo: 'profundiza', abajo: 'A fondo sobre la ', arriba: 'Tiene versión a fondo: ' },
+  { campo: 'continua', abajo: 'Continúa la ', arriba: 'Continúa en la ' }
+];
+
 function relacionDe(c){
   const todas = window.JN_CLASES || [];
-  if(c.profundiza){
-    const base = todas.find(x => x.id === c.profundiza);
-    if(base) return 'A fondo sobre la ' + numDe(base) + ' · ' + base.titulo.es;
+  for(let i = 0; i < LAZOS.length; i++){
+    const l = LAZOS[i];
+    if(c[l.campo]){
+      const base = todas.find(x => x.id === c[l.campo]);
+      if(base) return l.abajo + numDe(base) + ' · ' + base.titulo.es;
+    }
+    const hija = todas.find(x => x[l.campo] === c.id);
+    if(hija) return l.arriba + numDe(hija) + ' · ' + hija.titulo.es;
   }
-  const hija = todas.find(x => x.profundiza === c.id);
-  if(hija) return 'Tiene versión a fondo: ' + numDe(hija) + ' · ' + hija.titulo.es;
   return '';
 }
 

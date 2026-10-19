@@ -25,6 +25,14 @@
 // cambias el nivel, cambia de centena. Pasa poco y es una sola clase, no un
 // corrimiento de todas.
 //
+// Dos clases pueden estar atadas de dos maneras, y no son lo mismo:
+//
+//   `profundiza` — la misma materia más adentro y a otro nivel.
+//   `continua`   — la siguiente, que necesita la anterior para entenderse.
+//
+// Las dos llevan el id de la clase de abajo, y solo se escriben en la de
+// arriba: el catálogo deduce solo la otra mitad.
+//
 // `profundiza` dice que esta clase es la versión a fondo de otra: el mismo
 // asunto, más adentro y a otro nivel. Lleva el id de la clase base.
 //
@@ -468,6 +476,7 @@ window.JN_CLASES = [
   {
     num: 510,
     id: 'motor',
+    continua: 'seis-formas',
     pagina: 'clase-motor',
     nivel: 'B1–B2',
     perfil: 'cualquiera',
