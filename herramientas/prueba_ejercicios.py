@@ -119,7 +119,7 @@ BIEN = {
    "av12":"he"},
  'clase-suoni-it.html': {"so1":"la jota","so2":"è muta","so3":"si sente",
    "so4":"il th inglese","so5":"cuatro","so6":"j","so7":"profesor","so8":"atención",
-   "so9":"ciudad","so10":"libertad","so11":"difícil","so12":"teléfono"},
+   "so9":"ciudad","so10":"libertad","so11":"acción","so12":"teléfono"},
  'clase-piccole-it.html': {"pi1":"Muy","pi2":"Mucho","pi3":"mucho","pi4":"en","pi5":"a",
    "pi6":"desde","pi7":"también","pi8":"tampoco","pi9":"Todavía","pi10":"Ya","pi11":"en",
    "pi12":"con"},
