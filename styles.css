@@ -1175,6 +1175,45 @@ a.menu-button.current-page{background:rgba(255,255,255,.15)}
   .apu-panel{right:10px;left:10px;bottom:74px;width:auto;max-width:none;height:62vh}
 }
 @media(prefers-reduced-motion:reduce){ .apu-boton{transition:none} .apu-boton:hover{transform:none} }
+/* ── El globo de reservar clase ─────────────────────────────────────────
+   Va fijo abajo a la derecha de «Mis clases», que es la página donde el
+   alumno mira lo suyo. No se pone en las páginas de clase: ahí esa esquina
+   ya es del botón de apuntes y dos globos peleándose quedan fatal.
+   El anillo late tres veces al cargar y se para: llama la atención la
+   primera vez y después no da la lata. */
+.cita-boton{position:fixed;right:22px;bottom:22px;z-index:70;
+  display:inline-flex;align-items:center;justify-content:center;gap:9px;min-height:48px;
+  border:0;border-radius:28px;padding:13px 21px;background:var(--primary);color:#fff;
+  font-family:var(--font-head);font-size:15px;font-weight:600;text-decoration:none;
+  box-shadow:0 6px 18px rgba(35,44,79,.34);
+  transition:transform .14s,box-shadow .14s,background .14s;
+  animation:cita-entra .45s ease-out both}
+.cita-boton:hover,.cita-boton:focus-visible{transform:translateY(-2px);
+  background:var(--primary-dark);box-shadow:0 10px 26px rgba(35,44,79,.42);color:#fff}
+.cita-boton:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
+.cita-boton .ti{font-size:20px;color:var(--gold)}
+/* el anillo es un pseudoelemento: no ocupa sitio ni se puede pulsar */
+.cita-boton::after{content:"";position:absolute;inset:0;border-radius:28px;
+  border:2px solid var(--gold);opacity:0;pointer-events:none;
+  animation:cita-late 1.9s ease-out .6s 3}
+@keyframes cita-entra{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+@keyframes cita-late{0%{opacity:.85;transform:scale(1)}70%,100%{opacity:0;transform:scale(1.22)}}
+/* con la puerta puesta no se enseña: el overlay lo tapa igualmente, pero
+   así tampoco está debajo esperando */
+body:has(.access-gate-overlay) .cita-boton{display:none}
+[data-theme="dark"] .cita-boton{background:#4b5894;box-shadow:0 6px 18px rgba(0,0,0,.45)}
+[data-theme="dark"] .cita-boton:hover{background:#5a68a8}
+/* En el móvil NO se queda en círculo con solo el icono: los iconos vienen de
+   un CDN y si no carga queda una pelota muda. Se encoge, pero con su texto. */
+@media(max-width:620px){
+  .cita-boton{right:14px;bottom:14px;padding:11px 16px;font-size:14px;gap:7px}
+  .cita-boton .ti{font-size:18px}
+}
+@media(prefers-reduced-motion:reduce){
+  .cita-boton{transition:none;animation:none}
+  .cita-boton:hover{transform:none}
+  .cita-boton::after{animation:none}
+}
 .cl-apu-marca{margin-left:8px;font-size:15px;color:#7A5230;vertical-align:-1px}
 [data-theme="dark"] .cl-apu-marca{color:#c99b6e}
 .cl-apuntes{margin-top:12px}
