@@ -115,8 +115,20 @@ for bloque in clases.split("  {")[1:]:
     pistas = re.search(r"pistas: \[([^\]]*)\]", bloque)
     ls = re.findall(r"'([a-z]{2})'", pistas.group(1)) if pistas else list(PISTAS)
     for L in ls:
-        if f"{pag.group(1)}-{L}.html" not in EXISTE:
-            apunta("clases.js roto", f"{cid.group(1)} → {pag.group(1)}-{L}.html")
+        pagina = f"{pag.group(1)}-{L}.html"
+        if pagina not in EXISTE:
+            apunta("clases.js roto", f"{cid.group(1)} → {pagina}")
+            continue
+        # El data-clase del <body> es la caja de apuntes del alumno: lo que
+        # escriba en esta página se guarda con esa clave. Si la página se copió
+        # de otra y no se cambió, dos clases comparten caja y el alumno ve en
+        # una lo que escribió en otra. Pasó en 19 páginas de 50.
+        m = re.search(r'data-clase="([^"]*)"', CUERPO[pagina])
+        if not m:
+            apunta("página de clase sin data-clase", f"{pagina} (los apuntes no se guardan)")
+        elif m.group(1) != cid.group(1):
+            apunta("los apuntes de dos clases van a la misma caja",
+                   f"{pagina}: data-clase=«{m.group(1)}» y la clase es «{cid.group(1)}»")
 
 # Los lazos entre clases. Si apuntan a una clase que no existe, el catálogo se
 # calla y la clase parece suelta —que es justo lo que esos campos evitan—, así
