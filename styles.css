@@ -1175,6 +1175,31 @@ a.menu-button.current-page{background:rgba(255,255,255,.15)}
   .apu-panel{right:10px;left:10px;bottom:74px;width:auto;max-width:none;height:62vh}
 }
 @media(prefers-reduced-motion:reduce){ .apu-boton{transition:none} .apu-boton:hover{transform:none} }
+/* ── El repaso de una clase ─────────────────────────────────────────────
+   En «Mis clases» es una clase más, pero por dentro no lleva teoría: los
+   temas que entran y un botón que abre la tanda mezclada. */
+.cl-repaso{margin-bottom:12px}
+.cl-rep-temas{margin:0 0 4px;font-family:var(--font-head);font-size:15.5px;color:var(--text)}
+.cl-rep-nota{margin:0 0 10px;font-size:14px;color:var(--muted)}
+.cl-rep-boton{display:inline-flex;align-items:center;gap:7px;
+  background:var(--primary);color:#fff!important;border-radius:8px;padding:9px 16px;
+  font-family:var(--font-head);font-size:14.5px;text-decoration:none}
+.cl-rep-boton:hover{background:var(--primary-dark);color:#fff}
+[data-theme="dark"] .cl-rep-boton{background:#4b5894}
+[data-theme="dark"] .cl-rep-boton:hover{background:#5a68a8}
+/* la cabecera del repaso en el hub de ejercicios */
+.ex-repaso{background:var(--tint);border-left:4px solid var(--gold);border-radius:12px;
+  padding:14px 18px;margin-bottom:18px}
+.ex-repaso h4{margin:4px 0 8px;font-family:var(--font-head);font-size:18px;color:var(--text)}
+.ex-repaso-chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px}
+.ex-repaso-chip{background:var(--card-bg);border:1px solid var(--border);border-radius:999px;
+  padding:3px 11px;font-size:13px;color:var(--text-secondary)}
+.ex-repaso-teoria{font-size:14px}
+/* el botón de repaso en la ficha del alumno, en el panel */
+.fi-repaso{border:1px solid var(--border);background:var(--card-bg);color:var(--primary-dark);
+  border-radius:8px;padding:4px 10px;font-family:var(--font-head);font-size:13px;cursor:pointer}
+.fi-repaso:hover{background:var(--tint)}
+
 /* ── La sala de clase, arriba de «Mis clases» ───────────────────────────
    El alumno la necesita a la hora de la clase, así que va dentro de la
    página y no en un globo flotante: el globo ya es el de reservar y dos

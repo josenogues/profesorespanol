@@ -1220,7 +1220,114 @@ ${qHTML}`;
     pickAndRenderReading();
   }
 
+  // ── Repaso de una clase ────────────────────────────────────────────────
+  // José le pone a un alumno «repaso de la clase X» desde el panel, y eso es
+  // un enlace a ejercicios-??.html?repaso=X. La tanda sale de los temas que
+  // esa clase lleva escritos en clases.js, mezclados en una sola serie
+  // aunque sean de categorías distintas: el resto del hub no sabe hacer eso
+  // porque sus temas van siempre dentro de una materia.
+  let repasoClase = null;
+
+  const REPASO_T = {
+    es: { eyebrow: 'Repaso', de: 'Repaso de', teoria: 'Ver la teoría de esta clase',
+          vacio: 'Esta clase todavía no tiene ejercicios de repaso.' },
+    it: { eyebrow: 'Ripasso', de: 'Ripasso di', teoria: 'Vedi la teoria di questa lezione',
+          vacio: 'Questa lezione non ha ancora esercizi di ripasso.' },
+    en: { eyebrow: 'Review', de: 'Review of', teoria: 'See the theory for this class',
+          vacio: 'This class has no review exercises yet.' }
+  };
+  function repasoLabels(){ return REPASO_T[cfg.lang] || REPASO_T.es; }
+
+  function poolRepaso(){
+    const c = window.jnClasePorId && window.jnClasePorId(repasoClase);
+    const pool = [], vistos = new Set();
+    ((c && c.temas) || []).forEach(id => {
+      const t = window.jnTemaPorId && window.jnTemaPorId(id);
+      if(!t) return;
+      let items = collectPool([t.ejercicios || t.id]);
+      // un tema fino —por/para— vive dentro de otro: hay que acotarlo
+      if(t.g) items = items.filter(it => it.g === t.g);
+      items.forEach(it => {
+        // dos clases pueden mandar al mismo tema: el mismo ejercicio no se
+        // pone dos veces en la misma tanda
+        const clave = (it.prompt || '') + '|' + (it.answer || '');
+        if(vistos.has(clave)) return;
+        vistos.add(clave);
+        pool.push(it);
+      });
+    });
+    return pool;
+  }
+
+  function pintaCabeceraRepaso(){
+    const c = window.jnClasePorId && window.jnClasePorId(repasoClase);
+    if(!c || !container) return;
+    const L = repasoLabels();
+    const titulo = (c.titulo && (c.titulo[cfg.lang] || c.titulo.es)) || '';
+    const chips = (c.temas || []).map(id => {
+      const t = window.jnTemaPorId && window.jnTemaPorId(id);
+      const nom = (t && t.nombre && (t.nombre[cfg.lang] || t.nombre.es)) || id;
+      return '<span class="ex-repaso-chip">' + nom + '</span>';
+    }).join('');
+    // la teoría está en su clase, y solo si esa clase existe en esta pista
+    const hay = !c.pistas || c.pistas.indexOf(cfg.lang) >= 0;
+    const teoria = hay
+      ? '<a class="ex-repaso-teoria" href="' + c.pagina + '-' + cfg.lang + '.html">' +
+        '<i class="ti ti-book-2" aria-hidden="true"></i> ' + L.teoria + '</a>'
+      : '';
+    let caja = document.getElementById('ex-repaso');
+    if(!caja){
+      caja = document.createElement('div');
+      caja.id = 'ex-repaso';
+      caja.className = 'ex-repaso';
+      container.parentNode.insertBefore(caja, container);
+    }
+    caja.innerHTML = '<span class="eyebrow">' + L.eyebrow + '</span>' +
+      '<h4>' + L.de + ' «' + titulo + '»</h4>' +
+      '<div class="ex-repaso-chips">' + chips + '</div>' + teoria;
+  }
+
+  // Si toca cualquier otro modo, el repaso se acaba: si no, la tanda seguiría
+  // saliendo del repaso y parecería que los botones no hacen nada.
+  function saleDeRepaso(){
+    if(!repasoClase) return;
+    repasoClase = null;
+    const caja = document.getElementById('ex-repaso');
+    if(caja) caja.remove();
+    if(panelTema){
+      const grid = panelTema.querySelector('.ex-category-grid');
+      const lab = panelTema.querySelector('.ex-step-label');
+      if(grid) grid.style.display = '';
+      if(lab) lab.style.display = '';
+    }
+  }
+
+  function entraRepaso(id){
+    repasoClase = id;
+    showMode('tema');
+    // en repaso no se elige materia ni tema: ya los eligió él al mandarlo
+    if(panelTema){
+      const grid = panelTema.querySelector('.ex-category-grid');
+      const lab = panelTema.querySelector('.ex-step-label');
+      if(grid) grid.style.display = 'none';
+      if(lab) lab.style.display = 'none';
+    }
+    if(step2) step2.style.display = 'none';
+    pintaCabeceraRepaso();
+    render();
+  }
+
   function render(){
+    if(repasoClase){
+      let pool = poolRepaso();
+      // las chapas de nivel se ven, así que tienen que funcionar aquí también
+      if(activeLevelsFilter.size) pool = pool.filter(it => activeLevelsFilter.has(it.level));
+      const picked = sample(pool, Math.min(12, pool.length));
+      container.innerHTML = picked.map(item => renderItemHTML(
+        Object.assign({}, item, { exid: (item.exid || 'ex') + '-' + uid() })
+      )).join('') || '<p class="subtitle">' + repasoLabels().vacio + '</p>';
+      return;
+    }
     let topicKeys;
     if(activeLevel){
       const levelCat = (cfg.categories || []).find(c => c.key === activeLevelCategory);
@@ -1342,6 +1449,7 @@ ${qHTML}`;
   }
 
   function selectCategory(key){
+    saleDeRepaso();
     mixMode = false;
     activeLevel = null;
     activeLevelCategory = null;
@@ -2036,6 +2144,7 @@ ${qHTML}`;
 
   if(mixBtn){
     mixBtn.addEventListener('click', () => {
+      saleDeRepaso();
       mixMode = true;
       activeCategory = null;
       activeLevel = null;
@@ -2437,6 +2546,7 @@ ${nextHTML}<div class="ex-signal-btns">${btns}</div></div>`;
   }
 
   function backToModeChoice(){
+    saleDeRepaso();
     mixMode = false;
     activeLevel = null;
     activeLevelCategory = null;
@@ -2486,6 +2596,12 @@ ${nextHTML}<div class="ex-signal-btns">${btns}</div></div>`;
     pintaGrupo();
     renderPills();
     render();
+  }
+
+  // ?repaso=presente — la clase de la que se repasa. El id es el de clases.js
+  const repasoParam = params.get('repaso');
+  if(repasoParam && window.jnClasePorId && window.jnClasePorId(repasoParam)){
+    entraRepaso(repasoParam);
   }
 
   // ?curso=vivir[&paso=4] — así se le manda un deber concreto a un alumno

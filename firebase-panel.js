@@ -421,6 +421,10 @@ function tituloDe(a){
 }
 
 function etiquetasDe(a){
+  if(a && a.rapida && a.rapida.repasoDe){
+    const c = window.jnClasePorId && window.jnClasePorId(a.rapida.repasoDe);
+    return (c && c.etiquetas) || [];
+  }
   if(a && a.rapida){
     const auto = [];
     (a.rapida.temas || []).forEach(function(id){
@@ -459,17 +463,25 @@ function pintaFicha(){
     const url = paginaDeClase(c, (porEmail.get(emailAbierto) || {}).idioma || 'es');
     const cat = (!c.rapida && window.jnClasePorId) ? window.jnClasePorId(c.id) : null;
     const nm = cat ? `<span class="cat-num">${esc(numDe(cat))}</span>` : '';
+    // «Repaso»: le pone otra clase, fechada hoy, que son los ejercicios de
+    // los temas de ESTA. De un repaso no se hace repaso, y de una clase
+    // rápida tampoco: sus temas los eligió él a mano y ya los tiene.
+    const rep = (cat && (cat.temas || []).length)
+      ? `<button class="fi-repaso" data-repaso="${i}" title="Ponerle un repaso de esta clase: solo ejercicios">Repaso</button>`
+      : '';
     const tit = url
       ? `${nm}<a href="${esc(url)}" target="_blank" rel="noopener" title="Abrir la clase en otra pestaña">${
           esc(tituloDe(c))}<i class="ti ti-external-link"></i></a>`
-      : nm + esc(tituloDe(c)) + (c.rapida ? '<span class="fi-rap">clase rápida</span>' : '');
+      : nm + esc(tituloDe(c)) + (c.rapida
+          ? '<span class="fi-rap">' + (c.rapida.repasoDe ? 'repaso' : 'clase rápida') + '</span>'
+          : '');
     return `<div class="fi-row${pend ? ' pend' : ''}">
       <input type="date" class="fi-fecha" data-i="${i}" value="${esc(c.fecha || '')}">
       <div class="fi-tit">${tit}</div>
       <div class="fi-chips">${chips}</div>
       <input type="text" class="fi-nota" data-i="${i}" value="${esc(c.nota || '')}"
              placeholder="Nota para ti: cómo fue, qué repetir...">
-      <button class="fi-quitar" data-quitar="${i}" title="Quitar de su lista">×</button>
+      ${rep}<button class="fi-quitar" data-quitar="${i}" title="Quitar de su lista">×</button>
     </div>`;
   }).join('') : '<p class="panel-empty">Todavía no tiene ninguna clase asignada.</p>';
 
@@ -662,6 +674,32 @@ document.addEventListener('click', function(e){
       return;
     }
     clasesAbiertas.push({ id: id, fecha: (fFecha && fFecha.value) || '', nota: '' });
+    pintaFicha();
+    guarda();
+    return;
+  }
+
+  const rep = e.target.closest('[data-repaso]');
+  if(rep){
+    const base = clasesAbiertas[parseInt(rep.dataset.repaso, 10)];
+    const cat = window.jnClasePorId && window.jnClasePorId(base && base.id);
+    if(!cat) return;
+    // Se guarda como clase rápida —el alumno ya sabe verlas— con el id de la
+    // clase repasada dentro. Los temas NO se copian aquí: se leen de
+    // clases.js al pintarla, así que si mañana corrijo los temas de una
+    // clase, los repasos ya puestos se corrigen solos.
+    clasesAbiertas.push({
+      rapida: {
+        rid: 'r-' + Date.now().toString(36),
+        titulo: 'Repaso: ' + (cat.titulo.es || cat.id),
+        repasoDe: cat.id,
+        temas: [],
+        extra: [],
+        deberes: ''
+      },
+      fecha: (fFecha && fFecha.value) || hoyISO(),
+      nota: ''
+    });
     pintaFicha();
     guarda();
     return;

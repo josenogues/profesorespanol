@@ -94,6 +94,9 @@ for bloque in temas.split("{ id:")[1:]:
     if destino not in TEMAS_HUB["es"] and destino not in TEMAS_HUB["en"]:
         apunta("temas.js: ejercicios que no existen", f"{tid} → {destino}")
 
+# todos los ids de temas.js, para validar el `temas` de cada clase
+TEMAS_ID = set(re.findall(r"\{ id:'([a-z0-9-]+)'", temas))
+
 clases = open(os.path.join(REPO, "clases.js"), encoding="utf-8").read()
 ids_clase, nums_clase = set(), {}
 # los dos lazos entre clases: la de abajo apunta a la de arriba
@@ -112,6 +115,16 @@ for bloque in clases.split("  {")[1:]:
         m = re.search(campo + r": '([a-z0-9-]+)'", bloque)
         if m:
             lazos[campo][cid.group(1)] = m.group(1)
+    # `temas` es de dónde saca sus ejercicios el repaso de esta clase. Un id
+    # mal escrito no da error en ningún sitio: el repaso sale vacío y ni el
+    # alumno ni José se enteran de por qué.
+    mt = re.search(r"temas: \[([^\]]*)\]", bloque)
+    if not mt:
+        apunta("clases.js: clase sin temas", f"{cid.group(1)} (no se le puede hacer repaso)")
+    else:
+        for t in re.findall(r"'([a-z0-9-]+)'", mt.group(1)):
+            if t not in TEMAS_ID:
+                apunta("clases.js: tema de repaso que no existe", f"{cid.group(1)} → {t}")
     pistas = re.search(r"pistas: \[([^\]]*)\]", bloque)
     ls = re.findall(r"'([a-z]{2})'", pistas.group(1)) if pistas else list(PISTAS)
     for L in ls:

@@ -35,6 +35,8 @@
       teoria: 'Teoría', practicar: 'Practicar', deberes: 'Deberes',
       hoy: 'hoy', anteriores: 'Clases anteriores', sinF: 'sin fecha',
       apuntes: 'Mis apuntes', conApuntes: 'Tienes apuntes en esta clase',
+      repTit: 'Repaso',
+      repHecho: 'Solo ejercicios. La teoría está en la clase donde la vimos.', repBoton: 'Hacer los ejercicios', repTeoria: 'Ver esa clase',
       bajarTodo: 'Descargar todos mis apuntes'
     },
     it: {
@@ -58,6 +60,8 @@
       teoria: 'Teoria', practicar: 'Esercitati', deberes: 'Compiti',
       hoy: 'oggi', anteriores: 'Lezioni precedenti', sinF: 'senza data',
       apuntes: 'I miei appunti', conApuntes: 'Hai appunti in questa lezione',
+      repTit: 'Ripasso',
+      repHecho: 'Solo esercizi. La teoria è nella lezione dove l’abbiamo vista.', repBoton: 'Fai gli esercizi', repTeoria: 'Vedi quella lezione',
       bajarTodo: 'Scarica tutti i miei appunti'
     },
     en: {
@@ -81,6 +85,8 @@
       teoria: 'Theory', practicar: 'Practise', deberes: 'Homework',
       hoy: 'today', anteriores: 'Earlier classes', sinF: 'no date',
       apuntes: 'My notes', conApuntes: 'You have notes in this class',
+      repTit: 'Review',
+      repHecho: 'Exercises only. The theory is in the class where we saw it.', repBoton: 'Do the exercises', repTeoria: 'See that class',
       bajarTodo: 'Download all my notes'
     }
   }[track] || {};
@@ -162,12 +168,22 @@
       if(a.rapida){
         const r = a.rapida;
         const auto = [];
-        (r.temas || []).forEach(id => {
+        // un repaso no guarda sus temas: los lee de la clase que repasa, así
+        // que si José corrige los temas de esa clase, los repasos ya puestos
+        // se corrigen solos
+        const base = r.repasoDe && window.jnClasePorId(r.repasoDe);
+        const temas = base ? (base.temas || []) : (r.temas || []);
+        temas.forEach(id => {
           const t = window.jnTemaPorId && window.jnTemaPorId(id);
           (t ? t.etiquetas : []).forEach(e => { if(auto.indexOf(e) < 0) auto.push(e); });
         });
+        // el título guardado está en español, que es el idioma del panel;
+        // aquí se vuelve a construir en el del alumno
+        const tit = base
+          ? T.repTit + ': ' + ((base.titulo && (base.titulo[track] || base.titulo.es)) || '')
+          : (r.titulo || (fechaLarga(a.fecha) || T.sinF));
         return {
-          titulo: r.titulo || (fechaLarga(a.fecha) || T.sinF),
+          titulo: tit,
           href: null,
           rapida: r,
           clave: clave,
@@ -305,6 +321,34 @@
   // El contenido de una clase rápida: la regla de cada tema, con sus enlaces.
   // La regla vive en temas.js, así que si se mejora, mejora en todas.
   function detalleRapida(r, clave){
+    // Un repaso es otra cosa: sin teoría y sin reglas, solo los temas que
+    // entran y un botón que abre la tanda ya mezclada. La teoría está en la
+    // clase donde se dio, y ahí se manda.
+    if(r.repasoDe){
+      const c = window.jnClasePorId && window.jnClasePorId(r.repasoDe);
+      if(c){
+        const nombres = (c.temas || []).map(id => {
+          const t = window.jnTemaPorId && window.jnTemaPorId(id);
+          return esc((t && t.nombre && (t.nombre[track] || t.nombre.es)) || id);
+        }).join(' · ');
+        const hay = !c.pistas || c.pistas.indexOf(track) >= 0;
+        const aEsa = hay
+          ? '<a href="' + esc(c.pagina) + '-' + track + '.html">' +
+            '<i class="ti ti-book-2" aria-hidden="true"></i> ' + esc(T.repTeoria) + '</a>'
+          : '';
+        const apuR = window.jnApuntesCaja
+          ? '<div class="cl-apuntes"><b>' + esc(T.apuntes) + '</b>' +
+            '<div class="cl-apu-caja" data-apu="' + esc(clave) + '"></div></div>'
+          : '';
+        return '<div class="cl-repaso">' +
+          '<p class="cl-rep-temas">' + nombres + '</p>' +
+          '<p class="cl-rep-nota">' + esc(T.repHecho) + '</p>' +
+          '<div class="cl-links">' +
+          '<a class="cl-rep-boton" href="ejercicios-' + track + '.html?repaso=' + esc(c.id) + '">' +
+          '<i class="ti ti-pencil" aria-hidden="true"></i> ' + esc(T.repBoton) + '</a>' + aEsa +
+          '</div></div>' + apuR;
+      }
+    }
     const bloques = (r.temas || []).map(id => {
       const t = window.jnTemaPorId && window.jnTemaPorId(id);
       if(!t) return '';

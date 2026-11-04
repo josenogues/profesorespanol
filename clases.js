@@ -52,6 +52,7 @@ window.JN_CLASES = [
   {
     num: 110,
     id: 'sonidos',
+    temas: ['fonetica'],
     pagina: 'clase-sonidos',
     nivel: 'A1',
     perfil: 'angloparlantes',
@@ -68,6 +69,7 @@ window.JN_CLASES = [
   {
     num: 120,
     id: 'saludos',
+    temas: ['expresiones-comunes'],
     pagina: 'clase-saludos',
     nivel: 'A1',
     perfil: 'angloparlantes',
@@ -83,6 +85,7 @@ window.JN_CLASES = [
   {
     num: 130,
     id: 'sobre-ti',
+    temas: ['expresiones-comunes', 'vida-cotidiana'],
     continua: 'saludos',
     pagina: 'clase-sobre-ti',
     nivel: 'A1',
@@ -100,6 +103,7 @@ window.JN_CLASES = [
   {
     num: 140,
     id: 'presente',
+    temas: ['regulares', 'irregulares'],
     pagina: 'clase-presente',
     nivel: 'A1',
     perfil: 'angloparlantes',
@@ -115,6 +119,7 @@ window.JN_CLASES = [
   {
     num: 150,
     id: 'to-be',
+    temas: ['ser-estar', 'haber-tener'],
     pagina: 'clase-to-be',
     nivel: 'A1',
     perfil: 'angloparlantes',
@@ -129,6 +134,7 @@ window.JN_CLASES = [
   {
     num: 160,
     id: 'frio',
+    temas: ['haber-tener', 'clima', 'temperatura'],
     pagina: 'clase-frio',
     nivel: 'A1',
     perfil: 'angloparlantes',
@@ -144,6 +150,7 @@ window.JN_CLASES = [
   {
     num: 170,
     id: 'sin-do',
+    temas: ['atn-gramatica'],
     pagina: 'clase-sin-do',
     nivel: 'A1',
     perfil: 'angloparlantes',
@@ -158,6 +165,7 @@ window.JN_CLASES = [
   {
     num: 180,
     id: 'gustar',
+    temas: ['gustar', 'pronombres'],
     pagina: 'clase-gustar',
     nivel: 'A1',
     perfil: 'angloparlantes',
@@ -172,6 +180,7 @@ window.JN_CLASES = [
   {
     num: 190,
     id: 'bando',
+    temas: ['genero-numero', 'articulos'],
     pagina: 'clase-bando',
     nivel: 'A1',
     perfil: 'angloparlantes',
@@ -186,6 +195,7 @@ window.JN_CLASES = [
   {
     num: 210,
     id: 'costumbre',
+    temas: ['perifrasis'],
     pagina: 'clase-costumbre',
     nivel: 'A1–A2',
     perfil: 'angloparlantes',
@@ -203,6 +213,7 @@ window.JN_CLASES = [
   {
     num: 220,
     id: 'futuro',
+    temas: ['indicativo', 'perifrasis'],
     pagina: 'clase-futuro',
     nivel: 'A1–A2',
     perfil: 'angloparlantes',
@@ -219,6 +230,7 @@ window.JN_CLASES = [
   {
     num: 230,
     id: 'marcadores',
+    temas: ['conectores', 'las-fechas'],
     pagina: 'clase-marcadores',
     nivel: 'A1–A2',
     perfil: 'angloparlantes',
@@ -235,6 +247,7 @@ window.JN_CLASES = [
   {
     num: 310,
     id: 'menos-piezas',
+    temas: ['sujeto-innecesario', 'gerundio'],
     pagina: 'clase-menos-piezas',
     nivel: 'A2',
     perfil: 'angloparlantes',
@@ -250,6 +263,7 @@ window.JN_CLASES = [
   {
     num: 320,
     id: 'dos-sentidos',
+    temas: ['ser-estar'],
     pagina: 'clase-dos-sentidos',
     nivel: 'A2',
     perfil: 'angloparlantes',
@@ -265,6 +279,7 @@ window.JN_CLASES = [
   {
     num: 330,
     id: 'dos-verbos',
+    temas: ['atn-verbos'],
     pagina: 'clase-dos-verbos',
     nivel: 'A2',
     perfil: 'angloparlantes',
@@ -280,6 +295,7 @@ window.JN_CLASES = [
   {
     num: 340,
     id: 'falsos-amigos-en',
+    temas: ['falsos-amigos'],
     pagina: 'clase-falsos-amigos',
     nivel: 'A2',
     perfil: 'angloparlantes',
@@ -295,6 +311,7 @@ window.JN_CLASES = [
   {
     num: 350,
     id: 'por-para',
+    temas: ['por-para'],
     pagina: 'clase-por-para',
     nivel: 'A2',
     perfil: 'angloparlantes',
@@ -311,6 +328,7 @@ window.JN_CLASES = [
   {
     num: 360,
     id: 'essere-it',
+    temas: ['ser-estar'],
     pagina: 'clase-essere',
     nivel: 'A2',
     perfil: 'italianos',
@@ -327,6 +345,7 @@ window.JN_CLASES = [
   {
     num: 370,
     id: 'avere-it',
+    temas: ['haber-tener'],
     pagina: 'clase-avere',
     nivel: 'A2',
     perfil: 'italianos',
@@ -341,6 +360,7 @@ window.JN_CLASES = [
   {
     num: 380,
     id: 'suoni-it',
+    temas: ['fonetica'],
     pagina: 'clase-suoni',
     nivel: 'A2',
     perfil: 'italianos',
@@ -355,6 +375,7 @@ window.JN_CLASES = [
   {
     num: 390,
     id: 'desinenze-it',
+    temas: ['regulares', 'indicativo'],
     pagina: 'clase-desinenze',
     nivel: 'A2',
     perfil: 'italianos',
@@ -371,6 +392,7 @@ window.JN_CLASES = [
   {
     num: 395,
     id: 'rompe-it',
+    temas: ['irregulares'],
     pagina: 'clase-rompe',
     nivel: 'A2',
     perfil: 'italianos',
@@ -387,6 +409,7 @@ window.JN_CLASES = [
   {
     num: 410,
     id: 'la-a',
+    temas: ['pronombres'],
     pagina: 'clase-la-a',
     nivel: 'A2–B1',
     perfil: 'angloparlantes',
@@ -402,6 +425,7 @@ window.JN_CLASES = [
   {
     num: 420,
     id: 'would',
+    temas: ['indicativo'],
     pagina: 'clase-would',
     nivel: 'A2–B1',
     perfil: 'angloparlantes',
@@ -418,6 +442,7 @@ window.JN_CLASES = [
   {
     num: 430,
     id: 'formas-pasado',
+    temas: ['indicativo', 'irregulares'],
     pagina: 'clase-formas-pasado',
     nivel: 'A2–B1',
     perfil: 'cualquiera',
@@ -435,6 +460,7 @@ window.JN_CLASES = [
   {
     num: 440,
     id: 'tres-pasados',
+    temas: ['indicativo'],
     continua: 'formas-pasado',
     pagina: 'clase-tres-pasados',
     nivel: 'A2–B1',
@@ -450,6 +476,7 @@ window.JN_CLASES = [
   {
     num: 450,
     id: 'seis-formas',
+    temas: ['perifrasis', 'gerundio'],
     pagina: 'clase-seis-formas',
     nivel: 'A2–B1',
     perfil: 'cualquiera',
@@ -464,6 +491,7 @@ window.JN_CLASES = [
   {
     num: 460,
     id: 'falsos-amigos-it',
+    temas: ['falsos-amigos'],
     pagina: 'clase-falsos-amigos',
     nivel: 'A2–B1',
     perfil: 'italianos',
@@ -480,6 +508,7 @@ window.JN_CLASES = [
   {
     num: 470,
     id: 'piccole-it',
+    temas: ['mucho-muy', 'preposiciones', 'por-para'],
     pagina: 'clase-piccole',
     nivel: 'A2–B1',
     perfil: 'italianos',
@@ -494,6 +523,7 @@ window.JN_CLASES = [
   {
     num: 480,
     id: 'verbi-it',
+    temas: ['pedir-preguntar', 'traer-llevar', 'verbos-cambio'],
     pagina: 'clase-verbi',
     nivel: 'A2–B1',
     perfil: 'italianos',
@@ -510,6 +540,7 @@ window.JN_CLASES = [
   {
     num: 490,
     id: 'yo-it',
+    temas: ['irregulares', 'subjuntivo'],
     continua: 'rompe-it',
     pagina: 'clase-yo',
     nivel: 'A2–B1',
@@ -528,6 +559,7 @@ window.JN_CLASES = [
   {
     num: 510,
     id: 'motor',
+    temas: ['perifrasis', 'indicativo'],
     continua: 'seis-formas',
     pagina: 'clase-motor',
     nivel: 'B1–B2',
@@ -543,6 +575,7 @@ window.JN_CLASES = [
   {
     num: 520,
     id: 'llamada',
+    temas: ['profesional-telefono', 'profesional-deletrear'],
     pagina: 'clase-llamada',
     nivel: 'B1–B2',
     perfil: 'trabajo',
@@ -557,6 +590,7 @@ window.JN_CLASES = [
   {
     num: 530,
     id: 'suavizar',
+    temas: ['profesional-registro', 'subjuntivo'],
     pagina: 'clase-suavizar',
     nivel: 'B1–B2',
     perfil: 'trabajo',
@@ -571,6 +605,7 @@ window.JN_CLASES = [
   {
     num: 610,
     id: 'reunion',
+    temas: ['profesional-reuniones', 'profesional-videollamada'],
     pagina: 'clase-reunion',
     nivel: 'B2',
     perfil: 'trabajo',
@@ -585,6 +620,7 @@ window.JN_CLASES = [
   {
     num: 620,
     id: 'italiano-trabajo',
+    temas: ['falsos-amigos', 'profesional-videollamada'],
     profundiza: 'falsos-amigos-it',
     pagina: 'clase-italiano-trabajo',
     nivel: 'B2',
