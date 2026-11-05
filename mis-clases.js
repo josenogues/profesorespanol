@@ -402,7 +402,8 @@
   // firebase-sync.js es un módulo y carga después de este script, así que se
   // espera a que aparezca. Si no llega, se avisa en vez de dejar «Cargando».
   function arranca(){
-    const email = localStorage.getItem('jn_student_email');
+    const email = (window.jnEmailFicha && window.jnEmailFicha()) ||
+                  localStorage.getItem('jn_student_email');
     if(!email){ aviso(T.sinAcceso); return; }
     const t0 = Date.now();
     (function poll(){

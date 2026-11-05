@@ -52,7 +52,9 @@ DB = {s["email"]: s for s in [
   al("nora@x.com", "Nora", "en", "B1", 20, [], ej=0),
   al("viejo@x.com", "Un antiguo", "es", "B2", 120, [], ej=5, activo=False),
   # su propia ficha: está para mirar la web como la ve un alumno, no es cliente
-  al(PROF, "Yo", "es", "C1", 0, [], ej=3, clasesDadas=0, pagado=0),
+  # con una clase puesta: es lo que hace José para ver la web por dentro
+  al(PROF, "Yo", "es", "C1", 0, [{"id": "motor", "fecha": "2026-10-20", "nota": ""}],
+     ej=3, clasesDadas=0, pagado=0),
   # recibe clases pero las paga otra: un cero que no es una tarifa de cero
   al("sabrina@x.com", "Sabrina", "it", "A2", 2, [], ej=18,
      clasesDadas=8, pagado=0, sinCobro=True),
@@ -371,6 +373,20 @@ with sync_playwright() as p:
               "y no se le guarda como email de alumno")
     comprueba(pg.evaluate("window.__DB['%s'].visitCount === undefined" % PROF),
               "ni se le apunta la visita, aunque tenga ficha")
+
+    # Y su propia página de clases. Como no se le guarda jn_student_email,
+    # «Mis clases» se le quedaba vacía: se asignaba clases para probarlas y
+    # le salía «entra con tu email». Ahora ve su ficha, pero sin que la
+    # visita se apunte.
+    pg.goto(B + "/mis-clases-es.html", wait_until="domcontentloaded")
+    pg.wait_for_timeout(2200)
+    comprueba(pg.locator(".cl-row").count() > 0,
+              "y en «Mis clases» ve las clases que se ha puesto a sí mismo (%d)"
+              % pg.locator(".cl-row").count())
+    comprueba(pg.evaluate("localStorage.getItem('jn_student_email')") is None,
+              "sin que eso le guarde el email de alumno")
+    comprueba(pg.evaluate("window.__DB['%s'].visitCount === undefined" % PROF),
+              "ni le apunte la visita")
     c.close()
     br.close()
 

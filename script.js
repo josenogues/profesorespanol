@@ -758,7 +758,22 @@ a.closest(".menu-item").classList.add("active","current-section");
   // la cerradura: quien decide de verdad quién lee qué son las reglas de
   // Firestore, que ya le dejan leerlo todo a él y solo lo suyo a cada alumno.
   const PROFESOR = 'ncjosemaria@gmail.com';
+
   const PROFE_KEY = 'jn_profe';
+
+  // De quién es la ficha que toca enseñar en «Mis clases» y en los apuntes.
+  //
+  // A José no se le guarda nunca jn_student_email: es a propósito, para que
+  // sus visitas y los ejercicios que hace probando no se sumen a ninguna
+  // ficha. Pero eso dejaba su propia página de clases vacía —se asignaba
+  // clases para probar y no las veía—, así que aquí se dice que la suya es
+  // la suya. El contador y las visitas siguen leyendo jn_student_email a
+  // pelo, o sea que lo que él haga probando sigue sin contar.
+  window.jnEmailFicha = function(){
+    const e = localStorage.getItem('jn_student_email');
+    if(e) return e;
+    return localStorage.getItem(PROFE_KEY) === 'true' ? PROFESOR : '';
+  };
 
   if(!ACCESS_GATE_ENABLED) return;
 

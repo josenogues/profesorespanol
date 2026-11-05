@@ -52,7 +52,11 @@
           estirar: 'Drag to resize' }
   }[track] || {};
 
-  function email(){ return localStorage.getItem('jn_student_email') || ''; }
+  // la de José es la suya: ver script.js, window.jnEmailFicha
+  function email(){
+    return (window.jnEmailFicha && window.jnEmailFicha()) ||
+           localStorage.getItem('jn_student_email') || '';
+  }
   function claveLocal(clase){ return 'jn_apuntes_' + (email() || 'anon') + '_' + clase; }
 
   function leeLocal(clase){
