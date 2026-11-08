@@ -134,18 +134,36 @@ window.JN_CLASES = [
   {
     num: 160,
     id: 'frio',
-    temas: ['haber-tener', 'clima', 'temperatura'],
+    temas: ['clima', 'temperatura'],
     pagina: 'clase-frio',
     nivel: 'A1',
     perfil: 'angloparlantes',
     pistas: ['en'],
     titulo: {
-      es: 'Frío de tres maneras',
-      it: 'Freddo in tre modi',
-      en: 'Cold in three ways'
+      es: 'Hablar del tiempo',
+      it: 'Parlare del tempo',
+      en: 'Talking about the weather'
     },
-    etiquetas: ['tener frío', 'hace frío', 'tener hambre', 'tener años',
-                'el tiempo', 'hace sol']
+    etiquetas: ['el tiempo', 'hace frío', 'hace sol', 'hay niebla', 'está nublado',
+                'llueve', 'qué tiempo hace', 'grados', 'va a llover', 'tener frío']
+  },
+  {
+    num: 165,
+    id: 'tener-en',
+    continua: 'frio',
+    temas: ['haber-tener'],
+    pagina: 'clase-tener',
+    nivel: 'A1',
+    perfil: 'angloparlantes',
+    pistas: ['en'],
+    titulo: {
+      es: 'Lo que en español se tiene',
+      it: 'Quello che in spagnolo si ha',
+      en: 'What you have in Spanish'
+    },
+    etiquetas: ['tener hambre', 'tener sed', 'tener sueño', 'tener miedo', 'tener prisa',
+                'tener razón', 'tener suerte', 'tener años', 'tener ganas de',
+                'mucho y muy']
   },
   {
     num: 170,
