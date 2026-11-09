@@ -637,6 +637,22 @@ window.JN_CLASES = [
                 'tuviera', 'fuera', 'hiciera']
   },
   {
+    num: 550,
+    id: 'cuando-llegues',
+    temas: ['subjuntivo'],
+    pagina: 'clase-cuando-llegues',
+    nivel: 'B1–B2',
+    perfil: 'cualquiera',
+    titulo: {
+      es: 'Cuando llegues',
+      it: 'Cuando llegues',
+      en: 'Cuando llegues'
+    },
+    etiquetas: ['subjuntivo', 'presente de subjuntivo', 'quiero que', 'me alegra que',
+                'es importante que', 'no creo que', 'creo que', 'cuando + subjuntivo',
+                'en cuanto', 'hasta que', 'antes de que', 'tenga', 'vaya', 'sea']
+  },
+  {
     num: 610,
     id: 'reunion',
     temas: ['profesional-reuniones', 'profesional-videollamada'],
