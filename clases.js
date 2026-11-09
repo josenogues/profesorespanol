@@ -621,6 +621,22 @@ window.JN_CLASES = [
                 'pedir', 'discrepar']
   },
   {
+    num: 540,
+    id: 'si-tuviera',
+    temas: ['subjuntivo', 'indicativo'],
+    pagina: 'clase-si-tuviera',
+    nivel: 'B1–B2',
+    perfil: 'cualquiera',
+    titulo: {
+      es: 'Si tuviera dinero…',
+      it: 'Si tuviera dinero…',
+      en: 'Si tuviera dinero…'
+    },
+    etiquetas: ['subjuntivo', 'imperfecto de subjuntivo', 'si tuviera', 'condicional',
+                'hipótesis', 'si tendría', 'ojalá', 'como si', 'si hubiera tenido',
+                'tuviera', 'fuera', 'hiciera']
+  },
+  {
     num: 610,
     id: 'reunion',
     temas: ['profesional-reuniones', 'profesional-videollamada'],
