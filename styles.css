@@ -1211,6 +1211,32 @@ a.menu-button.current-page{background:rgba(255,255,255,.15)}
 .ex-repaso-chip{background:var(--card-bg);border:1px solid var(--border);border-radius:999px;
   padding:3px 11px;font-size:13px;color:var(--text-secondary)}
 .ex-repaso-teoria{font-size:14px}
+.ex-hoy-nota{margin:0;font-size:14.5px;color:var(--text-secondary)}
+
+/* ── «Cinco minutos de hoy», en «Mis clases» ────────────────────────────
+   Es la única cosa de la página que le pide algo al alumno, así que es la
+   única con fondo de color: entre la sala, los números y la lista, tiene
+   que ser lo primero que se ve sin parecer un anuncio. */
+.cl-hoy{display:flex;align-items:center;gap:14px;background:var(--primary);color:#fff;
+  border-radius:14px;padding:14px 18px;margin-bottom:16px;text-decoration:none;
+  box-shadow:0 3px 0 var(--primary-dark);transition:transform .15s,box-shadow .15s}
+.cl-hoy:hover,.cl-hoy:focus-visible{transform:translateY(-2px);box-shadow:0 5px 0 var(--primary-dark)}
+.cl-hoy:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
+.cl-hoy-ico{flex:none;display:flex;align-items:center;justify-content:center;width:42px;height:42px;
+  border-radius:50%;background:rgba(255,255,255,.14);color:var(--gold);font-size:22px}
+.cl-hoy-txt{flex:1;min-width:0}
+.cl-hoy-txt b{display:block;font-family:var(--font-head);font-weight:600;font-size:18px;line-height:1.25}
+.cl-hoy-txt span{display:block;margin-top:2px;font-size:14px;color:rgba(255,255,255,.82)}
+.cl-hoy-ir{flex:none;display:inline-flex;align-items:center;gap:6px;background:var(--gold);color:#232220;
+  border-radius:999px;padding:8px 16px;font-family:var(--font-head);font-weight:600;font-size:15px}
+[data-theme="dark"] .cl-hoy{background:#4b5894;box-shadow:0 3px 0 #2c3560}
+[data-theme="dark"] .cl-hoy:hover,[data-theme="dark"] .cl-hoy:focus-visible{box-shadow:0 5px 0 #2c3560}
+@media(max-width:520px){
+  .cl-hoy{flex-wrap:wrap;padding:13px 14px;gap:12px}
+  .cl-hoy-ir{width:100%;justify-content:center}
+}
+@media(prefers-reduced-motion:reduce){ .cl-hoy{transition:none} .cl-hoy:hover{transform:none} }
+
 /* el botón de repaso en la ficha del alumno, en el panel */
 .fi-repaso{border:1px solid var(--border);background:var(--card-bg);color:var(--primary-dark);
   border-radius:8px;padding:4px 10px;font-family:var(--font-head);font-size:13px;cursor:pointer}

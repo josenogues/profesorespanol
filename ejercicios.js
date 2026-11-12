@@ -420,6 +420,8 @@ ${qHTML}`;
   // aunque sean de categorías distintas: el resto del hub no sabe hacer eso
   // porque sus temas van siempre dentro de una materia.
   let repasoClase = null;
+  // «Cinco minutos de hoy» (más abajo): [[temas de lo último], [temas de lo anterior]…]
+  let hoy = null;
 
   const REPASO_T = {
     es: { eyebrow: 'Repaso', de: 'Repaso de', teoria: 'Ver la teoría de esta clase',
@@ -431,10 +433,12 @@ ${qHTML}`;
   };
   function repasoLabels(){ return REPASO_T[cfg.lang] || REPASO_T.es; }
 
-  function poolRepaso(){
-    const c = window.jnClasePorId && window.jnClasePorId(repasoClase);
-    const pool = [], vistos = new Set();
-    ((c && c.temas) || []).forEach(id => {
+  // Los ejercicios de una lista de temas de temas.js, sin repetir ninguno.
+  // `vistos` se puede pasar de fuera para no repetir tampoco entre dos fondos.
+  function poolDeTemas(temaIds, vistos){
+    vistos = vistos || new Set();
+    const pool = [];
+    (temaIds || []).forEach(id => {
       const t = window.jnTemaPorId && window.jnTemaPorId(id);
       if(!t) return;
       let items = collectPool([t.ejercicios || t.id]);
@@ -450,6 +454,11 @@ ${qHTML}`;
       });
     });
     return pool;
+  }
+
+  function poolRepaso(){
+    const c = window.jnClasePorId && window.jnClasePorId(repasoClase);
+    return poolDeTemas((c && c.temas) || []);
   }
 
   function pintaCabeceraRepaso(){
@@ -483,8 +492,9 @@ ${qHTML}`;
   // Si toca cualquier otro modo, el repaso se acaba: si no, la tanda seguiría
   // saliendo del repaso y parecería que los botones no hacen nada.
   function saleDeRepaso(){
-    if(!repasoClase) return;
+    if(!repasoClase && !hoy) return;
     repasoClase = null;
+    hoy = null;
     const caja = document.getElementById('ex-repaso');
     if(caja) caja.remove();
     if(panelTema){
@@ -510,7 +520,109 @@ ${qHTML}`;
     render();
   }
 
+  // ── Cinco minutos de hoy ───────────────────────────────────────────────
+  // Entre clase y clase, lo que frena al alumno no es hacer ejercicios: es
+  // tener que decidir cuáles (modo, materia, tema, nivel). Desde «Mis
+  // clases» hay un botón que lo decide por él: seis ejercicios de lo que ya
+  // ha visto en clase, la mitad de lo último. No apunta nada en ningún
+  // sitio ni le dice a José si lo ha hecho: es práctica suelta, como el
+  // resto del hub.
+  //
+  // La lista de lo visto viene en la dirección —?hoy=si-tuviera,t:por-para,
+  // gustar—, de lo más reciente a lo más antiguo: un id de clases.js, o
+  // «t:» y un tema de temas.js para lo que se dio en una clase rápida. La
+  // monta mis-clases.js, que es quien sabe qué clases tiene cada alumno;
+  // así aquí no hay que esperar a Firebase ni puede fallar por la conexión.
+  const HOY_CUANTOS = 6;
+
+  const HOY_T = {
+    es: { eyebrow: 'Para hoy', titulo: 'Cinco minutos de hoy',
+          nota: 'Seis ejercicios de lo que hemos visto en clase: la mitad, de lo último.',
+          vacio: 'Todavía no hay ejercicios de lo que hemos visto en clase.' },
+    it: { eyebrow: 'Per oggi', titulo: 'Cinque minuti di oggi',
+          nota: 'Sei esercizi su quello che abbiamo visto a lezione: metà sull’ultima.',
+          vacio: 'Non ci sono ancora esercizi su quello che abbiamo visto a lezione.' },
+    en: { eyebrow: 'For today', titulo: 'Five minutes for today',
+          nota: 'Six exercises from what we’ve covered in class: half of them from the latest.',
+          vacio: 'There are no exercises yet for what we’ve covered in class.' }
+  };
+  function hoyLabels(){ return HOY_T[cfg.lang] || HOY_T.es; }
+
+  // «si-tuviera,t:por-para,gustar» → una lista de temas por cada cosa vista.
+  // Lo que no exista (una clase retirada, un tema mal escrito) se salta.
+  function leeHoy(param){
+    const unidades = [];
+    String(param || '').split(',').forEach(trozo => {
+      trozo = trozo.trim();
+      if(!trozo) return;
+      if(trozo.indexOf('t:') === 0){
+        const t = window.jnTemaPorId && window.jnTemaPorId(trozo.slice(2));
+        if(t) unidades.push([t.id]);
+        return;
+      }
+      const c = window.jnClasePorId && window.jnClasePorId(trozo);
+      if(c && c.temas && c.temas.length) unidades.push(c.temas.slice());
+    });
+    return unidades;
+  }
+
+  // La mitad de la tanda sale de lo último que se dio y la otra mitad de
+  // todo lo anterior: lo reciente es lo que más falta hace repasar, pero si
+  // solo saliera eso, lo de hace un mes no volvería nunca.
+  function tandaHoy(){
+    const vale = it => !activeLevelsFilter.size || activeLevelsFilter.has(it.level);
+    const vistos = new Set();
+    const ultimo = poolDeTemas(hoy[0], vistos).filter(vale);
+    let resto = [];
+    hoy.slice(1).forEach(temas => { resto = resto.concat(poolDeTemas(temas, vistos)); });
+    resto = resto.filter(vale);
+    const mitad = Math.ceil(HOY_CUANTOS / 2);
+    let tanda = sample(ultimo, Math.min(mitad, ultimo.length));
+    tanda = tanda.concat(sample(resto, Math.min(HOY_CUANTOS - tanda.length, resto.length)));
+    // si lo anterior no da para su mitad, se completa con más de lo último
+    if(tanda.length < HOY_CUANTOS){
+      const quedan = ultimo.filter(it => tanda.indexOf(it) < 0);
+      tanda = tanda.concat(sample(quedan, Math.min(HOY_CUANTOS - tanda.length, quedan.length)));
+    }
+    return shuffle(tanda);
+  }
+
+  function pintaCabeceraHoy(){
+    if(!container) return;
+    const L = hoyLabels();
+    let caja = document.getElementById('ex-repaso');
+    if(!caja){
+      caja = document.createElement('div');
+      caja.id = 'ex-repaso';
+      caja.className = 'ex-repaso';
+      container.parentNode.insertBefore(caja, container);
+    }
+    caja.innerHTML = '<span class="eyebrow">' + L.eyebrow + '</span>' +
+      '<h4>' + L.titulo + '</h4><p class="ex-hoy-nota">' + L.nota + '</p>';
+  }
+
+  function entraHoy(unidades){
+    hoy = unidades;
+    showMode('tema');
+    // aquí no se elige materia ni tema: sale de lo que ha visto en clase
+    if(panelTema){
+      const grid = panelTema.querySelector('.ex-category-grid');
+      const lab = panelTema.querySelector('.ex-step-label');
+      if(grid) grid.style.display = 'none';
+      if(lab) lab.style.display = 'none';
+    }
+    if(step2) step2.style.display = 'none';
+    pintaCabeceraHoy();
+    render();
+  }
+
   function render(){
+    if(hoy){
+      container.innerHTML = tandaHoy().map(item => renderItemHTML(
+        Object.assign({}, item, { exid: (item.exid || 'ex') + '-' + uid() })
+      )).join('') || '<p class="subtitle">' + hoyLabels().vacio + '</p>';
+      return;
+    }
     if(repasoClase){
       let pool = poolRepaso();
       // las chapas de nivel se ven, así que tienen que funcionar aquí también
@@ -1801,6 +1913,13 @@ ${nextHTML}<div class="ex-signal-btns">${btns}</div></div>`;
   const repasoParam = params.get('repaso');
   if(repasoParam && window.jnClasePorId && window.jnClasePorId(repasoParam)){
     entraRepaso(repasoParam);
+  }
+
+  // ?hoy=si-tuviera,t:por-para,gustar — «cinco minutos de hoy», desde «Mis clases»
+  const hoyParam = params.get('hoy');
+  if(hoyParam){
+    const unidades = leeHoy(hoyParam);
+    if(unidades.length) entraHoy(unidades);
   }
 
   // ?curso=vivir[&paso=4] — así se le manda un deber concreto a un alumno

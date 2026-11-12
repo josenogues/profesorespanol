@@ -37,6 +37,8 @@
       apuntes: 'Mis apuntes', conApuntes: 'Tienes apuntes en esta clase',
       repTit: 'Repaso',
       repHecho: 'Solo ejercicios. La teoría está en la clase donde la vimos.', repBoton: 'Hacer los ejercicios', repTeoria: 'Ver esa clase',
+      hoyTit: 'Cinco minutos de hoy',
+      hoySub: 'Seis ejercicios de lo que hemos visto en clase.', hoyIr: 'Empezar',
       bajarTodo: 'Descargar todos mis apuntes'
     },
     it: {
@@ -62,6 +64,8 @@
       apuntes: 'I miei appunti', conApuntes: 'Hai appunti in questa lezione',
       repTit: 'Ripasso',
       repHecho: 'Solo esercizi. La teoria è nella lezione dove l’abbiamo vista.', repBoton: 'Fai gli esercizi', repTeoria: 'Vedi quella lezione',
+      hoyTit: 'Cinque minuti di oggi',
+      hoySub: 'Sei esercizi su quello che abbiamo visto a lezione.', hoyIr: 'Inizia',
       bajarTodo: 'Scarica tutti i miei appunti'
     },
     en: {
@@ -87,6 +91,8 @@
       apuntes: 'My notes', conApuntes: 'You have notes in this class',
       repTit: 'Review',
       repHecho: 'Exercises only. The theory is in the class where we saw it.', repBoton: 'Do the exercises', repTeoria: 'See that class',
+      hoyTit: 'Five minutes for today',
+      hoySub: 'Six exercises from what we’ve covered in class.', hoyIr: 'Start',
       bajarTodo: 'Download all my notes'
     }
   }[track] || {};
@@ -220,16 +226,49 @@
 
     // las fechadas primero, de la más reciente a la más antigua; las que no
     // tienen fecha, al final: no sabemos cuándo fueron y no deben colarse arriba
+    const hoy = hoyISO();
     const conF = filas.filter(f => f.fecha).sort((a, b) => b.fecha.localeCompare(a.fecha));
     const sinF = filas.filter(f => !f.fecha);
     const orden = conF.concat(sinF);
 
-    const hoy = hoyISO();
     const futuras = conF.filter(f => f.fecha > hoy).sort((a, b) => a.fecha.localeCompare(b.fecha));
     const proxima = futuras[0] || null;
 
     const temas = new Set();
     filas.forEach(f => f.etiquetas.forEach(t => temas.add(t)));
+
+    // «Cinco minutos de hoy»: lo que ya se ha dado, de lo último a lo más
+    // antiguo, para que el hub de ejercicios saque de ahí una tanda corta
+    // (ver ejercicios.js). Solo lo que ya ha pasado: de una clase que todavía
+    // no se ha dado no tiene sentido preguntarle. Lo que no tiene fecha va
+    // al final, como en la lista.
+    const visto = [];
+    asignadas.filter(a => a.fecha && a.fecha <= hoy)
+      .sort((a, b) => b.fecha.localeCompare(a.fecha))
+      .concat(asignadas.filter(a => !a.fecha))
+      .forEach(a => {
+        const r = a.rapida;
+        const claseId = r ? r.repasoDe : a.id;
+        const c = claseId && window.jnClasePorId(claseId);
+        if(c && c.temas && c.temas.length){
+          if(visto.indexOf(c.id) < 0) visto.push(c.id);
+        } else if(r && !r.repasoDe){
+          (r.temas || []).forEach(id => {
+            const t = window.jnTemaPorId && window.jnTemaPorId(id);
+            if(t && visto.indexOf('t:' + t.id) < 0) visto.push('t:' + t.id);
+          });
+        }
+      });
+    // un tope, que la lista viaja en la dirección: con las 40 últimas cosas
+    // vistas hay de sobra para una tanda de seis
+    const tarjetaHoy = visto.length
+      ? '<a class="cl-hoy" id="cl-hoy" href="ejercicios-' + track + '.html?hoy=' +
+        esc(visto.slice(0, 40).join(',')) + '">' +
+        '<span class="cl-hoy-ico"><i class="ti ti-bolt" aria-hidden="true"></i></span>' +
+        '<span class="cl-hoy-txt"><b>' + esc(T.hoyTit) + '</b><span>' + esc(T.hoySub) + '</span></span>' +
+        '<span class="cl-hoy-ir">' + esc(T.hoyIr) +
+        ' <i class="ti ti-arrow-right" aria-hidden="true"></i></span></a>'
+      : '';
 
     const masAntigua = conF.length ? conF[conF.length - 1].fecha : null;
     const meses = masAntigua ? mesesDesde(masAntigua) : null;
@@ -277,6 +316,7 @@
     pinta(
       '<p class="subtitle" style="margin-bottom:18px">' +
         esc(filas.length >= 4 ? T.subMuchas : T.subPocas) + '</p>' +
+      tarjetaHoy +
       '<div class="cl-nums">' + nums + '</div>' + prox +
       '<div class="cl-buscar"><i class="ti ti-search" aria-hidden="true"></i>' +
       '<input type="text" id="cl-filtro" placeholder="' + esc(T.buscar) + '" autocomplete="off"></div>' +
