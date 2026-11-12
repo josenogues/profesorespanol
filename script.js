@@ -143,29 +143,61 @@ a.closest(".menu-item").classList.add("active","current-section");
 
   // Motor genérico: cualquier elemento con class="i18n" y data-es/data-it/data-en
   // cambia de texto según el idioma elegido (si no hay idioma elegido, se queda en español).
+  // Los rótulos que no son texto a la vista: el que sale al pasar el ratón
+  // por el interruptor de tema y el que lee un lector de pantalla en el botón
+  // del menú. Van escritos en español en las páginas.
+  const ROTULOS = {
+    es: { tema: 'Modo oscuro', menu: 'Mostrar u ocultar el menú' },
+    it: { tema: 'Modalità scura', menu: 'Mostra o nascondi il menù' },
+    en: { tema: 'Dark mode', menu: 'Show or hide the menu' }
+  };
+
   function applyI18n(){
     const t = getTrack();
     document.querySelectorAll('.i18n').forEach(el=>{
       const val = t === 'it' ? el.dataset.it : t === 'en' ? el.dataset.en : el.dataset.es;
       if(val) el.textContent = val;
     });
+    const r = ROTULOS[t] || ROTULOS.es;
+    const tema = document.querySelector('.theme-switch');
+    if(tema) tema.title = r.tema;
+    const menu = document.getElementById('sidebar-toggle');
+    if(menu) menu.setAttribute('aria-label', r.menu);
   }
 
   function goTo(base, track){
     window.location.href = base + '-' + track + '.html';
   }
 
+  // La ventana que pregunta el idioma sale justo cuando todavía no se sabe
+  // cuál es: antes iba solo en español, y a un alumno inglés que empieza de
+  // cero le preguntaba «¿En qué idioma quieres las explicaciones?» en el
+  // único que no entiende. Ahora se la decimos en el de su navegador
+  // (window.jnIdioma), y cada idioma se llama como se llama a sí mismo.
+  const MODAL = {
+    es: { h: '¿En qué idioma quieres las explicaciones?',
+          p: 'Te lo explico todo en tu idioma; en español queda solo lo que estás aprendiendo. ' +
+             'Puedes cambiarlo cuando quieras con los botones de arriba.' },
+    it: { h: 'In che lingua vuoi le spiegazioni?',
+          p: 'Ti spiego tutto nella tua lingua; in spagnolo resta solo quello che stai imparando. ' +
+             'Puoi cambiarla quando vuoi con i pulsanti in alto.' },
+    en: { h: 'Which language do you want the explanations in?',
+          p: 'I’ll explain everything in your language; only what you’re learning stays in Spanish. ' +
+             'You can change it any time with the buttons at the top.' }
+  };
+
   function openModal(onChoose){
+    const m = MODAL[window.jnIdioma()] || MODAL.es;
     const overlay = document.createElement('div');
     overlay.className = 'track-modal-overlay';
     overlay.innerHTML = `
       <div class="track-modal">
-        <h3>¿En qué idioma quieres las explicaciones?</h3>
-        <p>Así te muestro las explicaciones de verbos adaptadas a tu idioma. Puedes cambiarlo cuando quieras desde el selector de arriba.</p>
+        <h3>${m.h}</h3>
+        <p>${m.p}</p>
         <div class="track-modal-buttons">
           <button data-track="es">🇪🇸 Español</button>
           <button data-track="it">🇮🇹 Italiano</button>
-          <button data-track="en">🇬🇧 Inglés</button>
+          <button data-track="en">🇬🇧 English</button>
         </div>
       </div>`;
     document.body.appendChild(overlay);
@@ -1085,8 +1117,8 @@ a.closest(".menu-item").classList.add("active","current-section");
   const PARTES = {
     comun: 'search-index-comun.js?v=995fa2abe7',
     es: 'search-index-es.js?v=df4ca0aec2',
-    it: 'search-index-it.js?v=170102ff05',
-    en: 'search-index-en.js?v=d69feb483c'
+    it: 'search-index-it.js?v=5b9187f21c',
+    en: 'search-index-en.js?v=0dea543c71'
   };
   const pedidas = {};   // parte → promesa de su descarga
   function pide(parte){

@@ -264,8 +264,8 @@ footer{text-align:center;padding:30px;color:var(--muted);border-top:1px solid va
 .track-modal{background:var(--card-bg);border-radius:18px;padding:30px;max-width:420px;text-align:center;border:1px solid var(--border)}
 .track-modal h3{font-size:21px;margin-bottom:10px;font-weight:700}
 .track-modal p{color:var(--muted);font-size:15.5px;margin-bottom:20px}
-.track-modal-buttons{display:flex;gap:12px;justify-content:center}
-.track-modal-buttons button{flex:1;padding:14px;border-radius:12px;border:1px solid var(--border);background:var(--card-bg);font-weight:600;font-size:16px;font-family:var(--font-head);cursor:pointer;transition:.1s}
+.track-modal-buttons{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.track-modal-buttons button{flex:1 1 auto;white-space:nowrap;padding:14px 12px;border-radius:12px;border:1px solid var(--border);background:var(--card-bg);font-weight:600;font-size:16px;font-family:var(--font-head);cursor:pointer;transition:.1s}
 .track-modal-buttons button:hover{background:var(--primary);color:#fff;border-color:var(--primary)}
 
 .badge-gold{display:inline-block;background:var(--badge-gold-bg);color:var(--gold-dark);font-size:12px;font-weight:700;padding:4px 11px;border-radius:20px}
@@ -302,8 +302,17 @@ footer{text-align:center;padding:30px;color:var(--muted);border-top:1px solid va
 [data-theme="dark"] .exercise-feedback.correct,[data-theme="dark"] .exercise-done-badge{color:#7be39a}
 [data-theme="dark"] .exercise-feedback.incorrect{color:#f2a09d}
 
-.generate-btn{display:inline-flex;align-items:center;gap:6px;padding:9px 16px;border-radius:10px;border:1px solid var(--primary);background:var(--card-bg);color:var(--primary-dark);font-weight:600;font-family:var(--font-head);cursor:pointer;font-size:14.5px;margin-bottom:16px;transition:.15s}
-.generate-btn:hover{background:var(--primary);color:#fff}
+/* Los botones del hub de ejercicios son de tres clases y nada más:
+   · principal (relleno): el que hace avanzar —Comprobar—;
+   · secundario (blanco con borde): los que cambian de sitio o piden otra
+     cosa —cambiar de modo, otra tanda, mezcla al azar, reiniciar—;
+   · discreto (solo texto): lo que se puede pero no se empuja —Saltar—.
+   Antes cada uno tenía su borde, su letra y su tamaño. Las pastillas de
+   nivel y de tema son filtros, no botones, y van aparte. */
+.generate-btn,.ex-mode-back,.ex-mix-btn{display:inline-flex;align-items:center;gap:7px;background:var(--card-bg);border:1px solid var(--border);border-radius:10px;color:var(--primary-dark);font-family:var(--font-head);font-weight:600;font-size:14.5px;padding:9px 16px;cursor:pointer;box-shadow:0 2px 0 var(--border);transition:transform .08s,box-shadow .08s,background .12s}
+.generate-btn:hover,.ex-mode-back:hover,.ex-mix-btn:hover{background:var(--tint);transform:translateY(1px);box-shadow:0 1px 0 var(--border)}
+.generate-btn:active,.ex-mode-back:active,.ex-mix-btn:active{transform:translateY(2px);box-shadow:none}
+.generate-btn{margin-bottom:16px}
 
 .access-gate-overlay{position:fixed;inset:0;background:var(--card-bg);display:flex;align-items:center;justify-content:center;z-index:1000;padding:20px}
 .access-gate-modal{background:var(--card-bg);border:1px solid var(--border);border-radius:18px;padding:36px;max-width:400px;width:100%;text-align:center;box-shadow:0 10px 30px rgba(0,0,0,.08)}
@@ -506,9 +515,7 @@ footer{text-align:center;padding:30px;color:var(--muted);border-top:1px solid va
 .ex-mode-card i{font-size:26px;color:var(--primary-dark);display:block;margin-bottom:12px}
 .ex-mode-card h3{margin:0 0 6px;font-size:18px;font-weight:600;color:var(--text);font-family:var(--font-head)}
 .ex-mode-card p{margin:0;color:var(--muted);font-size:14.5px}
-.ex-mode-back{display:inline-flex;align-items:center;gap:6px;background:var(--card-bg);border:1px solid var(--border);border-radius:10px;color:var(--primary-dark);font-weight:700;font-size:13.5px;cursor:pointer;padding:8px 14px;margin-bottom:18px;font-family:var(--font-body);box-shadow:0 2px 0 var(--border);transition:transform .08s,box-shadow .08s,background .12s}
-.ex-mode-back:hover{background:var(--tint);transform:translateY(1px);box-shadow:0 1px 0 var(--border)}
-.ex-mode-back:active{transform:translateY(2px);box-shadow:none}
+.ex-mode-back{margin-bottom:18px}
 .ex-topic-pills{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px}
 .ex-pill{padding:7px 14px;border-radius:20px;border:1px solid var(--border);background:var(--card-bg);cursor:pointer;font-size:12.5px;font-weight:600;color:var(--text);transition:.15s}
 .ex-pill:hover{border-color:var(--primary)}
@@ -583,10 +590,7 @@ h1 .ti,h2 .ti,h3 .ti{margin-right:8px}
 .search-results a:hover{background:var(--tint)}
 .search-results .search-empty{padding:14px;font-size:13.5px;color:var(--muted)}
 
-@keyframes jn-shimmer{0%{background-position:0% 50%}100%{background-position:200% 50%}}
-.ex-mix-wrap{padding:2px;border-radius:12px;background:linear-gradient(90deg,#8B5CF6,#EC4899,#3B82F6,#8B5CF6);background-size:300% 100%;animation:jn-shimmer 4s linear infinite;display:inline-block;margin-bottom:24px}
-.ex-mix-btn{display:flex;align-items:center;gap:8px;background:var(--card-bg);color:var(--text);border:0;padding:11px 20px;border-radius:10px;font-family:var(--font-head);font-weight:700;font-size:14.5px;cursor:pointer}
-.ex-mix-btn i{color:#8B5CF6}
+.ex-mix-wrap{display:inline-block;margin-bottom:18px}
 .ex-mix-btn.active{background:var(--tint)}
 
 .exercise-hint{font-size:13px;color:var(--muted);font-style:italic;margin:-8px 0 12px}
@@ -672,8 +676,10 @@ body[data-category="profesional"] .eyebrow{background:#E1EFE9;color:#0B5442}
 .order-word{padding:9px 14px;border-radius:8px;border:1px solid var(--border);background:var(--card-bg);cursor:pointer;font-size:14.5px;font-weight:600;color:var(--text);transition:.1s}
 .order-word:hover{border-color:var(--primary);transform:translateY(-1px)}
 .order-answer-area .order-word{background:var(--tint);border-color:var(--primary)}
-.order-check{padding:9px 16px;border-radius:10px;border:1px solid var(--primary);background:var(--primary);color:#fff;font-weight:600;cursor:pointer;font-family:var(--font-head)}
-.order-reset{padding:9px 16px;border-radius:10px;border:1px solid var(--border);background:var(--card-bg);color:var(--muted);font-weight:600;cursor:pointer;font-family:var(--font-head)}
+.order-check{padding:10px 18px;border-radius:10px;border:none;background:var(--primary);color:#fff;font-weight:600;cursor:pointer;font-family:var(--font-head);font-size:15px}
+.order-check:hover{background:var(--primary-dark)}
+.order-reset{padding:10px 18px;border-radius:10px;border:1px solid var(--border);background:var(--card-bg);color:var(--muted);font-weight:600;cursor:pointer;font-family:var(--font-head);font-size:15px}
+.order-reset:hover{border-color:var(--primary);color:var(--primary)}
 
 /* ---------- Emparejar (tipo de ejercicio "match") ---------- */
 .match-columns{display:grid;grid-template-columns:1fr 1fr;gap:10px 16px}
@@ -706,6 +712,13 @@ body.sidebar-collapsed .sidebar-toggle:hover{background:var(--tint)}
 body.sidebar-collapsed .sidebar{transform:translateX(-100%)}
 body.sidebar-collapsed .main{margin-left:24px}
 .sidebar{transition:transform .25s ease}
+/* En los móviles más estrechos (320 px) los tres botones de idioma y el
+   interruptor de tema no cabían en una fila y la página entera se movía de
+   lado. Un poco menos de relleno y caben. */
+@media(max-width:380px){
+  .language-selector button{padding:8px 9px;margin-left:3px;font-size:14px}
+}
+
 /* ── El menú en el móvil ──────────────────────────────────────────────
    Antes el menú entero iba desplegado arriba de cada página: en un móvil
    ocupaba toda la primera pantalla y el contenido empezaba debajo. Ahora
@@ -1223,6 +1236,7 @@ a.menu-button.current-page{background:rgba(255,255,255,.15)}
 /* la cabecera del repaso en el hub de ejercicios */
 .ex-repaso{background:var(--tint);border-left:4px solid var(--gold);border-radius:12px;
   padding:14px 18px;margin-bottom:18px}
+.ex-repaso .eyebrow{margin-bottom:2px}
 .ex-repaso h4{margin:4px 0 8px;font-family:var(--font-head);font-size:18px;color:var(--text)}
 .ex-repaso-chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px}
 .ex-repaso-chip{background:var(--card-bg);border:1px solid var(--border);border-radius:999px;

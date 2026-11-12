@@ -310,6 +310,29 @@ for pag, s in CUERPO.items():
         apunta("la miga de pan es la de otra página",
                f"{pag}: dice «{miga}», que es el título de {otras[0]}")
 
+# ── L3. lo que rodea al contenido, en el idioma del alumno ──────────────
+# La regla de la casa: las explicaciones van en italiano o en inglés, y en
+# español solo lo que se aprende. La ruta de arriba, el pie y las etiquetas
+# no son contenido. Las páginas se escriben copiando la española, y es fácil
+# que una miga o una etiqueta se queden como estaban.
+EN_ESPANOL = ("Verbos", "Gramática", "Vocabulario", "Expresiones", "Español profesional")
+for pag, s in CUERPO.items():
+    if not re.search(r"-(it|en)\.html$", pag):
+        continue
+    m = re.search(r'<div class="breadcrumb">(.*?)</div>', s, re.S)
+    if m:
+        tramos = [_html.unescape(re.sub(r"<[^>]+>", "", x)).strip() for x in m.group(1).split(" / ")]
+        if tramos and tramos[0] == "Inicio":
+            apunta("restos en español en páginas it/en", f"{pag}: la miga empieza por «Inicio»")
+        if len(tramos) >= 2 and tramos[1] in EN_ESPANOL:
+            apunta("restos en español en páginas it/en", f"{pag}: la miga dice «{tramos[1]}»")
+    for resto in ("Trampa común</span>", '<span class="eyebrow">Verbos', '<span class="eyebrow">Gramática'):
+        if resto in s:
+            apunta("restos en español en páginas it/en", f"{pag}: «{re.sub('<[^>]+>', '', resto)}»")
+for pag, s in CUERPO.items():
+    if "<footer>" in s and "· Profesor de español ·" in s:
+        apunta("restos en español en páginas it/en", f"{pag}: el pie no se traduce")
+
 # ── L. restos de páginas retiradas ──────────────────────────────────────
 for muerta in ("verbos-regulares", "verbos-irregulares"):
     for pag, s in CUERPO.items():

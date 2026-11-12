@@ -496,7 +496,7 @@ ${qHTML}`;
     if(hoy){
       quitaUno();
       if(levelFilterStep) levelFilterStep.style.display = '';
-      if(mixBtn) mixBtn.style.display = '';
+      if(mixBtn) (mixBtn.closest('.ex-mix-wrap') || mixBtn).style.display = '';
       if(hubToolbar) hubToolbar.style.display = '';
     }
     repasoClase = null;
@@ -621,7 +621,7 @@ ${qHTML}`;
     // ni filtro de nivel ni «mezcla al azar»: el nivel es el de sus clases,
     // y cuanto menos haya en pantalla, antes se pone a contestar
     if(levelFilterStep) levelFilterStep.style.display = 'none';
-    if(mixBtn) mixBtn.style.display = 'none';
+    if(mixBtn) (mixBtn.closest('.ex-mix-wrap') || mixBtn).style.display = 'none';
     pintaCabeceraHoy();
     render();
     // que al llegar tenga delante el ejercicio, no la cabecera de la página

@@ -43,6 +43,7 @@ python3 -m http.server 8947
 | `prueba_repaso.py` | Las clases de repaso, del panel al hub de ejercicios. |
 | `prueba_ejercicios.py` | Los ejercicios de todas las páginas de clase, con respuestas buenas y malas. |
 | `prueba_banco.py` | Una muestra del banco del hub pasada por el motor que corrige. |
+| `prueba_idioma.py` | Lo que rodea al contenido —ventana de idioma, ruta, pie, rótulos— en el idioma del alumno. |
 | `prueba_menu.py` | El menú: plegado bajo una barra en el móvil, lateral en el ordenador. |
 | `prueba_hoy.py` | «Cinco minutos de hoy»: el botón de «Mis clases» y la tanda del hub, de uno en uno y con final. |
 | `prueba_hub.py` | El hub de ejercicios: arranca, corrige, cambia de modo; también con una página antigua en caché. |
