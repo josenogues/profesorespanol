@@ -182,32 +182,31 @@ for bloque in clases.split("  {")[1:]:
         apunta("clases.js: el número no cuadra con el nivel",
                f"{cid.group(1)} es {nivel} y lleva el #{n}")
 
-# ── G. versiones de caché: mismo archivo, misma ?v= en todas las páginas ──
-versiones = defaultdict(set)
-for pag, s in CUERPO.items():
-    for archivo, v in re.findall(r'(?:src|href)="([a-z-]+\.(?:js|css))\?v=([0-9a-z]+)"', s):
-        versiones[archivo].add(v)
-        if not os.path.exists(os.path.join(REPO, archivo)):
-            apunta("archivos que no existen", f"{pag} → {archivo}")
-for archivo, vs in versiones.items():
-    if len(vs) > 1:
-        apunta("versiones de caché descuadradas", f"{archivo}: {sorted(vs)}")
+# ── G. iconos: todos los que se usan están en la fuente recortada ────────
+# La fuente de iconos es propia y solo lleva los que la web usa. Un icono
+# nuevo que no esté dentro no da ningún error: sale un hueco y ya.
+sys.path.insert(0, os.path.join(REPO, "herramientas"))
+import iconos as _iconos
+import versiones as _versiones
 
-# ── H. ¿se tocó un archivo sin subirle la versión? ───────────────────────
-for archivo in sorted(versiones):
-    fecha = subprocess.run(["git", "-C", REPO, "log", "-1", "--format=%at", "--", archivo],
-                           capture_output=True, text=True).stdout.strip()
-    paginas_con = [p for p, s in CUERPO.items() if f'{archivo}?v=' in s]
-    if not paginas_con or not fecha:
-        continue
-    # la versión más nueva que se usa de ese archivo
-    v = sorted(versiones[archivo])[-1]
-    cambios = subprocess.run(
-        ["git", "-C", REPO, "log", "--format=%at", "-S", f"{archivo}?v={v}", "--", paginas_con[0]],
-        capture_output=True, text=True).stdout.split()
-    if cambios and int(fecha) > int(cambios[0]):
-        apunta("versión de caché por detrás del archivo",
-               f"{archivo}: se tocó después de poner ?v={v}")
+for problema in _iconos.comprueba():
+    apunta("iconos", problema)
+
+# ── H. nada de fuera que frene la página ────────────────────────────────
+# Tipografías e iconos se sirven desde aquí. Si vuelve a colarse una hoja de
+# estilos o un script de otro servidor, cada página espera por él antes de
+# pintarse, y además le cuenta a ese servidor quién la está abriendo. Firebase
+# es la excepción: sin él no hay acceso ni progreso.
+PERMITIDOS = ("https://www.gstatic.com/firebasejs/",)
+for pag, s in CUERPO.items():
+    for m in re.finditer(r'<(?:link|script)\b[^>]*?(?:href|src)="(https?://[^"]+)"[^>]*>', s):
+        etiqueta, url = m.group(0), m.group(1)
+        if 'rel="preconnect"' in etiqueta or url.startswith(PERMITIDOS):
+            continue
+        apunta("recursos de terceros en una página", f"{pag} → {url[:70]}")
+for hoja in glob.glob(REPO + "/*.css"):
+    if re.search(r"@import|url\(\s*[\"']?https?://", open(hoja, encoding="utf-8").read()):
+        apunta("recursos de terceros en una página", f"{os.path.basename(hoja)} importa algo de fuera")
 
 # ── I. el índice del buscador, al día ───────────────────────────────────
 # OJO con el orden: indexar.py no solo regenera el índice, también deja su
@@ -233,7 +232,16 @@ elif pedido.group(1) != huella:
     apunta("índice del buscador",
            f"script.js lo pedía con ?v={pedido.group(1)} y el archivo es {huella}: "
            "quien ya lo tuviera guardado se quedaba con el viejo (ya corregido en "
-           "script.js, pero hay que subirle la versión en las páginas)")
+           "script.js; pasa herramientas/versiones.py para las páginas)")
+
+# ── I2. las versiones de caché son la huella de cada archivo ─────────────
+# Antes se comprobaba que todas las páginas pidieran la misma ?v= y, con git,
+# que nadie hubiera tocado un archivo sin subírsela. Ahora el ?v= es la
+# huella del contenido y la pone herramientas/versiones.py: aquí basta con
+# mirar que la que se pide es la del archivo que hay. Va después del índice
+# porque regenerarlo cambia script.js.
+for problema in _versiones.comprueba():
+    apunta("versiones de caché", problema)
 
 # ── J. páginas a las que no llega nadie ──────────────────────────────────
 enlazadas = set()

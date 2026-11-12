@@ -1,4 +1,112 @@
-@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@700&display=swap');
+/* ── tipografías ──
+   Nunito (texto), Fredoka (títulos y botones) y Caveat (el rótulo a mano),
+   alojadas aquí en vez de pedirlas a Google Fonts: una conexión menos a un
+   tercero en cada página y ningún dato del alumno que salga hacia Google.
+   Son los mismos archivos y las mismas declaraciones que servía Google
+   —por eso hay una regla por grosor aunque el archivo sea el mismo: así
+   cada grosor se dibuja exactamente igual que antes—. Licencia OFL: ver
+   fuentes/LEEME.md. El ?v= lo pone herramientas/versiones.py. */
+@font-face{font-family:'Caveat';font-style:normal;font-weight:700;font-display:swap;src:url("fuentes/caveat-latin-ext.woff2?v=1819e4a35b") format("woff2");unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C4,U+2113,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:'Caveat';font-style:normal;font-weight:700;font-display:swap;src:url("fuentes/caveat-latin.woff2?v=e25ad33cc7") format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:'Fredoka';font-style:normal;font-weight:500;font-stretch:100%;font-display:swap;src:url("fuentes/fredoka-latin-ext.woff2?v=de91215458") format("woff2");unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C4,U+2113,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:'Fredoka';font-style:normal;font-weight:500;font-stretch:100%;font-display:swap;src:url("fuentes/fredoka-latin.woff2?v=6438e7de08") format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:'Fredoka';font-style:normal;font-weight:600;font-stretch:100%;font-display:swap;src:url("fuentes/fredoka-latin-ext.woff2?v=de91215458") format("woff2");unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C4,U+2113,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:'Fredoka';font-style:normal;font-weight:600;font-stretch:100%;font-display:swap;src:url("fuentes/fredoka-latin.woff2?v=6438e7de08") format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:'Fredoka';font-style:normal;font-weight:700;font-stretch:100%;font-display:swap;src:url("fuentes/fredoka-latin-ext.woff2?v=de91215458") format("woff2");unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C4,U+2113,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:'Fredoka';font-style:normal;font-weight:700;font-stretch:100%;font-display:swap;src:url("fuentes/fredoka-latin.woff2?v=6438e7de08") format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:'Nunito';font-style:normal;font-weight:400;font-display:swap;src:url("fuentes/nunito-latin-ext.woff2?v=4fcdc09b70") format("woff2");unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C4,U+2113,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:'Nunito';font-style:normal;font-weight:400;font-display:swap;src:url("fuentes/nunito-latin.woff2?v=76388dbfe3") format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:'Nunito';font-style:normal;font-weight:600;font-display:swap;src:url("fuentes/nunito-latin-ext.woff2?v=4fcdc09b70") format("woff2");unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C4,U+2113,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:'Nunito';font-style:normal;font-weight:600;font-display:swap;src:url("fuentes/nunito-latin.woff2?v=76388dbfe3") format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:'Nunito';font-style:normal;font-weight:700;font-display:swap;src:url("fuentes/nunito-latin-ext.woff2?v=4fcdc09b70") format("woff2");unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C4,U+2113,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:'Nunito';font-style:normal;font-weight:700;font-display:swap;src:url("fuentes/nunito-latin.woff2?v=76388dbfe3") format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:'Nunito';font-style:normal;font-weight:800;font-display:swap;src:url("fuentes/nunito-latin-ext.woff2?v=4fcdc09b70") format("woff2");unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C4,U+2113,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:'Nunito';font-style:normal;font-weight:800;font-display:swap;src:url("fuentes/nunito-latin.woff2?v=76388dbfe3") format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+
+/* ── iconos:inicio ── generado por herramientas/iconos.py: no editar a mano ──
+   Tabler Icons 3.51.0 (MIT, https://tabler.io/icons): solo los 78 que usa la web. */
+@font-face{font-family:"tabler-icons";font-style:normal;font-weight:400;font-display:block;src:url("fuentes/iconos.woff2?v=a5e23e27ae") format("woff2")}
+.ti{font-family:"tabler-icons" !important;speak:none;font-style:normal;font-weight:normal;font-variant:normal;text-transform:none;line-height:1;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+.ti-adjustments-horizontal:before{content:"\ec38"}
+.ti-alert-triangle:before{content:"\ea06"}
+.ti-arrow-bear-left:before{content:"\f045"}
+.ti-arrow-down:before{content:"\ea16"}
+.ti-arrow-left:before{content:"\ea19"}
+.ti-arrow-right:before{content:"\ea1f"}
+.ti-arrow-up:before{content:"\ea25"}
+.ti-arrows-sort:before{content:"\eb5a"}
+.ti-ball-football:before{content:"\ee06"}
+.ti-bolt:before{content:"\ea38"}
+.ti-book:before{content:"\ea39"}
+.ti-book-2:before{content:"\efc5"}
+.ti-books:before{content:"\eff2"}
+.ti-briefcase:before{content:"\ea46"}
+.ti-bulb:before{content:"\ea51"}
+.ti-bus:before{content:"\ebe4"}
+.ti-calendar:before{content:"\ea53"}
+.ti-calendar-event:before{content:"\ea52"}
+.ti-cash:before{content:"\ea55"}
+.ti-check:before{content:"\ea5e"}
+.ti-chevron-down:before{content:"\ea5f"}
+.ti-chevron-left:before{content:"\ea60"}
+.ti-chevron-right:before{content:"\ea61"}
+.ti-chevron-up:before{content:"\ea62"}
+.ti-clock:before{content:"\ea70"}
+.ti-cloud:before{content:"\ea76"}
+.ti-coffee:before{content:"\ef0e"}
+.ti-download:before{content:"\ea96"}
+.ti-droplet:before{content:"\ea97"}
+.ti-external-link:before{content:"\ea99"}
+.ti-file-description:before{content:"\f028"}
+.ti-file-text:before{content:"\eaa2"}
+.ti-files:before{content:"\edef"}
+.ti-home:before{content:"\eac1"}
+.ti-info-circle:before{content:"\eac5"}
+.ti-key:before{content:"\eac7"}
+.ti-language:before{content:"\ebbe"}
+.ti-link:before{content:"\eade"}
+.ti-list:before{content:"\eb6b"}
+.ti-list-check:before{content:"\eb6a"}
+.ti-list-details:before{content:"\ef40"}
+.ti-lock:before{content:"\eae2"}
+.ti-mail:before{content:"\eae5"}
+.ti-menu-2:before{content:"\ec42"}
+.ti-message-2:before{content:"\eaec"}
+.ti-message-circle-2:before{content:"\eaed"}
+.ti-microphone:before{content:"\eaf0"}
+.ti-moon:before{content:"\eaf8"}
+.ti-note:before{content:"\eb6d"}
+.ti-notebook:before{content:"\eb96"}
+.ti-pencil:before{content:"\eb04"}
+.ti-phone:before{content:"\eb09"}
+.ti-plane:before{content:"\eb6f"}
+.ti-player-play:before{content:"\ed46"}
+.ti-plus:before{content:"\eb0b"}
+.ti-presentation:before{content:"\eb70"}
+.ti-puzzle:before{content:"\eb10"}
+.ti-refresh:before{content:"\eb13"}
+.ti-refresh-alert:before{content:"\ed57"}
+.ti-route:before{content:"\eb17"}
+.ti-salad:before{content:"\f50a"}
+.ti-school:before{content:"\ecf7"}
+.ti-search:before{content:"\eb1c"}
+.ti-seeding:before{content:"\ed51"}
+.ti-sparkles:before{content:"\f6d7"}
+.ti-sun:before{content:"\eb30"}
+.ti-sunrise:before{content:"\ef1c"}
+.ti-tags:before{content:"\ef86"}
+.ti-target:before{content:"\eb35"}
+.ti-temperature:before{content:"\eb38"}
+.ti-tools-kitchen-2:before{content:"\eeff"}
+.ti-trash:before{content:"\eb41"}
+.ti-trophy:before{content:"\eb45"}
+.ti-user:before{content:"\eb4d"}
+.ti-user-plus:before{content:"\eb4b"}
+.ti-users:before{content:"\ebf2"}
+.ti-volume:before{content:"\eb51"}
+.ti-x:before{content:"\eb55"}
+/* ── iconos:fin ── */
+
 :root{--primary:#3A4570;--primary-dark:#232C4F;--primary-light:#6B76A3;--gold:#f2ab27;--gold-dark:#8a5b0a;--bg:#f4f6fb;--sidebar:#232C4F;--text:#232220;--muted:#6b6963;--border:#e7e5e0;--tint:#EEF0F6;--card-bg:#fff;--text-secondary:#3f3d38;--table-stripe:#fafafa;--badge-gold-bg:#fff3d6;--attention-bg:#fffaf0;--font-head:'Fredoka',Arial,sans-serif;--font-body:'Nunito',Arial,sans-serif}
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:var(--font-body);background:var(--bg);color:var(--text);line-height:1.65;font-size:17px}

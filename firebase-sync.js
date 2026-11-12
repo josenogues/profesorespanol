@@ -10,7 +10,11 @@
 // funcionando con lo que haya en localStorage; lo que no se puede es entrar
 // por primera vez.
 
-import { app } from "./firebase-init.js";
+// firebase-init.js se pide con su ?v=, igual que en la etiqueta <script> de
+// las páginas: con la misma dirección el navegador lo trata como UN módulo.
+// Sin el ?v= eran dos direcciones distintas, y lo bajaba y lo ejecutaba dos
+// veces en cada página. La huella la pone herramientas/versiones.py.
+import { app } from "./firebase-init.js?v=2c6879e2ff";
 import { getAuth, onAuthStateChanged, sendSignInLinkToEmail,
          isSignInWithEmailLink, signInWithEmailLink, signOut }
   from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";

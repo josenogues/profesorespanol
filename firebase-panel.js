@@ -9,7 +9,7 @@
 // signInAnonymously, y ahora eso tiraría abajo la sesión con la que el
 // profesor acaba de entrar y dejaría al panel sin permisos.
 
-import { app } from "./firebase-init.js";
+import { app } from "./firebase-init.js?v=2c6879e2ff";
 import { getFirestore, collection, getDocs, doc, setDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 
 function esc(s){
@@ -329,9 +329,12 @@ function pintaCabeceras(){
   document.querySelectorAll('th.al-orden').forEach(th => {
     const esta = th.dataset.col === orden.col;
     th.classList.toggle('on', esta);
-    const flecha = esta ? (orden.desc ? 'arrow-down' : 'arrow-up') : 'arrows-sort';
+    // el nombre del icono va entero, no a trozos: herramientas/iconos.py
+    // recorta la fuente a los ti-… que encuentra escritos, y uno montado
+    // pegando el prefijo a una variable no lo vería y se quedaría sin dibujo
+    const flecha = esta ? (orden.desc ? 'ti-arrow-down' : 'ti-arrow-up') : 'ti-arrows-sort';
     th.innerHTML = th.textContent.replace(/\s*$/, '') +
-      ' <i class="ti ti-' + flecha + '" aria-hidden="true"></i>';
+      ' <i class="ti ' + flecha + '" aria-hidden="true"></i>';
   });
 }
 

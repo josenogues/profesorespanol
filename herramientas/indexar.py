@@ -96,7 +96,7 @@ def main():
     elif nuevo != s:
         open(sj, "w", encoding="utf-8").write(nuevo)
         print(f"script.js ahora pide search-index.js?v={huella} "
-              "— acuérdate de subirle la versión a script.js en las páginas.")
+              "— pasa herramientas/versiones.py para que las páginas pidan el script.js nuevo.")
 
     print(f"{len(entradas)} páginas indexadas → search-index.js")
     print(f"{len(saltadas)} fuera del índice:")
