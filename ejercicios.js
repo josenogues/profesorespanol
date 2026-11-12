@@ -493,6 +493,12 @@ ${qHTML}`;
   // saliendo del repaso y parecería que los botones no hacen nada.
   function saleDeRepaso(){
     if(!repasoClase && !hoy) return;
+    if(hoy){
+      quitaUno();
+      if(levelFilterStep) levelFilterStep.style.display = '';
+      if(mixBtn) mixBtn.style.display = '';
+      if(hubToolbar) hubToolbar.style.display = '';
+    }
     repasoClase = null;
     hoy = null;
     const caja = document.getElementById('ex-repaso');
@@ -612,15 +618,126 @@ ${qHTML}`;
       if(lab) lab.style.display = 'none';
     }
     if(step2) step2.style.display = 'none';
+    // ni filtro de nivel ni «mezcla al azar»: el nivel es el de sus clases,
+    // y cuanto menos haya en pantalla, antes se pone a contestar
+    if(levelFilterStep) levelFilterStep.style.display = 'none';
+    if(mixBtn) mixBtn.style.display = 'none';
     pintaCabeceraHoy();
     render();
+    // que al llegar tenga delante el ejercicio, no la cabecera de la página
+    const caja = document.getElementById('ex-repaso');
+    if(caja && caja.scrollIntoView) requestAnimationFrame(() => caja.scrollIntoView({ block: 'start' }));
   }
+
+  // ── Un ejercicio por pantalla ──────────────────────────────────────────
+  // La tanda de «cinco minutos» no sale como una lista hacia abajo sino de
+  // uno en uno, con «2 / 6» arriba y un final: en el móvil una lista de seis
+  // es mucha pantalla, y al acabarla no pasaba nada —ni «ya está» ni adónde
+  // ir—. Los seis están en la página y se enseña uno; corregir lo sigue
+  // haciendo el motor de siempre (script.js), aquí solo se pasa al siguiente.
+  let uno = null;          // { i, total, espera }
+
+  const UNO_T = {
+    es: { saltar: 'Saltar', hecho: '¡Hecho!', bien: 'Aciertos: {n} de {t}.',
+          otra: 'Otra tanda', volver: 'Volver a mis clases' },
+    it: { saltar: 'Salta', hecho: 'Fatto!', bien: 'Risposte giuste: {n} su {t}.',
+          otra: 'Un’altra serie', volver: 'Torna alle mie lezioni' },
+    en: { saltar: 'Skip', hecho: 'Done!', bien: 'Right answers: {n} out of {t}.',
+          otra: 'Another round', volver: 'Back to my classes' }
+  };
+  function unoLabels(){ return UNO_T[cfg.lang] || UNO_T.es; }
+
+  function quitaUno(){
+    if(uno && uno.espera) clearTimeout(uno.espera);
+    uno = null;
+    container.classList.remove('ex-uno');
+    ['ex-uno-barra', 'ex-uno-pie'].forEach(id => {
+      const el = document.getElementById(id);
+      if(el) el.remove();
+    });
+  }
+
+  function empiezaUno(){
+    quitaUno();
+    uno = { i: 0, total: container.querySelectorAll('.exercise-block').length, espera: null };
+    container.classList.add('ex-uno');
+    const barra = document.createElement('div');
+    barra.id = 'ex-uno-barra';
+    barra.className = 'ex-uno-barra';
+    barra.innerHTML = '<div class="ex-exam-progress"><div class="ex-exam-progress-fill" id="ex-uno-fill"></div></div>' +
+      '<span class="ex-exam-progress-label" id="ex-uno-label"></span>';
+    container.parentNode.insertBefore(barra, container);
+    const pie = document.createElement('div');
+    pie.id = 'ex-uno-pie';
+    pie.className = 'ex-uno-pie';
+    pie.innerHTML = '<button type="button" id="ex-uno-saltar" class="ex-uno-saltar">' + unoLabels().saltar +
+      ' <i class="ti ti-arrow-right" aria-hidden="true"></i></button>';
+    container.parentNode.insertBefore(pie, container.nextSibling);
+    pie.querySelector('button').addEventListener('click', avanzaUno);
+    // «otra tanda» está en la pantalla del final; arriba, a medias, despista
+    if(hubToolbar) hubToolbar.style.display = 'none';
+    muestraUno();
+  }
+
+  function muestraUno(){
+    const bloques = [...container.querySelectorAll('.exercise-block')];
+    bloques.forEach((b, k) => b.classList.toggle('ex-actual', k === uno.i));
+    const fill = document.getElementById('ex-uno-fill');
+    const label = document.getElementById('ex-uno-label');
+    if(fill) fill.style.width = Math.round(uno.i / uno.total * 100) + '%';
+    if(label) label.textContent = (uno.i + 1) + ' / ' + uno.total;
+    // con teclado delante, el cursor ya en la casilla; en el móvil no, que
+    // saltaría el teclado y taparía media pantalla antes de leer la pregunta
+    const inp = bloques[uno.i] && bloques[uno.i].querySelector('.exercise-input');
+    if(inp && window.matchMedia('(hover: hover)').matches) inp.focus({ preventScroll: true });
+  }
+
+  function avanzaUno(){
+    if(!uno) return;
+    if(uno.espera){ clearTimeout(uno.espera); uno.espera = null; }
+    uno.i++;
+    if(uno.i >= uno.total) finUno(); else muestraUno();
+  }
+
+  function finUno(){
+    const bien = container.querySelectorAll('.exercise-block.is-done').length;
+    const total = uno.total;
+    const L = unoLabels();
+    quitaUno();
+    container.innerHTML = '<div class="ex-signal ex-uno-fin" style="--c:var(--primary)">' +
+      '<div class="ex-signal-tick"><i class="ti ti-check" aria-hidden="true"></i></div>' +
+      '<h4>' + L.hecho + '</h4>' +
+      '<p class="ex-signal-sub">' + L.bien.replace('{n}', bien).replace('{t}', total) + '</p>' +
+      '<div class="ex-signal-btns">' +
+      '<button type="button" class="ex-signal-go" id="ex-uno-otra">' + L.otra + '</button>' +
+      '<button type="button" class="ex-signal-stop" id="ex-uno-volver">' + L.volver + '</button>' +
+      '</div></div>';
+    document.getElementById('ex-uno-otra').addEventListener('click', render);
+    document.getElementById('ex-uno-volver').addEventListener('click', () => {
+      location.href = 'mis-clases-' + cfg.lang + '.html';
+    });
+  }
+
+  // El motor avisa cada vez que se acierta uno por primera vez. Si es el que
+  // está delante, se deja un segundo el «¡muy bien!» y se pasa al siguiente.
+  document.addEventListener('jn-counter-updated', function(){
+    if(!uno || uno.espera) return;
+    const actual = container.querySelector('.exercise-block.ex-actual');
+    if(actual && actual.classList.contains('is-done')) uno.espera = setTimeout(avanzaUno, 1000);
+  });
 
   function render(){
     if(hoy){
-      container.innerHTML = tandaHoy().map(item => renderItemHTML(
+      const tanda = tandaHoy();
+      if(!tanda.length){
+        quitaUno();
+        container.innerHTML = '<p class="subtitle">' + hoyLabels().vacio + '</p>';
+        return;
+      }
+      container.innerHTML = tanda.map(item => renderItemHTML(
         Object.assign({}, item, { exid: (item.exid || 'ex') + '-' + uid() })
-      )).join('') || '<p class="subtitle">' + hoyLabels().vacio + '</p>';
+      )).join('');
+      empiezaUno();
       return;
     }
     if(repasoClase){

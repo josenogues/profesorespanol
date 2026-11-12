@@ -990,9 +990,33 @@ a.closest(".menu-item").classList.add("active","current-section");
   if(localStorage.getItem('jn_sidebar_collapsed') === 'true'){
     document.body.classList.add('sidebar-collapsed');
   }
+  // En el móvil el botón hace otra cosa: el menú va plegado bajo una barra y
+  // se abre al tocarlo. No se guarda: cada página empieza con él cerrado, que
+  // es lo que uno espera después de elegir adónde ir. La preferencia de
+  // «menú escondido» es solo la del ordenador.
+  const movil = window.matchMedia('(max-width:900px)');
+  const icono = btn.querySelector('i');
+  function abreMenu(abierto){
+    document.body.classList.toggle('menu-abierto', abierto);
+    // «desplegado sí/no» solo tiene sentido en el móvil
+    if(movil.matches) btn.setAttribute('aria-expanded', abierto ? 'true' : 'false');
+    else btn.removeAttribute('aria-expanded');
+    if(icono) icono.className = abierto ? 'ti ti-x' : 'ti ti-menu-2';
+  }
+  abreMenu(false);
   btn.addEventListener('click', () => {
+    if(movil.matches){
+      abreMenu(!document.body.classList.contains('menu-abierto'));
+      return;
+    }
     document.body.classList.toggle('sidebar-collapsed');
     localStorage.setItem('jn_sidebar_collapsed', document.body.classList.contains('sidebar-collapsed'));
+  });
+  // al girar el móvil o ensanchar la ventana, el menú abierto del móvil no
+  // debe quedarse marcado en la vista de ordenador
+  movil.addEventListener('change', () => abreMenu(false));
+  document.addEventListener('keydown', e => {
+    if(e.key === 'Escape' && document.body.classList.contains('menu-abierto')) abreMenu(false);
   });
 })();
 

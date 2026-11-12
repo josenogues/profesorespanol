@@ -9,8 +9,9 @@ Qué mira:
     que todavía no se ha dado;
   · en el hub salen seis ejercicios, todos de lo visto en clase y al menos
     la mitad de lo último;
-  · «otra tanda» y los filtros de nivel siguen funcionando, y al salir el
-    hub vuelve a ser el de siempre;
+  · van de uno en uno: acertar pasa al siguiente, fallar no, y se puede
+    saltar; al final dice cuántos ha acertado y ofrece otra tanda o volver;
+  · al salir, el hub vuelve a ser el de siempre;
   · una dirección con cosas que no existen no rompe nada.
 """
 import datetime
@@ -119,7 +120,9 @@ with sync_playwright() as p:
     comprueba(cab.count() == 1 and "Cinque minuti di oggi" in cab.inner_text(), "con su cabecera")
     comprueba(not pg.locator("#ex-mode-panel-tema .ex-category-grid").first.is_visible(),
               "sin pedirle que elija materia")
-    comprueba(pg.locator("#ex-hub-toolbar").is_visible(), "y con el botón de otra tanda")
+    comprueba(not pg.locator("#ex-level-filter-step").is_visible() and not pg.locator("#ex-hub-mix").is_visible()
+              and not pg.locator("#ex-hub-toolbar").is_visible(),
+              "ni filtros, ni mezcla, ni «otra tanda» a medias")
 
     def temas_de(ids):
         return pg.evaluate("ids => [].concat.apply([], ids.map(i => i.indexOf('t:') === 0 ? [i.slice(2)] : window.jnClasePorId(i).temas))", ids)
@@ -144,42 +147,113 @@ with sync_playwright() as p:
         return t
 
     primera = mira("primera tanda")
-    pg.locator("#ex-hub-generate").click()
+
+    print("\n═══ de uno en uno ═══")
+    visibles = "[...document.querySelectorAll('#ex-hub-container .exercise-block')].filter(b => b.offsetParent !== null).length"
+    cual = "[...document.querySelectorAll('#ex-hub-container .exercise-block')].findIndex(b => b.offsetParent !== null)"
+    rotulo = lambda: pg.locator("#ex-uno-label").inner_text().strip()
+    hechos = lambda: pg.evaluate("parseInt(localStorage.getItem('jn_total_done') || '0', 10)")
+    comprueba(pg.evaluate(visibles) == 1 and pg.evaluate(cual) == 0, "se ve uno solo, el primero")
+    comprueba(rotulo() == "1 / 6", "y arriba dice 1 / 6")
+    A_LA_VISTA = """() => { const r = document.querySelector('#ex-hub-container .exercise-block.ex-actual').getBoundingClientRect();
+      return r.top >= 0 && r.top < window.innerHeight * 0.75; }"""
+    comprueba(pg.evaluate(A_LA_VISTA), "el ejercicio queda a la vista al llegar, sin tener que bajar")
+
+    # contesta BIEN el que está delante, sea del tipo que sea
+    ACIERTA = """() => {
+      const b = document.querySelector('#ex-hub-container .exercise-block.ex-actual');
+      const a = (b.dataset.answer || '').split('|')[0];
+      const op = [...b.querySelectorAll('.option-btn')].find(x => x.dataset.value.trim().toLowerCase() === a.trim().toLowerCase());
+      if(op){ op.click(); return; }
+      if(b.querySelector('.order-word')){
+        let resto = b.dataset.answer.trim();
+        while(resto){
+          const f = [...b.querySelectorAll('.order-word-bank .order-word')].filter(w => resto.startsWith(w.dataset.word))
+            .sort((x, y) => y.dataset.word.length - x.dataset.word.length)[0];
+          if(!f) break;
+          resto = resto.slice(f.dataset.word.length).trim(); f.click();
+        }
+        b.querySelector('.order-check').click(); return;
+      }
+      if(b.querySelector('.match-item')){
+        const cols = b.querySelectorAll('.match-col');
+        [...cols[0].querySelectorAll('.match-item')].forEach(i => { i.click(); cols[1].querySelector('.match-item[data-key="' + i.dataset.key + '"]').click(); });
+        return;
+      }
+      b.querySelector('.exercise-input').value = a; b.querySelector('.exercise-check').click();
+    }"""
+    FALLA = """() => {
+      const b = document.querySelector('#ex-hub-container .exercise-block.ex-actual');
+      const a = (b.dataset.answer || '').split('|')[0].trim().toLowerCase();
+      const op = [...b.querySelectorAll('.option-btn')].find(x => x.dataset.value.trim().toLowerCase() !== a);
+      if(op){ op.click(); return true; }
+      const inp = b.querySelector('.exercise-input');
+      if(inp){ inp.value = 'zzz'; b.querySelector('.exercise-check').click(); return true; }
+      return false;
+    }"""
+
+    antes = hechos()
+    pg.evaluate(ACIERTA)
+    pg.wait_for_timeout(300)
+    comprueba(rotulo() == "1 / 6" and "correct" in (pg.locator(".exercise-block.ex-actual .exercise-feedback").get_attribute("class") or ""),
+              "al acertar felicita, y deja un momento para leerlo")
+    pg.wait_for_timeout(1100)
+    comprueba(rotulo() == "2 / 6" and pg.evaluate(cual) == 1 and pg.evaluate(visibles) == 1, "y pasa solo al segundo")
+    comprueba(hechos() == antes + 1, "sumando al contador de ejercicios")
+
+    fallado = pg.evaluate(FALLA)
+    pg.wait_for_timeout(1500)
+    if fallado:
+        comprueba(rotulo() == "2 / 6" and "incorrect" in (pg.locator(".exercise-block.ex-actual .exercise-feedback").get_attribute("class") or ""),
+                  "al fallar no pasa: se queda para volver a intentarlo")
+    pg.locator("#ex-uno-saltar").click()
+    pg.wait_for_timeout(200)
+    comprueba(rotulo() == "3 / 6" and pg.evaluate(cual) == 2, "«saltar» pasa al siguiente sin contestar")
+    comprueba(hechos() == antes + 1, "y no suma")
+
+    for _ in range(4):
+        pg.evaluate(ACIERTA)
+        pg.wait_for_timeout(1250)
+    fin = pg.locator(".ex-uno-fin")
+    comprueba(fin.count() == 1 and fin.is_visible() and "Fatto!" in fin.inner_text(), "al acabar los seis sale el final")
+    comprueba("5 su 6" in fin.inner_text(), "que dice cuántos ha acertado (%s)" % fin.locator(".ex-signal-sub").inner_text())
+    comprueba(pg.locator("#ex-uno-barra").count() == 0 and pg.locator("#ex-uno-saltar").count() == 0
+              and pg.locator("#ex-hub-container .exercise-block").count() == 0,
+              "y ya no quedan ni la barra ni ejercicios sueltos")
+    comprueba(hechos() == antes + 5, "cinco aciertos, cinco más en el contador")
+
+    pg.locator("#ex-uno-otra").click()
     pg.wait_for_timeout(300)
     segunda = mira("otra tanda")
     comprueba(primera != segunda, "y no es la misma")
+    comprueba(rotulo() == "1 / 6" and pg.evaluate(visibles) == 1, "otra vez de uno en uno, desde el primero")
 
-    # se corrigen como cualquier ejercicio y suman al contador
-    antes = pg.evaluate("parseInt(localStorage.getItem('jn_total_done') || '0', 10)")
-    hecho = pg.evaluate("""() => {
-      for(const b of document.querySelectorAll('#ex-hub-container .exercise-block')){
-        const a = (b.dataset.answer || '').split('|')[0];
-        const op = [...b.querySelectorAll('.option-btn')].find(x => x.dataset.value.trim().toLowerCase() === a.trim().toLowerCase());
-        if(op){ op.click(); return true; }
-        const inp = b.querySelector('.exercise-input');
-        if(inp){ inp.value = a; b.querySelector('.exercise-check').click(); return true; }
-      }
-      return false;
-    }""")
-    pg.wait_for_timeout(200)
-    comprueba(hecho and pg.evaluate("parseInt(localStorage.getItem('jn_total_done') || '0', 10)") == antes + 1,
-              "acertar uno suma al contador de ejercicios")
+    # acertar y saltar a la vez no puede adelantar dos
+    pg.evaluate(ACIERTA)
+    pg.wait_for_timeout(150)
+    pg.locator("#ex-uno-saltar").click()
+    pg.wait_for_timeout(1400)
+    comprueba(rotulo() == "2 / 6", "acertar y darle a «saltar» enseguida avanza uno, no dos")
 
-    # el filtro de nivel
-    nivel = pg.evaluate("""() => { const n = {}; document.querySelectorAll('#ex-hub-container .exercise-level-badge')
-      .forEach(b => { n[b.textContent.trim()] = 1; }); return Object.keys(n)[0]; }""")
-    pg.locator('#ex-level-filter-pills .ex-pill[data-level-filter="%s"]' % nivel).click()
-    pg.wait_for_timeout(300)
-    niveles = pg.evaluate("[...document.querySelectorAll('#ex-hub-container .exercise-level-badge')].map(b => b.textContent.trim())")
-    comprueba(len(niveles) > 0 and set(niveles) == {nivel}, "filtrando por %s, salen solo de %s (%d)" % (nivel, nivel, len(niveles)))
-    comprueba(all(e in todo for e in tanda(pg)), "y siguen siendo de lo visto en clase")
-    pg.locator('#ex-level-filter-pills .ex-pill[data-level-filter="%s"]' % nivel).click()
-    pg.wait_for_timeout(200)
+    # saltándolos todos, también hay final; y «volver» lleva a sus clases
+    for _ in range(5):
+        pg.locator("#ex-uno-saltar").click()
+        pg.wait_for_timeout(120)
+    comprueba("1 su 6" in pg.locator(".ex-uno-fin").inner_text(), "saltando el resto, el final dice 1 su 6")
+    pg.locator("#ex-uno-volver").click()
+    pg.wait_for_load_state("load")
+    pg.wait_for_timeout(500)
+    comprueba("mis-clases-it.html" in pg.url, "«volver» lleva a sus clases")
+    pg.go_back()
+    pg.wait_for_load_state("load")
+    pg.wait_for_timeout(900)
+    comprueba(rotulo() == "1 / 6", "y volviendo atrás, la tanda empieza de nuevo")
 
     print("\n═══ salir ═══")
     pg.locator("#ex-mode-back-tema").click()
     pg.wait_for_timeout(300)
-    comprueba(pg.locator("#ex-repaso").count() == 0, "al cambiar de modo se va la cabecera")
+    comprueba(pg.locator("#ex-repaso").count() == 0 and pg.locator("#ex-uno-barra").count() == 0
+              and pg.locator("#ex-uno-saltar").count() == 0, "al cambiar de modo se van la cabecera, la barra y «saltar»")
     comprueba(pg.locator('.ex-mode-card[data-mode="tema"]').is_visible(), "y vuelven los tres modos")
     pg.locator('.ex-mode-card[data-mode="tema"]').click()
     pg.wait_for_timeout(300)
@@ -187,8 +261,30 @@ with sync_playwright() as p:
               "en «por tema» vuelven a salir las materias")
     pg.locator(".ex-cat-card:not(.ex-level-card)").first.click()
     pg.wait_for_timeout(300)
-    comprueba(pg.locator("#ex-hub-container .exercise-block").count() == 12,
-              "y una materia da su tanda normal de doce (%d)" % pg.locator("#ex-hub-container .exercise-block").count())
+    n_vis = pg.evaluate("[...document.querySelectorAll('#ex-hub-container .exercise-block')].filter(b => b.offsetParent !== null).length")
+    comprueba(n_vis == 12, "y una materia da su tanda normal: doce, todos a la vista (%d)" % n_vis)
+    comprueba(pg.locator("#ex-level-filter-step").is_visible() and pg.locator("#ex-hub-mix").is_visible()
+              and pg.locator("#ex-hub-toolbar").is_visible(), "con sus filtros, su mezcla y su «otra tanda»")
+    c.close()
+
+    print("\n═══ en el móvil ═══")
+    c = br.new_context(viewport={"width": 390, "height": 760})
+    monta(c, json.loads(json.dumps(DB)))
+    c.add_init_script("localStorage.setItem('__falso_usuario','anna@x.com');localStorage.setItem('jn_access_granted','true');"
+                      "localStorage.setItem('jn_student_email','anna@x.com');localStorage.setItem('jn_track','it');")
+    pg = c.new_page()
+    pg.on("pageerror", lambda e: err.append("JS: %s" % e))
+    pg.goto(B + "/ejercicios-it.html?hoy=si-tuviera,motor", wait_until="load")
+    pg.wait_for_timeout(900)
+    comprueba(pg.evaluate(A_LA_VISTA), "al llegar, el ejercicio ya está en pantalla")
+    comprueba(pg.evaluate("document.documentElement.scrollWidth <= document.documentElement.clientWidth"),
+              "y nada se sale por los lados")
+    for _ in range(6):
+        pg.locator("#ex-uno-saltar").click()
+        pg.wait_for_timeout(120)
+    comprueba(pg.locator(".ex-uno-fin").is_visible() and pg.evaluate(
+        "(() => { const r = document.querySelector('.ex-uno-fin').getBoundingClientRect(); return r.top >= 0 && r.top < innerHeight * 0.75; })()"),
+        "y el final también, sin tener que buscarlo")
     c.close()
 
     print("\n═══ direcciones raras ═══")

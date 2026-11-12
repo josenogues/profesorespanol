@@ -706,7 +706,24 @@ body.sidebar-collapsed .sidebar-toggle:hover{background:var(--tint)}
 body.sidebar-collapsed .sidebar{transform:translateX(-100%)}
 body.sidebar-collapsed .main{margin-left:24px}
 .sidebar{transition:transform .25s ease}
-@media(max-width:900px){.sidebar-toggle{display:flex;left:auto;right:18px;color:var(--text)}body.sidebar-collapsed .sidebar{display:none}}
+/* ── El menú en el móvil ──────────────────────────────────────────────
+   Antes el menú entero iba desplegado arriba de cada página: en un móvil
+   ocupaba toda la primera pantalla y el contenido empezaba debajo. Ahora
+   arriba queda una barra con el logo y el botón, y el menú se abre al
+   tocarlo (body.menu-abierto, que pone script.js). Cada página empieza con
+   él plegado. Lo de «sidebar-collapsed» es la preferencia del ordenador y
+   aquí no pinta nada: se anula para que no esconda la barra. */
+@media(max-width:900px){
+  .sidebar{padding:12px 16px}
+  .sidebar .logo-header{justify-content:flex-start;margin:0}
+  .sidebar .logo-img{height:46px;margin:0}
+  body:not(.menu-abierto) .sidebar > *:not(.logo-header){display:none}
+  body.menu-abierto .sidebar .logo-header{margin-bottom:14px}
+  .sidebar-toggle,body.sidebar-collapsed .sidebar-toggle{display:flex;position:absolute;top:17px;right:14px;left:auto;color:#fff}
+  .sidebar-toggle:hover,body.sidebar-collapsed .sidebar-toggle:hover{background:rgba(255,255,255,.12)}
+  body.sidebar-collapsed .sidebar{transform:none}
+  body.sidebar-collapsed .main{margin-left:0}
+}
 
 /* ---------- Vida visual para las tarjetas de Vocabulario ---------- */
 body[data-category="vocabulario"] .mini-card{border-left:3px solid #E8791E;background:#FBEBD9}
@@ -1212,6 +1229,19 @@ a.menu-button.current-page{background:rgba(255,255,255,.15)}
   padding:3px 11px;font-size:13px;color:var(--text-secondary)}
 .ex-repaso-teoria{font-size:14px}
 .ex-hoy-nota{margin:0;font-size:14.5px;color:var(--text-secondary)}
+
+/* la tanda de «cinco minutos», de uno en uno: los seis están en la página y
+   se ve el que toca */
+.ex-uno .exercise-block{display:none}
+.ex-uno .exercise-block.ex-actual{display:block}
+.ex-uno-barra{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+.ex-uno-pie{display:flex;justify-content:flex-end;margin:-2px 0 18px}
+.ex-uno-saltar{border:0;background:none;color:var(--muted);font-family:var(--font-head);font-weight:600;
+  font-size:14.5px;padding:8px 6px;cursor:pointer;display:inline-flex;align-items:center;gap:6px}
+.ex-uno-saltar:hover,.ex-uno-saltar:focus-visible{color:var(--text)}
+.ex-uno-fin{text-align:center;max-width:520px;margin:0 auto 20px}
+.ex-uno-fin .ex-signal-tick{display:flex;align-items:center;justify-content:center;color:#fff;font-size:28px}
+[data-theme="dark"] .ex-uno-fin{--c:#5a68a8 !important}
 
 /* ── «Cinco minutos de hoy», en «Mis clases» ────────────────────────────
    Es la única cosa de la página que le pide algo al alumno, así que es la
