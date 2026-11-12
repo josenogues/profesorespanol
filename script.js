@@ -765,9 +765,16 @@ a.closest(".menu-item").classList.add("active","current-section");
       btn.disabled = true;
       window.jnCloudEntraConEnlace(email).then(function(){
         return compruebaFicha(email);
-      }, function(){
-        // el enlace ya se ha gastado al fallar: hay que pedir otro
-        pidePaso(t.nocuadra);
+      }, function(err){
+        // Hay que pedir otro enlace en los dos casos, pero diciendo la verdad:
+        // «no es ese email» solo si Firebase dice que el email no cuadra. Un
+        // enlace viejo —ya usado o caducado— falla con cualquier email, y
+        // decirle que se ha equivocado de dirección le hacía dudar de la suya.
+        const noCuadra = err && err.code === 'auth/invalid-email';
+        // y si lo que ha pasado es que Firebase no ha contestado, tampoco es
+        // culpa del enlace
+        const sinRed = err && !err.code && /timeout/.test(String(err.message));
+        pidePaso(noCuadra ? t.nocuadra : sinRed ? t.nocomp : t.caduco);
       });
     }
     btn.addEventListener('click', completa);

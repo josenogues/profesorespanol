@@ -10,7 +10,7 @@ están hoy) y cerrados (como quedarán al publicar firestore.rules). Lo segundo
 es lo que importa: que cerrar los permisos no deja a nadie fuera."""
 import sys, json
 sys.path.insert(0, '/home/user/profesorespanol/herramientas')
-from firebase_falso import monta, hora, ENLACE_FALSO
+from firebase_falso import monta, hora, ENLACE_FALSO, ENLACE_GASTADO
 from playwright.sync_api import sync_playwright
 
 B = "http://localhost:8947"
@@ -286,6 +286,67 @@ with sync_playwright() as p:
         if ventanitas:
             err.append("ventanita del navegador en la confirmación")
         c.close()
+    # En el móvil, lo natural para volver a la web es abrir el correo y pulsar
+    # otra vez el enlace con el que se entró. Ese enlace ya está gastado, pero
+    # el alumno sigue dentro en ese navegador: tiene que pasar sin más. Antes
+    # se le pedía «confirma tu email», el enlace gastado fallaba, se le decía
+    # que el email no era el bueno y vuelta a pedir otro enlace. Cada vez.
+    print("\n═══ volver pulsando el enlace viejo del correo ═══")
+    c = nuevo(br, True)
+    pg = c.new_page()
+    pg.on("pageerror", lambda e: err.append("JS: %s" % e))
+    entra(pg, "anna@x.com")
+    if pg.locator(".access-gate-overlay").count():
+        err.append("enlace viejo: no ha llegado a entrar la primera vez")
+    for vez in (1, 2):
+        pg.goto(B + PAG + ENLACE_GASTADO, wait_until="domcontentloaded")
+        pg.wait_for_timeout(1800)
+        dentro = not pg.locator(".access-gate-overlay").count()
+        print("   ya dentro, pulsa el enlace viejo (vez %d): %s" % (vez, "pasa sin preguntar" if dentro else
+              "LE PARA: " + pg.locator(".access-gate-modal h3").inner_text().strip()))
+        if not dentro:
+            err.append("ya estaba dentro y el enlace viejo le vuelve a pedir el email")
+        if "oobCode" in pg.url:
+            err.append("el código del enlace se queda en la barra de direcciones")
+    c.close()
+
+    # La excepción a lo anterior: si en este navegador se acaba de pedir un
+    # enlace para OTRA dirección, el enlace sí se usa, aunque hubiera alguien
+    # dentro. Es cambiar de cuenta, y tiene que seguir funcionando.
+    c = nuevo(br, True)
+    pg = c.new_page()
+    pg.on("pageerror", lambda e: err.append("JS: %s" % e))
+    entra(pg, "anna@x.com")
+    pg.evaluate("""() => { localStorage.setItem('jn_email_pendiente', 'bajaentra@x.com');
+      localStorage.setItem('__falso_enlace', JSON.stringify({ email: 'bajaentra@x.com' })); }""")
+    pg.goto(B + PAG + ENLACE_FALSO, wait_until="domcontentloaded")
+    pg.wait_for_timeout(1800)
+    quien = pg.evaluate("localStorage.getItem('jn_student_email')")
+    print("   dentro como anna, pide enlace para otra cuenta y lo abre: entra como", quien)
+    if quien != "bajaentra@x.com" or pg.locator(".access-gate-overlay").count():
+        err.append("cambiar de cuenta con un enlace nuevo: se queda como %s" % quien)
+    c.close()
+
+    # El mismo enlace viejo en un navegador donde NO está dentro: ahí sí hay
+    # que pedirle otro, pero diciéndole la verdad —que el enlace ya no vale—
+    # y no que se ha equivocado de email.
+    print("\n═══ enlace viejo donde no ha entrado ═══")
+    c = nuevo(br, True)
+    pg = c.new_page()
+    pg.on("pageerror", lambda e: err.append("JS: %s" % e))
+    pg.goto(B + PAG + ENLACE_GASTADO, wait_until="domcontentloaded")
+    pg.wait_for_timeout(1800)
+    titulo = pg.locator(".access-gate-modal h3").inner_text().strip()
+    print("   pantalla:", titulo)
+    pg.fill(".access-gate-input", "anna@x.com")
+    pg.click(".access-gate-btn"); pg.wait_for_timeout(1500)
+    aviso = pg.locator(".access-gate-error").inner_text().strip()
+    print("   tras confirmar, dice:", aviso[:70])
+    if "ya no vale" not in aviso:
+        err.append("enlace gastado: no dice que el enlace ya no vale, dice %r" % aviso[:60])
+    if not pg.locator(".access-gate-input").count():
+        err.append("enlace gastado: no deja pedir otro")
+    c.close()
     br.close()
 
 print()

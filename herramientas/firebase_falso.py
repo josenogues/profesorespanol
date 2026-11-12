@@ -35,6 +35,12 @@ export function sendSignInLinkToEmail(a, email, s){
 }
 export function isSignInWithEmailLink(a, url){ return String(url).indexOf('oobCode=FALSO') >= 0; }
 export function signInWithEmailLink(a, email, url){
+  // un enlace ya usado o caducado: Firebase lo rechaza sea cual sea el email
+  if(String(url).indexOf('GASTADO') >= 0){
+    const err = new Error('enlace gastado');
+    err.code = 'auth/invalid-action-code';
+    return Promise.reject(err);
+  }
   let pedido = null;
   try { pedido = JSON.parse(lee(ENLACE) || 'null'); } catch(e){}
   // el enlace solo vale con el email que lo pidió, como en Firebase de verdad
@@ -143,3 +149,5 @@ def hora(dias=0):
 
 
 ENLACE_FALSO = "?apiKey=FALSA&oobCode=FALSO&mode=signIn"
+# el mismo enlace cuando ya se ha usado una vez (o ha caducado)
+ENLACE_GASTADO = "?apiKey=FALSA&oobCode=FALSO-GASTADO&mode=signIn"

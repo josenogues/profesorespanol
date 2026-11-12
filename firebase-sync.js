@@ -48,51 +48,79 @@ function limpia(email){
 // de direcciones: hace falta para completar la entrada.
 let urlEnlace = null;
 
-window.jnCloudReady = (async () => {
-  // ¿venimos del enlace del correo? entonces aquí se termina de entrar
-  if(isSignInWithEmailLink(auth, location.href)){
-    urlEnlace = location.href;
-    // el enlace lleva el código pegado en la barra de direcciones: se quita
-    // enseguida para que no quede en el historial ni se comparta sin querer
-    try { history.replaceState(null, '', location.pathname + location.hash); } catch(e){}
-
-    const email = localStorage.getItem(PENDIENTE);
-    if(email){
-      try {
-        await signInWithEmailLink(auth, limpia(email), urlEnlace);
-        localStorage.removeItem(PENDIENTE);
-        urlEnlace = null;
-      } catch(err){
-        window.jnCloudFalloEnlace = (err && err.code) || 'error';
-        urlEnlace = null;
-      }
-    } else {
-      // Hay enlace pero no sabemos de quién: pasa siempre que se pide el
-      // enlace en un sitio y se abre el correo en otro, que es lo normal
-      // (lo pides en el ordenador y lo abres en el móvil). Firebase exige el
-      // email para que interceptar el enlace no baste. No se pregunta aquí:
-      // se avisa a la puerta, que lo pide con su propia pantalla en vez de
-      // con una ventanita del navegador sin estilo y siempre en español.
-      window.jnCloudPideEmail = true;
-    }
-  }
-
-  return await withTimeout(new Promise(ok => {
+// Quién hay ya dentro en este navegador, sin contar con ningún enlace. Firebase
+// lo guarda entre visitas; aquí solo se espera a que lo diga.
+function quienEstaba(){
+  return withTimeout(new Promise(ok => {
     let hecho = false;
     const para = onAuthStateChanged(auth, u => {
       if(hecho) return;
       hecho = true;
-      ok(u ? limpia(u.email) : null);
+      ok(u || null);
       setTimeout(() => { try { para(); } catch(e){} }, 0);
     });
   }), 10000, 'auth');
+}
+
+window.jnCloudReady = (async () => {
+  // ¿venimos del enlace del correo?
+  const esEnlace = isSignInWithEmailLink(auth, location.href);
+  if(esEnlace){
+    urlEnlace = location.href;
+    // el enlace lleva el código pegado en la barra de direcciones: se quita
+    // enseguida para que no quede en el historial ni se comparta sin querer
+    try { history.replaceState(null, '', location.pathname + location.hash); } catch(e){}
+  }
+
+  const estaba = await quienEstaba();
+  if(!esEnlace) return estaba ? limpia(estaba.email) : null;
+
+  const pendiente = limpia(localStorage.getItem(PENDIENTE));
+
+  // Ya había entrado en este navegador y vuelve a pulsar el enlace del
+  // correo. En el móvil es lo natural: el correo es donde está «la puerta»,
+  // así que se vuelve a él cada vez. Ese enlace ya está gastado, pero no
+  // hace falta: sigue dentro. Antes se le trataba como recién llegado —
+  // «confirma tu email», el enlace gastado fallaba, «ese no es el email» y a
+  // pedir otro—, y así cada vez que abría la web desde el correo.
+  // La excepción: si aquí se acaba de pedir un enlace para OTRA dirección,
+  // es que quiere cambiar de cuenta, y entonces sí se usa.
+  if(estaba && (!pendiente || pendiente === limpia(estaba.email))){
+    localStorage.removeItem(PENDIENTE);
+    urlEnlace = null;
+    return limpia(estaba.email);
+  }
+
+  if(pendiente){
+    try {
+      await signInWithEmailLink(auth, pendiente, urlEnlace);
+      localStorage.removeItem(PENDIENTE);
+      urlEnlace = null;
+      return jnCloudEmailActual();
+    } catch(err){
+      window.jnCloudFalloEnlace = (err && err.code) || 'error';
+      urlEnlace = null;
+      return estaba ? limpia(estaba.email) : null;
+    }
+  }
+
+  // Hay enlace pero no sabemos de quién: pasa siempre que se pide el enlace
+  // en un sitio y se abre el correo en otro, que es lo normal (lo pides en
+  // el ordenador y lo abres en el móvil). Firebase exige el email para que
+  // interceptar el enlace no baste. No se pregunta aquí: se avisa a la
+  // puerta, que lo pide con su propia pantalla en vez de con una ventanita
+  // del navegador sin estilo y siempre en español.
+  window.jnCloudPideEmail = true;
+  return null;
 })();
+
+function jnCloudEmailActual(){
+  return (auth.currentUser && limpia(auth.currentUser.email)) || null;
+}
 
 // El email con el que se ha entrado. Es la única fuente buena: lo que haya en
 // localStorage es solo una pista para no parpadear al cargar.
-window.jnCloudEmail = function(){
-  return (auth.currentUser && limpia(auth.currentUser.email)) || null;
-};
+window.jnCloudEmail = jnCloudEmailActual;
 
 window.jnCloudEnviaEnlace = async function(email){
   const e = limpia(email);
