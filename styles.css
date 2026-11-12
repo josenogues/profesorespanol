@@ -1399,6 +1399,10 @@ body:has(.access-gate-overlay) .cita-boton{display:none}
 .nota-mano{font-family:'Caveat',cursive;font-size:25px;line-height:1.35;color:var(--muted);
   transform:rotate(-1deg);max-width:46ch;margin-bottom:30px}
 .nota-mano i{color:var(--gold-dark);margin-right:6px;font-size:20px}
+/* la nota de la portada dice dónde está el menú, y eso cambia: a la izquierda
+   en el ordenador, tras el botón de las tres rayas en el móvil */
+.solo-movil{display:none}
+@media(max-width:900px){ .solo-ordenador{display:none} .solo-movil{display:block} }
 [data-theme="dark"] .nota-mano i{color:var(--gold)}
 .inicio-pie{border-top:1px solid var(--border);padding-top:22px;color:var(--muted);font-size:16px}
 .inicio-pie a{color:var(--primary);font-weight:600;text-decoration:underline}

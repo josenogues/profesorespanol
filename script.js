@@ -1122,7 +1122,7 @@ a.closest(".menu-item").classList.add("active","current-section");
   // entonces se busca en todas. Antes era un solo archivo de 450 KB con las
   // tres pistas. El ?v= de cada uno lo pone herramientas/versiones.py.
   const PARTES = {
-    comun: 'search-index-comun.js?v=995fa2abe7',
+    comun: 'search-index-comun.js?v=4fd7d8925e',
     es: 'search-index-es.js?v=df4ca0aec2',
     it: 'search-index-it.js?v=5b9187f21c',
     en: 'search-index-en.js?v=0dea543c71'
