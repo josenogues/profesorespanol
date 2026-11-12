@@ -9,7 +9,7 @@
 <link rel="preload" href="fuentes/fredoka-latin.woff2?v=6438e7de08" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="fuentes/iconos.woff2?v=a5e23e27ae" as="font" type="font/woff2" crossorigin>
 <link rel="icon" type="image/png" href="favicon.png">
-<link rel="stylesheet" href="styles.css?v=6f12760366">
+<link rel="stylesheet" href="styles.css?v=60f01fd141">
 <script>if(localStorage.getItem('jn_theme')==='dark')document.documentElement.setAttribute('data-theme','dark');</script>
 </head>
 <body>
@@ -138,33 +138,58 @@
 <div class="breadcrumb"><i class="ti ti-home"></i> <span class="i18n" data-es="Inicio" data-it="Home" data-en="Home">Inicio</span></div>
 </div>
 
-<section class="inicio-abre">
-<h1><span class="i18n" data-es="El cuaderno de nuestras clases" data-it="Il quaderno delle nostre lezioni" data-en="The notebook for our lessons">El cuaderno de nuestras clases</span></h1>
-<p><span class="i18n" data-es="Lo que vemos juntos, lo que te dejo para practicar y la teoría a la que volver cuando se te olvide algo." data-it="Quello che vediamo insieme, quello che ti lascio da esercitare e la teoria a cui tornare quando ti dimentichi qualcosa." data-en="What we cover together, what I leave you to practise, and the theory to come back to when something slips.">Lo que vemos juntos, lo que te dejo para practicar y la teoría a la que volver cuando se te olvide algo.</span></p>
+<section class="hola" id="hola">
+<div class="hola-txt">
+<h1 id="hola-saludo">¡Hola!</h1>
+<p class="hola-sub"><span class="i18n" data-es="Este es el cuaderno de nuestras clases: lo que vemos juntos, lo que te dejo para practicar y la teoría para cuando se te olvide algo." data-it="Questo è il quaderno delle nostre lezioni: quello che vediamo insieme, quello che ti lascio da esercitare e la teoria per quando ti dimentichi qualcosa." data-en="This is the notebook for our lessons: what we cover together, what I leave you to practise, and the theory for when something slips.">Este es el cuaderno de nuestras clases: lo que vemos juntos, lo que te dejo para practicar y la teoría para cuando se te olvide algo.</span></p>
+<p class="hola-prox" id="hola-prox" hidden></p>
+<div class="hola-botones">
+<a class="hola-btn hola-btn-oro" id="hola-hoy" href="#" hidden><i class="ti ti-bolt" aria-hidden="true"></i> <span class="i18n" data-es="Cinco minutos de hoy" data-it="Cinque minuti di oggi" data-en="Five minutes for today">Cinco minutos de hoy</span></a>
+<a class="hola-btn hola-btn-claro track-link" href="#" data-base="mis-clases"><i class="ti ti-notebook" aria-hidden="true"></i> <span class="i18n" data-es="Mis clases" data-it="Le mie lezioni" data-en="My classes">Mis clases</span></a>
+<a class="hola-btn hola-btn-linea" href="https://meet.google.com/xhh-wujz-ywi" target="_blank" rel="noopener noreferrer"><i class="ti ti-player-play" aria-hidden="true"></i> <span class="i18n" data-es="Entrar en clase" data-it="Entra in aula" data-en="Join the class">Entrar en clase</span></a>
+</div>
+</div>
+<div class="hola-globos" aria-hidden="true"><span>¿Qué tal?</span><span>¡Vamos!</span><span>Poco a poco</span></div>
 </section>
 
+<h2 class="inicio-rot"><span class="i18n" data-es="¿Qué quieres hacer hoy?" data-it="Cosa vuoi fare oggi?" data-en="What do you want to do today?">¿Qué quieres hacer hoy?</span></h2>
 <section class="puertas">
-<a class="puerta track-link" href="#" data-base="mis-clases" style="--c:#7A5230">
-<h2><i class="ti ti-notebook"></i> <span class="i18n" data-es="Mis clases" data-it="Le mie lezioni" data-en="My classes">Mis clases</span></h2>
-<p><span class="i18n" data-es="Lo que hemos dado, con la fecha de cada una y un sitio para tus apuntes. Y lo que toca la próxima vez, en cuanto te la preparo." data-it="Quello che abbiamo fatto, con la data di ogni lezione e uno spazio per i tuoi appunti. E cosa tocca la prossima volta, appena te la preparo." data-en="What we’ve covered, with the date of each lesson and a place for your notes. And what’s next, as soon as I’ve set it up.">Lo que hemos dado, con la fecha de cada una y un sitio para tus apuntes. Y lo que toca la próxima vez, en cuanto te la preparo.</span></p>
-<span class="ir"><span class="i18n" data-es="Ver mis clases" data-it="Vedi le mie lezioni" data-en="See my classes">Ver mis clases</span> →</span>
+<a class="puerta track-link" href="#" data-base="mis-clases" style="--c:#B5651D">
+<span class="puerta-ico"><i class="ti ti-notebook" aria-hidden="true"></i></span>
+<h3><span class="i18n" data-es="Mis clases" data-it="Le mie lezioni" data-en="My classes">Mis clases</span></h3>
+<p><span class="i18n" data-es="Lo que hemos dado, con su fecha y un sitio para tus apuntes. Y lo que toca la próxima vez." data-it="Quello che abbiamo fatto, con la data e uno spazio per i tuoi appunti. E cosa tocca la prossima volta." data-en="What we’ve covered, with its date and a place for your notes. And what’s next.">Lo que hemos dado, con su fecha y un sitio para tus apuntes. Y lo que toca la próxima vez.</span></p>
+<span class="ir"><span class="i18n" data-es="Ver mis clases" data-it="Vedi le mie lezioni" data-en="See my classes">Ver mis clases</span> <i class="ti ti-arrow-right" aria-hidden="true"></i></span>
 </a>
 <a class="puerta track-link" href="#" data-base="ejercicios" style="--c:#3A6FC9">
-<h2><i class="ti ti-pencil"></i> <span class="i18n" data-es="Ejercicios y cursos" data-it="Esercizi e corsi" data-en="Exercises &amp; courses">Ejercicios y cursos</span></h2>
-<p><span class="i18n" data-es="Cursos paso a paso que siguen donde los dejaste, o práctica suelta: eliges un tema o un nivel y te salen ejercicios de eso." data-it="Corsi passo passo che riprendono da dove li hai lasciati, o esercizi sciolti: scegli un argomento o un livello e ti escono esercizi di quello." data-en="Step-by-step courses that pick up where you left off, or loose practice: pick a topic or a level and you get exercises on it.">Cursos paso a paso que siguen donde los dejaste, o práctica suelta: eliges un tema o un nivel y te salen ejercicios de eso.</span></p>
-<span class="ir"><span class="i18n" data-es="Empezar a practicar" data-it="Inizia a esercitarti" data-en="Start practising">Empezar a practicar</span> →</span>
+<span class="puerta-ico"><i class="ti ti-pencil" aria-hidden="true"></i></span>
+<h3><span class="i18n" data-es="Ejercicios y cursos" data-it="Esercizi e corsi" data-en="Exercises &amp; courses">Ejercicios y cursos</span></h3>
+<p><span class="i18n" data-es="Cursos paso a paso que siguen donde los dejaste, o práctica suelta por tema o por nivel." data-it="Corsi passo passo che riprendono da dove li hai lasciati, o esercizi sciolti per argomento o per livello." data-en="Step-by-step courses that pick up where you left off, or loose practice by topic or level.">Cursos paso a paso que siguen donde los dejaste, o práctica suelta por tema o por nivel.</span></p>
+<span class="ir"><span class="i18n" data-es="Empezar a practicar" data-it="Inizia a esercitarti" data-en="Start practising">Empezar a practicar</span> <i class="ti ti-arrow-right" aria-hidden="true"></i></span>
 </a>
 </section>
 
-<p class="nota-mano solo-ordenador"><i class="ti ti-arrow-bear-left"></i> <span class="i18n" data-es="¿Buscas teoría? Está toda en el menú de la izquierda, y el buscador de arriba mira dentro de todas las páginas." data-it="Cerchi la teoria? È tutta nel menù a sinistra, e il cercatore in alto guarda dentro tutte le pagine." data-en="Looking for theory? It’s all in the menu on the left, and the search box at the top looks inside every page.">¿Buscas teoría? Está toda en el menú de la izquierda, y el buscador de arriba mira dentro de todas las páginas.</span></p>
-<p class="nota-mano solo-movil"><i class="ti ti-menu-2"></i> <span class="i18n" data-es="¿Buscas teoría? Está toda en el menú: toca las tres rayas de arriba a la derecha. Ahí está también el buscador, que mira dentro de todas las páginas." data-it="Cerchi la teoria? È tutta nel menù: tocca le tre righe in alto a destra. Lì c’è anche il cercatore, che guarda dentro tutte le pagine." data-en="Looking for theory? It’s all in the menu: tap the three lines at the top right. The search box is there too, and it looks inside every page.">¿Buscas teoría? Está toda en el menú: toca las tres rayas de arriba a la derecha. Ahí está también el buscador, que mira dentro de todas las páginas.</span></p>
+<h2 class="inicio-rot"><span class="i18n" data-es="La teoría, por materias" data-it="La teoria, per materie" data-en="The theory, by subject">La teoría, por materias</span></h2>
+<section class="tejas">
+<a class="teja track-link" href="#" data-base="tiempos-verbales" style="--c:#D6488F"><span class="teja-ico"><i class="ti ti-microphone" aria-hidden="true"></i></span><span class="teja-txt"><b><span class="i18n" data-es="Verbos" data-it="Verbi" data-en="Verbs">Verbos</span></b><span><span class="i18n" data-es="Tiempos, modos y los que se confunden" data-it="Tempi, modi e quelli che si confondono" data-en="Tenses, moods and the ones that get mixed up">Tiempos, modos y los que se confunden</span></span></span></a>
+<a class="teja track-link" href="#" data-base="articulos" style="--c:#5B9A3B"><span class="teja-ico"><i class="ti ti-book-2" aria-hidden="true"></i></span><span class="teja-txt"><b><span class="i18n" data-es="Gramática" data-it="Grammatica" data-en="Grammar">Gramática</span></b><span><span class="i18n" data-es="Artículos, pronombres, preposiciones…" data-it="Articoli, pronomi, preposizioni…" data-en="Articles, pronouns, prepositions…">Artículos, pronombres, preposiciones…</span></span></span></a>
+<a class="teja track-link" href="#" data-base="vocabulario" style="--c:#E8791E"><span class="teja-ico"><i class="ti ti-tags" aria-hidden="true"></i></span><span class="teja-txt"><b><span class="i18n" data-es="Vocabulario" data-it="Vocabolario" data-en="Vocabulary">Vocabulario</span></b><span><span class="i18n" data-es="La casa, la comida, los viajes, la hora…" data-it="La casa, il cibo, i viaggi, l’ora…" data-en="Home, food, travel, the time…">La casa, la comida, los viajes, la hora…</span></span></span></a>
+<a class="teja track-link" href="#" data-base="expresiones-comunes" style="--c:#7A6FD1"><span class="teja-ico"><i class="ti ti-message-circle-2" aria-hidden="true"></i></span><span class="teja-txt"><b><span class="i18n" data-es="Expresiones" data-it="Espressioni" data-en="Expressions">Expresiones</span></b><span><span class="i18n" data-es="Lo que se dice de verdad, y los modismos" data-it="Quello che si dice davvero, e i modi di dire" data-en="What people really say, and idioms">Lo que se dice de verdad, y los modismos</span></span></span></a>
+<a class="teja track-link" href="#" data-base="profesional" style="--c:#0F6E56"><span class="teja-ico"><i class="ti ti-briefcase" aria-hidden="true"></i></span><span class="teja-txt"><b><span class="i18n" data-es="Español profesional" data-it="Spagnolo al lavoro" data-en="Business Spanish">Español profesional</span></b><span><span class="i18n" data-es="Emails, reuniones, teléfono, entrevistas" data-it="Email, riunioni, telefono, colloqui" data-en="Emails, meetings, phone calls, interviews">Emails, reuniones, teléfono, entrevistas</span></span></span></a>
+</section>
 
-<p class="inicio-pie"><span class="i18n" data-es="¿Quién hay detrás de todo esto?" data-it="Chi c’è dietro a tutto questo?" data-en="Who’s behind all this?">¿Quién hay detrás de todo esto?</span> <a href="sobre-mi.html"><span class="i18n" data-es="Sobre mí" data-it="Chi sono" data-en="About me">Sobre mí</span></a></p>
+<a class="sobre-tira" href="sobre-mi.html">
+<img src="profile.jpg" alt="" width="340" height="340">
+<span class="sobre-tira-txt"><b><span class="i18n" data-es="Soy José, tu profe de español" data-it="Sono José, il tuo insegnante di spagnolo" data-en="I’m José, your Spanish teacher">Soy José, tu profe de español</span></b><span><span class="i18n" data-es="Quién soy, cómo trabajo y lo que dicen mis alumnos." data-it="Chi sono, come lavoro e cosa dicono i miei studenti." data-en="Who I am, how I work and what my students say.">Quién soy, cómo trabajo y lo que dicen mis alumnos.</span></span></span>
+<span class="sobre-tira-ir"><span class="i18n" data-es="Sobre mí" data-it="Chi sono" data-en="About me">Sobre mí</span> <i class="ti ti-arrow-right" aria-hidden="true"></i></span>
+</a>
 
 </main>
 <footer>© 2026 José N. · <span class="i18n" data-es="Profesor de español" data-it="Insegnante di spagnolo" data-en="Spanish teacher">Profesor de español</span> · <a href="sobre-mi.html"><span class="i18n" data-es="Sobre mí" data-it="Chi sono" data-en="About me">Sobre mí</span></a> · <a href="privacidad.html"><span class="i18n" data-es="Privacidad" data-it="Privacy" data-en="Privacy">Privacidad</span></a></footer>
 <script type="module" src="firebase-init.js?v=2c6879e2ff"></script>
 <script type="module" src="firebase-sync.js?v=f15ffa3919"></script>
-<script src="script.js?v=b4788a71cc"></script>
+<script src="clases.js?v=c1364af462"></script>
+<script src="temas.js?v=2eb917d126"></script>
+<script src="script.js?v=ff25771122"></script>
+<script src="inicio.js?v=d8ac7c3478"></script>
 </body>
 </html>

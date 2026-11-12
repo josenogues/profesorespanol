@@ -237,33 +237,11 @@
     const temas = new Set();
     filas.forEach(f => f.etiquetas.forEach(t => temas.add(t)));
 
-    // «Cinco minutos de hoy»: lo que ya se ha dado, de lo último a lo más
-    // antiguo, para que el hub de ejercicios saque de ahí una tanda corta
-    // (ver ejercicios.js). Solo lo que ya ha pasado: de una clase que todavía
-    // no se ha dado no tiene sentido preguntarle. Lo que no tiene fecha va
-    // al final, como en la lista.
-    const visto = [];
-    asignadas.filter(a => a.fecha && a.fecha <= hoy)
-      .sort((a, b) => b.fecha.localeCompare(a.fecha))
-      .concat(asignadas.filter(a => !a.fecha))
-      .forEach(a => {
-        const r = a.rapida;
-        const claseId = r ? r.repasoDe : a.id;
-        const c = claseId && window.jnClasePorId(claseId);
-        if(c && c.temas && c.temas.length){
-          if(visto.indexOf(c.id) < 0) visto.push(c.id);
-        } else if(r && !r.repasoDe){
-          (r.temas || []).forEach(id => {
-            const t = window.jnTemaPorId && window.jnTemaPorId(id);
-            if(t && visto.indexOf('t:' + t.id) < 0) visto.push('t:' + t.id);
-          });
-        }
-      });
-    // un tope, que la lista viaja en la dirección: con las 40 últimas cosas
-    // vistas hay de sobra para una tanda de seis
+    // «Cinco minutos de hoy»: lo que ya se ha dado (ver jnVisto en clases.js)
+    const visto = window.jnVisto(asignadas, hoy);
     const tarjetaHoy = visto.length
       ? '<a class="cl-hoy" id="cl-hoy" href="ejercicios-' + track + '.html?hoy=' +
-        esc(visto.slice(0, 40).join(',')) + '">' +
+        esc(visto.join(',')) + '">' +
         '<span class="cl-hoy-ico"><i class="ti ti-bolt" aria-hidden="true"></i></span>' +
         '<span class="cl-hoy-txt"><b>' + esc(T.hoyTit) + '</b><span>' + esc(T.hoySub) + '</span></span>' +
         '<span class="cl-hoy-ir">' + esc(T.hoyIr) +

@@ -708,3 +708,32 @@ window.JN_CLASES = [
 window.jnClasePorId = function(id){
   return (window.JN_CLASES || []).find(c => c.id === id) || null;
 };
+
+// Lo que un alumno ya ha dado, de lo último a lo más antiguo, tal como lo
+// quiere «Cinco minutos de hoy» (ejercicios.js): el id de cada clase del
+// catálogo —también la de un repaso— y «t:tema» por cada tema de una clase
+// rápida. Solo lo que ya ha pasado: de una clase que todavía no se ha dado no
+// tiene sentido preguntarle. Lo que no tiene fecha va al final.
+// La usan «Mis clases» y la portada, para que el botón diga lo mismo en las dos.
+window.jnVisto = function(asignadas, hoy){
+  const visto = [];
+  (asignadas || []).filter(a => a.fecha && a.fecha <= hoy)
+    .sort((a, b) => b.fecha.localeCompare(a.fecha))
+    .concat((asignadas || []).filter(a => !a.fecha))
+    .forEach(a => {
+      const r = a.rapida;
+      const claseId = r ? r.repasoDe : a.id;
+      const c = claseId && window.jnClasePorId(claseId);
+      if(c && c.temas && c.temas.length){
+        if(visto.indexOf(c.id) < 0) visto.push(c.id);
+      } else if(r && !r.repasoDe){
+        (r.temas || []).forEach(id => {
+          const t = window.jnTemaPorId && window.jnTemaPorId(id);
+          if(t && visto.indexOf('t:' + t.id) < 0) visto.push('t:' + t.id);
+        });
+      }
+    });
+  // un tope, que la lista viaja en la dirección: con las 40 últimas cosas
+  // vistas hay de sobra para una tanda de seis
+  return visto.slice(0, 40);
+};
