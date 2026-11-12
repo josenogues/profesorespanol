@@ -835,7 +835,23 @@ a.closest(".menu-item").classList.add("active","current-section");
 })();
 
 // --- El hub de ejercicios vive en ejercicios.js ---
-// Lo cargan solo las tres páginas del hub, detrás de este archivo.
+// Lo cargan solo las tres páginas del hub, con su propia etiqueta <script>
+// detrás de este archivo.
+//
+// Red de seguridad: si la página del hub que tiene el navegador es de antes
+// de ese cambio —guardada en caché, o una pestaña que llevaba abierta— trae
+// los ejercicios pero no la etiqueta, y con este script.js nuevo el hub se
+// quedaría sin arrancar. Se mira al terminar de leer la página, cuando una
+// etiqueta que existiera ya se habría ejecutado, y solo si falta se carga.
+(function(){
+  if(!window.EXERCISE_HUB_CONFIG) return;   // no es el hub
+  document.addEventListener('DOMContentLoaded', function(){
+    if(window.jnHubCargado) return;
+    const s = document.createElement('script');
+    s.src = 'ejercicios.js';
+    document.body.appendChild(s);
+  });
+})();
 
 // --- Frase motivadora aleatoria del menú lateral ---
 (function(){

@@ -43,6 +43,7 @@ python3 -m http.server 8947
 | `prueba_repaso.py` | Las clases de repaso, del panel al hub de ejercicios. |
 | `prueba_ejercicios.py` | Los ejercicios de todas las páginas de clase, con respuestas buenas y malas. |
 | `prueba_banco.py` | Una muestra del banco del hub pasada por el motor que corrige. |
+| `prueba_hub.py` | El hub de ejercicios: arranca, corrige, cambia de modo; también con una página antigua en caché. |
 | `prueba_examen.py` | El examen de nivel: acertar, fallar, salir a medias, continuar. |
 | `prueba_buscador.py` | El buscador del menú, en las tres pistas y sin pista. |
 

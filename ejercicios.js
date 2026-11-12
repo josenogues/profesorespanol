@@ -8,6 +8,9 @@
 // que corrige los ejercicios…), y de clases.js y temas.js.
 /* global jnEscapeHtml */
 
+// para que script.js sepa que el hub ya está (ver su «red de seguridad»)
+window.jnHubCargado = true;
+
 // --- Generador de ejercicios nuevos (verbos regulares) ---
 (function(){
   const VERBS = [
