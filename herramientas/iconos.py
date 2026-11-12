@@ -45,7 +45,7 @@ def usados():
     salen = set()
     rutas = glob.glob(os.path.join(RAIZ, "*.html"))
     rutas += [j for j in glob.glob(os.path.join(RAIZ, "*.js"))
-              if os.path.basename(j) != "search-index.js"]
+              if not os.path.basename(j).startswith("search-index")]
     for ruta in rutas:
         salen |= set(ICONO.findall(open(ruta, encoding="utf-8").read()))
     salen |= set(ICONO.findall(sin_bloque(open(ESTILOS, encoding="utf-8").read())))

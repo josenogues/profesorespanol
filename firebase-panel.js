@@ -1031,8 +1031,8 @@ function porNumero(){
 function pintaFiltros(){
   const caja = document.getElementById('cat-filtros');
   if(!caja) return;
-  // el rótulo va escrito, no en un icono: los iconos vienen de un CDN y si
-  // no carga quedarían dos filas de botones sueltos sin saber de qué
+  // el rótulo va escrito, no en un icono: si la fuente de iconos no llega
+  // a cargar quedarían dos filas de botones sueltos sin saber de qué
   function grupo(campo, rotulo, opciones){
     return `<div class="cat-fgrupo"><span class="cat-frot">${esc(rotulo)}</span>` +
       opciones.map(([v, etq]) =>

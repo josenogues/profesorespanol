@@ -209,30 +209,33 @@ for hoja in glob.glob(REPO + "/*.css"):
         apunta("recursos de terceros en una página", f"{os.path.basename(hoja)} importa algo de fuera")
 
 # ── I. el índice del buscador, al día ───────────────────────────────────
-# OJO con el orden: indexar.py no solo regenera el índice, también deja su
-# huella en script.js. Así que hay que quedarse con el script.js de ANTES de
-# llamarlo; si se mira el de después, el propio arreglo tapa el fallo y la
-# comprobación no salta nunca.
-antes = open(os.path.join(REPO, "search-index.js"), encoding="utf-8").read()
-script_antes = open(os.path.join(REPO, "script.js"), encoding="utf-8").read()
+# Se regenera y se mira si ha cambiado algo: si cambia, es que alguna página
+# se tocó sin volver a indexar y el buscador seguía con el texto viejo. El
+# ?v= con que script.js pide cada parte lo comprueba el apartado siguiente.
+import indexar as _indexar
+
+
+def _indices():
+    return {parte: (open(_indexar.ruta_parte(parte), encoding="utf-8").read()
+                    if os.path.exists(_indexar.ruta_parte(parte)) else None)
+            for parte in _indexar.PARTES}
+
+
+antes = _indices()
 subprocess.run([sys.executable, os.path.join(REPO, "herramientas", "indexar.py")],
                capture_output=True, text=True)
-ahora = open(os.path.join(REPO, "search-index.js"), encoding="utf-8").read()
-if antes != ahora:
-    apunta("índice del buscador", "estaba desfasado respecto a las páginas (ya regenerado)")
-
-# el índice no se pide desde ninguna página, sino desde dentro de script.js,
-# así que la comprobación G no lo ve. Aquí se mira aparte: la huella del
-# archivo tiene que ser la del ?v= con el que se pide.
-huella = hashlib.sha1(ahora.encode("utf-8")).hexdigest()[:10]
-pedido = re.search(r"search-index\.js\?v=([0-9a-z]+)", script_antes)
-if not pedido:
-    apunta("índice del buscador", "script.js ya no pide search-index.js con ?v=")
-elif pedido.group(1) != huella:
-    apunta("índice del buscador",
-           f"script.js lo pedía con ?v={pedido.group(1)} y el archivo es {huella}: "
-           "quien ya lo tuviera guardado se quedaba con el viejo (ya corregido en "
-           "script.js; pasa herramientas/versiones.py para las páginas)")
+ahora = _indices()
+for parte in _indexar.PARTES:
+    if antes[parte] != ahora[parte]:
+        apunta("índice del buscador",
+               f"search-index-{parte}.js estaba desfasado respecto a las páginas "
+               "(ya regenerado; pasa herramientas/versiones.py)")
+script_js = open(os.path.join(REPO, "script.js"), encoding="utf-8").read()
+for parte in _indexar.PARTES:
+    if f"search-index-{parte}.js?v=" not in script_js:
+        apunta("índice del buscador", f"script.js ya no pide search-index-{parte}.js con ?v=")
+if os.path.exists(os.path.join(REPO, "search-index.js")):
+    apunta("índice del buscador", "queda el search-index.js antiguo, que ya no usa nadie")
 
 # ── I2. las versiones de caché son la huella de cada archivo ─────────────
 # Antes se comprobaba que todas las páginas pidieran la misma ?v= y, con git,

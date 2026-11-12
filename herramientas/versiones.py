@@ -18,7 +18,7 @@ se pasa esto antes de publicar y revisar.py avisa si no se ha pasado.
 Vale para todo lo que se pida con ?v=, esté donde esté:
   · en las páginas:      <script src="script.js?v=…">, <link href="styles.css?v=…">
   · dentro del CSS:      url("fuentes/nunito-latin.woff2?v=…")
-  · dentro del JS:       'search-index.js?v=…', import … from "./firebase-init.js?v=…"
+  · dentro del JS:       'search-index-es.js?v=…', import … from "./firebase-init.js?v=…"
 Como unos archivos piden a otros (la página pide styles.css, que pide las
 fuentes), se repite hasta que ya no cambia nada.
 """
@@ -43,7 +43,7 @@ def contenedores():
     # primero lo que piden los demás: así casi siempre basta una vuelta
     rutas = sorted(glob.glob(os.path.join(RAIZ, "*.css")))
     rutas += sorted(j for j in glob.glob(os.path.join(RAIZ, "*.js"))
-                    if os.path.basename(j) != "search-index.js")
+                    if not os.path.basename(j).startswith("search-index"))
     rutas += sorted(glob.glob(os.path.join(RAIZ, "*.html")))
     return rutas
 

@@ -439,6 +439,9 @@ a.closest(".menu-item").classList.add("active","current-section");
       .replace(/([aeiou])['’]/g, (_, v) => ACCENT_APOSTROPHE[v])
       .replace(/[¿¡]/g, '').replace(/[.!?]+$/, '').trim();
   }
+  // la usa también el examen de nivel (ejercicios.js): una sola regla para
+  // decidir si una respuesta escrita es buena
+  window.jnNormalizeAnswer = normalizeAnswer;
 
   function checkTextAnswer(block){
     const input = block.querySelector('.exercise-input');
@@ -1031,32 +1034,62 @@ a.closest(".menu-item").classList.add("active","current-section");
   });
 
   function normalize(s){
-    return s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'');
+    return s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
   }
 
-  // El índice (search-index.js, ~450 KB) no se carga hasta que el usuario
-  // toca el buscador. Al llegar se le quitan tildes y mayúsculas UNA vez:
-  // antes se hacía con las 200 páginas enteras en cada letra que se tecleaba.
-  let indexPromise = null;
-  function loadIndex(){
-    if(!indexPromise){
-      indexPromise = new Promise((resolve, reject) => {
-        if(window.SEARCH_INDEX){ resolve(); return; }
+  // El índice no se carga hasta que el usuario toca el buscador, y va
+  // partido: uno por pista y uno con las páginas que no son de ninguna. Con
+  // pista elegida se bajan el suyo y el común; sin ella, los cuatro, porque
+  // entonces se busca en todas. Antes era un solo archivo de 450 KB con las
+  // tres pistas. El ?v= de cada uno lo pone herramientas/versiones.py.
+  const PARTES = {
+    comun: 'search-index-comun.js?v=995fa2abe7',
+    es: 'search-index-es.js?v=df4ca0aec2',
+    it: 'search-index-it.js?v=170102ff05',
+    en: 'search-index-en.js?v=d69feb483c'
+  };
+  const pedidas = {};   // parte → promesa de su descarga
+  function pide(parte){
+    if(!pedidas[parte]){
+      pedidas[parte] = new Promise((resolve, reject) => {
         const s = document.createElement('script');
-        s.src = 'search-index.js?v=53bd09d1c1';
+        s.src = PARTES[parte];
         s.onload = resolve;
         s.onerror = reject;
         document.head.appendChild(s);
       }).then(() => {
-        window.SEARCH_INDEX.forEach(entry => {
+        // tildes y mayúsculas se quitan UNA vez, al llegar: antes se hacía
+        // con todas las páginas enteras en cada letra que se tecleaba
+        ((window.JN_INDICE || {})[parte] || []).forEach(entry => {
           entry._title = normalize(entry.title);
           entry._text = normalize(entry.text);
         });
       });
-      // si falla la descarga, que el siguiente intento vuelva a pedirlo
-      indexPromise.catch(() => { indexPromise = null; });
+      // si falla la descarga, que el siguiente intento vuelva a pedirla
+      pedidas[parte].catch(() => { delete pedidas[parte]; });
     }
-    return indexPromise;
+    return pedidas[parte];
+  }
+
+  function partesQueTocan(){
+    const t = localStorage.getItem('jn_track');
+    return PARTES[t] && t !== 'comun' ? ['comun', t] : ['comun', 'es', 'it', 'en'];
+  }
+
+  let juntas = null, juntasDe = '';
+  function loadIndex(){
+    const partes = partesQueTocan();
+    return Promise.all(partes.map(pide)).then(() => {
+      const clave = partes.join(',');
+      if(juntasDe !== clave){
+        // en el orden de siempre, por nombre de página: es el que decide qué
+        // diez resultados salen cuando hay más de diez
+        juntas = [].concat.apply([], partes.map(p => window.JN_INDICE[p] || []))
+          .sort((x, y) => (x.url < y.url ? -1 : x.url > y.url ? 1 : 0));
+        juntasDe = clave;
+      }
+      window.SEARCH_INDEX = juntas;
+    });
   }
 
   function trackOf(url){

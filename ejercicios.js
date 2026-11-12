@@ -253,12 +253,10 @@
     'atn-gramatica': 'especial-atencion-gramatica'
   };
 
-  const ACCENT_APOSTROPHE2 = { a: 'á', e: 'é', i: 'í', o: 'ó', u: 'ú' };
-  function normalizeAnswer(s){
-    return s.trim().toLowerCase()
-      .replace(/([aeiou])['’]/g, (_, v) => ACCENT_APOSTROPHE2[v])
-      .replace(/[¿¡]/g, '').replace(/[.!?]+$/, '').trim();
-  }
+  // La misma función que corrige los ejercicios sueltos (está en script.js).
+  // Aquí había una copia para el examen: dos sitios que tenían que decir lo
+  // mismo sobre si «cafe'» vale por «café», y nada que lo garantizara.
+  const normalizeAnswer = window.jnNormalizeAnswer;
 
   function theoryLinkHTML(item){
     const cat = item._cat;
@@ -1164,7 +1162,13 @@ ${qHTML}`;
     } else if(item.type === 'match'){
       let hadMistake = false;
       const total = item.pairs.length;
-      root.addEventListener('click', (e) => {
+      // Los clics se escuchan en ESTA pregunta, no en la caja del examen. La
+      // caja dura todo el examen y la pregunta se tira al pasar a la
+      // siguiente: escuchando en la caja, una pregunta de emparejar que se
+      // abandonaba a medias (salir y continuar) seguía oyendo los clics de la
+      // siguiente, cada clic contaba dos veces —marcar y desmarcar— y ya no
+      // había manera de emparejar nada hasta recargar la página.
+      root.querySelector('.ex-exam-item').addEventListener('click', (e) => {
         if(answered) return;
         const el = e.target.closest('.ex-exam-match-item');
         if(!el || el.classList.contains('matched')) return;
