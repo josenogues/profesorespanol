@@ -101,6 +101,24 @@ window.JN_CLASES = [
                 'estoy casado', 'por la mañana', 'mi familia']
   },
   {
+    // Va detrás de «Háblame de ti» porque es lo primero que hace falta para
+    // contestar a lo que ahí se pregunta: la edad, el teléfono, una fecha.
+    num: 135,
+    id: 'numeros',
+    temas: ['las-fechas', 'la-hora'],
+    pagina: 'clase-numeros',
+    nivel: 'A1',
+    perfil: 'cualquiera',
+    pistas: ['it', 'en'],
+    titulo: {
+      es: 'Los números, y para qué se usan',
+      it: 'I numeri, e a cosa servono',
+      en: 'Numbers, and what you use them for'
+    },
+    etiquetas: ['números', 'veintiuno', 'treinta y uno', 'cien y ciento', 'mil', 'millón',
+                'doscientas', 'tener años', 'teléfono', 'precios', 'fechas', 'años']
+  },
+  {
     num: 140,
     id: 'presente',
     temas: ['regulares', 'irregulares'],
