@@ -88,16 +88,36 @@ with sync_playwright() as p:
     ok(pg3.locator('#ex-mode-panel-tema .ex-category-grid').first.is_visible()==False,
        'sin el selector de materias')
     ok(pg3.locator('#ex-step2').is_visible()==False, 'y sin el de temas')
+    # van de uno en uno, como «cinco minutos»
+    vis="[...document.querySelectorAll('#ex-hub-container .exercise-block')].filter(b => b.offsetParent !== null).length"
+    ok(pg3.evaluate(vis)==1 and pg3.locator('#ex-uno-label').inner_text().strip()=='1 / %d' % n,
+       'se ve uno solo, y arriba dice 1 / %d' % n)
+    ok(not pg3.locator('#ex-level-filter-step').is_visible() and not pg3.locator('#ex-hub-mix').is_visible(),
+       'sin filtro de nivel ni mezcla al azar')
+    # acierta el primero: pasa solo al segundo
+    pg3.evaluate("""() => { const b = document.querySelector('#ex-hub-container .exercise-block.ex-actual');
+      const a = (b.dataset.answer || '').split('|')[0];
+      const op = [...b.querySelectorAll('.option-btn')].find(x => x.dataset.value.trim().toLowerCase() === a.trim().toLowerCase());
+      if(op) op.click(); else if(b.querySelector('.exercise-input')){ b.querySelector('.exercise-input').value = a; b.querySelector('.exercise-check').click(); }
+      else document.getElementById('ex-uno-saltar').click(); }""")
+    pg3.wait_for_timeout(1300)
+    ok(pg3.locator('#ex-uno-label').inner_text().strip()=='2 / %d' % n, 'acertar pasa al siguiente')
+    for _ in range(n-1):
+        pg3.locator('#ex-uno-saltar').click(); pg3.wait_for_timeout(100)
+    fin=pg3.locator('.ex-uno-fin')
+    ok(fin.count()==1 and 'Fatto!' in fin.inner_text(), 'al acabar sale el final: '+fin.inner_text().replace('\n',' | ')[:70])
     # otra tanda: tiene que seguir siendo del repaso
-    pg3.locator('#ex-hub-generate').click(); pg3.wait_for_timeout(800)
-    ok(pg3.locator('#ex-hub-container .exercise-block').count()>0,
-       '«generar otra tanda» sigue dando ejercicios del repaso')
+    pg3.locator('#ex-uno-otra').click(); pg3.wait_for_timeout(600)
+    ok(pg3.locator('#ex-hub-container .exercise-block').count()>0 and pg3.locator('#ex-repaso').count()==1,
+       '«otra tanda» sigue dando ejercicios del repaso')
     # si cambia de modo, el repaso se acaba de verdad
     pg3.locator('#ex-mode-back-tema').click(); pg3.wait_for_timeout(500)
     ok(pg3.locator('#ex-repaso').count()==0, 'al cambiar de modo desaparece la cabecera del repaso')
     pg3.locator('.ex-mode-card[data-mode="tema"]').click(); pg3.wait_for_timeout(400)
     ok(pg3.locator('#ex-mode-panel-tema .ex-category-grid').first.is_visible(),
        'y vuelven los selectores de materia')
+    ok(pg3.locator('#ex-level-filter-step').is_visible() and pg3.locator('#ex-hub-mix').is_visible()
+       and pg3.locator('#ex-uno-barra').count()==0, 'con el filtro de nivel y la mezcla otra vez en su sitio')
     # un id que no existe no debe romper nada
     pg4=ctx.new_page(); e4=[]; pg4.on('pageerror', lambda e: e4.append(str(e)))
     pg4.goto('http://localhost:8947/ejercicios-it.html?repaso=noexiste'); pg4.wait_for_timeout(1500)

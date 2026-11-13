@@ -493,12 +493,12 @@ ${qHTML}`;
   // saliendo del repaso y parecería que los botones no hacen nada.
   function saleDeRepaso(){
     if(!repasoClase && !hoy) return;
-    if(hoy){
-      quitaUno();
-      if(levelFilterStep) levelFilterStep.style.display = '';
-      if(mixBtn) (mixBtn.closest('.ex-mix-wrap') || mixBtn).style.display = '';
-      if(hubToolbar) hubToolbar.style.display = '';
-    }
+    // el repaso y «cinco minutos» van de uno en uno y sin filtros: al salir,
+    // vuelve todo lo que se había quitado de la pantalla
+    quitaUno();
+    if(levelFilterStep) levelFilterStep.style.display = '';
+    if(mixBtn) (mixBtn.closest('.ex-mix-wrap') || mixBtn).style.display = '';
+    if(hubToolbar) hubToolbar.style.display = '';
     repasoClase = null;
     hoy = null;
     const caja = document.getElementById('ex-repaso');
@@ -522,8 +522,15 @@ ${qHTML}`;
       if(lab) lab.style.display = 'none';
     }
     if(step2) step2.style.display = 'none';
+    // como en «cinco minutos»: de uno en uno, sin filtro de nivel ni mezcla
+    // al azar —los temas y el nivel son los de la clase que se repasa—, y con
+    // el ejercicio a la vista al llegar
+    if(levelFilterStep) levelFilterStep.style.display = 'none';
+    if(mixBtn) (mixBtn.closest('.ex-mix-wrap') || mixBtn).style.display = 'none';
     pintaCabeceraRepaso();
     render();
+    const caja = document.getElementById('ex-repaso');
+    if(caja && caja.scrollIntoView) requestAnimationFrame(() => caja.scrollIntoView({ block: 'start' }));
   }
 
   // ── Cinco minutos de hoy ───────────────────────────────────────────────
@@ -630,8 +637,8 @@ ${qHTML}`;
   }
 
   // ── Un ejercicio por pantalla ──────────────────────────────────────────
-  // La tanda de «cinco minutos» no sale como una lista hacia abajo sino de
-  // uno en uno, con «2 / 6» arriba y un final: en el móvil una lista de seis
+  // Las tandas de «cinco minutos» y de los repasos no salen como una lista
+  // hacia abajo sino de uno en uno, con «2 / 6» arriba y un final: en el móvil una lista de seis
   // es mucha pantalla, y al acabarla no pasaba nada —ni «ya está» ni adónde
   // ir—. Los seis están en la página y se enseña uno; corregir lo sigue
   // haciendo el motor de siempre (script.js), aquí solo se pasa al siguiente.
@@ -745,9 +752,15 @@ ${qHTML}`;
       // las chapas de nivel se ven, así que tienen que funcionar aquí también
       if(activeLevelsFilter.size) pool = pool.filter(it => activeLevelsFilter.has(it.level));
       const picked = sample(pool, Math.min(12, pool.length));
+      if(!picked.length){
+        quitaUno();
+        container.innerHTML = '<p class="subtitle">' + repasoLabels().vacio + '</p>';
+        return;
+      }
       container.innerHTML = picked.map(item => renderItemHTML(
         Object.assign({}, item, { exid: (item.exid || 'ex') + '-' + uid() })
-      )).join('') || '<p class="subtitle">' + repasoLabels().vacio + '</p>';
+      )).join('');
+      empiezaUno();
       return;
     }
     let topicKeys;

@@ -108,7 +108,9 @@ with sync_playwright() as p:
     antes_de = pg.evaluate("""() => { const h = document.getElementById('cl-hoy'), n = document.querySelector('.cl-nums');
       return h.getBoundingClientRect().top < n.getBoundingClientRect().top; }""")
     comprueba(antes_de, "va arriba, antes de los números")
-    fondo = pg.evaluate("getComputedStyle(document.getElementById('cl-hoy')).backgroundColor")
+    # el fondo puede ser un color liso o un degradado: vale cualquiera de los dos
+    fondo = pg.evaluate("""(() => { const c = getComputedStyle(document.getElementById('cl-hoy'));
+      return c.backgroundImage !== 'none' ? 'degradado' : c.backgroundColor; })()""")
     comprueba(fondo not in ("rgba(0, 0, 0, 0)", "transparent"), "y tiene fondo propio (%s)" % fondo)
 
     print("\n═══ la tanda, en el hub ═══")

@@ -226,6 +226,16 @@ window.JN_TEMAS = [
          it:'<b>Es la una</b>, ma <b>son las dos</b>. E da lì in poi, sempre al plurale.',
          en:'<b>Es la una</b>, but <b>son las dos</b>. From two onwards, always plural.'} },
 
+// Los números no tienen página de teoría propia: se explican en su clase
+// (#135). Sus ejercicios viven dentro de «Las fechas», que es donde más se
+// usan, como grupo aparte para que el repaso de esa clase sea de números.
+{ id:'numeros', pagina:'las-fechas', ejercicios:'las-fechas', g:'numeros', cat:'vocabulario',
+  etiquetas:['números','cien y ciento','mil'],
+  nombre:{es:'Los números', it:'I numeri', en:'Numbers'},
+  regla:{es:'Hasta el 29, una palabra; del 31 al 99, con <b>y</b>: <b>treinta y uno</b>. <b>Cien</b> a secas, <b>ciento</b> uno.',
+         it:'Fino a 29, una parola; da 31 a 99, con <b>y</b>: <b>treinta y uno</b>. <b>Cien</b> da solo, <b>ciento</b> uno.',
+         en:'Up to 29, one word; from 31 to 99, with <b>y</b>: <b>treinta y uno</b>. <b>Cien</b> on its own, <b>ciento</b> uno.'} },
+
 { id:'las-fechas', pagina:'las-fechas', cat:'vocabulario', etiquetas:['fechas','días','meses'],
   nombre:{es:'Las fechas', it:'Le date', en:'Dates'},
   regla:{es:'Días, meses y años. Y los meses van en minúscula: <b>el 3 de marzo</b>.',

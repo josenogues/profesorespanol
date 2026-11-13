@@ -105,7 +105,7 @@ window.JN_CLASES = [
     // contestar a lo que ahí se pregunta: la edad, el teléfono, una fecha.
     num: 135,
     id: 'numeros',
-    temas: ['las-fechas', 'la-hora'],
+    temas: ['numeros'],
     pagina: 'clase-numeros',
     nivel: 'A1',
     perfil: 'cualquiera',
