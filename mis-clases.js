@@ -132,9 +132,10 @@
            (id ? ' id="' + id + '"' : '') +
            (href ? ' href="' + esc(href) + '"' : '') + '>' +
            '<span class="n">' + esc(n) + '</span>' +
-           '<span class="l">' + esc(etiqueta) + '</span>' +
+           '<span class="t"><span class="l">' + esc(etiqueta) + '</span>' +
            (href ? '<span class="ir">' + esc(T.masEj) +
                    ' <i class="ti ti-arrow-right" aria-hidden="true"></i></span>' : '') +
+           '</span>' +
            '</' + etq + '>';
   }
 

@@ -1127,26 +1127,29 @@ a.menu-button.current-page{background:rgba(255,255,255,.15)}
   letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.45)}
 
 /* ---------- «Mis clases»: la lista del alumno ---------- */
-.cl-nums{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:12px;margin-bottom:16px}
-/* Cada número con su color, como las materias de la portada. */
-.cl-num{--c:#B5651D;background:var(--card-bg);background:color-mix(in srgb,var(--c) 9%,var(--card-bg));
-  border:1px solid var(--border);border:1px solid color-mix(in srgb,var(--c) 32%,transparent);
-  border-radius:16px;padding:16px 18px}
-.cl-num:nth-child(2){--c:#D6488F}
-.cl-num:nth-child(3){--c:#7A6FD1}
-.cl-num .n{display:block;font-family:var(--font-head);font-size:32px;font-weight:700;
-  color:var(--c);line-height:1.1}
-[data-theme="dark"] .cl-num .n{color:color-mix(in srgb,var(--c) 60%,#fff)}
-.cl-num .l{display:block;font-size:13.5px;color:var(--text-secondary);margin-top:3px}
+/* Los números, en una sola tira: cifra y rótulo juntos, sin hueco y sin color
+   (los colores son de las materias; aquí no pintan nada). */
+.cl-nums{display:flex;flex-wrap:wrap;background:var(--card-bg);border:1px solid var(--border);
+  border-radius:16px;padding:8px 6px;margin-bottom:16px}
+.cl-num{flex:1 1 0;display:flex;align-items:center;gap:10px;padding:6px 16px;min-width:0;
+  text-decoration:none;color:inherit}
+.cl-num + .cl-num{border-left:1px solid var(--border)}
+.cl-num .n{font-family:var(--font-head);font-size:28px;font-weight:700;color:var(--text);line-height:1}
+.cl-num .t{min-width:0}
+.cl-num .l{display:block;font-size:13px;line-height:1.25;color:var(--text-secondary)}
 .cl-num.sin .n{color:var(--muted)}
-/* La de ejercicios es la única que lleva a algún sitio: se marca y lo dice. */
-.cl-num.cl-num-ir{display:block;background:var(--badge-gold-bg);border-color:#e8c96a;transition:.15s}
-.cl-num-ir:hover{transform:translateY(-2px);box-shadow:0 6px 16px rgba(0,0,0,.1)}
-.cl-num-ir .n{color:var(--gold-dark)}
-.cl-num-ir .ir{display:block;margin-top:8px;font-family:var(--font-head);font-weight:600;
-  font-size:13px;color:var(--gold-dark)}
-[data-theme="dark"] .cl-num-ir{background:#332a12;border-color:#6b5a26}
-[data-theme="dark"] .cl-num-ir .n,[data-theme="dark"] .cl-num-ir .ir{color:var(--gold)}
+/* La de ejercicios es la única que lleva a algún sitio: lo dice, en dorado. */
+.cl-num-ir .ir{display:block;margin-top:2px;font-family:var(--font-head);font-weight:600;
+  font-size:12.5px;line-height:1.25;color:var(--gold-dark)}
+.cl-num-ir .ir i{vertical-align:-1px}
+.cl-num-ir:hover .ir{text-decoration:underline}
+[data-theme="dark"] .cl-num-ir .ir{color:var(--gold)}
+@media(max-width:700px){
+  .cl-nums{display:grid;grid-template-columns:1fr 1fr;padding:4px 6px}
+  .cl-num{padding:10px 12px}
+  .cl-num:nth-child(odd){border-left:0}
+  .cl-num:nth-child(n+3){border-top:1px solid var(--border)}
+}
 .cl-prox{background:var(--badge-gold-bg);border:1px solid #e8c96a;border-radius:14px;padding:12px 16px;
   margin-bottom:22px;font-size:15.5px;color:var(--text)}
 .cl-prox i{color:var(--gold-dark);font-size:18px;vertical-align:-2px;margin-right:4px}
