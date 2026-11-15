@@ -1068,18 +1068,28 @@ a.closest(".menu-item").classList.add("active","current-section");
   const track = document.getElementById('reviews-track');
   if(!track) return;
   const cards = [...track.children];
-  const perPage = 2;
-  const pages = Math.ceil(cards.length / perPage);
   const dotsWrap = document.getElementById('reviews-dots');
   const prevBtn = document.querySelector('.reviews-prev');
   const nextBtn = document.querySelector('.reviews-next');
-  let index = 0;
+  // Dos reseñas por página en pantalla ancha y una en el móvil (lo decide el
+  // CSS, a 760px). Antes iba siempre de dos en dos, y en el móvil, con una
+  // por pantalla, la mitad de las reseñas no salía nunca.
+  const estrecho = window.matchMedia('(max-width:760px)');
+  let perPage, pages, dots, index = 0;
 
-  dotsWrap.innerHTML = Array.from({length: pages}, (_, i) => `<button class="dot-btn" data-i="${i}"></button>`).join('');
-  const dots = [...dotsWrap.children];
-
+  function monta(){
+    const primera = cards[index * (perPage || 1)];
+    perPage = estrecho.matches ? 1 : 2;
+    pages = Math.ceil(cards.length / perPage);
+    index = Math.floor(cards.indexOf(primera) / perPage) || 0;
+    dotsWrap.innerHTML = Array.from({length: pages}, (_, i) => `<button class="dot-btn" data-i="${i}"></button>`).join('');
+    dots = [...dotsWrap.children];
+    dots.forEach(d => d.addEventListener('click', () => { index = parseInt(d.dataset.i); update(); }));
+    update();
+  }
   function update(){
-    track.style.transform = `translateX(-${index * 100}%)`;
+    // se mueve hasta la primera tarjeta de la página: así cuenta también el hueco entre tarjetas
+    track.style.transform = `translateX(-${(cards[index * perPage].offsetLeft - cards[0].offsetLeft)}px)`;
     dots.forEach((d, i) => d.classList.toggle('active', i === index));
   }
   function go(delta){
@@ -1088,8 +1098,9 @@ a.closest(".menu-item").classList.add("active","current-section");
   }
   prevBtn.addEventListener('click', () => go(-1));
   nextBtn.addEventListener('click', () => go(1));
-  dots.forEach(d => d.addEventListener('click', () => { index = parseInt(d.dataset.i); update(); }));
-  update();
+  estrecho.addEventListener('change', monta);
+  window.addEventListener('resize', update);
+  monta();
 })();
 
 // --- Buscador del menú lateral (busca en el texto real de cada página) ---
