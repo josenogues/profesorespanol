@@ -1507,6 +1507,15 @@ body:has(.access-gate-overlay) .cita-boton{display:none}
 .sobre-estrellas{display:inline-flex;align-items:center;gap:7px;font-size:15px;color:var(--muted);margin-bottom:16px}
 .sobre-estrellas b{font-family:var(--font-head);font-size:18px;color:var(--text)}
 .sobre-estrellas .s{color:var(--gold);letter-spacing:1px}
+/* Banderas: imágenes y no emoji, que en Windows salen como dos letras. */
+.bandera{display:inline-block;width:21px;height:14px;object-fit:cover;border-radius:3px;
+  box-shadow:0 0 0 1px rgba(0,0,0,.14);vertical-align:-1px}
+[data-theme="dark"] .bandera{box-shadow:0 0 0 1px rgba(255,255,255,.2)}
+.review-name .bandera{margin-left:4px}
+.sobre-txt p.sobre-paises{display:flex;align-items:center;flex-wrap:wrap;gap:6px 12px;
+  font-size:15px;color:var(--muted);margin:-6px 0 18px}
+.sobre-paises .banderas{display:inline-flex;flex-wrap:wrap;gap:6px}
+.sobre-paises .bandera{width:27px;height:18px}
 
 /* ---------- Diálogo de clase, para leer en voz alta ---------- */
 .dialogo{background:var(--tint);border-radius:12px;padding:16px 20px;margin-top:4px}

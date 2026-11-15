@@ -158,6 +158,10 @@ a.closest(".menu-item").classList.add("active","current-section");
       const val = t === 'it' ? el.dataset.it : t === 'en' ? el.dataset.en : el.dataset.es;
       if(val) el.textContent = val;
     });
+    // las banderas dicen el país en el idioma de la página
+    document.querySelectorAll('img[data-alt-es]').forEach(el=>{
+      el.alt = el.title = el.getAttribute('data-alt-' + t) || el.dataset.altEs;
+    });
     const r = ROTULOS[t] || ROTULOS.es;
     const tema = document.querySelector('.theme-switch');
     if(tema) tema.title = r.tema;
@@ -1122,7 +1126,7 @@ a.closest(".menu-item").classList.add("active","current-section");
   // entonces se busca en todas. Antes era un solo archivo de 450 KB con las
   // tres pistas. El ?v= de cada uno lo pone herramientas/versiones.py.
   const PARTES = {
-    comun: 'search-index-comun.js?v=f0400d2c05',
+    comun: 'search-index-comun.js?v=64cfb6dbf7',
     es: 'search-index-es.js?v=df4ca0aec2',
     it: 'search-index-it.js?v=5b9187f21c',
     en: 'search-index-en.js?v=0dea543c71'
