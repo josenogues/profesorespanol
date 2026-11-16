@@ -21,7 +21,7 @@ with sync_playwright() as p:
               return [...document.querySelectorAll('.review-card')].filter(c=>{const r=c.getBoundingClientRect();return r.left>=w.left-1&&r.right<=w.right+1}).map(c=>c.querySelector('.review-name').textContent.trim())}"""))
             pg.click(".reviews-next")
         todos=sum(vistos,[])
-        ok = len(todos)==6 and len(set(todos))==6
+        ok = len(todos)==len(set(todos))==pg.locator(".review-card").count()
         mal+= not ok
         print(w, n, "páginas", vistos, "OK" if ok else "MAL")
         c.close()
