@@ -199,9 +199,9 @@ a.closest(".menu-item").classList.add("active","current-section");
         <h3>${m.h}</h3>
         <p>${m.p}</p>
         <div class="track-modal-buttons">
-          <button data-track="es">🇪🇸 Español</button>
-          <button data-track="it">🇮🇹 Italiano</button>
-          <button data-track="en">🇬🇧 English</button>
+          <button data-track="es"><img class="bandera" src="banderas/es.svg" width="21" height="14" alt=""> Español</button>
+          <button data-track="it"><img class="bandera" src="banderas/it.svg" width="21" height="14" alt=""> Italiano</button>
+          <button data-track="en"><img class="bandera" src="banderas/gb.svg" width="21" height="14" alt=""> English</button>
         </div>
       </div>`;
     document.body.appendChild(overlay);
@@ -709,7 +709,7 @@ a.closest(".menu-item").classList.add("active","current-section");
       overlay.className = 'access-gate-overlay';
       overlay.innerHTML =
         '<div class="access-gate-modal">' +
-          '<div class="logo-mark">🇪🇸 Aprende Español</div>' +
+          '<div class="logo-mark"><img class="bandera" src="banderas/es.svg" width="21" height="14" alt=""> Aprende Español</div>' +
           '<div class="access-gate-body"></div>' +
         '</div>';
       document.body.appendChild(overlay);
@@ -981,30 +981,6 @@ a.closest(".menu-item").classList.add("active","current-section");
   });
 })();
 
-// --- Titulo escrito a mano por seccion (traducido segun el idioma activo) ---
-(function(){
-  const header = document.querySelector('.page-header');
-  const cat = document.body.dataset.category;
-  if(!header || !cat) return;
-  const labels = {
-    verbos: {es:'Verbos', it:'Verbi', en:'Verbs'},
-    gramatica: {es:'Gramática', it:'Grammatica', en:'Grammar'},
-    vocabulario: {es:'Vocabulario', it:'Vocabolario', en:'Vocabulary'},
-    expresiones: {es:'Expresiones', it:'Espressioni', en:'Expressions'},
-    atencion: {es:'Especial atención', it:'Attenzione a questi', en:'Watch out for this'},
-    profesional: {es:'Profesional', it:'Professionale', en:'Business'},
-    clases: {es:'Mis clases', it:'Le mie lezioni', en:'My classes'}
-  };
-  const l = labels[cat];
-  if(!l) return;
-  const track = window.jnIdioma();
-  const span = document.createElement('span');
-  span.className = 'handwritten-title i18n';
-  span.dataset.es = l.es; span.dataset.it = l.it; span.dataset.en = l.en;
-  span.textContent = l[track] || l.es;
-  header.insertBefore(span, header.firstChild);
-})();
-
 // --- Alinear las pestañas del navegador con sus secciones reales ---
 (function(){
   const rail = document.querySelector('.tab-rail');
@@ -1223,13 +1199,13 @@ a.closest(".menu-item").classList.add("active","current-section");
     if(!matches.length){
       results.innerHTML = '<div class="search-empty">' + jnEscapeHtml(txt().nada + ' "' + qRaw + '"') + '</div>';
     } else {
-      const FLAGS = { es: '🇪🇸', it: '🇮🇹', en: '🇬🇧' };
+      const FLAGS = { es: 'es', it: 'it', en: 'gb' };   // banderas dibujadas: en Windows los emoji salen como letras
       results.innerHTML = matches.map(entry => {
         const inTitle = entry._title.includes(q);
         const snippet = inTitle ? '' : `<span class="search-snippet">${jnEscapeHtml(snippetAround(entry.text, entry._text, q))}</span>`;
         // sin idioma elegido, varias páginas (ES/IT/EN) pueden compartir título — se añade la bandera para distinguirlas
         const t = trackOf(entry.url);
-        const flag = (!currentTrack && t && FLAGS[t]) ? FLAGS[t] + ' ' : '';
+        const flag = (!currentTrack && t && FLAGS[t]) ? '<img class="bandera" src="banderas/' + FLAGS[t] + '.svg" width="21" height="14" alt=""> ' : '';
         return `<a href="${jnEscapeHtml(entry.url)}"><span class="search-title">${flag}${jnEscapeHtml(entry.title)}</span>${snippet}</a>`;
       }).join('');
     }
