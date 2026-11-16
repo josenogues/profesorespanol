@@ -37,10 +37,11 @@ with sync_playwright() as p:
         if pista:
             comprueba(all(("-%s.html" % pista) in h or not any(h.endswith("-%s.html" % x) for x in ("es", "it", "en")) for h in hrefs),
                       "y solo de su pista")
-            comprueba("🇪🇸" not in pg.locator("#search-results").inner_text(), "sin banderas cuando ya hay pista")
+            comprueba(pg.locator("#search-results img.bandera").count() == 0, "sin banderas cuando ya hay pista")
         else:
-            comprueba(len({h[-7:-5] for h in hrefs if h[-8] == "-"}) >= 1 and "🇪🇸" in pg.locator("#search-results").inner_text() or "🇮🇹" in pg.locator("#search-results").inner_text(),
-                      "sin pista salen de todas, con bandera")
+            con_bandera = pg.locator("#search-results a:has(img.bandera)").count()
+            comprueba(len({h[-7:-5] for h in hrefs if h[-8] == "-"}) >= 1 and con_bandera > 0,
+                      "sin pista salen de todas, con bandera (%d con bandera)" % con_bandera)
         partes = sorted(u.split("search-index-")[1].split(".js")[0] for u in pedidos if "search-index" in u)
         espero = sorted(["comun", pista]) if pista else ["comun", "en", "es", "it"]
         comprueba(partes == espero, "se baja solo el índice que toca, y una vez (%s)" % ", ".join(partes))

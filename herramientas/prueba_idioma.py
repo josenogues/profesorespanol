@@ -58,8 +58,11 @@ with sync_playwright() as p:
                   "con el navegador en %s pregunta en ese idioma (o en español si no lo tenemos)" % navegador)
         if navegador == "en-GB":
             nombres = [b.inner_text().strip() for b in pg.locator(".track-modal-buttons button").all()]
-            comprueba(nombres == ["🇪🇸 Español", "🇮🇹 Italiano", "🇬🇧 English"],
-                      "cada idioma con su propio nombre (%s)" % ", ".join(nombres))
+            banderas = [b.locator("img.bandera").get_attribute("src").split("?")[0]
+                        for b in pg.locator(".track-modal-buttons button").all()]
+            comprueba(nombres == ["Español", "Italiano", "English"] and
+                      banderas == ["banderas/es.svg", "banderas/it.svg", "banderas/gb.svg"],
+                      "cada idioma con su propio nombre y su bandera (%s)" % ", ".join(nombres))
             altos = pg.evaluate("[...document.querySelectorAll('.track-modal-buttons button')].map(b => Math.round(b.getBoundingClientRect().height))")
             comprueba(len(set(altos)) == 1, "y los tres botones iguales de alto")
             pg.locator('.track-modal-buttons button[data-track="en"]').click()
