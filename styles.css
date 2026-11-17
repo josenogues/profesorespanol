@@ -618,7 +618,26 @@ h1 .ti,h2 .ti,h3 .ti{margin-right:8px}
 .card{background:var(--card-bg) !important;border-color:var(--border) !important}
 .card h3{color:var(--text) !important}
 
+/* pestañas de cuaderno, fuera del panel (no desaparecen al esconder el menú).
+   Cada una va a la altura del título de su materia en el menú; script.js las
+   recoloca cuando el menú se despliega, se desplaza o cambia de tamaño. */
 .menu-item{margin-bottom:4px}
+.tab-rail{position:fixed;top:0;left:270px;width:24px;height:100vh;z-index:55;pointer-events:none}
+.rail-tab{position:absolute;left:0;width:14px;height:24px;background:var(--tab-color);opacity:.4;border-radius:0 7px 7px 0;transition:opacity .2s,width .2s;transform:translateY(-50%)}
+/* si su título queda fuera de la vista del menú, la pestaña no se enseña */
+.rail-tab.fuera{visibility:hidden}
+body[data-category="verbos"] .rail-tab[data-tab-cat="verbos"],
+body[data-category="gramatica"] .rail-tab[data-tab-cat="gramatica"],
+body[data-category="vocabulario"] .rail-tab[data-tab-cat="vocabulario"],
+body[data-category="expresiones"] .rail-tab[data-tab-cat="expresiones"],
+body[data-category="recursos"] .rail-tab[data-tab-cat="recursos"],
+body[data-category="ejercicios"] .rail-tab[data-tab-cat="ejercicios"],
+body[data-category="profesional"] .rail-tab[data-tab-cat="profesional"],
+body[data-category="atencion"] .rail-tab[data-tab-cat="gramatica"]{
+  opacity:1;width:22px;box-shadow:3px 2px 8px rgba(0,0,0,.22)
+}
+body.sidebar-collapsed .tab-rail{left:0}
+@media(max-width:900px){.tab-rail{display:none}}
 
 /* ---------- Toque de color por sección dentro de cada página ---------- */
 body[data-category="verbos"] .eyebrow{background:#FBEAF3;color:#A02D6C}
@@ -1367,7 +1386,7 @@ body:has(.access-gate-overlay) .cita-boton{display:none}
    línea de arriba, que ahí ya la pone el propio submenú. */
 .submenu .menu-sep{margin:10px 0 4px;padding-top:9px}
 .submenu .menu-sep:first-child{margin-top:2px;padding-top:0;border-top:0}
-.submenu .menu-sep span{font-size:10.5px;padding:0 10px 0 12px}
+.submenu .menu-sep span{font-size:12px;padding:0 10px 0 12px}
 /* Aviso de que la tanda de ejercicios está acotada a un sub-grupo */
 .ex-solo{display:inline-flex;align-items:center;gap:8px;margin:0 0 14px;padding:7px 10px 7px 14px;
   background:var(--badge-gold-bg);color:var(--gold-dark);border-radius:20px;font-size:14px;font-weight:600}

@@ -1003,6 +1003,47 @@ a.closest(".menu-item").classList.add("active","current-section");
   });
 })();
 
+// --- Las pestañas de cuaderno siguen al título de su materia en el menú ---
+// Antes solo se recolocaban al pulsar, y el menú podía moverse sin pulsar
+// nada (desplazarlo, cargar la letra, abrir un submenú largo): la pestaña se
+// quedaba a la altura de otro título. Ahora se recolocan cuando cambia el
+// tamaño de cualquier bloque del menú, al desplazarlo y al cambiar la
+// ventana. Si el título se sale de la vista del menú, su pestaña se esconde.
+(function(){
+  const rail = document.querySelector('.tab-rail');
+  const sidebar = document.querySelector('.sidebar');
+  if(!rail || !sidebar) return;
+  const tabs = Array.prototype.slice.call(rail.querySelectorAll('.rail-tab'));
+  let pendiente = false;
+  function align(){
+    pendiente = false;
+    const caja = sidebar.getBoundingClientRect();
+    tabs.forEach(function(tab){
+      const btn = sidebar.querySelector('.menu-item > .menu-button:has(.cat-' + tab.dataset.tabCat + ')');
+      if(!btn){ tab.classList.add('fuera'); return; }
+      const r = btn.getBoundingClientRect();
+      const medio = r.top + r.height / 2;
+      tab.style.top = medio + 'px';
+      tab.classList.toggle('fuera', r.height === 0 || medio < caja.top + 8 || medio > caja.bottom - 8);
+    });
+  }
+  function pide(){
+    if(pendiente) return;
+    pendiente = true;
+    requestAnimationFrame(align);
+  }
+  align();
+  sidebar.addEventListener('scroll', pide, { passive: true });
+  window.addEventListener('resize', pide);
+  document.addEventListener('click', function(e){ if(e.target.closest('.menu-button')) pide(); });
+  if(window.ResizeObserver){
+    const ro = new ResizeObserver(pide);
+    sidebar.querySelectorAll('.menu-item, .sidebar-search, .logo-header').forEach(function(el){ ro.observe(el); });
+  }
+  if(document.fonts && document.fonts.ready) document.fonts.ready.then(pide);
+  setTimeout(pide, 300);
+})();
+
 // --- Botón de mostrar/ocultar menú lateral ---
 (function(){
   const btn = document.getElementById('sidebar-toggle');
