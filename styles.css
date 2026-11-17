@@ -1,5 +1,5 @@
 /* ── tipografías ──
-   Nunito (texto, títulos y botones) y Caveat (solo el saludo de la portada),
+   Nunito (texto, títulos y botones) y Caveat (el saludo de la portada y el título a mano de cada sección),
    alojadas aquí en vez de pedirlas a Google Fonts: una conexión menos a un
    tercero en cada página y ningún dato del alumno que salga hacia Google.
    Son los mismos archivos y las mismas declaraciones que servía Google
@@ -126,7 +126,7 @@ h1,h2,.section-title{font-weight:800;letter-spacing:-.01em}
 
 .main{margin-left:294px;padding:40px 40px 40px 74px;max-width:1440px;min-height:calc(100vh - 66px)}
 .page-header{background:transparent;margin:0 0 44px;padding:0;border-bottom:0;display:flex;align-items:center;gap:20px;flex-wrap:wrap}
-.page-header .breadcrumb{margin:0;order:1}
+.page-header .breadcrumb{margin:0;order:1;flex:1 1 0;min-width:0}
 .page-header .language-selector{margin:0 0 0 auto;padding:0;border:0;text-align:right;order:2}
 .language-selector{display:inline-flex;align-items:center;text-align:right;margin-bottom:26px;padding-bottom:20px;border-bottom:1px solid var(--border)}
 .language-selector button{border:0;background:#EFEFEA;padding:8px 15px;margin-left:5px;border-radius:10px;cursor:pointer;font-weight:700;font-family:var(--font-head);transition:.15s;color:#4A4940}
@@ -624,7 +624,7 @@ h1 .ti,h2 .ti,h3 .ti{margin-right:8px}
 .menu-item{margin-bottom:4px}
 .tab-rail{position:fixed;top:0;left:270px;width:24px;height:100vh;z-index:55;pointer-events:none}
 .rail-tab{position:absolute;left:0;width:14px;height:24px;background:var(--tab-color);opacity:.4;border-radius:0 7px 7px 0;transition:opacity .2s,width .2s;transform:translateY(-50%)}
-/* si su título queda fuera de la vista del menú, la pestaña no se enseña */
+/* solo si su materia no está en el menú */
 .rail-tab.fuera{visibility:hidden}
 body[data-category="verbos"] .rail-tab[data-tab-cat="verbos"],
 body[data-category="gramatica"] .rail-tab[data-tab-cat="gramatica"],
@@ -638,6 +638,20 @@ body[data-category="atencion"] .rail-tab[data-tab-cat="gramatica"]{
 }
 body.sidebar-collapsed .tab-rail{left:0}
 @media(max-width:900px){.tab-rail{display:none}}
+
+/* Título escrito a mano por sección (lo pone script.js), en el color de la
+   materia: la sensación de cuaderno. */
+.handwritten-title{font-family:'Caveat',cursive;font-weight:700;font-size:34px;line-height:1;color:var(--muted);transform:rotate(-2deg);white-space:nowrap}
+body[data-category="verbos"] .handwritten-title{color:#D6488F}
+body[data-category="gramatica"] .handwritten-title{color:#5B9A3B}
+body[data-category="vocabulario"] .handwritten-title{color:#E8791E}
+body[data-category="expresiones"] .handwritten-title{color:#7A6FD1}
+body[data-category="atencion"] .handwritten-title{color:#5B9A3B}
+body[data-category="profesional"] .handwritten-title{color:#0F6E56}
+body[data-category="clases"] .handwritten-title{color:#7A5230}
+[data-theme="dark"] body[data-category="profesional"] .handwritten-title{color:#3fae8c}
+[data-theme="dark"] body[data-category="clases"] .handwritten-title{color:#c99a68}
+@media(max-width:900px){.handwritten-title{display:none}}
 
 /* ---------- Toque de color por sección dentro de cada página ---------- */
 body[data-category="verbos"] .eyebrow{background:#FBEAF3;color:#A02D6C}

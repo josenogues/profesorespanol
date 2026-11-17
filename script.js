@@ -1003,29 +1003,75 @@ a.closest(".menu-item").classList.add("active","current-section");
   });
 })();
 
+// --- Título escrito a mano por sección (traducido según el idioma activo) ---
+// Da la sensación de cuaderno escrito a mano. Se quitó con el estilo sobrio
+// y José lo echó de menos: vuelve (noviembre 2026).
+(function(){
+  const header = document.querySelector('.page-header');
+  const cat = document.body.dataset.category;
+  if(!header || !cat) return;
+  const labels = {
+    verbos: {es:'Verbos', it:'Verbi', en:'Verbs'},
+    gramatica: {es:'Gramática', it:'Grammatica', en:'Grammar'},
+    vocabulario: {es:'Vocabulario', it:'Vocabolario', en:'Vocabulary'},
+    expresiones: {es:'Expresiones', it:'Espressioni', en:'Expressions'},
+    atencion: {es:'Especial atención', it:'Attenzione a questi', en:'Watch out for this'},
+    profesional: {es:'Profesional', it:'Professionale', en:'Business'},
+    clases: {es:'Mis clases', it:'Le mie lezioni', en:'My classes'}
+  };
+  const l = labels[cat];
+  if(!l) return;
+  const track = window.jnIdioma();
+  const span = document.createElement('span');
+  span.className = 'handwritten-title i18n';
+  span.dataset.es = l.es; span.dataset.it = l.it; span.dataset.en = l.en;
+  span.textContent = l[track] || l.es;
+  header.insertBefore(span, header.firstChild);
+})();
+
 // --- Las pestañas de cuaderno siguen al título de su materia en el menú ---
 // Antes solo se recolocaban al pulsar, y el menú podía moverse sin pulsar
 // nada (desplazarlo, cargar la letra, abrir un submenú largo): la pestaña se
 // quedaba a la altura de otro título. Ahora se recolocan cuando cambia el
 // tamaño de cualquier bloque del menú, al desplazarlo y al cambiar la
-// ventana. Si el título se sale de la vista del menú, su pestaña se esconde.
+// ventana.
 (function(){
   const rail = document.querySelector('.tab-rail');
   const sidebar = document.querySelector('.sidebar');
   if(!rail || !sidebar) return;
   const tabs = Array.prototype.slice.call(rail.querySelectorAll('.rail-tab'));
   let pendiente = false;
+  // Una pestaña cuyo título se ha salido de la vista (por ejemplo, con el
+  // submenú largo de Verbos abierto) no desaparece: se apila contra el borde
+  // de arriba o de abajo, como las pestañas de un cuaderno, y vuelve a su
+  // sitio al desplazar el menú.
+  const PASO = 28, MARGEN = 18;
   function align(){
     pendiente = false;
     const caja = sidebar.getBoundingClientRect();
+    const sitios = [];
     tabs.forEach(function(tab){
       const btn = sidebar.querySelector('.menu-item > .menu-button:has(.cat-' + tab.dataset.tabCat + ')');
-      if(!btn){ tab.classList.add('fuera'); return; }
-      const r = btn.getBoundingClientRect();
-      const medio = r.top + r.height / 2;
-      tab.style.top = medio + 'px';
-      tab.classList.toggle('fuera', r.height === 0 || medio < caja.top + 8 || medio > caja.bottom - 8);
+      const r = btn && btn.getBoundingClientRect();
+      if(!r || r.height === 0){ tab.classList.add('fuera'); return; }
+      tab.classList.remove('fuera');
+      sitios.push({ tab: tab, medio: r.top + r.height / 2 });
     });
+    // Las que se ven, en su título. Las de fuera, apiladas contra el borde;
+    // si no hay sitio, se montan un poco unas sobre otras, como en un
+    // cuaderno, pero nunca tapan a una que esté en su título.
+    const alto = caja.top + MARGEN, bajo = caja.bottom - MARGEN;
+    const dentro = sitios.filter(function(s){ return s.medio >= alto && s.medio <= bajo; });
+    const arriba = sitios.filter(function(s){ return s.medio < alto; });
+    const abajo = sitios.filter(function(s){ return s.medio > bajo; });
+    function paso(n, sitio){ return n > 1 ? Math.max(6, Math.min(PASO, sitio / (n - 1))) : 0; }
+    dentro.forEach(function(s){ s.tab.style.top = s.medio + 'px'; });
+    const tope = dentro.length ? dentro[0].medio - PASO : bajo;
+    const pa = paso(arriba.length, tope - alto);
+    arriba.forEach(function(s, i){ s.tab.style.top = (alto + i * pa) + 'px'; });
+    const suelo = dentro.length ? dentro[dentro.length - 1].medio + PASO : alto;
+    const pb = paso(abajo.length, bajo - suelo);
+    abajo.forEach(function(s, i){ s.tab.style.top = (bajo - (abajo.length - 1 - i) * pb) + 'px'; });
   }
   function pide(){
     if(pendiente) return;

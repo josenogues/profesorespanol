@@ -29,7 +29,10 @@ bueno; lo pequeño y claro, hacerlo.
   blancas con el color solo en el icono. **Excepción querida por José:** el
   saludo de la portada y «Cinco minutos de hoy» llevan el degradado violeta, el
   «¡Hola!» escrito a mano (Caveat) y los globos «¿Qué tal? / ¡Vamos! / Poco a
-  poco».
+  poco». También son de José y no se quitan: el **título escrito a mano**
+  (Caveat, en el color de la materia) arriba de cada página, las **pestañas de
+  cuaderno** de colores junto al menú (siguen a su título; si no cabe, se
+  apilan en el borde) y la **puerta de entrada** con el degradado y su foto.
 - Los colores de las materias son de las materias (menú, iconos); no usarlos
   para otras cosas.
 - Banderas: siempre las de `banderas/*.svg`, nunca emoji (en Windows salen
