@@ -1827,8 +1827,10 @@ ${qHTML}`;
       html += `<div class="ex-route-stop" style="${cssVars(c)}">
 <div class="ex-route-dots">${lineIn}${lineOut}${dot}</div>
 <button class="ex-course-card${isNow ? ' now' : ''}" data-course="${c.key}">
-<span class="ex-course-top"><h4>${jnEscapeHtml(c.name)}</h4>${mark}</span>
-<span class="ex-course-meta"><span class="ex-course-lvl">${c.levels}</span> ${total} ${cLbl.steps}</span>
+<span class="ex-course-top"><span class="ex-course-ico"><i class="ti ${c.icon}" aria-hidden="true"></i></span>${mark}</span>
+<h4>${jnEscapeHtml(c.name)}</h4>
+<span class="ex-course-desc">${jnEscapeHtml(c.desc || '')}</span>
+<span class="ex-course-meta">${total} ${cLbl.steps} · ${c.levels}</span>
 ${state}</button></div>`;
     });
     html += '</div>';
