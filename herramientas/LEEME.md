@@ -22,6 +22,7 @@ ningún icono y que no se haya colado nada de un servidor de fuera.
 | `versiones.py` | El `?v=` de cada archivo es la huella de su contenido. Se pasa después de tocar cualquier `.js`, `.css` o fuente. |
 | `indexar.py` | Regenera el índice del buscador (`search-index-*.js`). `revisar.py` ya lo llama. |
 | `iconos.py` | Recorta la fuente de iconos a los que usa la web. Se pasa cuando `revisar.py` dice que falta uno. |
+| `logo.py` | Dibuja `logo.svg`, `logo-apilado.svg` (puerta de entrada), `icono.png` (pestaña) e `icono-movil.png` con las letras ya convertidas en trazos. Solo hace falta si se cambia el logo. Necesita `uharfbuzz`. |
 | `revisar.py` | La revisión general, sin navegador. |
 | `revisa_banco.py` | Revisa el banco de ejercicios del hub, sin navegador: respuestas que no están entre las opciones, respuestas con tilde sin su versión sin tilde, ejercicios repetidos, grupos y niveles que no existen. |
 | `banco.py` | Leer y añadir ejercicios al banco desde un script. |

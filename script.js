@@ -723,7 +723,7 @@ document.addEventListener("jn-modo", e => marcaModo(e.detail));
       overlay = document.createElement('div');
       overlay.className = 'access-gate-overlay';
       overlay.innerHTML =
-        '<img class="access-gate-logo" src="logo.png" width="340" height="171" alt="Aprende español con José">' +
+        '<img class="access-gate-logo" src="logo-apilado.svg" width="215" height="140" alt="Aprende español con José">' +
         '<div class="access-gate-modal" role="dialog" aria-modal="true">' +
           '<img class="access-gate-foto" src="profile.jpg" width="340" height="340" alt="José">' +
           '<div class="access-gate-body"></div>' +
