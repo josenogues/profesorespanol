@@ -1790,10 +1790,71 @@ ${qHTML}`;
 
   // La portada de cada curso: todos van en el azul de «Ejercicios» (los
   // colores de las materias son de las materias) y lo que los distingue es
-  // su dibujo, hecho con tres iconos de lo que trae el curso.
-  function decoHTML(c){
-    const d = Array.isArray(c.deco) ? c.deco : [];
-    return `<span class="ex-course-deco" aria-hidden="true">${d.map(ic => `<i class="ti ${ic}"></i>`).join('')}</span>`;
+  // su dibujo. Son dibujos propios, en blanco y azules sobre la portada,
+  // con un toque amarillo; el español de los bocadillos es lo que se aprende.
+  const W = '#fff', P = '#C9DBFA', D = '#244A94', Y = '#FFD66B';
+  const estrella = (x, y, r, c) =>
+    `<path d="M${x} ${y - r}Q${x} ${y} ${x + r} ${y}Q${x} ${y} ${x} ${y + r}Q${x} ${y} ${x - r} ${y}Q${x} ${y} ${x} ${y - r}Z" fill="${c}"/>`;
+  const bocadillo = (x, y, w, h, fondo, tinta, txt, size, cola) =>
+    `<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="${h / 2}" fill="${fondo}"/>` +
+    `<path d="${cola}" fill="${fondo}"/>` +
+    `<text x="${x + w / 2}" y="${y + h / 2 + size * .36}" text-anchor="middle" font-family="Nunito,Arial,sans-serif" font-weight="800" font-size="${size}" fill="${tinta}">${txt}</text>`;
+  const ART = {
+    'primeros-pasos':
+      bocadillo(14, 16, 96, 38, W, D, '¡Hola!', 19, 'M36 50L28 68L56 52Z') +
+      bocadillo(84, 62, 104, 36, P, D, '¿Qué tal?', 16, 'M160 94L170 110L148 96Z') +
+      estrella(172, 30, 9, Y) + estrella(150, 18, 5, W) + estrella(26, 92, 6, P) +
+      `<path d="M58 112V96" stroke="${W}" stroke-width="4" stroke-linecap="round"/>` +
+      `<path d="M58 100C50 100 44 94 44 86C52 86 58 92 58 100ZM58 98C58 89 64 82 74 82C74 91 67 98 58 98Z" fill="${W}"/>`,
+    'viajar':
+      `<path d="M18 104Q60 24 138 40" fill="none" stroke="${W}" stroke-opacity=".75" stroke-width="3" stroke-dasharray="3 7" stroke-linecap="round"/>` +
+      `<g transform="translate(152 36) rotate(-14)" fill="${W}"><rect x="-24" y="-5" width="50" height="10" rx="5"/>` +
+      `<path d="M-4 -4L-16 -24H-8L10 -4ZM-4 4L-16 24H-8L10 4ZM-22 -4L-28 -14H-22L-14 -4Z"/></g>` +
+      `<rect x="34" y="70" width="44" height="34" rx="7" fill="${P}"/><path d="M48 70V62H64V70" fill="none" stroke="${P}" stroke-width="4"/>` +
+      `<rect x="44" y="70" width="5" height="34" fill="${D}" opacity=".35"/><rect x="63" y="70" width="5" height="34" fill="${D}" opacity=".35"/>` +
+      `<path d="M176 74C166 74 160 81 160 90C160 102 176 114 176 114S192 102 192 90C192 81 186 74 176 74Z" fill="${Y}"/><circle cx="176" cy="89" r="6" fill="${D}"/>` +
+      estrella(104, 92, 6, W),
+    'tiempo-libre':
+      `<g stroke="${Y}" stroke-width="4" stroke-linecap="round"><path d="M42 8V14M42 54V60M16 34H22M62 34H68M24 16L28 20M56 48L60 52M24 52L28 48M56 20L60 16"/></g>` +
+      `<circle cx="42" cy="34" r="14" fill="${Y}"/>` +
+      `<circle cx="118" cy="74" r="30" fill="${Y}"/>` +
+      `<path d="M92 60Q110 74 92 90M144 58Q126 74 144 90" fill="none" stroke="${W}" stroke-width="4" stroke-linecap="round"/>` +
+      `<g fill="${P}"><path d="M170 18V48" stroke="${P}" stroke-width="4"/><ellipse cx="164" cy="50" rx="8" ry="6"/><path d="M170 18L186 22V30L170 26Z"/></g>` +
+      estrella(186, 92, 7, W) + estrella(60, 100, 5, P),
+    'vivir':
+      `<path d="M58 54L104 18L150 54Z" fill="${P}"/><rect x="66" y="52" width="76" height="56" fill="${W}"/>` +
+      `<rect x="96" y="78" width="18" height="30" rx="3" fill="${D}"/><circle cx="110" cy="94" r="1.8" fill="${Y}"/>` +
+      `<rect x="74" y="62" width="16" height="15" rx="2" fill="${Y}"/><rect x="120" y="62" width="16" height="15" rx="2" fill="${Y}"/>` +
+      `<rect x="128" y="26" width="10" height="18" fill="${W}"/>` +
+      `<rect x="172" y="86" width="6" height="22" fill="${P}"/><circle cx="175" cy="78" r="16" fill="${P}"/>` +
+      `<g fill="none" stroke="${W}" stroke-width="5" stroke-linecap="round"><circle cx="28" cy="84" r="10"/><path d="M38 84H58M50 84V92M56 84V90"/></g>` +
+      estrella(30, 30, 7, Y) + estrella(178, 26, 5, W),
+    'contar':
+      `<rect x="34" y="14" width="118" height="66" rx="16" fill="${W}"/><path d="M60 76L50 98L80 78Z" fill="${W}"/>` +
+      `<text x="48" y="44" font-family="Nunito,Arial,sans-serif" font-weight="800" font-size="16" fill="${D}">Ayer fui…</text>` +
+      `<rect x="48" y="54" width="86" height="6" rx="3" fill="${P}"/><rect x="48" y="65" width="60" height="6" rx="3" fill="${P}"/>` +
+      `<circle cx="166" cy="88" r="22" fill="${Y}"/><path d="M166 76V88L174 94" fill="none" stroke="${D}" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>` +
+      `<path d="M140 80A26 26 0 0 1 150 66" fill="none" stroke="${W}" stroke-width="3" stroke-linecap="round"/><path d="M144 62L152 64L148 72Z" fill="${W}"/>` +
+      `<rect x="10" y="84" width="30" height="26" rx="4" fill="${P}"/><rect x="10" y="84" width="30" height="8" rx="3" fill="${W}"/>` +
+      estrella(178, 22, 6, W),
+    'profesional':
+      `<rect x="56" y="12" width="96" height="64" rx="7" fill="${W}"/><rect x="63" y="19" width="82" height="50" rx="3" fill="${P}"/>` +
+      `<rect x="72" y="50" width="12" height="13" rx="2" fill="${D}"/><rect x="90" y="40" width="12" height="23" rx="2" fill="${D}"/><rect x="108" y="30" width="12" height="33" rx="2" fill="${D}"/><rect x="126" y="24" width="12" height="39" rx="2" fill="${Y}"/>` +
+      `<path d="M46 80H162L170 92H38Z" fill="${W}"/>` +
+      `<rect x="10" y="30" width="40" height="28" rx="4" fill="${Y}"/><path d="M11 32L30 46L49 32" fill="none" stroke="${D}" stroke-width="2.5" stroke-linejoin="round"/>` +
+      `<rect x="170" y="56" width="20" height="24" rx="4" fill="${P}"/><path d="M190 62H194A4 4 0 0 1 194 74H190" fill="none" stroke="${P}" stroke-width="3"/>` +
+      `<path d="M176 50Q172 44 177 40M184 50Q180 44 185 40" fill="none" stroke="${W}" stroke-width="2" stroke-linecap="round"/>` +
+      estrella(26, 96, 7, W),
+    'sonar-natural':
+      bocadillo(14, 18, 120, 42, W, D, '¡Qué guay!', 19, 'M40 56L32 74L60 58Z') +
+      bocadillo(74, 70, 86, 32, P, D, '¡Venga ya!', 14, 'M140 98L150 112L128 100Z') +
+      `<g fill="none" stroke="${Y}" stroke-width="4" stroke-linecap="round"><path d="M152 30Q160 39 152 48"/><path d="M164 22Q178 39 164 56"/><path d="M176 14Q196 39 176 64"/></g>` +
+      estrella(30, 96, 9, Y) + estrella(178, 92, 6, W) + estrella(56, 104, 4, W)
+  };
+  function artHTML(c){
+    const a = ART[c.key];
+    if(!a) return `<span class="ex-course-ico"><i class="ti ${c.icon}" aria-hidden="true"></i></span>`;
+    return `<svg class="ex-course-art" viewBox="0 0 200 120" aria-hidden="true" focusable="false">${a}</svg>`;
   }
 
   function renderRoute(){
@@ -1820,24 +1881,26 @@ ${qHTML}`;
       const total = c.steps.length;
       const complete = done.size >= total;
       const isNow = !!up && up.course.key === c.key;
-      const mark = complete
-        ? `<span class="ex-course-badge">${TICK}</span>`
+      const pct = Math.round(done.size / total * 100);
+      const seal = complete ? `<span class="ex-course-seal"><i class="ti ti-check" aria-hidden="true"></i></span>` : '';
+      // el progreso se tiene que ver: una barra de verdad y el paso en que
+      // vas, no un circulito en una esquina
+      const foot = complete
+        ? `<span class="ex-course-foot"><span class="ex-course-bar full"><i style="width:100%"></i></span>
+<span class="ex-course-state done"><i class="ti ti-check" aria-hidden="true"></i> ${cLbl.done} · ${total}/${total}</span></span>`
         : (done.size
-            ? `<span class="ex-course-ring" style="--pct:${Math.round(done.size / total * 100)}"><span>${done.size}/${total}</span></span>`
-            : '<span class="ex-course-badge empty"></span>');
-      const state = complete
-        ? `<span class="ex-course-state">${cLbl.done}</span>`
-        : (done.size
-            ? `<span class="ex-course-state">${cText('inProgress', { n: done.size + 1 })}</span>`
-            : `<span class="ex-course-state todo">${cLbl.notStarted}</span>`);
+            ? `<span class="ex-course-foot"><span class="ex-course-bar"><i style="width:${pct}%"></i></span>
+<span class="ex-course-state">${cText('inProgress', { n: done.size + 1 })} <b>${done.size}/${total}</b></span></span>`
+            : `<span class="ex-course-foot"><span class="ex-course-state todo">${cLbl.start} <i class="ti ti-arrow-right" aria-hidden="true"></i></span></span>`);
+      const cls = complete ? ' complete' : (done.size ? ' started' : '');
       html += `<div class="ex-route-stop" style="${cssVars(c)}">
-<button class="ex-course-card${isNow ? ' now' : ''}" data-course="${c.key}">
-<span class="ex-course-cover">${decoHTML(c)}<span class="ex-course-ico"><i class="ti ${c.icon}" aria-hidden="true"></i></span>${mark}</span>
+<button class="ex-course-card${cls}${isNow ? ' now' : ''}" data-course="${c.key}">
+<span class="ex-course-cover">${artHTML(c)}</span>${seal}
 <span class="ex-course-body">
 <h4>${jnEscapeHtml(c.name)}</h4>
 <span class="ex-course-desc">${jnEscapeHtml(c.desc || '')}</span>
 <span class="ex-course-meta">${total} ${cLbl.steps} · ${c.levels}</span>
-${state}</span></button></div>`;
+${foot}</span></button></div>`;
     });
     html += '</div>';
     courseView.innerHTML = html;
@@ -1853,8 +1916,7 @@ ${state}</span></button></div>`;
     let firstPending = -1;
     for(let i = 0; i < total; i++){ if(!done.has(course.steps[i].id)){ firstPending = i; break; } }
 
-    let html = `<div class="ex-course-hero" style="${cssVars(course)}">${decoHTML(course)}
-<span class="ex-course-badge"><i class="ti ${course.icon}" aria-hidden="true"></i></span>
+    let html = `<div class="ex-course-hero" style="${cssVars(course)}">${artHTML(course)}
 <div class="ex-course-hero-body">
 <h4>${jnEscapeHtml(course.name)}</h4>
 <p>${jnEscapeHtml(course.desc)} · ${course.levels} · ${done.size}/${total} ${cLbl.steps}</p>

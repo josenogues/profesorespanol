@@ -948,28 +948,32 @@ a.prof-card:hover{transform:translateY(-2px);box-shadow:0 4px 10px rgba(0,0,0,.0
   padding:0;flex:1;display:flex;flex-direction:column;cursor:pointer;overflow:hidden;
   text-align:left;font-family:var(--font-body);transition:.15s}
 .ex-course-body{display:flex;flex-direction:column;gap:7px;padding:14px 15px 15px;flex:1}
-/* La portada: el azul de «Ejercicios» con el dibujo del curso. Los tres
-   iconos del fondo son lo que distingue un curso de otro. */
-.ex-course-cover{position:relative;height:104px;flex:none;overflow:hidden;
+/* La portada: el azul de «Ejercicios» con el dibujo propio de cada curso. */
+.ex-course-cover{position:relative;height:118px;flex:none;overflow:hidden;
   background:linear-gradient(135deg,var(--c) 0%,var(--c-dark) 100%);
-  display:flex;align-items:flex-end;padding:0 15px 14px}
-.ex-course-cover::before{content:"";position:absolute;width:150px;height:150px;border-radius:50%;
-  right:-38px;top:-52px;background:rgba(255,255,255,.09)}
-.ex-course-cover::after{content:"";position:absolute;width:90px;height:90px;border-radius:50%;
-  right:70px;bottom:-58px;background:rgba(255,255,255,.07)}
-.ex-course-deco i{position:absolute;color:rgba(255,255,255,.42);line-height:1}
-.ex-course-deco i:nth-child(1){font-size:38px;right:22px;bottom:16px;transform:rotate(-10deg)}
-.ex-course-deco i:nth-child(2){font-size:24px;right:80px;top:16px;transform:rotate(12deg);color:rgba(255,255,255,.3)}
-.ex-course-deco i:nth-child(3){font-size:22px;right:96px;bottom:14px;transform:rotate(-6deg);color:rgba(255,255,255,.26)}
-.ex-course-cover .ex-course-ico{position:relative;width:50px;height:50px;border-radius:14px;background:#fff;
-  color:var(--c);font-size:27px;box-shadow:0 4px 12px rgba(20,30,70,.22)}
-.ex-course-cover .ex-course-badge,.ex-course-cover .ex-course-ring{position:absolute;top:11px;right:11px}
-.ex-course-cover .ex-course-badge{background:#fff;color:var(--c);width:30px;height:30px;border-radius:50%}
-.ex-course-cover .ex-course-badge.empty{display:none}
-.ex-course-cover .ex-course-ring{width:34px;height:34px;
-  background:conic-gradient(#fff calc(var(--pct,0)*1%),rgba(255,255,255,.3) 0)}
-.ex-course-cover .ex-course-ring::before{background:var(--c-dark)}
-.ex-course-cover .ex-course-ring span{color:#fff;font-size:10px}
+  display:flex;align-items:center;justify-content:center}
+.ex-course-cover::before{content:"";position:absolute;width:160px;height:160px;border-radius:50%;
+  right:-50px;top:-70px;background:rgba(255,255,255,.08)}
+.ex-course-cover::after{content:"";position:absolute;width:100px;height:100px;border-radius:50%;
+  left:-30px;bottom:-60px;background:rgba(255,255,255,.07)}
+.ex-course-art{position:relative;z-index:1;height:100px;width:auto;max-width:92%;display:block;
+  filter:drop-shadow(0 3px 6px rgba(15,30,80,.18));transition:transform .2s}
+.ex-course-card:hover .ex-course-art{transform:scale(1.04) rotate(-1deg)}
+/* curso terminado: sello grande sobre la portada y borde del curso */
+.ex-course-card{position:relative}
+.ex-course-seal{position:absolute;z-index:2;top:96px;right:12px;width:44px;height:44px;border-radius:50%;
+  background:#fff;color:var(--c);display:flex;align-items:center;justify-content:center;font-size:24px;
+  box-shadow:0 0 0 4px rgba(255,255,255,.35),0 4px 10px rgba(15,30,80,.25)}
+.ex-course-seal i{-webkit-text-stroke:1px currentColor}
+.ex-course-card.started,.ex-course-card.complete{border:2px solid var(--c)}
+.ex-course-card.complete{box-shadow:0 6px 18px rgba(58,111,201,.22)}
+.ex-course-foot{margin-top:auto;padding-top:6px;display:flex;flex-direction:column;gap:7px}
+.ex-course-foot .ex-course-bar{height:9px;margin:0;max-width:none;background:var(--tint)}
+.ex-course-foot .ex-course-state{margin-top:0;font-size:13.5px}
+.ex-course-foot .ex-course-state b{float:right;font-variant-numeric:tabular-nums}
+.ex-course-state.done{display:inline-flex;align-items:center;gap:6px;align-self:flex-start;
+  background:var(--c);color:#fff;border-radius:20px;padding:4px 12px 4px 9px}
+.ex-course-foot .ex-course-state.todo{color:var(--c);font-weight:700;display:inline-flex;align-items:center;gap:4px}
 .ex-course-card:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(58,69,112,.14);border-color:var(--c)}
 .ex-course-card.now{border-color:var(--c);box-shadow:0 8px 20px rgba(58,69,112,.14)}
 .ex-course-top{display:flex;align-items:flex-start;justify-content:space-between;gap:8px}
@@ -999,14 +1003,11 @@ a.prof-card:hover{transform:translateY(-2px);box-shadow:0 4px 10px rgba(0,0,0,.0
   border-radius:16px;padding:22px 22px;margin:4px 0 22px}
 .ex-course-hero::before{content:"";position:absolute;width:220px;height:220px;border-radius:50%;
   right:-60px;top:-90px;background:rgba(255,255,255,.08)}
-.ex-course-hero .ex-course-deco i:nth-child(1){font-size:54px;right:34px;bottom:auto;top:50%;margin-top:-27px}
-.ex-course-hero .ex-course-deco i:nth-child(2){font-size:30px;right:118px;top:12px}
-.ex-course-hero .ex-course-deco i:nth-child(3){font-size:26px;right:136px;bottom:12px}
-.ex-course-hero .ex-course-badge{position:relative;width:54px;height:54px;border-radius:15px;font-size:28px;
-  background:#fff;color:var(--c);box-shadow:0 4px 12px rgba(20,30,70,.22)}
+.ex-course-hero .ex-course-art{position:absolute;right:18px;top:50%;transform:translateY(-50%);height:104px;max-width:none}
 .ex-course-hero-body{position:relative;flex:1;min-width:0}
 .ex-course-hero h4{font-family:var(--font-head);font-size:21px;font-weight:700;margin:0}
-.ex-course-hero p{font-size:13.5px;color:rgba(255,255,255,.85);margin:0;padding-right:120px}
+.ex-course-hero p{font-size:13.5px;color:rgba(255,255,255,.85);margin:0}
+.ex-course-hero-body{padding-right:190px}
 .ex-course-hero .ex-course-bar{background:rgba(255,255,255,.28)}
 .ex-course-hero .ex-course-bar i{background:#fff}
 .ex-course-bar{height:8px;border-radius:6px;background:var(--border);overflow:hidden;
@@ -1069,19 +1070,14 @@ a.prof-card:hover{transform:translateY(-2px);box-shadow:0 4px 10px rgba(0,0,0,.0
   .ex-route{grid-template-columns:1fr;gap:10px}
   /* en el móvil la portada va a la izquierda, como una miniatura */
   .ex-course-card{flex-direction:row}
-  .ex-course-cover{width:92px;height:auto;min-height:118px;padding:0;align-items:center;justify-content:center}
-  .ex-course-cover::before{width:90px;height:90px;right:-30px;top:-34px}
+  .ex-course-cover{width:118px;height:auto;min-height:132px}
   .ex-course-cover::after{display:none}
-  .ex-course-deco i:nth-child(1){font-size:24px;right:6px;bottom:8px}
-  .ex-course-deco i:nth-child(2){font-size:17px;right:auto;left:8px;top:9px}
-  .ex-course-deco i:nth-child(3){display:none}
-  .ex-course-cover .ex-course-ico{width:46px;height:46px;font-size:25px}
-  .ex-course-cover .ex-course-badge,.ex-course-cover .ex-course-ring{top:auto;right:auto;bottom:8px;left:8px;width:26px;height:26px}
-  .ex-course-cover .ex-course-ring span{font-size:8.5px}
+  .ex-course-art{height:auto;width:108px;max-width:none}
+  .ex-course-seal{width:32px;height:32px;font-size:19px;top:8px;right:auto;left:8px}
   .ex-course-body{padding:12px 13px 13px;gap:5px}
   .ex-course-hero{padding:18px 16px}
-  .ex-course-hero p{padding-right:0}
-  .ex-course-hero .ex-course-deco{display:none}
+  .ex-course-hero-body{padding-right:0}
+  .ex-course-hero .ex-course-art{display:none}
 }
 
 /* ---------- Emails de ejemplo ----------
@@ -1166,9 +1162,9 @@ a.prof-card:hover{transform:translateY(-2px);box-shadow:0 4px 10px rgba(0,0,0,.0
 [data-theme="dark"] .ex-course-state,
 [data-theme="dark"] .ex-course-ring span,
 [data-theme="dark"] .ex-step-num.next{color:var(--c-lite)}
-[data-theme="dark"] .ex-course-cover .ex-course-ico,
-[data-theme="dark"] .ex-course-cover .ex-course-badge{color:var(--c)}
-[data-theme="dark"] .ex-course-cover .ex-course-ring span{color:#fff}
+[data-theme="dark"] .ex-course-seal{color:var(--c)}
+[data-theme="dark"] .ex-course-state.done{color:#fff}
+[data-theme="dark"] .ex-course-foot .ex-course-state.todo{color:var(--c-lite)}
 
 /* ---------- Fichas de clase ---------- */
 .cat-clases{color:#7A5230}
