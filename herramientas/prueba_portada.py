@@ -108,7 +108,7 @@ with sync_playwright() as p:
     comprueba(pg.locator("#hola-saludo").inner_text().strip() == "¡Hola!", "sin nombre en la ficha, saluda a secas")
     comprueba(not pg.locator("#hola-prox").is_visible() and not pg.locator("#hola-hoy").is_visible(),
               "sin clases, ni próxima clase ni «cinco minutos»")
-    comprueba(pg.locator('.hola-btn[data-base="mis-clases"]').is_visible(), "pero «Mis clases» está")
+    comprueba(pg.locator('.puerta[data-base="mis-clases"]').is_visible(), "pero «Mis clases» está")
     c.close()
 
     print("\n═══ en el móvil ═══")

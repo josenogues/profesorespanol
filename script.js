@@ -633,7 +633,7 @@ a.closest(".menu-item").classList.add("active","current-section");
   // Los textos, en las tres pistas. La puerta sale antes que nada, así que no
   // puede depender del sistema de i18n del resto de la web.
   const T = {
-    es: { titulo:'Acceso para alumnos',
+    es: { titulo:'Acceso para alumnos', ph:'tu@email.com',
           pide:'Escribe el email con el que reservas tus clases. Te mando un enlace para entrar.',
           boton:'Mandarme el enlace', mandando:'Mandando...',
           vacio:'Escribe tu email.',
@@ -649,7 +649,7 @@ a.closest(".menu-item").classList.add("active","current-section");
           confirmab:'Entrar',
           nocuadra:'Ese no es el email al que mandé este enlace. Escribe el mismo, o pide uno nuevo.',
           enotro:'Si puedes, ábrelo en este mismo navegador: si lo abres en otro te pediré el email otra vez.' },
-    it: { titulo:'Accesso per studenti',
+    it: { titulo:'Accesso per studenti', ph:'tua@email.com',
           pide:'Scrivi l’email con cui prenoti le lezioni. Ti mando un link per entrare.',
           boton:'Mandami il link', mandando:'Invio...',
           vacio:'Scrivi la tua email.',
@@ -665,7 +665,7 @@ a.closest(".menu-item").classList.add("active","current-section");
           confirmab:'Entra',
           nocuadra:'Non è l’email a cui ho mandato questo link. Scrivi la stessa, o chiedine uno nuovo.',
           enotro:'Se puoi, aprilo in questo stesso browser: se lo apri in un altro ti richiederò l’email.' },
-    en: { titulo:'Student access',
+    en: { titulo:'Student access', ph:'you@email.com',
           pide:'Enter the email you book your lessons with. I’ll send you a link to get in.',
           boton:'Send me the link', mandando:'Sending...',
           vacio:'Enter your email.',
@@ -682,7 +682,7 @@ a.closest(".menu-item").classList.add("active","current-section");
           nocuadra:'That isn’t the email I sent this link to. Enter the same one, or ask for a new link.',
           enotro:'If you can, open it in this same browser: if you open it elsewhere I’ll ask for your email again.' }
   };
-  const t = T[window.jnIdioma()] || T.es;
+  let t = T[window.jnIdioma()] || T.es;
 
   function esc(s){
     return String(s == null ? '' : s).replace(/[&"<>]/g, c => ({'&':'&amp;','"':'&quot;','<':'&lt;','>':'&gt;'}[c]));
@@ -708,8 +708,9 @@ a.closest(".menu-item").classList.add("active","current-section");
       overlay = document.createElement('div');
       overlay.className = 'access-gate-overlay';
       overlay.innerHTML =
-        '<div class="access-gate-modal">' +
-          '<div class="logo-mark"><img class="bandera" src="banderas/es.svg" width="21" height="14" alt=""> Aprende Español</div>' +
+        '<img class="access-gate-logo" src="logo.png" width="340" height="171" alt="Aprende español con José">' +
+        '<div class="access-gate-modal" role="dialog" aria-modal="true">' +
+          '<img class="access-gate-foto" src="profile.jpg" width="340" height="340" alt="José">' +
           '<div class="access-gate-body"></div>' +
         '</div>';
       document.body.appendChild(overlay);
@@ -727,13 +728,34 @@ a.closest(".menu-item").classList.add("active","current-section");
     cuerpo.innerHTML =
       '<h3>' + esc(t.titulo) + '</h3>' +
       '<p>' + esc(t.pide) + '</p>' +
-      '<input type="email" class="access-gate-input" placeholder="tu@email.com" autocomplete="email">' +
+      '<input type="email" class="access-gate-input" placeholder="' + esc(t.ph) + '" autocomplete="email">' +
       '<button class="access-gate-btn">' + esc(t.boton) + '</button>' +
-      '<p class="access-gate-error"></p>';
+      '<p class="access-gate-error"></p>' +
+      '<div class="access-gate-idiomas">' +
+        [['es','es','Español'],['it','it','Italiano'],['en','gb','English']].map(function(l){
+          return '<button type="button" data-idioma="' + l[0] + '"' +
+            (T[l[0]] === t ? ' class="activo" aria-pressed="true"' : ' aria-pressed="false"') +
+            '><img class="bandera" src="banderas/' + l[1] + '.svg" width="21" height="14" alt=""> ' + l[2] + '</button>';
+        }).join('') +
+      '</div>';
     input = cuerpo.querySelector('.access-gate-input');
     btn = cuerpo.querySelector('.access-gate-btn');
     errorEl = cuerpo.querySelector('.access-gate-error');
     if(aviso) errorEl.textContent = aviso;
+    // Quien llega por primera vez elige aquí su idioma: la puerta cambia en
+    // el sitio y la web queda ya en su pista (lo mismo que los botones de
+    // arriba, que hacen el resto: textos de la página y versión -it/-en).
+    cuerpo.querySelectorAll('[data-idioma]').forEach(function(b){
+      b.addEventListener('click', function(){
+        const l = b.dataset.idioma;
+        const escrito = input.value;
+        t = T[l];
+        const arriba = document.querySelector('.lang-track-btn[data-track="' + l + '"]');
+        if(arriba) arriba.click(); else localStorage.setItem('jn_track', l);
+        pidePaso(''); // un aviso que hubiera estaba en el otro idioma
+        input.value = escrito;
+      });
+    });
     btn.addEventListener('click', manda);
     input.addEventListener('keydown', e => { if(e.key === 'Enter') manda(); });
     input.focus();
@@ -756,7 +778,7 @@ a.closest(".menu-item").classList.add("active","current-section");
     cuerpo.innerHTML =
       '<h3>' + esc(t.confirma) + '</h3>' +
       '<p>' + esc(t.confirmap) + '</p>' +
-      '<input type="email" class="access-gate-input" placeholder="tu@email.com" autocomplete="email">' +
+      '<input type="email" class="access-gate-input" placeholder="' + esc(t.ph) + '" autocomplete="email">' +
       '<button class="access-gate-btn">' + esc(t.confirmab) + '</button>' +
       '<p class="access-gate-error"></p>';
     input = cuerpo.querySelector('.access-gate-input');
@@ -981,27 +1003,6 @@ a.closest(".menu-item").classList.add("active","current-section");
   });
 })();
 
-// --- Alinear las pestañas del navegador con sus secciones reales ---
-(function(){
-  const rail = document.querySelector('.tab-rail');
-  if(!rail) return;
-  function align(){
-    rail.querySelectorAll('.rail-tab').forEach(tab => {
-      const cat = tab.dataset.tabCat;
-      const btn = document.querySelector(`.menu-item > .menu-button:has(.cat-${cat})`);
-      if(!btn) return;
-      const rect = btn.getBoundingClientRect();
-      tab.style.top = (rect.top + rect.height / 2) + 'px';
-    });
-  }
-  align();
-  window.addEventListener('resize', align);
-  document.addEventListener('click', (e) => {
-    if(e.target.closest('.menu-button')) requestAnimationFrame(align); // el menú desplegado cambia de alto
-  });
-  setTimeout(align, 300); // por si las fuentes cambian la altura del menú al cargar
-})();
-
 // --- Botón de mostrar/ocultar menú lateral ---
 (function(){
   const btn = document.getElementById('sidebar-toggle');
@@ -1023,6 +1024,25 @@ a.closest(".menu-item").classList.add("active","current-section");
     if(icono) icono.className = abierto ? 'ti ti-x' : 'ti ti-menu-2';
   }
   abreMenu(false);
+  // El idioma y el modo oscuro se eligen una vez y luego estorban: en el
+  // móvil ocupaban una franja entera arriba de cada página. Ahí van dentro
+  // del menú, al final; en el ordenador se quedan arriba a la derecha.
+  const selector = document.querySelector('.page-header .language-selector');
+  const sidebar = document.querySelector('.sidebar');
+  const casa = selector && selector.parentNode;
+  const sitio = selector && selector.nextSibling;
+  function colocaIdioma(){
+    if(!selector || !sidebar) return;
+    if(movil.matches){
+      if(selector.parentNode !== sidebar){
+        sidebar.insertBefore(selector, sidebar.querySelector('.sidebar-filler'));
+      }
+    } else if(selector.parentNode !== casa){
+      casa.insertBefore(selector, sitio);
+    }
+  }
+  colocaIdioma();
+  movil.addEventListener('change', colocaIdioma);
   btn.addEventListener('click', () => {
     if(movil.matches){
       abreMenu(!document.body.classList.contains('menu-abierto'));
@@ -1113,7 +1133,7 @@ a.closest(".menu-item").classList.add("active","current-section");
   // entonces se busca en todas. Antes era un solo archivo de 450 KB con las
   // tres pistas. El ?v= de cada uno lo pone herramientas/versiones.py.
   const PARTES = {
-    comun: 'search-index-comun.js?v=9e805daa5a',
+    comun: 'search-index-comun.js?v=7aacba98ee',
     es: 'search-index-es.js?v=df4ca0aec2',
     it: 'search-index-it.js?v=5b9187f21c',
     en: 'search-index-en.js?v=0dea543c71'
