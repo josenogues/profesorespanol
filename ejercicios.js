@@ -1788,6 +1788,14 @@ ${qHTML}`;
 
   const TICK = '<i class="ti ti-check" aria-hidden="true"></i>';
 
+  // La portada de cada curso: todos van en el azul de «Ejercicios» (los
+  // colores de las materias son de las materias) y lo que los distingue es
+  // su dibujo, hecho con tres iconos de lo que trae el curso.
+  function decoHTML(c){
+    const d = Array.isArray(c.deco) ? c.deco : [];
+    return `<span class="ex-course-deco" aria-hidden="true">${d.map(ic => `<i class="ti ${ic}"></i>`).join('')}</span>`;
+  }
+
   function renderRoute(){
     if(!courseView) return;
     activeCourse = null; activeStepIdx = null; activeStepTotal = 0;
@@ -1824,11 +1832,12 @@ ${qHTML}`;
             : `<span class="ex-course-state todo">${cLbl.notStarted}</span>`);
       html += `<div class="ex-route-stop" style="${cssVars(c)}">
 <button class="ex-course-card${isNow ? ' now' : ''}" data-course="${c.key}">
-<span class="ex-course-top"><span class="ex-course-ico"><i class="ti ${c.icon}" aria-hidden="true"></i></span>${mark}</span>
+<span class="ex-course-cover">${decoHTML(c)}<span class="ex-course-ico"><i class="ti ${c.icon}" aria-hidden="true"></i></span>${mark}</span>
+<span class="ex-course-body">
 <h4>${jnEscapeHtml(c.name)}</h4>
 <span class="ex-course-desc">${jnEscapeHtml(c.desc || '')}</span>
 <span class="ex-course-meta">${total} ${cLbl.steps} · ${c.levels}</span>
-${state}</button></div>`;
+${state}</span></button></div>`;
     });
     html += '</div>';
     courseView.innerHTML = html;
@@ -1844,7 +1853,7 @@ ${state}</button></div>`;
     let firstPending = -1;
     for(let i = 0; i < total; i++){ if(!done.has(course.steps[i].id)){ firstPending = i; break; } }
 
-    let html = `<div class="ex-course-hero" style="${cssVars(course)}">
+    let html = `<div class="ex-course-hero" style="${cssVars(course)}">${decoHTML(course)}
 <span class="ex-course-badge"><i class="ti ${course.icon}" aria-hidden="true"></i></span>
 <div class="ex-course-hero-body">
 <h4>${jnEscapeHtml(course.name)}</h4>

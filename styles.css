@@ -18,8 +18,8 @@
 @font-face{font-family:'Nunito';font-style:normal;font-weight:800;font-display:swap;src:url("fuentes/nunito-latin.woff2?v=76388dbfe3") format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
 
 /* ── iconos:inicio ── generado por herramientas/iconos.py: no editar a mano ──
-   Tabler Icons 3.51.0 (MIT, https://tabler.io/icons): solo los 78 que usa la web. */
-@font-face{font-family:"tabler-icons";font-style:normal;font-weight:400;font-display:block;src:url("fuentes/iconos.woff2?v=c5cea7b71b") format("woff2")}
+   Tabler Icons 3.51.0 (MIT, https://tabler.io/icons): solo los 89 que usa la web. */
+@font-face{font-family:"tabler-icons";font-style:normal;font-weight:400;font-display:block;src:url("fuentes/iconos.woff2?v=13f2fec55c") format("woff2")}
 .ti{font-family:"tabler-icons" !important;speak:none;font-style:normal;font-weight:normal;font-variant:normal;text-transform:none;line-height:1;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
 .ti-adjustments-horizontal:before{content:"\ec38"}
 .ti-alert-triangle:before{content:"\ea06"}
@@ -29,11 +29,13 @@
 .ti-arrow-up:before{content:"\ea25"}
 .ti-arrows-sort:before{content:"\eb5a"}
 .ti-ball-football:before{content:"\ee06"}
+.ti-bike:before{content:"\ea36"}
 .ti-bolt:before{content:"\ea38"}
 .ti-book:before{content:"\ea39"}
 .ti-book-2:before{content:"\efc5"}
 .ti-books:before{content:"\eff2"}
 .ti-briefcase:before{content:"\ea46"}
+.ti-building:before{content:"\ea4f"}
 .ti-bulb:before{content:"\ea51"}
 .ti-bus:before{content:"\ebe4"}
 .ti-calendar:before{content:"\ea53"}
@@ -49,10 +51,13 @@
 .ti-coffee:before{content:"\ef0e"}
 .ti-download:before{content:"\ea96"}
 .ti-droplet:before{content:"\ea97"}
+.ti-ear:before{content:"\ebce"}
 .ti-external-link:before{content:"\ea99"}
 .ti-file-description:before{content:"\f028"}
 .ti-file-text:before{content:"\eaa2"}
 .ti-files:before{content:"\edef"}
+.ti-hand-stop:before{content:"\ec2e"}
+.ti-history:before{content:"\ebea"}
 .ti-home:before{content:"\eac1"}
 .ti-info-circle:before{content:"\eac5"}
 .ti-key:before{content:"\eac7"}
@@ -62,12 +67,16 @@
 .ti-list-check:before{content:"\eb6a"}
 .ti-list-details:before{content:"\ef40"}
 .ti-lock:before{content:"\eae2"}
+.ti-luggage:before{content:"\efad"}
 .ti-mail:before{content:"\eae5"}
+.ti-map-pin:before{content:"\eae8"}
 .ti-menu-2:before{content:"\ec42"}
 .ti-message-2:before{content:"\eaec"}
+.ti-message-circle:before{content:"\eaed"}
 .ti-message-circle-2:before{content:"\eaed"}
 .ti-microphone:before{content:"\eaf0"}
 .ti-moon:before{content:"\eaf8"}
+.ti-music:before{content:"\eafc"}
 .ti-note:before{content:"\eb6d"}
 .ti-notebook:before{content:"\eb96"}
 .ti-pencil:before{content:"\eb04"}
@@ -77,6 +86,7 @@
 .ti-plus:before{content:"\eb0b"}
 .ti-presentation:before{content:"\eb70"}
 .ti-puzzle:before{content:"\eb10"}
+.ti-quote:before{content:"\efbe"}
 .ti-refresh:before{content:"\eb13"}
 .ti-refresh-alert:before{content:"\ed57"}
 .ti-route:before{content:"\eb17"}
@@ -85,6 +95,7 @@
 .ti-search:before{content:"\eb1c"}
 .ti-seeding:before{content:"\ed51"}
 .ti-sparkles:before{content:"\f6d7"}
+.ti-stethoscope:before{content:"\edbe"}
 .ti-sun:before{content:"\eb30"}
 .ti-sunrise:before{content:"\ef1c"}
 .ti-tags:before{content:"\ef86"}
@@ -920,7 +931,8 @@ a.prof-card:hover{transform:translateY(-2px);box-shadow:0 4px 10px rgba(0,0,0,.0
   font-size:14.5px;padding:10px 18px;border-radius:11px;border:0;flex:none}
 [data-theme="dark"] .ex-resume-go{color:#232C4F}
 
-.ex-route{display:grid;grid-template-columns:repeat(var(--n,5),1fr);gap:12px;margin-bottom:26px}
+.ex-route{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:26px}
+@media(max-width:1100px){.ex-route{grid-template-columns:repeat(3,1fr)}}
 .ex-route-stop{display:flex;flex-direction:column;min-width:0}
 .ex-route-dots{position:relative;height:22px;display:flex;align-items:center;justify-content:center;margin-bottom:14px}
 .ex-route-line{position:absolute;height:3px;background:var(--border);top:50%;transform:translateY(-50%)}
@@ -932,9 +944,32 @@ a.prof-card:hover{transform:translateY(-2px);box-shadow:0 4px 10px rgba(0,0,0,.0
 .ex-route-dot.done{background:var(--c);border-color:var(--c)}
 .ex-route-dot.now{width:22px;height:22px;border-color:var(--c);border-width:3px}
 
-.ex-course-card{background:var(--card-bg);color:var(--text);border:1px solid var(--border);border-radius:13px;
-  padding:15px 14px;flex:1;display:flex;flex-direction:column;gap:8px;cursor:pointer;
+.ex-course-card{background:var(--card-bg);color:var(--text);border:1px solid var(--border);border-radius:14px;
+  padding:0;flex:1;display:flex;flex-direction:column;cursor:pointer;overflow:hidden;
   text-align:left;font-family:var(--font-body);transition:.15s}
+.ex-course-body{display:flex;flex-direction:column;gap:7px;padding:14px 15px 15px;flex:1}
+/* La portada: el azul de «Ejercicios» con el dibujo del curso. Los tres
+   iconos del fondo son lo que distingue un curso de otro. */
+.ex-course-cover{position:relative;height:104px;flex:none;overflow:hidden;
+  background:linear-gradient(135deg,var(--c) 0%,var(--c-dark) 100%);
+  display:flex;align-items:flex-end;padding:0 15px 14px}
+.ex-course-cover::before{content:"";position:absolute;width:150px;height:150px;border-radius:50%;
+  right:-38px;top:-52px;background:rgba(255,255,255,.09)}
+.ex-course-cover::after{content:"";position:absolute;width:90px;height:90px;border-radius:50%;
+  right:70px;bottom:-58px;background:rgba(255,255,255,.07)}
+.ex-course-deco i{position:absolute;color:rgba(255,255,255,.42);line-height:1}
+.ex-course-deco i:nth-child(1){font-size:38px;right:22px;bottom:16px;transform:rotate(-10deg)}
+.ex-course-deco i:nth-child(2){font-size:24px;right:80px;top:16px;transform:rotate(12deg);color:rgba(255,255,255,.3)}
+.ex-course-deco i:nth-child(3){font-size:22px;right:96px;bottom:14px;transform:rotate(-6deg);color:rgba(255,255,255,.26)}
+.ex-course-cover .ex-course-ico{position:relative;width:50px;height:50px;border-radius:14px;background:#fff;
+  color:var(--c);font-size:27px;box-shadow:0 4px 12px rgba(20,30,70,.22)}
+.ex-course-cover .ex-course-badge,.ex-course-cover .ex-course-ring{position:absolute;top:11px;right:11px}
+.ex-course-cover .ex-course-badge{background:#fff;color:var(--c);width:30px;height:30px;border-radius:50%}
+.ex-course-cover .ex-course-badge.empty{display:none}
+.ex-course-cover .ex-course-ring{width:34px;height:34px;
+  background:conic-gradient(#fff calc(var(--pct,0)*1%),rgba(255,255,255,.3) 0)}
+.ex-course-cover .ex-course-ring::before{background:var(--c-dark)}
+.ex-course-cover .ex-course-ring span{color:#fff;font-size:10px}
 .ex-course-card:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(58,69,112,.14);border-color:var(--c)}
 .ex-course-card.now{border-color:var(--c);box-shadow:0 8px 20px rgba(58,69,112,.14)}
 .ex-course-top{display:flex;align-items:flex-start;justify-content:space-between;gap:8px}
@@ -959,12 +994,21 @@ a.prof-card:hover{transform:translateY(-2px);box-shadow:0 4px 10px rgba(0,0,0,.0
 .ex-course-state{font-size:12.5px;font-weight:700;margin-top:auto;color:var(--c)}
 .ex-course-state.todo{color:var(--muted);font-weight:600}
 
-.ex-course-hero{display:flex;align-items:center;gap:16px;background:var(--c-soft);
-  border:1px solid var(--c);border-radius:14px;padding:18px 20px;margin:4px 0 22px}
-.ex-course-hero .ex-course-badge{width:44px;height:44px;border-radius:12px;font-size:22px}
-.ex-course-hero-body{flex:1;min-width:0}
-.ex-course-hero h4{font-family:var(--font-head);font-size:19px;font-weight:700;margin:0}
-.ex-course-hero p{font-size:13.5px;color:var(--muted);margin:0}
+.ex-course-hero{position:relative;overflow:hidden;display:flex;align-items:center;gap:16px;color:#fff;
+  background:linear-gradient(135deg,var(--c) 0%,var(--c-dark) 100%);
+  border-radius:16px;padding:22px 22px;margin:4px 0 22px}
+.ex-course-hero::before{content:"";position:absolute;width:220px;height:220px;border-radius:50%;
+  right:-60px;top:-90px;background:rgba(255,255,255,.08)}
+.ex-course-hero .ex-course-deco i:nth-child(1){font-size:54px;right:34px;bottom:auto;top:50%;margin-top:-27px}
+.ex-course-hero .ex-course-deco i:nth-child(2){font-size:30px;right:118px;top:12px}
+.ex-course-hero .ex-course-deco i:nth-child(3){font-size:26px;right:136px;bottom:12px}
+.ex-course-hero .ex-course-badge{position:relative;width:54px;height:54px;border-radius:15px;font-size:28px;
+  background:#fff;color:var(--c);box-shadow:0 4px 12px rgba(20,30,70,.22)}
+.ex-course-hero-body{position:relative;flex:1;min-width:0}
+.ex-course-hero h4{font-family:var(--font-head);font-size:21px;font-weight:700;margin:0}
+.ex-course-hero p{font-size:13.5px;color:rgba(255,255,255,.85);margin:0;padding-right:120px}
+.ex-course-hero .ex-course-bar{background:rgba(255,255,255,.28)}
+.ex-course-hero .ex-course-bar i{background:#fff}
 .ex-course-bar{height:8px;border-radius:6px;background:var(--border);overflow:hidden;
   margin-top:9px;max-width:340px}
 .ex-course-bar i{display:block;height:100%;border-radius:6px;background:var(--c);
@@ -1012,9 +1056,8 @@ a.prof-card:hover{transform:translateY(-2px);box-shadow:0 4px 10px rgba(0,0,0,.0
 .ex-signal-stop{background:var(--card-bg);border-color:var(--border);color:var(--text)}
 
 @media(max-width:820px){
-  .ex-route{grid-template-columns:1fr;gap:0}
+  .ex-route{grid-template-columns:repeat(2,1fr);gap:12px}
   .ex-route-dots{display:none}
-  .ex-route-stop{margin-bottom:10px}
 }
 @media(max-width:560px){
   .ex-step-row{grid-template-columns:30px 1fr;gap:11px}
@@ -1023,6 +1066,22 @@ a.prof-card:hover{transform:translateY(-2px);box-shadow:0 4px 10px rgba(0,0,0,.0
   .ex-resume{gap:11px;padding:13px 14px}
   .ex-resume-icon{display:none}
   .ex-signal-btns{flex-direction:column}
+  .ex-route{grid-template-columns:1fr;gap:10px}
+  /* en el móvil la portada va a la izquierda, como una miniatura */
+  .ex-course-card{flex-direction:row}
+  .ex-course-cover{width:92px;height:auto;min-height:118px;padding:0;align-items:center;justify-content:center}
+  .ex-course-cover::before{width:90px;height:90px;right:-30px;top:-34px}
+  .ex-course-cover::after{display:none}
+  .ex-course-deco i:nth-child(1){font-size:24px;right:6px;bottom:8px}
+  .ex-course-deco i:nth-child(2){font-size:17px;right:auto;left:8px;top:9px}
+  .ex-course-deco i:nth-child(3){display:none}
+  .ex-course-cover .ex-course-ico{width:46px;height:46px;font-size:25px}
+  .ex-course-cover .ex-course-badge,.ex-course-cover .ex-course-ring{top:auto;right:auto;bottom:8px;left:8px;width:26px;height:26px}
+  .ex-course-cover .ex-course-ring span{font-size:8.5px}
+  .ex-course-body{padding:12px 13px 13px;gap:5px}
+  .ex-course-hero{padding:18px 16px}
+  .ex-course-hero p{padding-right:0}
+  .ex-course-hero .ex-course-deco{display:none}
 }
 
 /* ---------- Emails de ejemplo ----------
@@ -1107,6 +1166,9 @@ a.prof-card:hover{transform:translateY(-2px);box-shadow:0 4px 10px rgba(0,0,0,.0
 [data-theme="dark"] .ex-course-state,
 [data-theme="dark"] .ex-course-ring span,
 [data-theme="dark"] .ex-step-num.next{color:var(--c-lite)}
+[data-theme="dark"] .ex-course-cover .ex-course-ico,
+[data-theme="dark"] .ex-course-cover .ex-course-badge{color:var(--c)}
+[data-theme="dark"] .ex-course-cover .ex-course-ring span{color:#fff}
 
 /* ---------- Fichas de clase ---------- */
 .cat-clases{color:#7A5230}

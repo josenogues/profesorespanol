@@ -535,8 +535,10 @@ document.addEventListener("jn-modo", e => marcaModo(e.detail));
     if(orderCheckBtn){
       const block = orderCheckBtn.closest('.exercise-block');
       const built = normalizeAnswer(orderAnswerText(block));
-      const correct = normalizeAnswer(block.dataset.answer);
-      showFeedback(block, built === correct);
+      // la solución puede traer su versión sin tildes detrás de «|», como las
+      // de escribir; comparada entera, no la acertaba nadie
+      const accepted = block.dataset.answer.split('|').map(s => normalizeAnswer(s));
+      showFeedback(block, accepted.includes(built));
       return;
     }
     const matchItem = e.target.closest('.match-item');
