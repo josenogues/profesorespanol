@@ -112,12 +112,24 @@ a.closest(".menu-item").classList.add("active","current-section");
 const m = current.match(/^(.+)-(it|en|es)\.html$/);
 if(m){
 document.querySelectorAll(".submenu a.track-link, a.menu-button.track-link").forEach(a=>{
-if(a.dataset.base === m[1]){
+if(a.dataset.base === m[1] && !a.dataset.q){
 a.classList.add("current-page");
 a.closest(".menu-item").classList.add("active","current-section");
 }
 });
 }
+// «Práctica libre»: los tres modos son la misma página (ejercicios-xx.html)
+// con ?modo=…; se marca el que está abierto. El hub avisa con «jn-modo»
+// cuando se cambia de modo sin salir de la página.
+function marcaModo(modo){
+document.querySelectorAll("a.menu-button[data-q]").forEach(a=>{
+const es = !!(m && a.dataset.base === m[1] && modo && a.dataset.q === "modo=" + modo);
+a.classList.toggle("current-page", es);
+a.closest(".menu-item").classList.toggle("current-section", es);
+});
+}
+marcaModo(new URLSearchParams(location.search).get("modo"));
+document.addEventListener("jn-modo", e => marcaModo(e.detail));
 })();
 
 // --- Selector de recorrido (italiano / inglés) para el contenido de verbos ---
@@ -169,8 +181,8 @@ a.closest(".menu-item").classList.add("active","current-section");
     if(menu) menu.setAttribute('aria-label', r.menu);
   }
 
-  function goTo(base, track){
-    window.location.href = base + '-' + track + '.html';
+  function goTo(base, track, q){
+    window.location.href = base + '-' + track + '.html' + (q ? '?' + q : '');
   }
 
   // La ventana que pregunta el idioma sale justo cuando todavía no se sabe
@@ -274,8 +286,9 @@ a.closest(".menu-item").classList.add("active","current-section");
     if(trackLink){
       e.preventDefault();
       const base = trackLink.dataset.base;
+      const q = trackLink.dataset.q || '';
       const existing = getTrack();
-      if(existing){ goTo(base, existing); } else { openModal((t)=> goTo(base, t)); }
+      if(existing){ goTo(base, existing, q); } else { openModal((t)=> goTo(base, t, q)); }
       return;
     }
 
@@ -1017,7 +1030,8 @@ a.closest(".menu-item").classList.add("active","current-section");
     expresiones: {es:'Expresiones', it:'Espressioni', en:'Expressions'},
     atencion: {es:'Especial atención', it:'Attenzione a questi', en:'Watch out for this'},
     profesional: {es:'Profesional', it:'Professionale', en:'Business'},
-    clases: {es:'Mis clases', it:'Le mie lezioni', en:'My classes'}
+    clases: {es:'Mis clases', it:'Le mie lezioni', en:'My classes'},
+    ejercicios: {es:'Práctica libre', it:'Pratica libera', en:'Free practice'}
   };
   const l = labels[cat];
   if(!l) return;
@@ -1057,6 +1071,7 @@ a.closest(".menu-item").classList.add("active","current-section");
       tab.classList.remove('fuera');
       sitios.push({ tab: tab, medio: r.top + r.height / 2 });
     });
+    sitios.sort(function(a, b){ return a.medio - b.medio; });
     // Las que se ven, en su título. Las de fuera, apiladas contra el borde;
     // si no hay sitio, se montan un poco unas sobre otras, como en un
     // cuaderno, pero nunca tapan a una que esté en su título.

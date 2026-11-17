@@ -1977,7 +1977,19 @@ ${nextHTML}<div class="ex-signal-btns">${btns}</div></div>`;
     });
   }
 
+  // El modo queda en la dirección (?modo=…): el menú marca el que está
+  // abierto y, al recargar o volver atrás, se vuelve al mismo sitio.
+  function apuntaModo(mode){
+    try {
+      const u = new URL(location.href);
+      if(mode) u.searchParams.set('modo', mode); else u.searchParams.delete('modo');
+      history.replaceState(history.state, '', u.pathname + u.search + u.hash);
+    } catch(e){}
+    document.dispatchEvent(new CustomEvent('jn-modo', { detail: mode || '' }));
+  }
+
   function showMode(mode){
+    apuntaModo(mode);
     if(modeGrid) modeGrid.style.display = 'none';
     if(panelNivel) panelNivel.style.display = mode === 'nivel' ? '' : 'none';
     if(panelTema) panelTema.style.display = mode === 'tema' ? '' : 'none';
@@ -2011,6 +2023,7 @@ ${nextHTML}<div class="ex-signal-btns">${btns}</div></div>`;
     if(courseView) courseView.innerHTML = '';
     if(hubToolbar) hubToolbar.style.display = 'none';
     endExam(false);
+    apuntaModo('');
   }
 
   modeCards.forEach(btn => {
@@ -2050,6 +2063,14 @@ ${nextHTML}<div class="ex-signal-btns">${btns}</div></div>`;
   if(hoyParam){
     const unidades = leeHoy(hoyParam);
     if(unidades.length) entraHoy(unidades);
+  }
+
+  // ?modo=curso|nivel|tema — desde «Práctica libre» del menú. Solo si no ha
+  // abierto ya otra cosa (un tema, un repaso, «cinco minutos», un curso).
+  const modoParam = params.get('modo');
+  if(['curso', 'nivel', 'tema'].indexOf(modoParam) >= 0 &&
+     !(tema || repasoParam || hoyParam || params.get('curso'))){
+    showMode(modoParam);
   }
 
   // ?curso=vivir[&paso=4] — así se le manda un deber concreto a un alumno

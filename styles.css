@@ -649,6 +649,8 @@ body[data-category="expresiones"] .handwritten-title{color:#7A6FD1}
 body[data-category="atencion"] .handwritten-title{color:#5B9A3B}
 body[data-category="profesional"] .handwritten-title{color:#0F6E56}
 body[data-category="clases"] .handwritten-title{color:#7A5230}
+body[data-category="ejercicios"] .handwritten-title{color:#3A6FC9}
+[data-theme="dark"] body[data-category="ejercicios"] .handwritten-title{color:#7ea3e6}
 [data-theme="dark"] body[data-category="profesional"] .handwritten-title{color:#3fae8c}
 [data-theme="dark"] body[data-category="clases"] .handwritten-title{color:#c99a68}
 @media(max-width:900px){.handwritten-title{display:none}}
