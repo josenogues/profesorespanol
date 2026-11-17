@@ -50,6 +50,9 @@ python3 -m http.server 8947
 | `prueba_hub.py` | El hub de ejercicios: arranca, corrige, cambia de modo; también con una página antigua en caché. |
 | `prueba_examen.py` | El examen de nivel: acertar, fallar, salir a medias, continuar. |
 | `prueba_buscador.py` | El buscador del menú, en las tres pistas y sin pista. |
+| `prueba_resenas.py` | El carrusel de reseñas de «Sobre mí»: se ven todas, en móvil y ordenador. |
+
+Toda la batería de una vez (unos 15 minutos): `bash herramientas/todas.sh`.
 
 ## Cómo está montada la web
 
