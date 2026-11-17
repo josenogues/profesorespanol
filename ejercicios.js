@@ -1768,13 +1768,14 @@ ${qHTML}`;
     return pool;
   }
 
-  // el paso que toca: primero un curso empezado y sin acabar, si no, el primero
-  // que quede pendiente. Ningún curso se bloquea nunca por los anteriores.
+  // el paso que toca: el de un curso empezado y sin acabar. Si no hay
+  // ninguno empezado, nada: los cursos son situaciones sueltas que se eligen,
+  // no un camino en orden, así que no se propone «empieza por el primero».
   function nextUp(){
     const prog = getCourseProgress();
     const pending = c => (prog[c.key] || []).length < c.steps.length;
     const started = courses.filter(c => (prog[c.key] || []).length && pending(c));
-    const c = started[0] || courses.filter(pending)[0];
+    const c = started[0];
     if(!c) return null;
     const done = doneSet(c.key);
     for(let i = 0; i < c.steps.length; i++){ if(!done.has(c.steps[i].id)) return { course: c, idx: i }; }
@@ -1805,15 +1806,12 @@ ${qHTML}`;
 <span class="ex-resume-go">${cLbl.cont}</span></button>`;
     }
     html += `<p class="ex-step-label">${cLbl.route}</p><div class="ex-route" style="--n:${courses.length}">`;
-    courses.forEach((c, i) => {
+    // sin línea de puntos que los una: no son un camino en orden de nivel
+    courses.forEach(c => {
       const done = doneSet(c.key);
       const total = c.steps.length;
       const complete = done.size >= total;
       const isNow = !!up && up.course.key === c.key;
-      const prevDone = i > 0 && doneSet(courses[i - 1].key).size >= courses[i - 1].steps.length;
-      const lineIn = i > 0 ? `<span class="ex-route-line in${prevDone ? ' filled' : ''}" style="--c:${courses[i - 1].color}"></span>` : '';
-      const lineOut = i < courses.length - 1 ? `<span class="ex-route-line out${complete ? ' filled' : ''}"></span>` : '';
-      const dot = `<span class="ex-route-dot${complete ? ' done' : (isNow ? ' now' : '')}"></span>`;
       const mark = complete
         ? `<span class="ex-course-badge">${TICK}</span>`
         : (done.size
@@ -1825,7 +1823,6 @@ ${qHTML}`;
             ? `<span class="ex-course-state">${cText('inProgress', { n: done.size + 1 })}</span>`
             : `<span class="ex-course-state todo">${cLbl.notStarted}</span>`);
       html += `<div class="ex-route-stop" style="${cssVars(c)}">
-<div class="ex-route-dots">${lineIn}${lineOut}${dot}</div>
 <button class="ex-course-card${isNow ? ' now' : ''}" data-course="${c.key}">
 <span class="ex-course-top"><span class="ex-course-ico"><i class="ti ${c.icon}" aria-hidden="true"></i></span>${mark}</span>
 <h4>${jnEscapeHtml(c.name)}</h4>
