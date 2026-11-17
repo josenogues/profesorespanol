@@ -871,6 +871,9 @@ ${qHTML}`;
     if(levelCatGrid) levelCatGrid.innerHTML = cats.map(c =>
       `<button class="ex-cat-card ex-level-cat-btn" data-level-cat="${c.key}" style="--cat-color:${c.color};--cat-bg:${c.color}30"><p>${c.label} <span class="ex-pill-count">${c.n}</span></p></button>`
     ).join('');
+    // las portadas se definen más abajo; si se pinta antes (al llegar con
+    // ?nivel=), las pone la llamada que va justo después de definirlas
+    if(portadasListas) portadasMateriasDeNivel();
     if(levelCatStep) levelCatStep.style.display = cats.length ? '' : 'none';
     if(levelCatGrid) levelCatGrid.querySelectorAll('.ex-level-cat-btn').forEach(btn => {
       btn.addEventListener('click', () => selectLevelCategory(btn.dataset.levelCat));
@@ -1131,6 +1134,8 @@ ${qHTML}`;
       const st = status[lv];
       donut.style.setProperty('--pct', st ? st.bestPct : 0);
       donut.classList.toggle('is-gold', passed);
+      // sin examen empezado, la marca vacía solo ensucia la portada
+      donut.classList.toggle('is-empty', !(st && st.bestPct));
       donut.innerHTML = passed ? '<span aria-hidden="true">&#10003;</span>' : '';
     });
     renderLevelTimeline();
@@ -1851,6 +1856,90 @@ ${qHTML}`;
       `<g fill="none" stroke="${Y}" stroke-width="4" stroke-linecap="round"><path d="M152 30Q160 39 152 48"/><path d="M164 22Q178 39 164 56"/><path d="M176 14Q196 39 176 64"/></g>` +
       estrella(30, 96, 9, Y) + estrella(178, 92, 6, W) + estrella(56, 104, 4, W)
   };
+  // ---- Portadas de «Por nivel» y «Por tema», como las de los cursos ----
+  // Por nivel: el azul de «Ejercicios» y una planta que crece de nivel en
+  // nivel (poco a poco, sin examen a la vista). Por tema: cada materia en su
+  // color, que es suyo, con un dibujo de lo que se practica.
+  const hoja = (x, y, s, ang, c) =>
+    `<ellipse cx="${x}" cy="${y}" rx="${s}" ry="${s * .45}" transform="rotate(${ang} ${x} ${y})" fill="${c}"/>`;
+  const tallo = (y1, y2) => `<path d="M150 ${y1}V${y2}" stroke="${W}" stroke-width="4" stroke-linecap="round"/>`;
+  const suelo = `<ellipse cx="150" cy="112" rx="44" ry="8" fill="${P}"/>`;
+  const ART_NIVEL = {
+    A1: suelo + `<ellipse cx="150" cy="106" rx="9" ry="6" fill="${Y}"/>` + tallo(104, 90) +
+        hoja(142, 88, 9, -30, W) + hoja(158, 86, 9, 30, W) + estrella(184, 40, 6, W),
+    A2: suelo + tallo(108, 70) + hoja(139, 92, 12, -25, W) + hoja(161, 86, 12, 25, W) +
+        hoja(141, 72, 10, -35, P) + hoja(159, 68, 10, 35, P) + estrella(110, 40, 6, Y) + estrella(186, 30, 4, W),
+    B1: suelo + tallo(108, 50) + hoja(137, 94, 14, -20, W) + hoja(163, 88, 14, 20, W) +
+        hoja(138, 74, 12, -30, P) + hoja(162, 68, 12, 30, P) + hoja(142, 56, 9, -40, W) + hoja(158, 52, 9, 40, W) +
+        `<circle cx="150" cy="44" r="6" fill="${Y}"/>` + estrella(108, 30, 5, W),
+    B2: suelo + `<rect x="145" y="64" width="10" height="46" rx="3" fill="${W}"/>` +
+        `<circle cx="150" cy="50" r="28" fill="${P}"/><circle cx="138" cy="44" r="14" fill="${W}" opacity=".55"/>` +
+        `<circle cx="160" cy="58" r="4" fill="${Y}"/><circle cx="140" cy="62" r="4" fill="${Y}"/>` + estrella(104, 30, 6, Y),
+    C1: suelo + `<rect x="144" y="62" width="12" height="48" rx="3" fill="${W}"/>` +
+        `<circle cx="130" cy="58" r="22" fill="${P}"/><circle cx="170" cy="58" r="22" fill="${P}"/><circle cx="150" cy="40" r="28" fill="${W}"/>` +
+        `<circle cx="140" cy="36" r="5" fill="${Y}"/><circle cx="162" cy="46" r="5" fill="${Y}"/><circle cx="128" cy="62" r="5" fill="${Y}"/><circle cx="172" cy="64" r="5" fill="${Y}"/>` +
+        estrella(104, 22, 8, Y) + estrella(192, 18, 5, W)
+  };
+  const T = 'currentColor';
+  const pastilla = (x, y, w, h, fondo, txt, size) =>
+    `<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="${h / 2}" fill="${fondo}"/>` +
+    `<text x="${x + w / 2}" y="${y + h / 2 + size * .36}" text-anchor="middle" font-family="Nunito,Arial,sans-serif" font-weight="800" font-size="${size}" fill="${T}">${txt}</text>`;
+  const bloque = (x, y, s, fondo, txt) =>
+    `<rect x="${x}" y="${y}" width="${s}" height="${s}" rx="7" fill="${fondo}"/>` +
+    `<text x="${x + s / 2}" y="${y + s / 2 + 7}" text-anchor="middle" font-family="Nunito,Arial,sans-serif" font-weight="800" font-size="19" fill="${T}">${txt}</text>`;
+  const etiqueta = (x, y, w, h, fondo, txt) =>
+    `<path d="M${x} ${y + h / 2}L${x + 16} ${y}H${x + w - 6}Q${x + w} ${y} ${x + w} ${y + 6}V${y + h - 6}Q${x + w} ${y + h} ${x + w - 6} ${y + h}H${x + 16}Z" fill="${fondo}"/>` +
+    `<circle cx="${x + 15}" cy="${y + h / 2}" r="4" fill="${T}"/>` +
+    `<text x="${x + 24 + (w - 24) / 2}" y="${y + h / 2 + 6}" text-anchor="middle" font-family="Nunito,Arial,sans-serif" font-weight="800" font-size="16" fill="${T}">${txt}</text>`;
+  const ART_MATERIA = {
+    verbos: pastilla(22, 12, 96, 30, W, 'hablo', 17) + pastilla(56, 46, 100, 30, W, 'hablas', 17) +
+            pastilla(90, 80, 96, 30, P, 'habla', 17) + estrella(170, 26, 8, Y) + estrella(30, 94, 6, W),
+    gramatica: bloque(44, 64, 44, W, 'el') + bloque(94, 64, 44, P, 'la') + bloque(69, 16, 44, Y, 'los') +
+               bloque(146, 78, 32, W, 'un') + estrella(164, 30, 7, W),
+    vocabulario: etiqueta(22, 16, 116, 36, W, 'la casa') + etiqueta(62, 64, 110, 36, Y, 'el sol') +
+                 estrella(170, 28, 7, W) + estrella(34, 92, 5, P),
+    expresiones: bocadillo(14, 14, 112, 40, W, T, '¡Ojalá!', 19, 'M38 50L30 70L58 52Z') +
+                 bocadillo(84, 64, 100, 34, P, T, '¡Ánimo!', 16, 'M160 96L170 112L148 98Z') + estrella(168, 28, 8, Y),
+    profesional: `<rect x="52" y="42" width="96" height="66" rx="10" fill="${W}"/><path d="M84 42V32Q84 26 90 26H110Q116 26 116 32V42" fill="none" stroke="${W}" stroke-width="6"/>` +
+                 `<rect x="52" y="64" width="96" height="8" fill="${P}"/><rect x="92" y="58" width="16" height="20" rx="3" fill="${Y}"/>` +
+                 `<rect x="152" y="18" width="38" height="26" rx="4" fill="${Y}"/><path d="M153 20L171 33L189 20" fill="none" stroke="${T}" stroke-width="2.5" stroke-linejoin="round"/>` +
+                 estrella(30, 34, 7, W),
+    lectura: `<path d="M100 32Q74 18 40 24V102Q74 96 100 110Z" fill="${W}"/><path d="M100 32Q126 18 160 24V102Q126 96 100 110Z" fill="${P}"/>` +
+             `<g stroke="${T}" stroke-width="3" stroke-linecap="round" opacity=".35"><path d="M52 44Q72 40 90 46M52 58Q72 54 90 60M52 72Q72 68 90 74M110 46Q128 40 148 44M110 60Q128 54 148 58"/></g>` +
+             `<path d="M132 20H146V52L139 46L132 52Z" fill="${Y}"/>` + estrella(178, 40, 7, W) + estrella(22, 60, 5, Y)
+  };
+  function portada(card, svg, color){
+    if(!svg || card.querySelector('.ex-pick-cover')) return;
+    card.classList.add('with-cover');
+    card.style.setProperty('--c', color);
+    card.style.setProperty('--c-dark', shade(color, -.3));
+    card.style.setProperty('--c-lite', shade(color, .45));
+    const tapa = document.createElement('span');
+    tapa.className = 'ex-pick-cover';
+    tapa.innerHTML = `<svg viewBox="0 0 200 120" aria-hidden="true" focusable="false">${svg}</svg>`;
+    // el código del nivel y su marca van sobre la portada
+    ['.ex-level-code', '.ex-level-donut'].forEach(sel => {
+      const el = card.querySelector(sel);
+      if(el) tapa.appendChild(el);
+    });
+    card.insertBefore(tapa, card.firstChild);
+  }
+  const AZUL_EJ = '#3A6FC9';
+  levelBtns.forEach(card => portada(card, ART_NIVEL[card.dataset.level], AZUL_EJ));
+  catBtns.forEach(card => {
+    const cat = (cfg.categories || []).find(c => c.key === card.dataset.cat);
+    if(cat) portada(card, ART_MATERIA[cat.key], cat.color);
+  });
+  function portadasMateriasDeNivel(){
+    if(!levelCatGrid) return;
+    levelCatGrid.querySelectorAll('.ex-level-cat-btn').forEach(card => {
+      const cat = (cfg.categories || []).find(c => c.key === card.dataset.levelCat);
+      if(cat) portada(card, ART_MATERIA[cat.key], cat.color);
+    });
+  }
+  var portadasListas = true;
+  portadasMateriasDeNivel();
+
   function artHTML(c){
     const a = ART[c.key];
     if(!a) return `<span class="ex-course-ico"><i class="ti ${c.icon}" aria-hidden="true"></i></span>`;

@@ -399,6 +399,51 @@ body:has(.apu-boton) footer,body:has(.cita-boton) footer{padding-bottom:96px}
 .ex-level-card:hover{background:var(--tint);border-color:var(--primary)}
 .ex-level-card.active:hover{background:var(--primary);border-color:var(--primary)}
 
+/* Portadas de «Por nivel» y «Por tema»: las pone ejercicios.js, igual que
+   las de los cursos. La de nivel va en el azul de «Ejercicios»; la de cada
+   materia, en el color de la materia. */
+.ex-cat-card.with-cover{padding:0;overflow:hidden;display:flex;flex-direction:column;position:relative;border-radius:14px}
+.ex-cat-card.with-cover:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(58,69,112,.14);border-color:var(--c);background:var(--card-bg)}
+.ex-cat-card.with-cover > i{display:none}
+.ex-pick-cover{position:relative;height:100px;flex:none;overflow:hidden;display:flex;align-items:center;justify-content:center;
+  background:linear-gradient(135deg,var(--c) 0%,var(--c-dark) 100%);color:var(--c-dark)}
+.ex-pick-cover::before{content:"";position:absolute;width:130px;height:130px;border-radius:50%;
+  right:-40px;top:-60px;background:rgba(255,255,255,.09)}
+.ex-pick-cover svg{position:relative;z-index:1;height:86px;width:auto;max-width:94%;
+  filter:drop-shadow(0 3px 6px rgba(15,30,80,.18));transition:transform .2s}
+.ex-cat-card.with-cover:hover .ex-pick-cover svg{transform:scale(1.05) rotate(-1deg)}
+.ex-cat-card.with-cover p{padding:12px 15px 14px;font-family:var(--font-head);font-weight:700;font-size:16px;color:var(--text)}
+.ex-cat-card.with-cover.active{background:var(--card-bg);border:2px solid var(--c);box-shadow:0 6px 18px rgba(58,69,112,.18)}
+.ex-cat-card.with-cover.active p{color:var(--c-dark)}
+.ex-cat-card.with-cover.active p::after{content:"\2713";float:right;width:22px;height:22px;border-radius:50%;
+  background:var(--c);color:#fff;font-size:13px;line-height:22px;text-align:center}
+[data-theme="dark"] .ex-cat-card.with-cover.active p{color:var(--c-lite)}
+/* nivel: el código grande, escrito sobre la portada; la planta a la derecha */
+.ex-level-card.with-cover .ex-pick-cover{justify-content:flex-end}
+.ex-level-card.with-cover .ex-level-code{position:absolute;z-index:2;left:13px;bottom:8px;margin:0;
+  color:#fff;font-size:34px;font-weight:800;line-height:1;text-shadow:0 2px 8px rgba(15,30,80,.25)}
+.ex-level-card.with-cover.is-level-passed .ex-level-code,
+.ex-cat-card.with-cover.active .ex-level-code{color:#fff}
+.ex-level-card.with-cover .ex-level-donut{z-index:2;top:9px;left:11px;right:auto}
+.ex-level-card.with-cover .ex-level-donut::before{background:var(--c-dark)}
+.ex-level-card.with-cover .ex-level-donut.is-empty{display:none}
+.ex-level-card.with-cover:hover{background:var(--card-bg)}
+.ex-level-card.with-cover.is-level-passed,.ex-level-card.with-cover.is-level-passed.active{
+  background:linear-gradient(var(--card-bg),var(--card-bg)) padding-box,
+    linear-gradient(120deg,#b8790a,#f2ab27,#ffe9b0,#f2ab27,#b8790a) border-box;background-size:100% 100%,300% 300%}
+/* las materias dentro de un nivel: portada más baja */
+.ex-level-cat-btn.with-cover .ex-pick-cover{height:74px}
+.ex-level-cat-btn.with-cover .ex-pick-cover svg{height:64px}
+.ex-level-cat-btn.with-cover p{font-size:15px;padding:10px 13px 12px}
+/* «Por tema»: seis materias, mejor en dos filas de tres que en una de seis */
+#ex-mode-panel-tema .ex-category-grid{grid-template-columns:repeat(3,1fr);gap:14px}
+@media(max-width:760px){
+  #ex-mode-panel-tema .ex-category-grid{grid-template-columns:repeat(2,1fr);gap:10px}
+  .ex-pick-cover{height:86px}
+  .ex-pick-cover svg{height:74px}
+  .ex-level-card.with-cover .ex-level-code{font-size:28px}
+}
+
 /* ---------- Examen de nivel ---------- */
 .ex-global-counter{display:inline-flex;align-items:center;gap:8px;background:var(--badge-gold-bg);color:var(--gold-dark);font-weight:700;font-size:14.5px;padding:9px 18px;border-radius:24px;margin:0 0 18px}
 .ex-global-counter:empty{display:none;margin:0}
