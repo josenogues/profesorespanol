@@ -38,6 +38,14 @@ svg[data-fx="draw"] path{fill:none;stroke-linecap:round;stroke-linejoin:round}
 .sello.si{background:var(--verde);left:430px;top:150px}
 .verde{color:var(--verde)}
 /* 1 · gancho */
+.camara{position:absolute;inset:0;transform-origin:414px 432px}
+.bar .ojos-susto,.bar .boca-o,.bar .sudor{display:none}
+.susto .ojos-susto,.susto .boca-o,.susto .sudor{display:inline}
+.susto .ojos-normal,.susto .boca-normal{display:none}
+.gancho-txt em{font-style:normal;color:#ffd166;text-decoration:underline;text-decoration-thickness:5px;text-underline-offset:6px}
+.burro-cae{position:absolute;left:162px;top:362px;width:220px;height:180px;transform-origin:50% 100%}
+.burro-cae svg{width:100%;height:100%}
+.cliente-dice{max-width:250px;top:318px}
 .gancho-txt{position:absolute;left:24px;right:24px;top:92px;text-align:center;color:#fff;font-size:42px;font-weight:800;line-height:1.15}
 .escena-bar{position:absolute;left:30px;width:480px;top:330px}
 .escena-bar svg{width:480px;height:300px}
@@ -158,6 +166,14 @@ const escenas=TL.escenas.map(e=>({...e,el:document.getElementById('e-'+e.id)}));
 const subt=document.getElementById('subt'), subtTxt=subt.querySelector('span');
 const marca=document.getElementById('marca'), grad=document.getElementById('grad');
 const sacudidas=els.filter(e=>e.dataset.fx==='shake');
+// cuándo arranca cada elemento: su trozo + retraso, o «tantos segundos antes de que acabe el trozo»
+function inicio(el){const c=el.dataset.cue;
+  return el.dataset.fin!==undefined?cue(c)+TL.dur[c]-(+el.dataset.fin):cue(c)+(+el.dataset.delay||0)}
+// lista de efectos de sonido para la mezcla final
+window.sfxList=()=>els.filter(e=>e.dataset.sfx).flatMap(e=>e.dataset.sfx.split(',').map(x=>{
+  const [n,spec]=x.split('@');let t=inicio(e);
+  if(spec){const m=spec.match(/^([a-z]\w*)?([+-][\d.]+)?$/);t=(m[1]?cue(m[1]):t)+(+(m[2]||0))}
+  if(e.dataset.fx==='fall'&&!spec)t+=0;return {n,t}}));
 function render(t){
   // sacudida de pantalla (golpe del lema)
   let sx=0,sy=0;
@@ -176,14 +192,22 @@ function render(t){
     s.style.transform=`rotate(${Math.sin(t*.2+i)*15}deg)`;s.style.opacity=g>.5?.25:.35;
     s.querySelector('.f').style.stroke=g>.5?'#fff':FORMAS[i][3]});
   for(const el of els){
-    const t0=cue(el.dataset.cue)+(+el.dataset.delay||0), fx=el.dataset.fx;
+    const t0=inicio(el), fx=el.dataset.fx;
     const d=t-t0, p=clamp(d/(DUR[fx]||.45)), s=el.style;
     // desaparece cuando llega otro trozo
     if(el.dataset.hidecue){const h=t-cue(el.dataset.hidecue);if(h>0){s.opacity=1-clamp(h/.25);continue}}
     if(fx==='shake')continue;
     if(fx==='ya'){s.opacity=1;continue}
-    if(fx==='raise'){const tgt=el.closest('.escena').querySelector(el.dataset.sel);
-      tgt.style.transform=`translateY(${-9*easeBack(p)}px) rotate(${-12*easeBack(p)}deg)`;tgt.style.transformBox='fill-box';tgt.style.transformOrigin='center';continue}
+    if(fx==='raise'){el.closest('.escena').querySelectorAll(el.dataset.sel).forEach((tgt,k)=>{
+      tgt.style.transform=`translateY(${-11*easeBack(p)}px) rotate(${(k?-8:8)*easeBack(p)}deg)`;tgt.style.transformBox='fill-box';tgt.style.transformOrigin='center'});continue}
+    if(fx==='camara'){ // primer plano de la cara del camarero y la cámara se aleja
+      s.opacity=1;const q=easeInOut(clamp((d-(+el.dataset.zoom||1))/.6)), tiembla=(1-q)*Math.sin(d*42)*2.2;
+      s.transform=`translate(${-144*(1-q)+tiembla}px,${-12*(1-q)}px) scale(${2.6-1.6*q})`;continue}
+    if(fx==='drop'){ // cae del cielo, aplasta un poco y rebota
+      s.opacity=d>0?1:0;if(d<=0)continue;const T=.42;
+      if(d<T){s.transform=`translateY(${-560*(1-(d/T)**2)}px)`}
+      else{const e=d-T, a=Math.exp(-e*7)*Math.cos(e*26);s.transform=`scale(${1+.18*a},${1-.22*a})`}
+      continue}
     if(fx==='walk'){ // el burro entra trotando desde la derecha y suelta una coz
       s.opacity=d>0?1:0;const w=clamp(d/.8);
       s.transform=`translateX(${(1-easeOut(w))*360}px) translateY(${w<1?-Math.abs(Math.sin(d*16))*10:0}px)`;

@@ -102,11 +102,15 @@ def bar():
     <rect x="352" y="168" width="64" height="42" rx="6" fill="{C}" {TR}/>
     <circle cx="384" cy="102" r="38" fill="#ffd9b8" {TR}/>
     <path d="M348 92 C 352 64, 416 62, 420 90 C 404 78, 364 78, 348 92 Z" fill="{L}"/>
-    <circle cx="370" cy="104" r="3.5" fill="{L}"/><circle cx="398" cy="104" r="3.5" fill="{L}"/>
+    <g class="ojos-normal"><circle cx="370" cy="104" r="3.5" fill="{L}"/><circle cx="398" cy="104" r="3.5" fill="{L}"/></g>
+    <g class="ojos-susto"><circle cx="370" cy="104" r="7.5" fill="#fff" {TR}/><circle cx="398" cy="104" r="7.5" fill="#fff" {TR}/>
+      <circle cx="371" cy="105" r="3" fill="{L}"/><circle cx="397" cy="105" r="3" fill="{L}"/></g>
     <path class="ceja" d="M392 90 C 398 84, 406 84, 410 88" fill="none" {TR}/>
-    <path d="M362 92 C 368 90, 374 90, 378 92" fill="none" {TR}/>
+    <path class="ceja2" d="M360 88 C 364 84, 372 84, 378 90" fill="none" {TR}/>
     <path d="M368 120 C 376 116, 392 116, 400 120 C 392 126, 376 126, 368 120 Z" fill="{L}"/>
-    <path d="M378 130 L 392 130" {TR}/>
+    <path class="boca-normal" d="M378 130 L 392 130" {TR}/>
+    <ellipse class="boca-o" cx="385" cy="134" rx="6" ry="8" fill="{L}"/>
+    <g class="sudor"><path d="M420 82 C 426 92, 428 98, 422 100 C 416 98, 416 92, 420 82 Z" fill="#9fd3ff" {TR}/></g>
   </g>
   <g transform="translate(200 150)"><rect x="0" y="0" width="34" height="50" rx="5" fill="#fff" {TR}/>
     <rect x="4" y="14" width="26" height="32" rx="3" fill="#8a5a3b"/></g>

@@ -102,6 +102,7 @@ with sync_playwright() as p:
             pg.evaluate(f"render({s})")
             pg.screenshot(path=str(AQUI / "tmp" / f"v-{SUBS}-{s}.png"))
         sys.exit()
+    sfx = pg.evaluate("sfxList()")
     mudo = AQUI / "tmp" / "mudo.mp4"
     ff = subprocess.Popen(["ffmpeg", "-y", "-loglevel", "error", "-f", "image2pipe", "-framerate", str(FPS),
                            "-i", "-", "-c:v", "libx264", "-preset", "medium", "-crf", "23",
@@ -113,15 +114,21 @@ with sync_playwright() as p:
     nav.close()
     ff.stdin.close(); ff.wait()
 
-# 4. audio
+# 4. audio: voz + efectos de sonido (sonidos/*.wav, fabricados con sonidos.py)
+VOL = {"rebuzno": 0.55, "tiza": 0.35, "whoosh": 0.45, "caida": 0.5}
+for x in sfx:
+    if 0 <= x["t"] < total:
+        pistas.append((x["t"], AQUI / "sonidos" / f"{x['n']}.wav", VOL.get(x["n"], 0.6)))
 if pistas:
     entradas, filtros = [], []
-    for k, (ini, mp3) in enumerate(pistas):
-        entradas += ["-i", str(mp3)]
+    for k, pista in enumerate(pistas):
+        ini, archivo = pista[0], pista[1]
+        vol = pista[2] if len(pista) > 2 else 1.0
+        entradas += ["-i", str(archivo)]
         ms = int(ini * 1000)
-        filtros.append(f"[{k+1}:a]adelay={ms}|{ms}[a{k}]")
+        filtros.append(f"[{k+1}:a]aformat=sample_rates=44100:channel_layouts=mono,volume={vol},adelay={ms}|{ms}[a{k}]")
     mezcla = "".join(f"[a{k}]" for k in range(len(pistas)))
-    filtro = ";".join(filtros) + f";{mezcla}amix=inputs={len(pistas)}:normalize=0,apad[voz]"
+    filtro = ";".join(filtros) + f";{mezcla}amix=inputs={len(pistas)}:normalize=0,alimiter=limit=0.9,apad[voz]"
     subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-i", str(mudo), *entradas,
                     "-filter_complex", filtro, "-map", "0:v", "-map", "[voz]",
                     "-c:v", "copy", "-c:a", "aac", "-b:a", "128k", "-shortest", str(SALIDA)], check=True)
