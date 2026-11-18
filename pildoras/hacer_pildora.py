@@ -71,7 +71,7 @@ for i, e in enumerate(ESCENAS):
         if mp3.exists():
             pistas.append((t, mp3))
         # tras lo que se aprende, un respiro para leerlo e interiorizarlo
-        t += d + tr.get("pausa", 1.0 if tr["lang"] == "es" else 0.15)
+        t += d + tr.get("pausa", 0.8 if tr["lang"] == "es" else 0.12)
     t += 0.6
     escenas.append({"id": e["id"], "ini": ini, "fin": t})
     t -= 0.06

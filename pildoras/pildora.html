@@ -3,101 +3,122 @@
 <style>
 @font-face{font-family:'Nunito';font-weight:400 800;src:url("REPO/fuentes/nunito-latin.woff2") format("woff2")}
 @font-face{font-family:'Caveat';font-weight:700;src:url("REPO/fuentes/caveat-latin.woff2") format("woff2")}
-:root{--violeta:#4b5894;--violeta-osc:#3A4570;--lila:#6a5fc0;--tinta:#2a2f45;--gris:#6b6f80;
+:root{--violeta:#4b5894;--violeta-osc:#3A4570;--logo:#5B4FB8;--rosa:#E04F96;--lila:#6a5fc0;--tinta:#2a2f45;--gris:#6b6f80;
   --verde:#2f9e6b;--rojo:#d4574e;--oro:#f2ab27;--papel:#faf8f4}
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{width:540px;height:960px;overflow:hidden;background:var(--papel);font-family:Nunito,sans-serif;color:var(--tinta)}
-#grad{position:absolute;inset:0;background:linear-gradient(135deg,#3A4570 0%,#4b5894 55%,#6a5fc0 100%);opacity:0}
+#grad{position:absolute;inset:0;background:linear-gradient(160deg,#3A4570 0%,#4b5894 50%,#6a5fc0 100%);opacity:0}
 #formas{position:absolute;inset:0;pointer-events:none}
 #formas svg{position:absolute;overflow:visible}
-#formas .f{fill:none;stroke-width:5;stroke-linecap:round;stroke-linejoin:round}
+#formas .f{fill:none;stroke-width:4;stroke-linecap:round;stroke-linejoin:round}
 .escena{position:absolute;inset:0;opacity:0}
 .escena.degradado{color:#fff}
-[data-cue]{opacity:0;will-change:transform,opacity}
-#marca{position:absolute;left:0;right:0;justify-content:center;top:30px;display:flex;align-items:center;gap:10px;font-weight:700;font-size:15px;color:var(--gris);z-index:5}
-#marca img{width:38px;height:38px}
-#marca b{font-family:Caveat;font-size:22px;color:var(--violeta)}
-#avance{position:absolute;left:0;bottom:0;height:5px;background:var(--lila);z-index:6}
-#subt{position:absolute;left:24px;right:24px;top:690px;justify-content:center;z-index:5;
-  background:rgba(255,255,255,.96);border-radius:16px;padding:11px 22px;font-size:25px;font-weight:800;line-height:1.35;
-  box-shadow:0 6px 24px rgba(40,40,80,.16);display:flex;align-items:center;gap:12px;text-align:center}
-#subt img{width:30px;height:20px;border-radius:3px;flex:none}
-#subt.es span{color:var(--violeta);font-weight:800}
-#subt i{font-style:normal;border-radius:5px}
-#subt i.on{background:var(--oro);color:#2a1f00;box-shadow:0 0 0 3px var(--oro)}
-.cierre-emo{top:330px}
-.gancho-txt{position:absolute;left:0;right:0;top:185px;text-align:center;color:#fff;font-size:46px;font-weight:800}
-.gancho-txt.abajo{top:395px}
-.alerta{position:absolute;left:50%;top:585px;width:220px;margin-left:-110px;text-align:center;background:var(--rojo);color:#fff;
-  font-size:32px;font-weight:800;padding:8px 0;border-radius:999px;box-shadow:0 10px 24px rgba(0,0,0,.25)}
-.palabra.chica{font-size:92px;top:200px}
-/* dibujos */
+[data-cue]{opacity:0}
+#marca{position:absolute;left:0;right:0;top:28px;display:flex;justify-content:center;align-items:center;gap:8px;font-weight:700;font-size:14px;color:var(--gris);z-index:5}
+#marca img{width:30px;height:30px}
+#marca b{font-family:Caveat;font-size:20px;color:var(--violeta)}
+#avance{position:absolute;left:0;bottom:0;height:5px;background:var(--oro);z-index:6}
+/* subtítulos: sin caja, letra blanca con borde oscuro (no se confunden con las tarjetas) */
+#subt{position:absolute;left:22px;right:22px;top:700px;z-index:5;text-align:center;font-size:26px;font-weight:800;line-height:1.3;
+  color:#fff;-webkit-text-stroke:4.5px #1d2238;paint-order:stroke fill;letter-spacing:.4px;word-spacing:2px;text-shadow:0 3px 8px rgba(0,0,0,.35)}
+#subt i{font-style:normal}
+#subt i.on{color:var(--oro)}
+#subt.es{font-size:29px}
+#subt img{display:none}
+/* dibujos que se trazan */
 svg[data-fx="draw"] path{fill:none;stroke-linecap:round;stroke-linejoin:round}
-.garabato{display:block;width:240px;height:22px;margin:-6px auto 0}
-.garabato path{stroke:var(--oro);stroke-width:6}
-.flecha-curva{position:absolute;left:600px;top:262px;width:90px;height:110px}
-.flecha-curva path{stroke:var(--lila);stroke-width:5}
-.rodeado{position:relative}
-.rodeo{position:absolute;left:-14px;top:-14px;width:calc(100% + 28px);height:calc(100% + 28px);overflow:visible}
-.rodeo path{stroke:var(--rojo);stroke-width:4}
 .estrellas{position:absolute;left:0;top:0;width:0;height:0}
 .estrellas i{position:absolute;display:block}
-/* piezas (vertical 540x960) */
-.etiqueta{position:absolute;left:0;right:0;top:110px;text-align:center;font-family:Caveat;font-size:50px;color:var(--violeta)}
-.garabato{width:200px}
-.tarjeta{position:absolute;left:30px;right:30px;background:#fff;border-radius:22px;box-shadow:0 10px 30px rgba(40,40,90,.12);border:2px solid #ecebf3}
-.par{top:250px;display:flex;align-items:center;justify-content:center;gap:14px;padding:18px 20px;font-size:38px;font-weight:700}
-.par img{width:44px;height:30px;border-radius:4px;box-shadow:0 0 0 1px rgba(0,0,0,.08)}
-.es-w{color:var(--violeta);font-weight:800}
-.igual{color:var(--gris)}
-.emo{font-size:52px;line-height:1}
-.grande-emo{font-size:76px}
-.trad{font-size:28px;color:var(--verde);font-weight:800}
-.nota-mano{position:absolute;left:0;right:0;top:385px;text-align:center;font-family:Caveat;font-size:46px;color:var(--rojo)}
-.nota-mano.abajo{top:545px;color:var(--verde)}
-.marca{background:linear-gradient(transparent 58%,rgba(242,171,39,.55) 58%) no-repeat;background-size:0% 100%;padding:0 4px}
-.frase{top:360px;display:flex;align-items:center;gap:16px;padding:20px 22px;font-size:31px;font-weight:600;line-height:1.3}
-.frase img{width:44px;height:30px;border-radius:4px;flex:none;box-shadow:0 0 0 1px rgba(0,0,0,.08)}
-.frase b{color:var(--verde)}
-.emo-fila{position:absolute;left:0;right:0;top:245px;text-align:center;font-size:62px;letter-spacing:10px}
-.sello{position:absolute;width:62px;height:62px;border-radius:50%;display:grid;place-items:center;font-size:38px;font-weight:800;color:#fff}
-.sello.si{background:var(--verde);left:462px;top:330px}
-.bocadillo{position:absolute;left:60px;right:60px;top:420px;text-align:center;background:var(--violeta);color:#fff;font-size:40px;font-weight:800;
-  padding:18px 10px;border-radius:26px;box-shadow:0 12px 30px rgba(75,88,148,.3)}
-.bocadillo::after{content:"";position:absolute;bottom:-18px;left:70px;border:12px solid transparent;border-top:18px solid var(--violeta)}
-/* gancho */
-.cinta{position:absolute;left:50%;top:95px;transform:translateX(-50%);background:var(--oro);color:#3A2a00;font-weight:800;font-size:20px;
-  padding:8px 20px;border-radius:999px;letter-spacing:.5px;text-transform:uppercase;white-space:nowrap}
-.cinta[data-cue]{left:0;right:0;margin:0 auto;width:max-content;transform:none}
-.capsula{position:absolute;left:170px;top:290px;width:200px;height:90px}
-.cap-a,.cap-b{position:absolute;top:0;width:100px;height:90px}
-.cap-a{left:0;background:#ffe9b0;border-radius:45px 0 0 45px}
-.cap-b{right:0;background:var(--oro);border-radius:0 45px 45px 0}
-.palabra{position:absolute;left:0;right:0;top:240px;text-align:center;font-family:Caveat;font-size:130px;color:#fff;line-height:1}
-.emoji-dudas{position:absolute;left:0;right:0;top:465px;text-align:center;font-size:72px;letter-spacing:6px}
-.globo{position:absolute;background:#fff;color:var(--violeta-osc);font-weight:800;font-size:30px;padding:8px 20px;border-radius:22px;box-shadow:0 10px 24px rgba(0,0,0,.18)}
-.globo::after{content:"";position:absolute;bottom:-12px;left:18px;border:8px solid transparent;border-top:12px solid #fff}
-.gq1{left:120px;top:430px}.gq2{right:115px;top:470px}
-/* cierre */
-.fila{position:absolute;left:34px;right:34px;background:#fff;border:2px solid #ecebf3;border-radius:20px;box-shadow:0 8px 22px rgba(40,40,90,.10);
-  display:flex;align-items:center;gap:12px;padding:12px 20px;font-size:30px;font-weight:700}
-.fila img{width:38px;height:26px;border-radius:4px;box-shadow:0 0 0 1px rgba(0,0,0,.08)}
-.fila .emo{font-size:40px}
-.fila small{font-size:19px;color:var(--gris);font-weight:700;margin-left:auto}
-.fila .verde{color:var(--verde);margin-left:auto;font-size:27px}
-.duda{position:absolute;left:0;right:0;top:325px;text-align:center;color:#fff;font-size:36px;font-weight:800}
-.lema{position:absolute;left:30px;right:30px;top:420px;text-align:center;background:#fff;color:var(--violeta-osc);font-size:36px;font-weight:800;
-  padding:16px 8px;border-radius:22px;box-shadow:0 14px 34px rgba(0,0,0,.28)}
-.lema-trad{position:absolute;left:0;right:0;top:510px;text-align:center;color:#ffe9b0;font-family:Caveat;font-size:34px}
-.sigue{position:absolute;left:0;right:0;top:705px;text-align:center;color:#fff;font-size:24px;font-weight:700}
-.sigue b{background:var(--oro);color:#2a1f00;padding:4px 12px;border-radius:999px;margin-left:4px}
-
-.resumen{position:absolute;left:0;right:0;top:190px;text-align:center;font-size:56px;font-weight:800;color:#fff}
-.resumen.r2{top:290px}
-.r-es{font-family:Caveat;font-size:84px;color:#ffe9b0}
-.g-fin{left:50%;top:415px;transform-origin:center;margin-left:-160px;width:320px;white-space:nowrap;text-align:center}
-.logo-fin{position:absolute;left:50%;top:560px;width:170px;margin-left:-85px}
-.mas{position:absolute;left:0;right:0;top:640px;text-align:center;color:rgba(255,255,255,.9);font-weight:700;font-size:22px}
+/* comunes */
+.nota-mano{position:absolute;left:0;right:0;top:452px;text-align:center;font-family:Caveat;font-size:50px;color:var(--rojo);transform-origin:center}
+.nota-mano.abajo{top:560px;color:var(--verde)}
+.palabra-oscura{position:absolute;left:0;right:0;top:100px;text-align:center;font-family:Caveat;font-size:96px;line-height:1;color:var(--violeta)}
+.palabra-oscura .igual{color:var(--gris);font-family:Nunito;font-size:60px}
+.sello{position:absolute;width:76px;height:76px;border-radius:50%;display:grid;place-items:center;font-size:46px;font-weight:800;color:#fff;box-shadow:0 8px 20px rgba(0,0,0,.18)}
+.sello.si{background:var(--verde);left:430px;top:150px}
+.verde{color:var(--verde)}
+/* 1 · gancho */
+.gancho-txt{position:absolute;left:24px;right:24px;top:92px;text-align:center;color:#fff;font-size:42px;font-weight:800;line-height:1.15}
+.escena-bar{position:absolute;left:30px;width:480px;top:330px}
+.escena-bar svg{width:480px;height:300px}
+.escena-bar.baja{top:380px}
+.bocata{position:absolute;left:24px;top:225px;background:#fff;color:var(--tinta);font-size:25px;font-weight:800;padding:12px 18px;border-radius:20px;
+  box-shadow:0 10px 24px rgba(0,0,0,.18);max-width:300px}
+.bocata::after{content:"";position:absolute;bottom:-14px;left:60px;border:9px solid transparent;border-top:14px solid #fff}
+.bocata b{color:var(--rojo)}
+.bocata b.verde{color:var(--verde)}
+.bocata.arriba{top:200px;max-width:380px;font-size:28px}
+.piensa{position:absolute;left:300px;top:205px;width:200px;height:120px;background:#fff;border-radius:60px;box-shadow:0 10px 24px rgba(0,0,0,.18);
+  display:flex;align-items:center;justify-content:center;gap:4px;transform-origin:30% 100%}
+.piensa .burro{width:120px;height:100px}
+.piensa b{font-size:38px;color:var(--rojo);font-weight:800}
+.nube{position:absolute;left:60px;bottom:-26px;width:22px;height:22px;border-radius:50%;background:#fff}
+.nube.n2{left:44px;bottom:-46px;width:13px;height:13px}
+/* 2 · revela */
+.burro-entra{position:absolute;left:150px;top:205px;width:300px;height:245px}
+.burro-entra svg,.burro-terco svg{width:100%;height:100%}
+.tostada-vuela{position:absolute;left:60px;top:300px;width:110px;height:100px}
+.tostada-vuela svg{width:100%;height:100%}
+.untar-fila{position:absolute;left:20px;right:20px;top:525px;display:flex;align-items:center;gap:6px}
+.untar-fila .tostada{width:110px;height:100px;flex:none}
+.untar{position:relative;display:inline-block;font-size:44px;font-weight:800;color:var(--violeta-osc);padding:4px 10px}
+.manteca{position:absolute;left:0;top:18%;height:70%;width:0;background:#ffe07a;border-radius:14px 22px 18px 26px;
+  box-shadow:inset 0 -5px 0 rgba(242,171,39,.5)}
+.untar-txt{position:relative}
+.cuchillo-va{position:absolute;top:-34px;left:0;width:150px;height:40px;margin-left:-40px}
+.cuchillo-va svg{width:100%;height:100%}
+/* 4 · moneda */
+.moneda{position:absolute;left:120px;top:210px;width:300px;height:300px;transform-style:preserve-3d}
+.cara{position:absolute;inset:0;border-radius:50%;background:radial-gradient(circle at 35% 30%,#ffe7a6,#f2ab27 70%,#d89418);
+  border:6px solid #c47f0d;box-shadow:0 14px 30px rgba(0,0,0,.18),inset 0 0 0 10px rgba(255,255,255,.25);backface-visibility:hidden;
+  display:grid;place-items:center}
+.cara svg{width:220px;height:180px}
+.cara.b{transform:rotateY(180deg)}
+.cara.b svg{width:230px;height:150px}
+.pie-moneda{position:absolute;left:0;right:0;top:530px;text-align:center;font-size:34px;font-weight:800;color:var(--violeta-osc)}
+.dipende{position:absolute;left:350px;top:215px;background:var(--rojo);color:#fff;font-size:26px;font-weight:800;padding:8px 16px;border-radius:999px;
+  box-shadow:0 8px 20px rgba(0,0,0,.2)}
+/* 5 · testarudo */
+.bocadillo{position:absolute;left:50px;right:50px;top:110px;text-align:center;background:var(--logo);color:#fff;font-size:44px;font-weight:800;
+  padding:16px 10px;border-radius:26px;box-shadow:0 12px 30px rgba(75,88,148,.3)}
+.bocadillo::after{content:"";position:absolute;bottom:-18px;right:110px;border:12px solid transparent;border-top:18px solid var(--logo)}
+.burro-terco{position:absolute;left:110px;top:250px;width:320px;height:262px}
+/* 6 · burrone */
+.bandera-it{position:absolute;left:0;right:0;top:110px;text-align:center;font-size:24px;font-weight:700;color:var(--gris)}
+.bandera-it img{width:34px;height:23px;border-radius:3px;vertical-align:-4px}
+.cae{position:absolute;left:0;right:0;top:160px;text-align:center;font-family:Caveat;font-size:104px;color:var(--violeta);line-height:1}
+.cae span{display:inline-block}
+.barranco-caja{position:absolute;left:0;width:540px;top:300px;height:330px}
+.barranco-caja svg{width:540px;height:330px}
+.eco{position:absolute;left:0;right:0;top:170px;text-align:center;font-size:46px;font-weight:800;color:var(--verde);transform-origin:center}
+.eco span{display:block;font-size:32px;color:var(--gris)}
+.eco .e2{font-size:24px;opacity:.6}
+/* 7 · pizarra */
+.pizarra{position:absolute;left:24px;right:24px;top:110px;height:560px;background:#2f3d45;border:14px solid #b98552;border-radius:18px;
+  box-shadow:0 16px 36px rgba(0,0,0,.25),inset 0 0 40px rgba(0,0,0,.35);padding:22px 24px;color:#f4f1e8;font-family:Caveat}
+.piz-titulo{text-align:center;font-size:44px;letter-spacing:2px;color:#ffe9b0;border-bottom:3px dashed rgba(255,255,255,.35);padding-bottom:8px;margin-bottom:16px}
+.piz-l{position:relative;font-size:37px;line-height:1.05;margin:16px 0 22px}
+.piz-l i{font-style:normal;color:#9be3a8;margin-left:6px}
+.piz-l.no i{color:#ff8c80}
+.piz-l small{display:block;font-family:Nunito;font-size:17px;color:rgba(244,241,232,.65);font-weight:700;margin-top:4px}
+.tachar{position:absolute;left:-6px;top:6px;width:110px;height:30px}
+.tachar path{stroke:#ff8c80;stroke-width:5}
+/* 8 · cierre */
+.pregunta{position:absolute;left:20px;right:20px;top:100px;text-align:center;font-family:Caveat;font-size:54px;line-height:1.05;color:#ffe9b0;transform-origin:center}
+.globos-vivos{position:absolute;left:0;right:0;top:205px;height:230px}
+.globos{position:absolute;left:50%;top:0;width:260px;height:230px;margin-left:-130px;transform-origin:center top}
+.globos svg{position:absolute;overflow:visible}
+.g-rosa{left:130px;top:4px;width:110px;height:110px}
+.g-violeta{left:28px;top:44px;width:165px;height:165px}
+.destellos{left:0;top:0;width:260px;height:220px}
+.lema{position:absolute;left:10px;right:10px;top:440px;text-align:center;font-family:Caveat;font-size:68px;line-height:1;color:#fff;
+  text-shadow:0 6px 0 var(--rosa),0 12px 26px rgba(0,0,0,.3);transform-origin:center}
+.lema-trad{position:absolute;left:0;right:0;top:582px;text-align:center;color:#ffe9b0;font-family:Caveat;font-size:34px}
+.marca-fin{position:absolute;left:0;right:0;top:632px;text-align:center;color:#fff;font-size:26px;font-weight:800}
+.marca-fin b{font-family:Caveat;font-size:34px;color:var(--oro);font-weight:700}
+.sigue{position:absolute;left:0;right:0;top:680px;display:flex;justify-content:center;align-items:center;gap:12px;color:#fff;font-size:22px;font-weight:800}
+.redes{display:flex;gap:8px}.redes svg{width:40px;height:40px}
+.sacude{display:none}
 </style></head>
 <body>
 <div id="grad"></div>
@@ -110,78 +131,119 @@ ESCENAS
 const TL = TIMELINE;
 const clamp=(x)=>Math.max(0,Math.min(1,x));
 const easeOut=(p)=>1-Math.pow(1-p,3);
+const easeInOut=(p)=>p<.5?4*p*p*p:1-Math.pow(-2*p+2,3)/2;
 const easeBack=(p)=>{const c1=1.70158,c3=c1+1;return 1+c3*Math.pow(p-1,3)+c1*Math.pow(p-1,2)};
-const DUR={openL:.5,openR:.5,pop:.4,up:.4,slide:.45,write:1.1,stamp:.3,mark:.45,grow:.7,draw:.6,wobble:.9};
+const DUR={pop:.4,up:.4,slide:.45,write:.9,stamp:.3,mark:.45,grow:.7,draw:.5,wobble:.9,spread:1.1};
 const COL=['#6a5fc0','#f2ab27','#2f9e6b','#d4574e','#8891C4'];
-// formas sueltas que flotan (círculo, triángulo, cruz, garabato, estrella, rombo)
+const cue=(c)=>TL.cues[c];
+// formas de fondo, discretas: pequeñas, claras y lentas
 const FORMAS=[
- ['<circle cx="20" cy="20" r="16"/>',30,170,COL[0]],
- ['<path d="M20 4 L36 34 L4 34 Z"/>',470,150,COL[1]],
- ['<path d="M20 4 V36 M4 20 H36"/>',475,600,COL[2]],
- ['<path d="M2 20 C 10 4, 18 36, 26 20 S 42 4, 50 20"/>',20,620,COL[4]],
- ['<path d="M20 2 L25 15 L38 16 L28 25 L31 38 L20 31 L9 38 L12 25 L2 16 L15 15 Z"/>',60,860,COL[1]],
- ['<path d="M20 2 L38 20 L20 38 L2 20 Z"/>',450,860,COL[3]],
+ ['<circle cx="20" cy="20" r="14"/>',24,190,COL[0]],
+ ['<path d="M20 6 L34 32 L6 32 Z"/>',488,170,COL[1]],
+ ['<path d="M20 8 V32 M8 20 H32"/>',492,640,COL[2]],
+ ['<path d="M2 20 C 10 6, 18 34, 26 20 S 42 6, 50 20"/>',14,660,COL[4]],
 ];
 const capa=document.getElementById('formas');
 const formas=FORMAS.map(([d,x,y,c],i)=>{const s=document.createElementNS('http://www.w3.org/2000/svg','svg');
-  s.setAttribute('viewBox','0 0 52 40');s.setAttribute('width',52);s.setAttribute('height',40);
+  s.setAttribute('viewBox','0 0 52 40');s.setAttribute('width',30);s.setAttribute('height',24);
   s.innerHTML=d.replace('/>',` class="f" stroke="${c}"/>`);capa.appendChild(s);return {s,x,y,i}});
-// ráfagas de estrellitas
 document.querySelectorAll('[data-fx="burst"]').forEach(b=>{b.style.left=b.dataset.x+'px';b.style.top=b.dataset.y+'px';
   for(let k=0;k<22;k++){const i=document.createElement('i');const sz=8+(k*7)%12;
     i.style.width=i.style.height=sz+'px';i.style.background=COL[k%5];
     i.style.borderRadius=k%3===0?'50%':(k%3===1?'2px':'0');if(k%3===2)i.style.clipPath='polygon(50% 0,100% 100%,0 100%)';
     i.dataset.a=(k/22)*Math.PI*2+(k%4)*.2;i.dataset.v=180+(k*53)%160;b.appendChild(i)}});
-// longitudes de los trazos dibujados
 document.querySelectorAll('svg[data-fx="draw"] path').forEach(p=>{const l=p.getTotalLength();p.dataset.l=l;p.style.strokeDasharray=l});
 const els=[...document.querySelectorAll('[data-cue]')];
 const escenas=TL.escenas.map(e=>({...e,el:document.getElementById('e-'+e.id)}));
-const subt=document.getElementById('subt'), subtTxt=subt.querySelector('span'), subtImg=subt.querySelector('img');
+const subt=document.getElementById('subt'), subtTxt=subt.querySelector('span');
 const marca=document.getElementById('marca'), grad=document.getElementById('grad');
+const sacudidas=els.filter(e=>e.dataset.fx==='shake');
 function render(t){
+  // sacudida de pantalla (golpe del lema)
+  let sx=0,sy=0;
+  for(const k of sacudidas){const d=t-cue(k.dataset.cue);if(d>0&&d<.5){const a=(1-d/.5)*9;sx+=Math.sin(d*90)*a;sy+=Math.cos(d*70)*a}}
   let g=0;
   for(const e of escenas){
     const fi=e.ini<=0?1:clamp((t-e.ini)/.12), fo=clamp((e.fin-t)/.12), o=Math.min(fi,fo);
     e.el.style.opacity=o; e.el.style.visibility=o>0?'visible':'hidden';
-    const golpe=e.ini<=0?0:(1-easeOut(clamp((t-e.ini)/.3)))*.07, lento=clamp((t-e.ini)/(e.fin-e.ini))*.035;
-    e.el.style.transform=`scale(${1+golpe+lento})`;
+    const golpe=e.ini<=0?0:(1-easeOut(clamp((t-e.ini)/.3)))*.06, lento=clamp((t-e.ini)/(e.fin-e.ini))*.03;
+    e.el.style.transform=`translate(${sx}px,${sy}px) scale(${1+golpe+lento})`;
     if(e.el.classList.contains('degradado'))g=Math.max(g,o);
   }
   grad.style.opacity=g; marca.style.opacity=1-g;
-  formas.forEach(({s,x,y,i})=>{const a=t*.6+i*1.7;
-    s.style.left=(x+Math.cos(a)*10)+'px';s.style.top=(y+Math.sin(a*1.2)*12)+'px';
-    s.style.transform=`rotate(${Math.sin(t*.4+i)*25+t*(i%2?8:-8)}deg)`;
-    s.querySelector('.f').style.stroke=g>.5?'rgba(255,255,255,.45)':FORMAS[i][3]});
+  formas.forEach(({s,x,y,i})=>{const a=t*.3+i*1.7;
+    s.style.left=(x+Math.cos(a)*6)+'px';s.style.top=(y+Math.sin(a*1.2)*6)+'px';
+    s.style.transform=`rotate(${Math.sin(t*.2+i)*15}deg)`;s.style.opacity=g>.5?.25:.35;
+    s.querySelector('.f').style.stroke=g>.5?'#fff':FORMAS[i][3]});
   for(const el of els){
-    const t0=TL.cues[el.dataset.cue]+(+el.dataset.delay||0), fx=el.dataset.fx;
+    const t0=cue(el.dataset.cue)+(+el.dataset.delay||0), fx=el.dataset.fx;
     const d=t-t0, p=clamp(d/(DUR[fx]||.45)), s=el.style;
-    if(fx==='countdown'){const dur=TL.dur[el.dataset.cue];
-      if(d<0||d>dur){s.opacity=0;continue}
-      const n=3-Math.floor(d/(dur/3)), q=(d%(dur/3))/(dur/3);
-      el.textContent=n; s.opacity=1-Math.max(0,(q-.8)/.2); s.transform=`scale(${.6+.4*easeBack(clamp(q*4))})`; continue}
+    // desaparece cuando llega otro trozo
+    if(el.dataset.hidecue){const h=t-cue(el.dataset.hidecue);if(h>0){s.opacity=1-clamp(h/.25);continue}}
+    if(fx==='shake')continue;
+    if(fx==='ya'){s.opacity=1;continue}
+    if(fx==='raise'){const tgt=el.closest('.escena').querySelector(el.dataset.sel);
+      tgt.style.transform=`translateY(${-9*easeBack(p)}px) rotate(${-12*easeBack(p)}deg)`;tgt.style.transformBox='fill-box';tgt.style.transformOrigin='center';continue}
+    if(fx==='walk'){ // el burro entra trotando desde la derecha y suelta una coz
+      s.opacity=d>0?1:0;const w=clamp(d/.8);
+      s.transform=`translateX(${(1-easeOut(w))*360}px) translateY(${w<1?-Math.abs(Math.sin(d*16))*10:0}px)`;
+      const kd=d-(+el.dataset.kick||1), pt=el.querySelector('.patas-tras'), cab=el.querySelector('.cabeza');
+      const k=kd>0&&kd<.6?Math.sin(kd/.6*Math.PI):0;
+      pt.style.transform=`rotate(${-48*k}deg)`;cab.style.transform=`rotate(${10*k}deg)`;
+      s.transform+=` rotate(${-6*k}deg)`;continue}
+    if(fx==='kicked'){ // la tostada sale volando con la coz
+      s.opacity=d>0?1:0;if(d<=0)continue;s.transform=`translateY(${(1-easeOut(p))*20}px)`;
+      const kd=t-(cue(el.dataset.kickcue)+(+el.dataset.kickdelay||0));
+      if(kd>0){s.transform=`translate(${-kd*520}px,${-kd*620+kd*kd*600}px) rotate(${-kd*720}deg)`;s.opacity=clamp(1.2-kd)}
+      continue}
+    if(fx==='spread'){ // el cuchillo unta la mantequilla sobre la palabra
+      s.opacity=d>0?1:0;const q=easeInOut(p), w=el.offsetWidth;
+      el.querySelector('.manteca').style.width=(q*100)+'%';
+      const cu=el.querySelector('.cuchillo-va');cu.style.left=(q*w)+'px';
+      cu.style.transform=`rotate(${-12+Math.sin(d*18)*6}deg)`;cu.style.opacity=p<1?1:clamp(1-(d-DUR.spread)/.3);continue}
+    if(fx==='flip'){ // moneda: aparece y gira hasta la otra cara
+      s.opacity=easeOut(clamp(d/.3));const fd=t-cue(el.dataset.flipcue);
+      const ang=fd>0?540*easeInOut(clamp(fd/.9)):Math.sin(d*2.4)*12;
+      s.transform=`scale(${.6+.4*easeBack(clamp(d/.4))}) rotateY(${ang}deg) translateY(${fd>0&&fd<.9?-Math.sin(fd/.9*Math.PI)*60:0}px)`;continue}
+    if(fx==='fall'){ // las letras se caen al barranco una a una
+      s.opacity=d>0?1:0;const fd=t-t0-(+el.dataset.falldelay||0);
+      el.querySelectorAll('span').forEach((sp,k)=>{const q=fd-k*.09;
+        sp.style.transform=q>0?`translate(${(k-3)*-6*q}px,${q*q*900}px) rotate(${(k%2?1:-1)*q*240}deg)`:`translateY(${(1-easeOut(p))*20}px)`;
+        sp.style.opacity=q>0?clamp(1-(q-.4)/.3):1});continue}
+    if(fx==='globos'){ // el sello de la serie: los globos del logo hablan
+      s.opacity=d>0?1:0;if(d<=0)continue;
+      const vi=el.querySelector('.g-violeta'), ro=el.querySelector('.g-rosa'), de=el.querySelector('.destellos');
+      const gr=t-cue(el.dataset.grito), lg=t-cue(el.dataset.logo);
+      vi.style.transform=`scale(${.3+.7*easeBack(clamp(d/.45))}) rotate(${gr>0?0:Math.sin(d*5)*7}deg)`;vi.style.transformOrigin='40% 90%';
+      let rs=.3+.7*easeBack(clamp((d-.25)/.45)), rr=0, ry=0;
+      if(gr>0){ry=-Math.sin(clamp(gr/.35)*Math.PI)*36;rr=gr<.9?Math.sin(gr*40)*9*(1-gr/.9):0;rs*=1+.25*Math.sin(clamp(gr/.35)*Math.PI)}
+      ro.style.transform=`translateY(${ry}px) rotate(${rr}deg) scale(${rs})`;ro.style.transformOrigin='60% 90%';
+      el.querySelectorAll('.rubor').forEach(r=>r.style.opacity=gr>0?clamp(gr/.3)*.9:0);
+      const boca=el.querySelector('.boca');boca.setAttribute('ry',gr>0&&gr<1.2?8:4);boca.setAttribute('rx',gr>0&&gr<1.2?8:6);
+      de.style.opacity=gr>0?(gr<.6?(Math.floor(gr*14)%2?1:.3):1):.7;de.style.transform=`scale(${gr>0?1+.25*Math.sin(clamp(gr/.4)*Math.PI):1})`;de.style.transformOrigin='center';
+      el.querySelector('.globos').style.transform=lg>0?`translateY(${-easeInOut(clamp(lg/.6))*0}px) scale(${1-.18*easeInOut(clamp(lg/.6))})`:'';continue}
+    if(fx==='slam'){s.opacity=d>0?1:0;const k=easeOut(clamp(d/.22));
+      s.transform=`scale(${2.4-1.4*k}) rotate(${-8+3*k}deg)`;continue}
+    if(fx==='countdown'){continue}
     if(fx==='draw'){s.opacity=d>0?1:0;el.querySelectorAll('path').forEach((pa,k)=>{
         const pk=clamp(d/DUR.draw-k*.6); pa.style.strokeDashoffset=pa.dataset.l*(1-easeOut(pk))});continue}
     if(fx==='burst'){const on=d>0&&d<1.3;s.opacity=on?1:0;if(!on)continue;
       el.querySelectorAll('i').forEach(i=>{const a=+i.dataset.a,v=+i.dataset.v;
         const x=Math.cos(a)*v*d*(1-d*.35), y=Math.sin(a)*v*d*(1-d*.35)+140*d*d;
         i.style.transform=`translate(${x}px,${y}px) rotate(${d*400}deg)`;i.style.opacity=clamp(1.3-d)});continue}
-    if(fx==='travel'){s.opacity=d>0?1:0;let pos=110;
-      for(const [c,px] of [['l2',280],['l4',640],['l6',1000]])pos+=(px-pos)*easeOut(clamp((t-TL.cues[c])/.6));
-      s.left=pos+'px';continue}
-    if(fx==='openL'||fx==='openR'){s.opacity=1;const k=easeOut(p),sg=fx==='openL'?-1:1;
-      s.transform=`translate(${sg*k*120}px,${k*40}px) rotate(${sg*k*35}deg)`;s.opacity=1-clamp((d-.3)/.4);continue}
-    if(fx==='ya'){s.opacity=1;continue}
-    if(fx==='bob'){s.opacity=easeOut(clamp(p*1.6));s.transform=`scale(${.55+.45*easeBack(p)}) translateY(${Math.sin(t*5)*6}px)`;continue}
-    if(fx==='grow'){s.opacity=d>0?1:0;s.transform=`scaleX(${easeOut(p)})`;continue}
     if(fx==='mark'){s.opacity=1;s.backgroundSize=`${easeOut(p)*100}% 100%`;continue}
-    if(fx==='write'){s.opacity=d>0?1:0;s.clipPath=`inset(-20% ${100-p*100}% -20% 0)`;continue}
+    if(fx==='write'){s.opacity=d>0?1:0;s.clipPath=`inset(-30% ${100-p*100}% -60% 0)`;continue}
     s.opacity=easeOut(clamp(p*1.6));
     const k=fx==='stamp'?easeOut(p):easeBack(p);
     if(fx==='pop')s.transform=`scale(${.55+.45*k})`;
     else if(fx==='wobble')s.transform=`scale(${.4+.6*easeBack(p)}) rotate(${Math.sin(d*14)*14*Math.exp(-d*3)}deg)`;
     else if(fx==='up')s.transform=`translateY(${(1-easeOut(p))*24}px)`;
     else if(fx==='slide')s.transform=`translateX(${(1-easeOut(p))*-50}px)`;
-    else if(fx==='stamp')s.transform=`scale(${2.2-1.2*k}) rotate(${-14*k}deg)`;
+    else if(fx==='stamp')s.transform=`scale(${2.2-1.2*k}) rotate(${-10*k}deg)`;
+    // el burro testarudo: clava las patas y niega con la cabeza
+    if(el.dataset.stubborn){const sd=t-cue(el.dataset.stubborn), cab=el.querySelector('.cabeza');
+      cab.style.transform=sd>0&&sd<2.2?`rotate(${Math.sin(sd*11)*12}deg)`:'';
+      if(sd>0&&sd<2.2)s.transform+=` translateX(${Math.sin(sd*30)*2}px) rotate(-3deg)`}
   }
   const tr=TL.trozos.find(x=>t>=x.ini&&t<x.fin+.2&&x.text);
   if(tr){subt.style.opacity=1;
@@ -189,7 +251,8 @@ function render(t){
       subtTxt.innerHTML=tr.sub.split(' ').map(w=>`<i>${w}</i>`).join(' ')}
     const ws=[...subtTxt.querySelectorAll('i')], tot=ws.reduce((a,w)=>a+w.textContent.length+1,0);
     let acc=0; const prog=clamp((t-tr.ini)/(tr.fin-tr.ini))*tot;
-    ws.forEach(w=>{const on=prog>=acc&&prog<acc+w.textContent.length+1;acc+=w.textContent.length+1;w.className=on?'on':''});subt.className=tr.lang;subtImg.src=TL.banderas[tr.lang];subtImg.style.display=tr.lang==='es'?'block':'none'}
+    ws.forEach(w=>{const on=prog>=acc&&prog<acc+w.textContent.length+1;acc+=w.textContent.length+1;w.className=on?'on':''});
+    subt.className=tr.lang}
   else subt.style.opacity=0;
   document.getElementById('avance').style.width=(t/TL.total*100)+'%';
 }
