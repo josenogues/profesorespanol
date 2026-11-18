@@ -4,11 +4,12 @@
 # fx "ya" = visible desde el primer fotograma (la miniatura en redes es el fotograma 0).
 
 VOZ = "it"
+CUENTA = "@espanolconjose"   # provisional, hasta que José elija el nombre
 
 def T(it, es, en):
     return {"it": it, "es": es, "en": en}
 
-def escenas(L):
+def escenas(L, web=False):
     t = lambda d: d[L]
     SUB = '<svg class="garabato" data-cue="{c}" data-fx="draw" viewBox="0 0 300 24"><path d="M6 16 C 50 4, 80 22, 125 12 S 200 6, 240 14 S 280 16, 294 10"/></svg>'
     return [
@@ -81,16 +82,38 @@ def escenas(L):
       <span class="es-w"><b class="marca" data-cue="b2" data-fx="mark" data-delay="0.2">un barranco</b></span></div>
   """},
 
-  {"id": "cierre", "fondo": "degradado", "trozos": [
-     {"id": "c1", "lang": "it", "text": "Prossima pillola: embarazada. Non è quello che pensi!",
-      "sub": T("Prossima pillola: «embarazada». Non è quello che pensi!",
-               "Próxima píldora: «embarazada». ¡No es lo que piensas!",
-               "Next pill: «embarazada». It's not what you think!")},
-     {"id": "c2", "lang": "es", "text": "¡Hasta la próxima!", "pausa": 0.8, "sub": T("¡Hasta la próxima!", "¡Hasta la próxima!", "¡Hasta la próxima!")},
+  {"id": "resumen", "trozos": [
+     {"id": "x1", "lang": "it", "text": "Ricapitolando!", "sub": T("Ricapitolando!", "¡Resumiendo!", "Quick recap!")},
+     {"id": "x2", "lang": "pausa", "dur": 4.6},
   ], "html": f"""
-    <div class="cinta" data-cue="c1" data-fx="pop">{t(T("Prossima pillola","Próxima píldora","Next pill"))}</div>
-    <div class="palabra chica" data-cue="c1" data-fx="pop" data-delay="0.4">«embarazada»</div>
-    <div class="emoji-dudas cierre-emo" data-cue="c1" data-fx="bob" data-delay="0.8">😳🤔</div>
-    <img class="logo-fin" src="REPO/logo-apilado.svg" data-cue="c2" data-fx="up">
+    <div class="etiqueta" data-cue="x1" data-fx="up">{t(T("Ricapitolando","Resumiendo","Recap"))}{SUB.format(c="x1")}</div>
+    <div class="fila" style="top:232px" data-cue="x1" data-fx="slide" data-delay="0.8">
+      <img src="REPO/banderas/es.svg"><span class="es-w">burro</span><span class="igual">=</span><span class="emo">🫏</span></div>
+    <div class="fila" style="top:337px" data-cue="x1" data-fx="slide" data-delay="1.8">
+      <img src="REPO/banderas/es.svg"><span class="es-w">burrito</span><span class="igual">=</span><span class="emo">🌯</span>
+      <small>{t(T("piccolo asino","burro pequeño","little donkey"))}</small></div>
+    <div class="fila" style="top:442px" data-cue="x1" data-fx="slide" data-delay="2.8">
+      <img src="REPO/banderas/it.svg"><span class="es-w">burrone</span><span class="igual">=</span><span class="emo">🏞️</span>
+      <b class="verde">barranco</b></div>
+    <div class="fila" style="top:547px" data-cue="x1" data-fx="slide" data-delay="3.8">
+      <img src="REPO/banderas/it.svg"><span class="es-w">burro</span><span class="igual">=</span><span class="emo">🧈</span>
+      <b class="verde">mantequilla</b></div>
+  """},
+
+  {"id": "cierre", "fondo": "degradado", "trozos": [
+     {"id": "c1", "lang": "it", "text": "E embarazada? Vuol dire imbarazzata?",
+      "sub": T("E «embarazada»? Vuol dire «imbarazzata»?",
+               "¿Y «embarazada»? ¿Será «imbarazzata»?",
+               "And «embarazada»? Does it mean «embarrassed»?")},
+     {"id": "c2", "lang": "es", "text": "¡No es lo que parece!", "pausa": 0.2,
+      "sub": T("¡No es lo que parece!", "¡No es lo que parece!", "¡No es lo que parece!")},
+     {"id": "c3", "lang": "pausa", "dur": 1.8},
+  ], "html": f"""
+    <div class="palabra chica" data-cue="c1" data-fx="pop">«embarazada»</div>
+    <div class="duda" data-cue="c1" data-fx="up" data-delay="1.2">= {t(T("imbarazzata","imbarazzata","embarrassed"))}? 🤔</div>
+    <div class="lema" data-cue="c2" data-fx="stamp">¡No es lo que parece! 😳</div>
+    {"" if L == "es" else f'<div class="lema-trad" data-cue="c2" data-fx="up" data-delay="0.4">{t(T("Non è quello che sembra!","","It is not what it looks like!"))}</div>'}
+    <img class="logo-fin" src="REPO/logo-apilado.svg" data-cue="c3" data-fx="up">
+    {"" if web else f'<div class="sigue" data-cue="c3" data-fx="pop" data-delay="0.3">{t(T("Segui","Sigue a","Follow"))} <b>{CUENTA}</b></div>'}
   """},
     ]

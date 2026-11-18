@@ -10,18 +10,20 @@ from playwright.sync_api import sync_playwright
 AQUI = pathlib.Path(__file__).parent
 REPO = AQUI.parent
 FPS = 25
-NOMBRE, SUBS = sys.argv[1], sys.argv[2]
-CAPTURAS = sys.argv[3] if len(sys.argv) > 3 else None
+ARGS = [a for a in sys.argv[1:] if a != "--web"]
+WEB = "--web" in sys.argv
+NOMBRE, SUBS = ARGS[0], ARGS[1]
+CAPTURAS = ARGS[2] if len(ARGS) > 2 else None
 G = importlib.import_module(f"guion_{NOMBRE}")
-ESCENAS = G.escenas(SUBS)
+ESCENAS = G.escenas(SUBS, web=WEB)
 AUDIO = AQUI / "audio" / NOMBRE
 AUDIO.mkdir(parents=True, exist_ok=True)
-SALIDA = AQUI / "videos" / f"pildora-{NOMBRE}-{SUBS}.mp4"
+SALIDA = AQUI / "videos" / f"pildora-{NOMBRE}-{SUBS}{'-web' if WEB else ''}.mp4"
 BANDERA = {"it": "it", "es": "es", "en": "gb"}
 
 # Voces de Azure: (código, voz, velocidad)
-VOCES = {"it": ("it-IT", "it-IT-DiegoNeural", "+6%"),
-         "es": ("es-ES", "es-ES-AlvaroNeural", "-6%"),
+VOCES = {"it": ("it-IT", "it-IT-DiegoNeural", "0%"),
+         "es": ("es-ES", "es-ES-AlvaroNeural", "-10%"),
          "en": ("en-GB", "en-GB-RyanNeural", "+4%")}
 
 def voz_azure(tr, destino):
@@ -49,7 +51,7 @@ def duracion_audio(p):
 def estimar(tr):
     if tr["lang"] == "pausa":
         return tr["dur"]
-    return len(tr["text"]) / (12.5 if tr["lang"] == "es" else 17.5) + 0.15
+    return len(tr["text"]) / (10.5 if tr["lang"] == "es" else 15) + 0.2
 
 # 1. voz y línea de tiempo
 t = 0.0
@@ -68,8 +70,9 @@ for i, e in enumerate(ESCENAS):
                        "sub": tr.get("sub", {}).get(SUBS, tr.get("text", "")), "ini": t, "fin": t + d})
         if mp3.exists():
             pistas.append((t, mp3))
-        t += d + tr.get("pausa", 0.03)
-    t += 0.2
+        # tras lo que se aprende, un respiro para leerlo e interiorizarlo
+        t += d + tr.get("pausa", 1.0 if tr["lang"] == "es" else 0.15)
+    t += 0.6
     escenas.append({"id": e["id"], "ini": ini, "fin": t})
     t -= 0.06
 total = t + 0.06
