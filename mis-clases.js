@@ -152,14 +152,9 @@
   }
   document.addEventListener('jn-counter-updated', refrescaEjercicios);
 
-  // Clave con la que se guardan los apuntes de una clase. Las del catálogo
-  // tienen id; una rápida lleva el suyo desde que se crea, y las creadas
-  // antes de que existiera el cuaderno se apañan con fecha + título.
-  function claveApuntes(a){
-    if(!a.rapida) return a.id;
-    return a.rapida.rid || ('r-' + (a.fecha || 'sinfecha') + '-' +
-      (a.rapida.titulo || '').toLowerCase().replace(/[^a-z0-9]+/g, '').slice(0, 24));
-  }
+  // la clave de los apuntes de cada clase vive en apuntes.js, que la usa
+  // también el cuaderno para su lista de «Todos mis apuntes»
+  const claveApuntes = window.jnClaveApuntes;
 
   function render(asignadas, apuntes){
     apuntes = apuntes || {};

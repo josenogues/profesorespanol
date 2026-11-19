@@ -1532,6 +1532,33 @@ body:has(.access-gate-overlay) .cita-boton{display:none}
   border-top:2px solid rgba(255,255,255,.75);border-left:2px solid rgba(255,255,255,.75);
   border-radius:2px 0 0 0}
 @media(max-width:620px){ .apu-tirador{display:none} }
+/* Cuaderno: «Esta clase» / «Todos mis apuntes» */
+.apu-pestanas{display:flex;border-bottom:1px solid var(--border);background:var(--card-bg)}
+.apu-pest{flex:1;border:0;border-bottom:3px solid transparent;background:transparent;color:var(--muted);cursor:pointer;
+  font-family:var(--font-body);font-size:13.5px;font-weight:700;padding:9px 8px 7px}
+.apu-pest[aria-selected="true"]{color:#7A5230;border-bottom-color:#7A5230}
+.apu-pest:hover{color:var(--text)}
+[data-theme="dark"] .apu-pest[aria-selected="true"]{color:#c99b6e;border-bottom-color:#c99b6e}
+.apu-vista{flex:1;min-height:0;display:flex;flex-direction:column}
+.apu-vista[hidden],.apu-lista[hidden],.apu-detalle[hidden],.apu-det-caja[hidden],.apu-ir[hidden],.apu-traer[hidden]{display:none}
+.apu-lista{flex:1;overflow-y:auto;padding:8px;background:var(--card-bg)}
+.apu-vacio{margin:14px 8px;color:var(--muted);font-size:14px}
+.apu-item{display:grid;grid-template-columns:1fr auto;gap:2px 10px;width:100%;text-align:left;cursor:pointer;
+  border:1px solid var(--border);border-radius:10px;background:var(--card-bg);color:var(--text);
+  padding:10px 12px;margin-bottom:6px;font-family:var(--font-body)}
+.apu-item:hover{border-color:#7A5230}
+.apu-item-tit{font-weight:700;font-size:14px}
+.apu-item-fecha{font-size:12px;color:var(--muted);white-space:nowrap}
+.apu-item-txt{grid-column:1/-1;font-size:13px;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.apu-detalle{flex:1;min-height:0;display:flex;flex-direction:column;background:var(--card-bg)}
+.apu-det-cab{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:8px 10px 0}
+.apu-volver,.apu-ir{border:0;background:transparent;color:#7A5230;cursor:pointer;font-family:var(--font-body);
+  font-size:13px;font-weight:700;padding:4px 6px;border-radius:8px;text-decoration:none}
+.apu-volver:hover,.apu-ir:hover{background:rgba(122,82,48,.1)}
+[data-theme="dark"] .apu-volver,[data-theme="dark"] .apu-ir{color:#c99b6e}
+.apu-det-tit{display:block;padding:4px 16px 6px;font-family:var(--font-head);font-size:15px;color:var(--text)}
+.apu-det-cajas{flex:1;min-height:0;display:flex;flex-direction:column;border-top:1px solid var(--border)}
+.apu-det-caja{flex:1;min-height:0;display:flex;flex-direction:column}
 
 /* ---------- Portada y «Sobre mí» ---------- */
 /* La portada se escribe sobre el papel del cuaderno en vez de taparlo con
