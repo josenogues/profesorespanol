@@ -190,5 +190,6 @@ if __name__ == "__main__":
     solo = icono(destellos=False)
     svg_icono = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="-1 -1 80 66" width="%d" height="%d">%s</svg>'
     png("icono.png", svg_icono % (124, 102, solo), 128)
-    png("icono-movil.png", svg_icono % (140, 115, solo), 180, "#FFFFFF")
+    # los globos ocupan casi todo el ancho: José lo quería con menos blanco alrededor
+    png("icono-movil.png", svg_icono % (155, 128, solo), 180, "#FFFFFF")
     print("icono.png, icono-movil.png")
