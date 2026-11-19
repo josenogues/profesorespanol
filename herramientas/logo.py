@@ -186,10 +186,12 @@ if __name__ == "__main__":
     w, h = guarda("logo-apilado.svg", dibujo + txt2, caja2, "Aprende español con José")
     print("logo-apilado.svg  %.0f × %.0f" % (w, h))
 
-    # iconos: solo los globos, sin destellos (en pequeño no se verían)
+    # pestaña: solo los globos, sin destellos (tan pequeño no se verían)
     solo = icono(destellos=False)
     svg_icono = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="-1 -1 80 66" width="%d" height="%d">%s</svg>'
     png("icono.png", svg_icono % (124, 102, solo), 128)
-    # los globos ocupan casi todo el ancho: José lo quería con menos blanco alrededor
-    png("icono-movil.png", svg_icono % (155, 128, solo), 180, "#FFFFFF")
+    # móvil: como el logo del menú (fondo azul y destellos), con los globos
+    # ocupando casi todo el ancho. Lo eligió José.
+    svg_movil = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="-6.5 -1.5 91 62.5" width="%d" height="%d">%s</svg>'
+    png("icono-movil.png", svg_movil % (155, 106, dibujo), 180, "#232C4F")
     print("icono.png, icono-movil.png")
