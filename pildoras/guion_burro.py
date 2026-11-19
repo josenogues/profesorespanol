@@ -36,7 +36,7 @@ def escenas(L, web=False):
   {"id": "revela", "trozos": [
      {"id": "r1", "lang": "it", "text": "Perché in spagnolo, burro è...",
       "sub": T("Perché in spagnolo «burro» è...", "Porque en español «burro» es...", "Because in Spanish «burro» is...")},
-     {"id": "r2", "lang": "es", "text": "un burro.", "pausa": 0.6, "sub": T("un burro.", "un burro.", "un burro.")},
+     {"id": "r2", "lang": "es", "text": "un burro.", "pausa": 0.9, "sub": T("un burro.", "un burro.", "un burro.")},
      {"id": "r3", "lang": "it", "text": "Un asino! Quello che volevi sul pane è...",
       "sub": T("Un asino! Quello che volevi sul pane è...", "¡Un asno! Lo que querías en el pan es...", "A donkey! What you wanted on your toast is...")},
      {"id": "r4", "lang": "es", "text": "la mantequilla.", "sub": T("la mantequilla.", "la mantequilla.", "la mantequilla.")},
@@ -45,7 +45,7 @@ def escenas(L, web=False):
     <div class="tostada-vuela" data-cue="r1" data-fx="kicked" data-kickcue="r2" data-kickdelay="1.0" data-sfx="coz@r2+1.0,whoosh@r2+1.05">{D.tostada(False)}</div>
     <div class="burro-entra" data-cue="r2" data-fx="walk" data-kick="1.0" data-sfx="boing@+0.6">{D.burro()}</div>
     <div class="nota-mano" data-cue="r3" data-fx="pop" data-sfx="pop">{t(T("un asino!","¡un asno!","a donkey!"))}</div>
-    <div class="untar-fila" data-cue="r3" data-fx="up" data-delay="1.1">
+    <div class="untar-fila" data-cue="r3" data-fx="up" data-delay="0.7">
       {D.tostada(True)}<span class="untar" data-cue="r4" data-fx="spread" data-sfx="tiza"><span class="manteca"></span>
       <span class="untar-txt">la mantequilla</span><span class="cuchillo-va">{D.cuchillo()}</span></span></div>
   """},
@@ -81,8 +81,8 @@ def escenas(L, web=False):
   {"id": "testarudo", "trozos": [
      {"id": "n1", "lang": "it", "text": "E se ti dicono:", "sub": T("E se ti dicono:", "Y si te dicen:", "And if someone says:")},
      {"id": "n2", "lang": "es", "text": "¡No seas burro!", "sub": T("¡No seas burro!", "¡No seas burro!", "¡No seas burro!")},
-     {"id": "n3", "lang": "it", "text": "è come il nostro: non fare l'asino!",
-      "sub": T("...è come il nostro: non fare l'asino!", "...es el «non fare l'asino!» italiano.", "...it means: don't be so stubborn!")},
+     {"id": "n3", "lang": "it", "text": "È come in italiano: non fare l'asino!",
+      "sub": T("È come in italiano: non fare l'asino!", "Es como en italiano: «non fare l'asino!»", "It means: don't be so stubborn!")},
   ], "html": f"""
     <div class="bocadillo" data-cue="n2" data-fx="pop" data-sfx="pop">¡No seas burro!</div>
     <div class="burro-terco" data-cue="n1" data-fx="up" data-stubborn="n2" data-sfx="rebuzno@n2+0.3">{D.burro()}</div>
@@ -104,13 +104,13 @@ def escenas(L, web=False):
   # 7 · RESUMEN: la pizarra del bar
   {"id": "resumen", "trozos": [
      {"id": "x1", "lang": "it", "text": "Ricapitolando, il menù!", "sub": T("Ricapitolando, il menù!", "Resumiendo: ¡el menú!", "Quick recap: the menu!")},
-     {"id": "x2", "lang": "pausa", "dur": 4.4},
+     {"id": "x2", "lang": "pausa", "dur": 3.6},
   ], "html": D.pizarra(f"""
-      <div class="piz-l" data-cue="x1" data-fx="write" data-delay="0.7" data-sfx="tiza">Tostada con mantequilla <i>✓</i><small>{t(T("burro (per il pane)","«burro» italiano","butter"))}</small></div>
-      <div class="piz-l" data-cue="x1" data-fx="write" data-delay="1.6" data-sfx="tiza">Burrito de pollo <i>✓</i><small>{t(T("il piatto messicano","el plato mexicano","the Mexican dish"))}</small></div>
-      <div class="piz-l" data-cue="x1" data-fx="write" data-delay="2.5" data-sfx="tiza">Vistas al barranco <i>✓</i><small>{t(T("burrone","«burrone» italiano","ravine"))}</small></div>
-      <div class="piz-l no" data-cue="x1" data-fx="write" data-delay="3.4" data-sfx="tiza">Burro <i>✗</i><small>{t(T("asino: non è nel menù!","asno: ¡no está en el menú!","donkey: not on the menu!"))}</small>
-        <svg class="tachar" data-cue="x1" data-fx="draw" data-delay="4.1" viewBox="0 0 200 20" preserveAspectRatio="none"><path d="M4 12 C 60 4, 120 16, 196 8"/></svg></div>
+      <div class="piz-l" data-cue="x1" data-fx="write" data-delay="0.5" data-sfx="tiza">Tostada con mantequilla <i>✓</i><small>{t(T("burro (per il pane)","«burro» italiano","butter"))}</small></div>
+      <div class="piz-l" data-cue="x1" data-fx="write" data-delay="1.1" data-sfx="tiza">Burrito de pollo <i>✓</i><small>{t(T("il piatto messicano","el plato mexicano","the Mexican dish"))}</small></div>
+      <div class="piz-l" data-cue="x1" data-fx="write" data-delay="1.7" data-sfx="tiza">Vistas al barranco <i>✓</i><small>{t(T("burrone","«burrone» italiano","ravine"))}</small></div>
+      <div class="piz-l no" data-cue="x1" data-fx="write" data-delay="2.3" data-sfx="tiza">Burro <i>✗</i><small>{t(T("asino: non è nel menù!","asno: ¡no está en el menú!","donkey: not on the menu!"))}</small>
+        <svg class="tachar" data-cue="x1" data-fx="draw" data-delay="2.9" viewBox="0 0 200 20" preserveAspectRatio="none"><path d="M4 12 C 60 4, 120 16, 196 8"/></svg></div>
   """).replace('class="pizarra"', 'class="pizarra" data-cue="x1" data-fx="up"')},
 
   # 8 · CIERRE (sello de la serie): los globos del logo cobran vida
@@ -119,7 +119,7 @@ def escenas(L, web=False):
       "sub": T("E «embarazada»? Vuol dire «imbarazzata»?", "¿Y «embarazada»? ¿Será «imbarazzata»?", "And «embarazada»? Does it mean «embarrassed»?")},
      {"id": "c2", "lang": "es", "text": "¡No es lo que parece!", "pausa": 0.4,
       "sub": T("¡No es lo que parece!", "¡No es lo que parece!", "¡No es lo que parece!")},
-     {"id": "c3", "lang": "pausa", "dur": 2.0},
+     {"id": "c3", "lang": "pausa", "dur": 1.8},
   ], "html": f"""
     <div class="pregunta" data-cue="c1" data-fx="pop" data-delay="0.3" data-sfx="pop">«embarazada» = «{t(T("imbarazzata","imbarazzata","embarrassed"))}»?</div>
     <div class="globos-vivos" data-cue="c1" data-fx="globos" data-grito="c2" data-logo="c3" data-sfx="pop,pop@+0.25">{D.globos_logo()}</div>

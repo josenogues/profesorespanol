@@ -51,7 +51,7 @@ def duracion_audio(p):
 def estimar(tr):
     if tr["lang"] == "pausa":
         return tr["dur"]
-    return len(tr["text"]) / (10.5 if tr["lang"] == "es" else 15) + 0.2
+    return len(tr["text"]) / (11.5 if tr["lang"] == "es" else 16) + 0.15
 
 # 1. voz y línea de tiempo
 t = 0.0
@@ -71,8 +71,8 @@ for i, e in enumerate(ESCENAS):
         if mp3.exists():
             pistas.append((t, mp3))
         # tras lo que se aprende, un respiro para leerlo e interiorizarlo
-        t += d + tr.get("pausa", 0.8 if tr["lang"] == "es" else 0.12)
-    t += 0.6
+        t += d + tr.get("pausa", 0.5 if tr["lang"] == "es" else 0.08)
+    t += e.get("respiro", 0.35)
     escenas.append({"id": e["id"], "ini": ini, "fin": t})
     t -= 0.06
 total = t + 0.06
