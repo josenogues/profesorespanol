@@ -219,10 +219,10 @@
 
   // ──────────────── el botón flotante, solo en páginas de clase ────────────────
   //
-  // En «Mis clases» el cuaderno también está, pero solo con «Todos mis
-  // apuntes» (ahí no hay una clase delante) y sin botón flotante: esa esquina
-  // es del globo de reservar. Lo abre una línea de la columna de la derecha
-  // con window.jnAbreApuntes, que pone mis-clases.js.
+  // En «Mis clases» el cuaderno también está, con el mismo botón, pero solo
+  // con «Todos mis apuntes»: ahí no hay una clase delante. (El botón de
+  // reservar, que antes ocupaba esa esquina, va arriba junto a «Entra en el
+  // aula».)
 
   const clase = document.body.dataset.clase;
   const soloLista = !clase && !!document.getElementById('mc-cont');
@@ -269,7 +269,7 @@
       '</div>' +
     '</div>';
 
-  if(!soloLista) document.body.appendChild(boton);
+  document.body.appendChild(boton);
   document.body.appendChild(panel);
   if(soloLista){
     // sin pestañas ni «Traer»: solo la lista de todas las clases
