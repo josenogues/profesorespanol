@@ -651,7 +651,10 @@ document.addEventListener("jn-modo", e => marcaModo(e.detail));
           confirmap:'Has abierto el enlace en otro navegador, así que no sé de quién es. Escribe el mismo email al que te lo mandé y entras.',
           confirmab:'Entrar',
           nocuadra:'Ese no es el email al que mandé este enlace. Escribe el mismo, o pide uno nuevo.',
-          enotro:'Si puedes, ábrelo en este mismo navegador: si lo abres en otro te pediré el email otra vez.' },
+          enotro:'Si puedes, ábrelo en este mismo navegador: si lo abres en otro te pediré el email otra vez.',
+          app:'Estás usando la web desde la pantalla de inicio. No pulses el enlace del correo, porque se abriría en el navegador: mantén el dedo sobre él, elige «Copiar» y vuelve aquí.',
+          pega:'Pegar el enlace', pegaph:'Pega aquí el enlace', entrando:'Entrando...',
+          nopega:'No encuentro el enlace en lo que has copiado. Vuelve al correo, mantén el dedo sobre el enlace y elige «Copiar».' },
     it: { titulo:'Accesso per studenti', ph:'tua@email.com',
           pide:'Scrivi l’email con cui prenoti le lezioni. Ti mando un link per entrare.',
           boton:'Mandami il link', mandando:'Invio...',
@@ -667,7 +670,10 @@ document.addEventListener("jn-modo", e => marcaModo(e.detail));
           confirmap:'Hai aperto il link in un altro browser, quindi non so di chi è. Scrivi la stessa email a cui te l’ho mandato ed entri.',
           confirmab:'Entra',
           nocuadra:'Non è l’email a cui ho mandato questo link. Scrivi la stessa, o chiedine uno nuovo.',
-          enotro:'Se puoi, aprilo in questo stesso browser: se lo apri in un altro ti richiederò l’email.' },
+          enotro:'Se puoi, aprilo in questo stesso browser: se lo apri in un altro ti richiederò l’email.',
+          app:'Stai usando il sito dalla schermata Home. Non toccare il link nella mail, perché si aprirebbe nel browser: tieni il dito premuto sopra, scegli «Copia» e torna qui.',
+          pega:'Incolla il link', pegaph:'Incolla qui il link', entrando:'Entro...',
+          nopega:'Non trovo il link in quello che hai copiato. Torna alla mail, tieni il dito premuto sul link e scegli «Copia».' },
     en: { titulo:'Student access', ph:'you@email.com',
           pide:'Enter the email you book your lessons with. I’ll send you a link to get in.',
           boton:'Send me the link', mandando:'Sending...',
@@ -683,7 +689,10 @@ document.addEventListener("jn-modo", e => marcaModo(e.detail));
           confirmap:'You opened the link in a different browser, so I don’t know whose it is. Enter the same email I sent it to and you’re in.',
           confirmab:'Come in',
           nocuadra:'That isn’t the email I sent this link to. Enter the same one, or ask for a new link.',
-          enotro:'If you can, open it in this same browser: if you open it elsewhere I’ll ask for your email again.' }
+          enotro:'If you can, open it in this same browser: if you open it elsewhere I’ll ask for your email again.',
+          app:'You’re using the site from your Home Screen. Don’t tap the link in the email, as it would open in the browser: press and hold it, choose “Copy” and come back here.',
+          pega:'Paste the link', pegaph:'Paste the link here', entrando:'Signing in...',
+          nopega:'I can’t find the link in what you copied. Go back to the email, press and hold the link and choose “Copy”.' }
   };
   let t = T[window.jnIdioma()] || T.es;
 
@@ -764,13 +773,75 @@ document.addEventListener("jn-modo", e => marcaModo(e.detail));
     input.focus();
   }
 
+  // ¿La web está abierta desde el icono de la pantalla de inicio?
+  function desdeIcono(){
+    try {
+      return window.navigator.standalone === true ||
+        window.matchMedia('(display-mode: standalone)').matches;
+    } catch(e){ return false; }
+  }
+
   function esperaPaso(email){
+    if(desdeIcono()) return esperaPasoIcono(email);
     cuerpo.innerHTML =
       '<h3>' + esc(t.mirado) + '</h3>' +
       '<p>' + t.enviado.replace('%s', esc(email)) + '</p>' +
       '<p style="font-size:13.5px">' + esc(t.enotro) + '</p>' +
       '<button class="access-gate-btn access-gate-otro">' + esc(t.otro) + '</button>';
     cuerpo.querySelector('.access-gate-otro').addEventListener('click', () => pidePaso(''));
+  }
+
+  // Desde el icono, el enlace del correo nunca vuelve aquí (se abre en el
+  // navegador), así que se copia y se pega. El botón lee lo copiado; si el
+  // teléfono no le deja, aparece una casilla para pegarlo a mano.
+  function esperaPasoIcono(email){
+    cuerpo.innerHTML =
+      '<h3>' + esc(t.mirado) + '</h3>' +
+      '<p>' + t.enviado.replace('%s', esc(email)) + '</p>' +
+      '<p class="access-gate-app">' + esc(t.app) + '</p>' +
+      '<button class="access-gate-btn access-gate-pega">' + esc(t.pega) + '</button>' +
+      '<input type="url" class="access-gate-input access-gate-pegado" placeholder="' + esc(t.pegaph) + '" hidden>' +
+      '<p class="access-gate-error"></p>' +
+      '<button class="access-gate-btn access-gate-otro">' + esc(t.otro) + '</button>';
+    const pega = cuerpo.querySelector('.access-gate-pega');
+    const casilla = cuerpo.querySelector('.access-gate-pegado');
+    const error = cuerpo.querySelector('.access-gate-error');
+    cuerpo.querySelector('.access-gate-otro').addEventListener('click', () => pidePaso(''));
+
+    function usa(texto){
+      if(!texto || pega.disabled) return;
+      error.textContent = '';
+      pega.disabled = true;
+      pega.textContent = t.entrando;
+      window.jnCloudEntraConPegado(texto).then(function(quien){
+        return compruebaFicha(quien);
+      }, function(err){
+        const codigo = err && err.code;
+        if(codigo === 'jn/falta-email'){ confirmaPaso(''); return; }
+        pega.disabled = false;
+        pega.textContent = t.pega;
+        const sinRed = !codigo && /timeout/.test(String(err && err.message));
+        if(codigo === 'jn/sin-enlace'){
+          error.textContent = t.nopega;
+          casilla.value = '';
+          return;
+        }
+        // enlace gastado o caducado: hay que pedir otro
+        pidePaso(sinRed ? t.nocomp : t.caduco);
+      });
+    }
+    function aMano(){
+      casilla.hidden = false;
+      casilla.focus();
+    }
+    pega.addEventListener('click', function(){
+      const portapapeles = navigator.clipboard && navigator.clipboard.readText;
+      if(!portapapeles){ aMano(); return; }
+      navigator.clipboard.readText().then(function(texto){
+        if(texto) usa(texto); else { error.textContent = t.nopega; aMano(); }
+      }, aMano);
+    });
+    casilla.addEventListener('input', function(){ usa(casilla.value); });
   }
 
   // Cuando el enlace se abre en un navegador distinto del que lo pidió, hay
@@ -890,6 +961,11 @@ document.addEventListener("jn-modo", e => marcaModo(e.detail));
       if(!email){
         // no ha entrado nadie: la puerta, sin tratarlo como un error
         if(pista) fuera('');
+        // Desde el icono, ir al correo a copiar el enlace puede hacer que el
+        // iPhone cierre la web; al volver, se sigue donde estaba (pegar el
+        // enlace) en vez de pedir el email otra vez.
+        const pedido = window.jnCloudPendiente && window.jnCloudPendiente();
+        if(pedido && desdeIcono() && overlay) esperaPaso(pedido);
         return;
       }
       return compruebaFicha(email);

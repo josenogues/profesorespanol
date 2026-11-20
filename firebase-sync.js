@@ -145,6 +145,51 @@ window.jnCloudEntraConEnlace = async function(email){
   window.jnCloudPideEmail = false;
 };
 
+// En el iPhone, la web puesta en la pantalla de inicio es como un navegador
+// aparte: el enlace del correo se abre siempre en Safari o Chrome, nunca en
+// ella, y la web se quedaba esperando para siempre. Ahí el alumno copia el
+// enlace y lo pega en la web. Lo copiado puede venir envuelto (Gmail mete los
+// enlaces dentro de otro, codificados), así que no se usa tal cual: se buscan
+// el código y la clave dentro, deshaciendo la codificación las veces que haga
+// falta, y se monta un enlace limpio con ellos.
+window.jnCloudPendiente = function(){
+  return limpia(localStorage.getItem(PENDIENTE)) || null;
+};
+
+window.jnCloudEntraConPegado = async function(texto){
+  let s = String(texto || '');
+  for(let i = 0; i < 4; i++){
+    try { const d = decodeURIComponent(s); if(d === s) break; s = d; } catch(e){ break; }
+  }
+  s = s.replace(/&amp;/g, '&');
+  const codigo = (s.match(/[?&]oobCode=([^&\s#"'<>]+)/) || [])[1];
+  const clave = (s.match(/[?&]apiKey=([^&\s#"'<>]+)/) || [])[1];
+  if(!codigo || !clave){
+    const err = new Error('no hay enlace en lo pegado');
+    err.code = 'jn/sin-enlace';
+    throw err;
+  }
+  const enlace = location.origin + location.pathname +
+    '?apiKey=' + encodeURIComponent(clave) + '&oobCode=' + encodeURIComponent(codigo) + '&mode=signIn';
+  if(!isSignInWithEmailLink(auth, enlace)){
+    const err = new Error('no es un enlace de entrada');
+    err.code = 'jn/sin-enlace';
+    throw err;
+  }
+  const pendiente = limpia(localStorage.getItem(PENDIENTE));
+  if(!pendiente){
+    // no se pidió desde aquí: que lo confirme, como en otro navegador
+    urlEnlace = enlace;
+    window.jnCloudPideEmail = true;
+    const err = new Error('falta el email');
+    err.code = 'jn/falta-email';
+    throw err;
+  }
+  await withTimeout(signInWithEmailLink(auth, pendiente, enlace), 12000, 'signInLink');
+  localStorage.removeItem(PENDIENTE);
+  return pendiente;
+};
+
 window.jnCloudSal = async function(){
   try { await signOut(auth); } catch(e){}
   localStorage.removeItem(PENDIENTE);

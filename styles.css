@@ -326,6 +326,12 @@ body:has(.apu-boton) footer,body:has(.cita-boton) footer{padding-bottom:96px}
 @media(max-width:480px){.access-gate-modal{padding:56px 20px 20px}.access-gate-idiomas{gap:2px}.access-gate-idiomas button{padding:5px 8px}}
 /* El email al que se ha mandado el enlace, para que vea si se ha colado una letra */
 .access-gate-modal p b{color:var(--text);font-weight:700;word-break:break-all}
+/* desde el icono de la pantalla de inicio: copiar y pegar el enlace */
+.access-gate-modal .access-gate-app{font-size:13.5px;color:var(--text)}
+.access-gate-pegado{margin:12px 0 0}
+.access-gate-modal .access-gate-pega ~ .access-gate-error:empty{display:none}
+.access-gate-modal .access-gate-pega,.access-gate-modal .access-gate-pega ~ .access-gate-otro{display:block}
+.access-gate-modal .access-gate-pega ~ .access-gate-otro{margin-top:12px}
 /* «usar otro email»: segunda opción, no la principal */
 .access-gate-otro{background:transparent;color:var(--muted);border:1px solid var(--border);font-weight:600}
 .access-gate-otro:hover{background:var(--tint);color:var(--text)}

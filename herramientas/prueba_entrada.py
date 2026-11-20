@@ -347,6 +347,78 @@ with sync_playwright() as p:
     if not pg.locator(".access-gate-input").count():
         err.append("enlace gastado: no deja pedir otro")
     c.close()
+
+    # ── la web desde el icono de la pantalla de inicio (iPhone) ──
+    # Ahí el enlace del correo se abre en el navegador, nunca en la web del
+    # icono, así que se copia y se pega. Gmail lo copia envuelto en otro
+    # enlace y codificado: tiene que servir igual.
+    print("\n═══ desde el icono de la pantalla de inicio ═══")
+    ICONO = "Object.defineProperty(navigator,'standalone',{get:()=>true});"
+    GMAIL = ("https://www.google.com/url?q=https://x.firebaseapp.com/__/auth/action"
+             "?apiKey%3DFALSA%26mode%3DsignIn%26oobCode%3DFALSO%26continueUrl%3Dhttps://x"
+             "&source=gmail&ust=1&usg=AO")
+
+    def pide_desde_icono(c):
+        pg = c.new_page()
+        pg.on("pageerror", lambda e: err.append("JS: %s" % e))
+        pg.goto(B + PAG, wait_until="domcontentloaded"); pg.wait_for_timeout(900)
+        pg.fill(".access-gate-input", "anna@x.com")
+        pg.click(".access-gate-btn"); pg.wait_for_timeout(700)
+        return pg
+
+    # con permiso para leer lo copiado: un toque y dentro
+    c = nuevo(br, True, ancho=390)
+    c.add_init_script(ICONO)
+    c.grant_permissions(["clipboard-read", "clipboard-write"], origin=B)
+    pg = pide_desde_icono(c)
+    if not pg.locator(".access-gate-pega").count():
+        err.append("desde el icono: no sale el botón de pegar el enlace")
+    # algo que no es el enlace: avisa y no deja pasar
+    pg.evaluate("navigator.clipboard.writeText('hola, qué tal')")
+    pg.click(".access-gate-pega"); pg.wait_for_timeout(800)
+    aviso = pg.locator(".access-gate-error").inner_text().strip()
+    print("   pegando otra cosa:", aviso[:60])
+    if "No encuentro el enlace" not in aviso:
+        err.append("desde el icono: pegar otra cosa no avisa (%r)" % aviso[:50])
+    pg.evaluate("navigator.clipboard.writeText(%r)" % GMAIL)
+    pg.click(".access-gate-pega"); pg.wait_for_timeout(1500)
+    dentro = not pg.locator(".access-gate-overlay").count()
+    print("   pegando el enlace de Gmail:", "entra" if dentro else "NO entra")
+    if not dentro:
+        err.append("desde el icono: con el enlace de Gmail pegado no entra")
+    c.close()
+
+    # sin permiso para leer lo copiado: sale la casilla y se pega a mano
+    c = nuevo(br, True, ancho=390)
+    c.add_init_script(ICONO + "navigator.clipboard.readText=()=>Promise.reject(new Error('no'));")
+    pg = pide_desde_icono(c)
+    pg.click(".access-gate-pega"); pg.wait_for_timeout(400)
+    if not pg.locator(".access-gate-pegado").is_visible():
+        err.append("desde el icono: si no deja leer lo copiado, no sale la casilla")
+    pg.fill(".access-gate-pegado", GMAIL); pg.wait_for_timeout(1500)
+    dentro = not pg.locator(".access-gate-overlay").count()
+    print("   pegando a mano:", "entra" if dentro else "NO entra")
+    if not dentro:
+        err.append("desde el icono: pegando a mano no entra")
+    c.close()
+
+    # si el iPhone cierra la web mientras copia el enlace, al volver sigue en
+    # «pega el enlace», sin pedirle el email otra vez
+    c = nuevo(br, True, ancho=390)
+    c.add_init_script(ICONO)
+    pg = pide_desde_icono(c)
+    pg.reload(wait_until="domcontentloaded"); pg.wait_for_timeout(1800)
+    if not pg.locator(".access-gate-pega").count():
+        err.append("desde el icono: al volver a abrir la web vuelve a pedir el email")
+    print("   al volver a abrirla:", pg.locator(".access-gate-modal h3").inner_text().strip())
+    c.close()
+
+    # en el navegador normal no cambia nada
+    c = nuevo(br, True, ancho=390)
+    pg = pide_desde_icono(c)
+    if pg.locator(".access-gate-pega").count():
+        err.append("en el navegador normal sale el botón de pegar el enlace")
+    c.close()
     br.close()
 
 print()
