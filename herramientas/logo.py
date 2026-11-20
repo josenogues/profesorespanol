@@ -12,8 +12,9 @@ Saca cuatro archivos en la raíz:
 El logo lo eligió José en noviembre de 2026, probando opciones en un taller:
 dos globos de conversación (el violeta con la ñ, que es él, y uno rosa más
 pequeño detrás, el alumno), destellos amarillos finos en la esquina de cada
-uno, «Aprende español» en la Nunito de la web y «con José» a mano (Caveat)
-en el mismo amarillo de los destellos. El amarillo es el del logo viejo.
+uno, «Aprende español» en la Nunito de la web y «con José» a mano (Caveat),
+en blanco y marcado con un subrayador del mismo amarillo de los destellos.
+El amarillo es el del logo viejo.
 No poner juntos rojo, amarillo y morado: recuerda a la bandera republicana
 y José no quiere líos.
 
@@ -128,6 +129,18 @@ def base_de_linea(ruta, tam, arriba):
     return arriba + (tam - (asc + desc)) / 2 + asc
 
 
+def subrayador(c, base, tam):
+    """Trazo de subrayador detrás de «con José»: punta en bisel, bordes algo
+    irregulares y un poco torcido, como hecho a mano. Devuelve (svg, caja)."""
+    x0, x1 = c[0] - 5, c[2] + 4
+    y0, y1 = base - tam * .52, base + tam * .16
+    d = ('M%.1f %.1f L%.1f %.1f Q%.1f %.1f %.1f %.1f L%.1f %.1f L%.1f %.1f Q%.1f %.1f %.1f %.1f Z' % (
+        x0 + 3, y0 + 1, (x0 + x1) / 2, y0 - .6, x1 - 8, y0 + .4, x1, y0 - .2,
+        x1 - 3, y1 - .6, (x0 + x1) / 2, y1 + .5, x0 + 10, y1 - .2, x0, y1 + .4))
+    svg = '<path d="%s" fill="%s" transform="rotate(-2.5 %.1f %.1f)"/>' % (d, ORO, (x0 + x1) / 2, (y0 + y1) / 2)
+    return svg, (x0 - 1, y0 - 2, x1 + 1, y1 + 2)
+
+
 def nombre(x, arriba, centrado_en=None):
     """«Aprende español» y, debajo, «con José». Devuelve (svg, caja)."""
     t1, t2 = K, K * 1.12
@@ -140,9 +153,10 @@ def nombre(x, arriba, centrado_en=None):
     else:
         dx1 = centrado_en - (c1[0] + c1[2]) / 2
         dx2 = centrado_en - (c2[0] + c2[2]) / 2
+    marca, cm = subrayador(c2, b2, t2)
     svg = ('<path transform="translate(%.2f 0)" d="%s" fill="%s"/>' % (dx1, d1, BLANCO) +
-           '<path transform="translate(%.2f 0)" d="%s" fill="%s"/>' % (dx2, d2, ORO))
-    caja = (min(c1[0] + dx1, c2[0] + dx2), min(c1[1], c2[1]), max(c1[2] + dx1, c2[2] + dx2), max(c1[3], c2[3]))
+           '<g transform="translate(%.2f 0)">%s<path d="%s" fill="%s"/></g>' % (dx2, marca, d2, BLANCO))
+    caja = (min(c1[0] + dx1, cm[0] + dx2), min(c1[1], c2[1]), max(c1[2] + dx1, cm[2] + dx2), max(c1[3], c2[3], cm[3]))
     return svg, caja
 
 
