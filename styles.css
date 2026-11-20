@@ -1768,3 +1768,13 @@ body[data-category="ejercicios"] .grammar-section > h2::after{background:var(--c
    cada ejercicio, en el dorado oscuro para que se lea sobre blanco */
 .ex-pill.active{color:#232220}
 .exercise-cat-tag{color:var(--c-ejer-d)!important}
+/* «Mis apuntes» en la columna de «Mis clases»: abre el cuaderno con todos */
+.mc-apuntes{display:flex;align-items:center;gap:8px;width:100%;margin:0;padding:15px 0;border:0;
+  border-bottom:1px solid rgba(91,79,184,.15);background:none;color:var(--text);cursor:pointer;
+  font-family:var(--font-body);font-size:15px;font-weight:700;text-align:left}
+.mc-apuntes > .ti{margin:0;font-size:18px;color:var(--c-clases)}
+.mc-apuntes .mc-apuntes-ir{margin-left:auto;color:var(--muted);font-size:17px}
+.mc-apuntes:hover{color:var(--c-clases-d)}
+@media(max-width:1099px){ .mc-lado .mc-apuntes{order:2} }
+.apu-solo-lista .apu-pestanas{display:none}
+@media(max-width:1099px){ .mc-lado .cl-num{border-bottom:0} }

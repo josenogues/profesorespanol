@@ -218,9 +218,16 @@
   };
 
   // ──────────────── el botón flotante, solo en páginas de clase ────────────────
+  //
+  // En «Mis clases» el cuaderno también está, pero solo con «Todos mis
+  // apuntes» (ahí no hay una clase delante) y sin botón flotante: esa esquina
+  // es del globo de reservar. Lo abre una línea de la columna de la derecha
+  // con window.jnAbreApuntes, que pone mis-clases.js.
 
   const clase = document.body.dataset.clase;
-  if(!clase) return;
+  const soloLista = !clase && !!document.getElementById('mc-cont');
+  if(!clase && !soloLista) return;
+  let quien = null;              // lo que lo abrió, para devolverle el foco
 
   const boton = document.createElement('button');
   boton.className = 'apu-boton';
@@ -262,15 +269,21 @@
       '</div>' +
     '</div>';
 
-  document.body.appendChild(boton);
+  if(!soloLista) document.body.appendChild(boton);
   document.body.appendChild(panel);
+  if(soloLista){
+    // sin pestañas ni «Traer»: solo la lista de todas las clases
+    panel.classList.add('apu-solo-lista');
+    panel.querySelector('.apu-pestanas').hidden = true;
+    panel.querySelector('.apu-traer').remove();
+  }
 
   const punto = boton.querySelector('.apu-punto');
   const vEsta = panel.querySelector('.apu-v-esta');
   const vTodas = panel.querySelector('.apu-v-todas');
   const lista = panel.querySelector('.apu-lista');
   const detalle = panel.querySelector('.apu-detalle');
-  const caja = window.jnApuntesCaja(clase, vEsta, function(hay){ punto.hidden = !hay; });
+  const caja = clase ? window.jnApuntesCaja(clase, vEsta, function(hay){ punto.hidden = !hay; }) : null;
 
   // ─────────── «Todos mis apuntes»: los de las otras clases, sin salir de esta ───────────
   //
@@ -278,7 +291,8 @@
   // a la lista, abre los apuntes de otra clase y puede seguir escribiendo en
   // ellos. El enlace a esa clase se abre en otra pestaña a propósito.
 
-  let vista = 'esta';
+  let vista = soloLista ? 'todas' : 'esta';
+  if(soloLista){ vEsta.hidden = true; vTodas.hidden = false; }
   let abierta = null;            // clave de la clase abierta en la lista
   const otras = {};              // clave → { caja, el }, se crean al abrirlas
   let filas = [];                // lo último que se pintó en la lista
@@ -425,7 +439,7 @@
   function pintaAcciones(){
     const t = panel.querySelector('.apu-traer');
     const b = panel.querySelector('.apu-bajar');
-    t.hidden = !enUso();
+    if(t) t.hidden = !enUso();
     b.title = enUso() ? T.bajarT : T.bajarTodo;
   }
 
@@ -449,16 +463,22 @@
     panel.hidden = false;
     aplicaTam();
     boton.setAttribute('aria-expanded', 'true');
+    if(quien) quien.setAttribute('aria-expanded', 'true');
     if(vista === 'esta') vEsta.querySelector('.apu-texto').focus();
     else if(!abierta) pintaLista();
   }
   function cierra(){
     const c = enUso(); if(c) c.guarda();
-    caja.guarda();
+    if(caja) caja.guarda();
     panel.hidden = true;
     boton.setAttribute('aria-expanded', 'false');
-    boton.focus();
+    if(quien){ quien.setAttribute('aria-expanded', 'false'); quien.focus(); }
+    else boton.focus();
   }
+  window.jnAbreApuntes = function(desde){
+    if(desde) quien = desde;
+    panel.hidden ? abre() : cierra();
+  };
 
   boton.addEventListener('click', function(){ panel.hidden ? abre() : cierra(); });
   panel.querySelector('.apu-cerrar').addEventListener('click', cierra);
@@ -482,7 +502,7 @@
     if(txt) ultimaSel = txt;
   });
 
-  panel.querySelector('.apu-traer').addEventListener('click', function(){
+  if(!soloLista) panel.querySelector('.apu-traer').addEventListener('click', function(){
     const c = enUso();
     if(!c) return;
     if(!ultimaSel){ c.avisa(T.sinSel); return; }
@@ -502,7 +522,7 @@
     } else {
       // toda la lista y, delante, los de esta clase si hay
       const trozos = [];
-      if(caja.tieneTexto()){
+      if(caja && caja.tieneTexto()){
         const h = document.querySelector('.grammar-section h3, .grammar-section h2');
         trozos.push(((h && h.textContent.trim()) || clase) + '\n\n' + caja.texto());
       }

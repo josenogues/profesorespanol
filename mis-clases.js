@@ -23,7 +23,7 @@
       proxima: 'La próxima:', porDefinir: 'por definir',
       buscar: 'Busca una clase…',
       buscarNota: 'Por título o por tema: subjuntivo, por/para, ser y estar…',
-      recorrido: 'Tu camino', mas: n => '+ otros ' + n,
+      misApuntes: 'Mis apuntes', recorrido: 'Tu camino', mas: n => '+ otros ' + n,
       nada: 'Ninguna de tus clases habla de eso.',
       sinClases: 'Todavía no hay nada aquí',
       sinClasesP: 'En cuanto deis una clase, José la pondrá aquí: lo que visteis, ' +
@@ -50,7 +50,7 @@
       proxima: 'La prossima:', porDefinir: 'da definire',
       buscar: 'Cerca una lezione…',
       buscarNota: 'Per titolo o per argomento: congiuntivo, por/para, ser y estar…',
-      recorrido: 'Il tuo percorso', mas: n => '+ altri ' + n,
+      misApuntes: 'I miei appunti', recorrido: 'Il tuo percorso', mas: n => '+ altri ' + n,
       nada: 'Nessuna delle tue lezioni parla di questo.',
       sinClases: 'Qui non c’è ancora niente',
       sinClasesP: 'Appena farete una lezione, José la metterà qui: quello che avete visto, ' +
@@ -77,7 +77,7 @@
       proxima: 'Next up:', porDefinir: 'to be decided',
       buscar: 'Find a class…',
       buscarNota: 'By title or by topic: subjunctive, por/para, ser y estar…',
-      recorrido: 'Your journey', mas: n => '+ ' + n + ' more',
+      misApuntes: 'My notes', recorrido: 'Your journey', mas: n => '+ ' + n + ' more',
       nada: 'None of your classes is about that.',
       sinClases: 'Nothing here yet',
       sinClasesP: 'As soon as you have a class, José will put it here: what you covered, ' +
@@ -309,8 +309,17 @@
       '<div class="cl-buscar"><i class="ti ti-search" aria-hidden="true"></i>' +
       '<input type="text" id="cl-filtro" placeholder="' + esc(T.buscar) + '" aria-label="' + esc(T.buscar) +
       '" autocomplete="off"></div><p class="mc-nota">' + esc(T.buscarNota) + '</p>',
-      tarjetaHoy + prox + '<h4>' + esc(T.recorrido) + '</h4><div class="cl-nums">' + nums + '</div>'
+      tarjetaHoy + prox +
+      // el cuaderno, con los apuntes de todas las clases (apuntes.js)
+      '<button type="button" class="mc-apuntes" id="mc-apuntes" aria-expanded="false">' +
+      '<i class="ti ti-notebook" aria-hidden="true"></i> ' + esc(T.misApuntes) +
+      '<i class="ti ti-chevron-right mc-apuntes-ir" aria-hidden="true"></i></button>' +
+      '<h4>' + esc(T.recorrido) + '</h4><div class="cl-nums">' + nums + '</div>'
     );
+    const abreApuntes = document.getElementById('mc-apuntes');
+    if(abreApuntes) abreApuntes.addEventListener('click', function(){
+      if(window.jnAbreApuntes) window.jnAbreApuntes(abreApuntes);
+    });
     const bajar = document.getElementById('cl-bajar');
     if(bajar) bajar.addEventListener('click', function(){
       // un archivo con todo, en el mismo orden en que ve las clases
