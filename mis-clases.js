@@ -16,19 +16,19 @@
   const T = {
     es: {
       titulo: 'Tus clases',
-      subMuchas: 'Tu camino con José.',
-      subPocas: 'Acabas de empezar.',
       clases: 'clases', clase: 'clase',
       temas: 'temas tocados', tema: 'tema tocado',
       meses: 'meses juntos', mes: 'mes juntos', sinFecha: 'por confirmar',
       ejercicios: 'ejercicios hechos', ejercicio: 'ejercicio hecho',
       proxima: 'La próxima:', porDefinir: 'por definir',
-      buscar: 'Buscar por tema: subjuntivo, pasados, por/para...',
+      buscar: 'Busca una clase…',
+      buscarNota: 'Por título o por tema: subjuntivo, por/para, ser y estar…',
+      recorrido: 'Tu camino', mas: n => '+ otros ' + n,
       nada: 'Ninguna de tus clases habla de eso.',
       sinClases: 'Todavía no hay nada aquí',
       sinClasesP: 'En cuanto deis una clase, José la pondrá aquí: lo que visteis, ' +
                   'las reglas para repasarlo y los deberes de ese día.',
-      irEj: 'Mientras tanto, practica', masEj: 'Haz más ejercicios',
+      irEj: 'Mientras tanto, practica',
       cargando: 'Cargando tus clases...',
       sinAcceso: 'Entra con tu email para ver tus clases.',
       error: 'No se han podido cargar tus clases. Revisa tu conexión y vuelve a intentarlo.',
@@ -43,19 +43,19 @@
     },
     it: {
       titulo: 'Le tue lezioni',
-      subMuchas: 'Il tuo percorso con José.',
-      subPocas: 'Hai appena iniziato.',
       clases: 'lezioni', clase: 'lezione',
       temas: 'argomenti visti', tema: 'argomento visto',
       meses: 'mesi insieme', mes: 'mese insieme', sinFecha: 'da confermare',
       ejercicios: 'esercizi fatti', ejercicio: 'esercizio fatto',
       proxima: 'La prossima:', porDefinir: 'da definire',
-      buscar: 'Cerca per argomento: subjuntivo, pasados, por/para...',
+      buscar: 'Cerca una lezione…',
+      buscarNota: 'Per titolo o per argomento: congiuntivo, por/para, ser y estar…',
+      recorrido: 'Il tuo percorso', mas: n => '+ altri ' + n,
       nada: 'Nessuna delle tue lezioni parla di questo.',
       sinClases: 'Qui non c’è ancora niente',
       sinClasesP: 'Appena farete una lezione, José la metterà qui: quello che avete visto, ' +
                   'le regole per ripassare e i compiti di quel giorno.',
-      irEj: 'Intanto, esercitati', masEj: 'Fai più esercizi',
+      irEj: 'Intanto, esercitati',
       cargando: 'Carico le tue lezioni...',
       sinAcceso: 'Entra con la tua email per vedere le tue lezioni.',
       error: 'Non è stato possibile caricare le tue lezioni. Controlla la connessione e riprova.',
@@ -70,19 +70,19 @@
     },
     en: {
       titulo: 'Your classes',
-      subMuchas: 'Your journey with José.',
-      subPocas: 'You’ve just started.',
       clases: 'classes', clase: 'class',
       temas: 'topics covered', tema: 'topic covered',
       meses: 'months together', mes: 'month together', sinFecha: 'to be confirmed',
       ejercicios: 'exercises done', ejercicio: 'exercise done',
       proxima: 'Next up:', porDefinir: 'to be decided',
-      buscar: 'Search by topic: subjuntivo, pasados, por/para...',
+      buscar: 'Find a class…',
+      buscarNota: 'By title or by topic: subjunctive, por/para, ser y estar…',
+      recorrido: 'Your journey', mas: n => '+ ' + n + ' more',
       nada: 'None of your classes is about that.',
       sinClases: 'Nothing here yet',
       sinClasesP: 'As soon as you have a class, José will put it here: what you covered, ' +
                   'the rules to go over it again and that day’s homework.',
-      irEj: 'In the meantime, practise', masEj: 'Do more exercises',
+      irEj: 'In the meantime, practise',
       cargando: 'Loading your classes...',
       sinAcceso: 'Sign in with your email to see your classes.',
       error: 'Your classes could not be loaded. Check your connection and try again.',
@@ -100,10 +100,26 @@
   const esc = s => String(s == null ? '' : s)
     .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 
-  function pinta(html){ cont.innerHTML = html; }
+  // lo de arriba (el buscador) y la columna de la derecha solo tienen
+  // sentido con clases: con un aviso, se vacían
+  const bus = document.getElementById('mc-bus');
+  const lado = document.getElementById('mc-lado');
+  function pinta(html, arriba, derecha){
+    cont.innerHTML = html;
+    if(bus) bus.innerHTML = arriba || '';
+    if(lado){ lado.innerHTML = derecha || ''; lado.hidden = !derecha; }
+  }
 
   function aviso(txt){
     pinta('<div class="placeholder-box">' + esc(txt) + '</div>');
+  }
+
+  // «2026-10-12» → el día en grande y el mes corto debajo, como en una agenda
+  function fechaAgenda(iso){
+    const d = iso ? new Date(iso + 'T12:00:00') : null;
+    if(!d || isNaN(d)) return null;
+    return '<b>' + d.getDate() + '</b><span>' +
+      esc(d.toLocaleDateString(LOCALE, { month: 'short' }).replace('.', '')) + '</span>';
   }
 
   // «2026-10-12» → «12 de octubre». Si la fecha no vale, devuelve null.
@@ -123,20 +139,12 @@
     return Math.max(1, (h.getFullYear() - d.getFullYear()) * 12 + (h.getMonth() - d.getMonth()));
   }
 
-  // Las tres primeras tarjetas son números que pones tú; la de ejercicios es
-  // la única que el alumno puede subir solo, así que además de contar, lleva.
-  function tarjeta(n, etiqueta, apagada, id, href){
-    const etq = href ? 'a' : 'div';
-    const clases = 'cl-num' + (apagada ? ' sin' : '') + (href ? ' cl-num-ir' : '');
-    return '<' + etq + ' class="' + clases + '"' +
-           (id ? ' id="' + id + '"' : '') +
-           (href ? ' href="' + esc(href) + '"' : '') + '>' +
+  // Los números de «tu camino», uno por línea en la columna de la derecha
+  function tarjeta(n, etiqueta, apagada, id){
+    return '<div class="cl-num' + (apagada ? ' sin' : '') + '"' +
+           (id ? ' id="' + id + '"' : '') + '>' +
            '<span class="n">' + esc(n) + '</span>' +
-           '<span class="t"><span class="l">' + esc(etiqueta) + '</span>' +
-           (href ? '<span class="ir">' + esc(T.masEj) +
-                   ' <i class="ti ti-arrow-right" aria-hidden="true"></i></span>' : '') +
-           '</span>' +
-           '</' + etq + '>';
+           '<span class="t"><span class="l">' + esc(etiqueta) + '</span></span></div>';
   }
 
 
@@ -212,7 +220,7 @@
 
     if(!filas.length){
       pinta('<div class="placeholder-box">' +
-        '<i class="ti ti-notebook" style="font-size:42px;color:#7A5230;display:block;margin-bottom:14px"></i>' +
+        '<i class="ti ti-notebook" style="font-size:42px;color:var(--c-clases);display:block;margin-bottom:14px"></i>' +
         '<h3 style="font-size:20px;margin-bottom:10px;color:var(--text)">' + esc(T.sinClases) + '</h3>' +
         '<p style="max-width:520px;margin:0 auto 22px;font-weight:400">' + esc(T.sinClasesP) + '</p>' +
         '<a href="ejercicios-' + track + '.html" class="button button-primary">' +
@@ -238,8 +246,8 @@
     const tarjetaHoy = visto.length
       ? '<a class="cl-hoy" id="cl-hoy" href="ejercicios-' + track + '.html?hoy=' +
         esc(visto.join(',')) + '">' +
-        '<span class="cl-hoy-ico"><i class="ti ti-bolt" aria-hidden="true"></i></span>' +
-        '<span class="cl-hoy-txt"><b>' + esc(T.hoyTit) + '</b><span>' + esc(T.hoySub) + '</span></span>' +
+        '<span class="cl-hoy-cab"><i class="ti ti-clock" aria-hidden="true"></i><b>' + esc(T.hoyTit) + '</b></span>' +
+        '<span class="cl-hoy-sub">' + esc(T.hoySub) + '</span>' +
         '<span class="cl-hoy-ir">' + esc(T.hoyIr) +
         ' <i class="ti ti-arrow-right" aria-hidden="true"></i></span></a>'
       : '';
@@ -255,8 +263,7 @@
     // que el alumno puede subir él solo, y aquí lo tiene a la vista cada vez
     // que entra a mirar sus clases
     const hechos = window.jnGetExerciseCount ? window.jnGetExerciseCount() : 0;
-    nums += tarjeta(hechos, hechos === 1 ? T.ejercicio : T.ejercicios, false,
-                    'cl-ejercicios', 'ejercicios-' + track + '.html');
+    nums += tarjeta(hechos, hechos === 1 ? T.ejercicio : T.ejercicios, false, 'cl-ejercicios');
 
     const prox = proxima
       ? '<p class="cl-prox"><i class="ti ti-calendar-event" aria-hidden="true"></i> <b>' +
@@ -266,16 +273,20 @@
         esc(T.proxima) + '</b> ' + esc(T.porDefinir) + '</p>';
 
     const lista = orden.map(f => {
-      const chips = f.etiquetas.map(t => '<span class="cl-chip">' + esc(t) + '</span>').join('');
+      // se ven las tres primeras (el resto lo esconde la hoja de estilos) y
+      // se cuenta lo que queda; el buscador sigue mirando todas
+      const chips = f.etiquetas.map(t => '<span class="cl-chip">' + esc(t) + '</span>').join('') +
+        (f.etiquetas.length > 3 ? '<span class="cl-mas">' + esc(T.mas(f.etiquetas.length - 3)) + '</span>' : '');
       const busca = (f.titulo + ' ' + f.etiquetas.join(' ')).toLowerCase();
-      const cuando = f.fecha ? (fechaLarga(f.fecha) || f.fecha) : T.sinF;
+      const agenda = fechaAgenda(f.fecha);
       const pendiente = f.fecha && f.fecha > hoy;
       const clases = 'cl-row' + (pendiente ? ' cl-prox-row' : '') + (f.rapida ? ' cl-abre' : '');
       const marca = f.conApuntes
         ? '<i class="ti ti-note cl-apu-marca" title="' + esc(T.conApuntes) + '" aria-label="' +
           esc(T.conApuntes) + '"></i>'
         : '';
-      const cab = '<span class="cl-fecha">' + esc(cuando) + '</span>' +
+      const cab = (agenda ? '<span class="cl-fecha">' + agenda + '</span>'
+                          : '<span class="cl-fecha sin">' + esc(f.fecha || T.sinF) + '</span>') +
                   '<span class="cl-tit">' + esc(f.titulo) + marca + '</span>' +
                   '<span class="cl-temas">' + chips + '</span>';
       if(!f.rapida){
@@ -288,19 +299,17 @@
     }).join('\n');
 
     pinta(
-      '<p class="subtitle" style="margin-bottom:18px">' +
-        esc(filas.length >= 4 ? T.subMuchas : T.subPocas) + '</p>' +
-      tarjetaHoy +
-      '<div class="cl-nums">' + nums + '</div>' + prox +
-      '<div class="cl-buscar"><i class="ti ti-search" aria-hidden="true"></i>' +
-      '<input type="text" id="cl-filtro" placeholder="' + esc(T.buscar) + '" autocomplete="off"></div>' +
       '<div class="cl-lista" id="cl-lista">' + lista + '</div>' +
       (filas.some(f => f.conApuntes)
         ? '<p style="margin:16px 0 0"><button type="button" id="cl-bajar" ' +
           'class="button button-secondary"><i class="ti ti-download"></i> ' +
           esc(T.bajarTodo) + '</button></p>'
         : '') +
-      '<p class="panel-empty" id="cl-vacio" style="display:none;margin-top:14px">' + esc(T.nada) + '</p>'
+      '<p class="panel-empty" id="cl-vacio" style="display:none;margin-top:14px">' + esc(T.nada) + '</p>',
+      '<div class="cl-buscar"><i class="ti ti-search" aria-hidden="true"></i>' +
+      '<input type="text" id="cl-filtro" placeholder="' + esc(T.buscar) + '" aria-label="' + esc(T.buscar) +
+      '" autocomplete="off"></div><p class="mc-nota">' + esc(T.buscarNota) + '</p>',
+      tarjetaHoy + prox + '<h4>' + esc(T.recorrido) + '</h4><div class="cl-nums">' + nums + '</div>'
     );
     const bajar = document.getElementById('cl-bajar');
     if(bajar) bajar.addEventListener('click', function(){

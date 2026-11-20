@@ -933,23 +933,6 @@ document.addEventListener("jn-modo", e => marcaModo(e.detail));
   });
 })();
 
-// --- Frase motivadora aleatoria del menú lateral ---
-(function(){
-  const el = document.getElementById('tagline-text');
-  if(!el) return;
-  const REFRANES = [
-    'Poco a poco se llega lejos',
-    'El que la sigue, la consigue',
-    'No hay atajo sin trabajo',
-    'Quien no arriesga, no gana',
-    'Practicando se aprende el oficio',
-    'El saber no ocupa lugar',
-    'A quien madruga, Dios le ayuda',
-    'Más vale tarde que nunca',
-  ];
-  el.textContent = REFRANES[Math.floor(Math.random() * REFRANES.length)];
-})();
-
 // --- Modo oscuro ---
 (function(){
   const checkbox = document.getElementById('theme-toggle');
@@ -1020,7 +1003,9 @@ document.addEventListener("jn-modo", e => marcaModo(e.detail));
 
 // --- Título escrito a mano por sección (traducido según el idioma activo) ---
 // Da la sensación de cuaderno escrito a mano. Se quitó con el estilo sobrio
-// y José lo echó de menos: vuelve (noviembre 2026).
+// y José lo echó de menos: vuelve (noviembre 2026). Es además el camino de
+// vuelta a la portada de la sección: en el ordenador ya no hay ruta arriba
+// («Inicio / Verbos / …»), que repetía lo mismo que este título.
 (function(){
   const header = document.querySelector('.page-header');
   const cat = document.body.dataset.category;
@@ -1031,80 +1016,29 @@ document.addEventListener("jn-modo", e => marcaModo(e.detail));
     vocabulario: {es:'Vocabulario', it:'Vocabolario', en:'Vocabulary'},
     expresiones: {es:'Expresiones', it:'Espressioni', en:'Expressions'},
     atencion: {es:'Especial atención', it:'Attenzione a questi', en:'Watch out for this'},
-    profesional: {es:'Profesional', it:'Professionale', en:'Business'},
+    profesional: {es:'Español profesional', it:'Spagnolo al lavoro', en:'Business Spanish'},
     clases: {es:'Mis clases', it:'Le mie lezioni', en:'My classes'},
     ejercicios: {es:'Práctica libre', it:'Pratica libera', en:'Free practice'}
+  };
+  // adónde lleva: la primera página de cada sección, la misma que en la portada
+  const portada = {
+    verbos: 'tiempos-verbales', gramatica: 'articulos', vocabulario: 'vocabulario',
+    expresiones: 'expresiones-comunes', profesional: 'profesional',
+    clases: 'mis-clases', ejercicios: 'ejercicios'
   };
   const l = labels[cat];
   if(!l) return;
   const track = window.jnIdioma();
-  const span = document.createElement('span');
-  span.className = 'handwritten-title i18n';
+  const span = document.createElement(portada[cat] ? 'a' : 'span');
+  if(portada[cat]){
+    // .track-link: el enlace se rehace solo al cambiar de idioma
+    span.href = portada[cat] + '-' + track + '.html';
+    span.dataset.base = portada[cat];
+  }
+  span.className = 'handwritten-title i18n' + (portada[cat] ? ' track-link' : '');
   span.dataset.es = l.es; span.dataset.it = l.it; span.dataset.en = l.en;
   span.textContent = l[track] || l.es;
   header.insertBefore(span, header.firstChild);
-})();
-
-// --- Las pestañas de cuaderno siguen al título de su materia en el menú ---
-// Antes solo se recolocaban al pulsar, y el menú podía moverse sin pulsar
-// nada (desplazarlo, cargar la letra, abrir un submenú largo): la pestaña se
-// quedaba a la altura de otro título. Ahora se recolocan cuando cambia el
-// tamaño de cualquier bloque del menú, al desplazarlo y al cambiar la
-// ventana.
-(function(){
-  const rail = document.querySelector('.tab-rail');
-  const sidebar = document.querySelector('.sidebar');
-  if(!rail || !sidebar) return;
-  const tabs = Array.prototype.slice.call(rail.querySelectorAll('.rail-tab'));
-  let pendiente = false;
-  // Una pestaña cuyo título se ha salido de la vista (por ejemplo, con el
-  // submenú largo de Verbos abierto) no desaparece: se apila contra el borde
-  // de arriba o de abajo, como las pestañas de un cuaderno, y vuelve a su
-  // sitio al desplazar el menú.
-  const PASO = 28, MARGEN = 18;
-  function align(){
-    pendiente = false;
-    const caja = sidebar.getBoundingClientRect();
-    const sitios = [];
-    tabs.forEach(function(tab){
-      const btn = sidebar.querySelector('.menu-item > .menu-button:has(.cat-' + tab.dataset.tabCat + ')');
-      const r = btn && btn.getBoundingClientRect();
-      if(!r || r.height === 0){ tab.classList.add('fuera'); return; }
-      tab.classList.remove('fuera');
-      sitios.push({ tab: tab, medio: r.top + r.height / 2 });
-    });
-    sitios.sort(function(a, b){ return a.medio - b.medio; });
-    // Las que se ven, en su título. Las de fuera, apiladas contra el borde;
-    // si no hay sitio, se montan un poco unas sobre otras, como en un
-    // cuaderno, pero nunca tapan a una que esté en su título.
-    const alto = caja.top + MARGEN, bajo = caja.bottom - MARGEN;
-    const dentro = sitios.filter(function(s){ return s.medio >= alto && s.medio <= bajo; });
-    const arriba = sitios.filter(function(s){ return s.medio < alto; });
-    const abajo = sitios.filter(function(s){ return s.medio > bajo; });
-    function paso(n, sitio){ return n > 1 ? Math.max(6, Math.min(PASO, sitio / (n - 1))) : 0; }
-    dentro.forEach(function(s){ s.tab.style.top = s.medio + 'px'; });
-    const tope = dentro.length ? dentro[0].medio - PASO : bajo;
-    const pa = paso(arriba.length, tope - alto);
-    arriba.forEach(function(s, i){ s.tab.style.top = (alto + i * pa) + 'px'; });
-    const suelo = dentro.length ? dentro[dentro.length - 1].medio + PASO : alto;
-    const pb = paso(abajo.length, bajo - suelo);
-    abajo.forEach(function(s, i){ s.tab.style.top = (bajo - (abajo.length - 1 - i) * pb) + 'px'; });
-  }
-  function pide(){
-    if(pendiente) return;
-    pendiente = true;
-    requestAnimationFrame(align);
-  }
-  align();
-  sidebar.addEventListener('scroll', pide, { passive: true });
-  window.addEventListener('resize', pide);
-  document.addEventListener('click', function(e){ if(e.target.closest('.menu-button')) pide(); });
-  if(window.ResizeObserver){
-    const ro = new ResizeObserver(pide);
-    sidebar.querySelectorAll('.menu-item, .sidebar-search, .logo-header').forEach(function(el){ ro.observe(el); });
-  }
-  if(document.fonts && document.fonts.ready) document.fonts.ready.then(pide);
-  setTimeout(pide, 300);
 })();
 
 // --- Botón de mostrar/ocultar menú lateral ---
@@ -1204,22 +1138,71 @@ document.addEventListener("jn-modo", e => marcaModo(e.detail));
 })();
 
 // --- Buscador del menú lateral (busca en el texto real de cada página) ---
+// Antes era un campo grande arriba del menú y se llevaba toda la atención.
+// Ahora es una lupa: en el ordenador, abajo a la izquierda del menú, y al
+// pulsarla se estira para escribir; en el móvil, junto al botón del menú,
+// y abre una ventana en el centro. Cada resultado dice de qué sección es.
 (function(){
   const input = document.getElementById('site-search');
   const results = document.getElementById('search-results');
   if(!input || !results) return;
+  const caja = input.closest('.sidebar-search');
+  const movil = window.matchMedia('(max-width:900px)');
+
+  const lupa = document.createElement('button');
+  lupa.type = 'button';
+  lupa.className = 'lupa-btn';
+  lupa.innerHTML = '<i class="ti ti-search" aria-hidden="true"></i>';
+  caja.insertBefore(lupa, caja.firstChild);
+  // la del móvil va en la barra de arriba, al lado del botón del menú
+  const lupaMovil = lupa.cloneNode(true);
+  lupaMovil.className = 'lupa-movil';
+  document.body.appendChild(lupaMovil);
+  const cerrar = document.createElement('button');
+  cerrar.type = 'button';
+  cerrar.className = 'lupa-cerrar';
+  cerrar.innerHTML = '<i class="ti ti-x" aria-hidden="true"></i>';
+  caja.appendChild(cerrar);
+
+  function abre(){
+    caja.classList.add('abierta');
+    document.body.classList.toggle('busca-abierta', movil.matches);
+    input.focus();
+  }
+  function cierra(){
+    caja.classList.remove('abierta');
+    document.body.classList.remove('busca-abierta');
+    results.classList.remove('active');
+    input.value = '';
+    results.innerHTML = '';
+  }
+  lupa.addEventListener('click', function(){ caja.classList.contains('abierta') ? cierra() : abre(); });
+  lupaMovil.addEventListener('click', abre);
+  cerrar.addEventListener('click', cierra);
+  document.addEventListener('keydown', function(e){
+    if(e.key === 'Escape' && caja.classList.contains('abierta')) cierra();
+  });
+  // en el móvil, tocar el velo de detrás también cierra
+  caja.addEventListener('click', function(e){ if(e.target === caja && movil.matches) cierra(); });
+  movil.addEventListener('change', cierra);
 
   // Lo que el buscador le dice al alumno, en su idioma. Sigue la misma regla
   // que el resto del menú: el recorrido elegido y, si no hay, español.
   const TXT = {
-    es: { buscar: 'Buscar...', nada: 'Sin resultados para' },
-    it: { buscar: 'Cerca...', nada: 'Nessun risultato per' },
-    en: { buscar: 'Search...', nada: 'No results for' }
+    es: { buscar: 'Buscar...', nada: 'Sin resultados para', lupa: 'Buscar', cerrar: 'Cerrar',
+          teoria: 'Teoría', ejercicios: 'Ejercicios', clase: 'Clase' },
+    it: { buscar: 'Cerca...', nada: 'Nessun risultato per', lupa: 'Cerca', cerrar: 'Chiudi',
+          teoria: 'Teoria', ejercicios: 'Esercizi', clase: 'Lezione' },
+    en: { buscar: 'Search...', nada: 'No results for', lupa: 'Search', cerrar: 'Close',
+          teoria: 'Theory', ejercicios: 'Exercises', clase: 'Class' }
   };
   function txt(){ return TXT[localStorage.getItem('jn_track')] || TXT.es; }
   function rotula(){
     input.placeholder = txt().buscar;
     input.setAttribute('aria-label', txt().buscar);
+    lupa.setAttribute('aria-label', txt().lupa);
+    lupaMovil.setAttribute('aria-label', txt().lupa);
+    cerrar.setAttribute('aria-label', txt().cerrar);
   }
   rotula();
   // al cambiar de idioma con los botones de arriba, sin recargar la página
@@ -1291,6 +1274,15 @@ document.addEventListener("jn-modo", e => marcaModo(e.detail));
     return m ? m[1] : null;
   }
 
+  // de qué sección es cada página, para su etiqueta de color
+  function seccion(url){
+    const pag = url.split('/').pop();
+    if(/^clase-|^mis-clases-/.test(pag)) return 'clase';
+    if(/^ejercicios-/.test(pag)) return 'ejercicios';
+    if(/^(index|sobre-mi|privacidad)\.html/.test(pag)) return '';
+    return 'teoria';
+  }
+
   function snippetAround(text, normText, q){
     const i = normText.indexOf(q);
     if(i === -1) return text.slice(0, 90) + '…';
@@ -1330,7 +1322,9 @@ document.addEventListener("jn-modo", e => marcaModo(e.detail));
         // sin idioma elegido, varias páginas (ES/IT/EN) pueden compartir título — se añade la bandera para distinguirlas
         const t = trackOf(entry.url);
         const flag = (!currentTrack && t && FLAGS[t]) ? '<img class="bandera" src="banderas/' + FLAGS[t] + '.svg" width="21" height="14" alt=""> ' : '';
-        return `<a href="${jnEscapeHtml(entry.url)}"><span class="search-title">${flag}${jnEscapeHtml(entry.title)}</span>${snippet}</a>`;
+        const sec = seccion(entry.url);
+        const pill = sec ? `<span class="search-sec search-sec-${sec}">${jnEscapeHtml(txt()[sec])}</span>` : '';
+        return `<a href="${jnEscapeHtml(entry.url)}">${pill}<span class="search-title">${flag}${jnEscapeHtml(entry.title)}</span>${snippet}</a>`;
       }).join('');
     }
     results.classList.add('active');
@@ -1340,6 +1334,11 @@ document.addEventListener("jn-modo", e => marcaModo(e.detail));
   input.addEventListener('focus', busca);
   input.addEventListener('input', busca);
   document.addEventListener('click', (e) => {
-    if(!e.target.closest('.sidebar-search')){ results.classList.remove('active'); }
+    if(e.target.closest('.lupa-movil')) return;
+    if(!e.target.closest('.sidebar-search')){
+      results.classList.remove('active');
+      // en el ordenador, si no se ha escrito nada, la barra vuelve a ser lupa
+      if(!input.value.trim()) cierra();
+    }
   });
 })();

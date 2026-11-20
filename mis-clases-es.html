@@ -10,7 +10,7 @@
 <link rel="preload" href="fuentes/iconos.woff2?v=13f2fec55c" as="font" type="font/woff2" crossorigin>
 <link rel="icon" type="image/png" href="icono.png">
 <link rel="apple-touch-icon" href="icono-movil.png">
-<link rel="stylesheet" href="styles.css?v=5a5084d41c">
+<link rel="stylesheet" href="styles.css?v=52dd0b5089">
 <script>if(localStorage.getItem('jn_theme')==='dark')document.documentElement.setAttribute('data-theme','dark');</script>
 </head>
 <body data-category="clases">
@@ -25,10 +25,11 @@
 </div>
 
 
+<div class="menu-sep sep-clases"><span class="i18n" data-es="Clases" data-it="Lezioni" data-en="Classes">Clases</span></div>
 <div class="menu-item">
 <a href="#" class="menu-button track-link" data-base="mis-clases"><i class="ti ti-notebook cat-clases"></i> <span class="i18n" data-es="Mis clases" data-it="Le mie lezioni" data-en="My classes">Mis clases</span></a>
 </div>
-<div class="menu-sep"><span class="i18n" data-es="Práctica libre" data-it="Pratica libera" data-en="Free practice">Práctica libre</span></div>
+<div class="menu-sep sep-ejer"><span class="i18n" data-es="Práctica libre" data-it="Pratica libera" data-en="Free practice">Práctica libre</span></div>
 <div class="menu-item menu-practica">
 <a href="#" class="menu-button track-link" data-base="ejercicios" data-q="modo=curso"><i class="ti ti-route cat-ejercicios"></i> <span class="i18n" data-es="Cursos" data-it="Corsi" data-en="Courses">Cursos</span></a>
 </div>
@@ -38,7 +39,7 @@
 <div class="menu-item menu-practica">
 <a href="#" class="menu-button track-link" data-base="ejercicios" data-q="modo=tema"><i class="ti ti-target cat-ejercicios"></i> <span class="i18n" data-es="Por tema" data-it="Per argomento" data-en="By topic">Por tema</span></a>
 </div>
-<div class="menu-sep"><span class="i18n" data-es="Teoría" data-it="Teoria" data-en="Theory">Teoría</span></div>
+<div class="menu-sep sep-teoria"><span class="i18n" data-es="Teoría" data-it="Teoria" data-en="Theory">Teoría</span></div>
 
 <div class="menu-item">
 <button class="menu-button"><i class="ti ti-microphone cat-verbos"></i> <span class="i18n" data-es="Verbos" data-it="Verbi" data-en="Verbs">Verbos</span> ▾</button>
@@ -118,18 +119,8 @@
 
 
 <div class="sidebar-filler">
-<p class="tagline"><span id="tagline-text">Poco a poco se llega lejos</span> <i class="ti ti-bolt"></i></p>
 </div>
 </aside>
-<div class="tab-rail">
-<div class="rail-tab" data-tab-cat="clases" style="--tab-color:#7A5230"></div>
-<div class="rail-tab" data-tab-cat="verbos" style="--tab-color:#D6488F"></div>
-<div class="rail-tab" data-tab-cat="gramatica" style="--tab-color:#5B9A3B"></div>
-<div class="rail-tab" data-tab-cat="vocabulario" style="--tab-color:#E8791E"></div>
-<div class="rail-tab" data-tab-cat="expresiones" style="--tab-color:#7A6FD1"></div>
-<div class="rail-tab" data-tab-cat="profesional" style="--tab-color:#0F6E56"></div>
-<div class="rail-tab" data-tab-cat="ejercicios" style="--tab-color:#3A6FC9"></div>
-</div>
 <main class="main">
 <div class="page-header"><div class="language-selector">
 <button class="lang-track-btn" data-track="es"><img class="bandera" src="banderas/es.svg" width="21" height="14" alt=""> Español</button>
@@ -143,9 +134,13 @@
 <div class="breadcrumb"><a href="index.html"><i class="ti ti-home"></i> Inicio</a> / Mis clases</div>
 </div>
 <section class="grammar-section">
-<h3 style="font-size:23px;margin:6px 0 10px" class="i18n" data-es="Tus clases" data-it="Le tue lezioni" data-en="Your classes">Tus clases</h3>
-<div class="aula"><span class="aula-ico"><i class="ti ti-video" aria-hidden="true"></i></span><div class="aula-txt"><span class="aula-tit i18n" data-es="Tu sala de clase" data-it="La tua aula" data-en="Your classroom">Tu sala de clase</span><span class="aula-nota i18n" data-es="Siempre la misma. Si te pide esperar, es normal: estoy entrando." data-it="È sempre la stessa. Se ti chiede di aspettare è normale: sto entrando." data-en="Always the same link. If it asks you to wait, that is normal — I am on my way in.">Siempre la misma. Si te pide esperar, es normal: estoy entrando.</span></div><a class="button button-primary" href="https://meet.google.com/xhh-wujz-ywi" target="_blank" rel="noopener noreferrer"><span class="i18n" data-es="Entrar a clase" data-it="Entra in aula" data-en="Join the class">Entrar a clase</span></a></div>
+<div class="mc-grid">
+<div class="mc-izq">
+<div class="mc-barra"><div class="mc-bus" id="mc-bus"></div><a class="aula-boton" href="https://meet.google.com/xhh-wujz-ywi" target="_blank" rel="noopener noreferrer"><i class="ti ti-video" aria-hidden="true"></i><span class="i18n" data-es="Entrar a clase" data-it="Entra in aula" data-en="Join the class">Entrar a clase</span></a></div>
 <div id="mc-cont"></div>
+</div>
+<aside class="mc-lado" id="mc-lado" hidden></aside>
+</div>
 </section>
 </main>
 <a class="cita-boton" href="https://tidycal.com/josenogues" target="_blank" rel="noopener noreferrer" title="Reservar la próxima clase · Prenota la prossima lezione · Book your next class"><i class="ti ti-calendar" aria-hidden="true"></i><span class="cita-txt i18n" data-es="Reservar clase" data-it="Prenota lezione" data-en="Book a class">Reservar clase</span></a>
@@ -154,8 +149,8 @@
 <script type="module" src="firebase-sync.js?v=f15ffa3919"></script>
 <script src="clases.js?v=b45f79a397"></script>
 <script src="temas.js?v=29497494e8"></script>
-<script src="script.js?v=eda60858fe"></script>
+<script src="script.js?v=ae784e6455"></script>
 <script src="apuntes.js?v=60c46a55bb"></script>
-<script src="mis-clases.js?v=c23c5ce622"></script>
+<script src="mis-clases.js?v=6205404aab"></script>
 </body>
 </html>

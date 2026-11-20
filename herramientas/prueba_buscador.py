@@ -30,7 +30,11 @@ with sync_playwright() as p:
         comprueba(not [u for u in pedidos if "search-index" in u], "el índice no se pide hasta tocar el buscador")
         comprueba(len([u for u in pedidos if "firebase-init" in u]) == 1,
                   "firebase-init.js se pide una sola vez (%d)" % len([u for u in pedidos if "firebase-init" in u]))
-        pg.locator("#site-search").click(); pg.keyboard.type("subjuntivo", delay=20); pg.wait_for_timeout(900)
+        comprueba(not pg.locator("#site-search").is_visible() and pg.locator(".lupa-btn").is_visible(),
+                  "de entrada solo se ve la lupa")
+        pg.locator(".lupa-btn").click(); pg.wait_for_timeout(200)
+        comprueba(pg.locator("#site-search").is_visible(), "al pulsarla se abre la barra para escribir")
+        pg.keyboard.type("subjuntivo", delay=20); pg.wait_for_timeout(900)
         enlaces = pg.locator("#search-results a").all()
         hrefs = [a.get_attribute("href") for a in enlaces]
         comprueba(len(hrefs) > 0 and len(hrefs) <= 10, "«subjuntivo» da resultados (%d)" % len(hrefs))
@@ -38,6 +42,8 @@ with sync_playwright() as p:
             comprueba(all(("-%s.html" % pista) in h or not any(h.endswith("-%s.html" % x) for x in ("es", "it", "en")) for h in hrefs),
                       "y solo de su pista")
             comprueba(pg.locator("#search-results img.bandera").count() == 0, "sin banderas cuando ya hay pista")
+            comprueba(pg.locator("#search-results a .search-sec").count() == len(hrefs),
+                      "cada resultado dice de qué sección es")
         else:
             con_bandera = pg.locator("#search-results a:has(img.bandera)").count()
             comprueba(len({h[-7:-5] for h in hrefs if h[-8] == "-"}) >= 1 and con_bandera > 0,
@@ -76,13 +82,15 @@ with sync_playwright() as p:
     comprueba(pg.locator("#site-search").get_attribute("placeholder") == "Search...", "al pasar a inglés el buscador dice «Search...»")
     pedidos = []
     pg.on("request", lambda r: pedidos.append(r.url) if "search-index" in r.url else None)
-    pg.locator("#site-search").click(); pg.keyboard.type("weather", delay=20); pg.wait_for_timeout(900)
+    pg.locator(".lupa-btn").click(); pg.wait_for_timeout(200)
+    pg.keyboard.type("weather", delay=20); pg.wait_for_timeout(900)
     hrefs = [a.get_attribute("href") for a in pg.locator("#search-results a").all()]
     comprueba(len(hrefs) > 0 and all(not h.endswith(("-es.html", "-it.html")) for h in hrefs),
               "y busca ya en las páginas en inglés (%d resultados)" % len(hrefs))
     comprueba(sorted(u.split("search-index-")[1].split(".js")[0] for u in pedidos) == ["comun", "en"],
               "bajándose el índice inglés, no los otros")
     pg.locator('.lang-track-btn[data-track="it"]').click(); pg.wait_for_timeout(400)
+    if not pg.locator("#site-search").is_visible(): pg.locator(".lupa-btn").click(); pg.wait_for_timeout(200)
     pg.locator("#site-search").fill("congiuntivo"); pg.wait_for_timeout(900)
     hrefs = [a.get_attribute("href") for a in pg.locator("#search-results a").all()]
     comprueba(len(hrefs) > 0 and all(not h.endswith(("-es.html", "-en.html")) for h in hrefs),

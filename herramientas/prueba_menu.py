@@ -59,28 +59,36 @@ with sync_playwright() as p:
     comprueba(boton.is_visible() and boton.get_attribute("aria-expanded") == "false", "el botón está y dice que está plegado")
     boton.click()
     pg.wait_for_timeout(250)
-    comprueba(pg.locator("#site-search").is_visible() and pg.locator(".sidebar .menu-item").first.is_visible(),
-              "al tocarlo se abre el menú, con el buscador")
+    comprueba(pg.locator(".sidebar .menu-item").first.is_visible(),
+              "al tocarlo se abre el menú")
+    comprueba(pg.locator(".lupa-movil").is_visible(), "y la lupa sigue arriba, junto al botón")
     comprueba(boton.get_attribute("aria-expanded") == "true", "y el botón lo dice")
     comprueba(pg.locator(".sidebar a.current-page").is_visible(), "con la página en la que estás marcada")
     boton.click()
     pg.wait_for_timeout(250)
-    comprueba(not pg.locator("#site-search").is_visible(), "tocarlo otra vez lo cierra")
+    comprueba(not pg.locator(".sidebar .menu-item").first.is_visible(), "tocarlo otra vez lo cierra")
     boton.click()
     pg.wait_for_timeout(200)
     pg.keyboard.press("Escape")
     pg.wait_for_timeout(200)
-    comprueba(not pg.locator("#site-search").is_visible(), "y Escape también")
+    comprueba(not pg.locator(".sidebar .menu-item").first.is_visible(), "y Escape también")
     # ir a otra página desde el menú: la nueva empieza plegada
     boton.click()
     pg.wait_for_timeout(200)
     pg.locator('.sidebar a.track-link[data-base="mis-clases"]').click()
     pg.wait_for_load_state("load")
     pg.wait_for_timeout(600)
-    comprueba("mis-clases-it.html" in pg.url and not pg.locator("#site-search").is_visible(),
+    comprueba("mis-clases-it.html" in pg.url and not pg.locator(".sidebar .menu-item").first.is_visible(),
               "al ir a otra página desde el menú, llega con él plegado")
     comprueba(pg.evaluate("document.documentElement.scrollWidth <= document.documentElement.clientWidth"),
               "sin que nada se salga por los lados")
+    # la lupa del móvil abre la búsqueda en una ventana, y se cierra
+    pg.locator(".lupa-movil").click(); pg.wait_for_timeout(250)
+    comprueba(pg.locator("#site-search").is_visible(), "la lupa de arriba abre la búsqueda")
+    pg.keyboard.type("subjuntivo", delay=20); pg.wait_for_timeout(900)
+    comprueba(pg.locator("#search-results a").count() > 0, "y encuentra")
+    pg.keyboard.press("Escape"); pg.wait_for_timeout(200)
+    comprueba(not pg.locator("#site-search").is_visible(), "Escape la cierra")
     c.close()
 
     # quien en el ordenador dejó el menú escondido no puede quedarse sin barra en el móvil
@@ -89,15 +97,15 @@ with sync_playwright() as p:
               "con el menú «escondido» del ordenador, en el móvil la barra sigue ahí")
     pg.locator("#sidebar-toggle").click()
     pg.wait_for_timeout(250)
-    comprueba(pg.locator("#site-search").is_visible(), "y se abre igual")
+    comprueba(pg.locator(".sidebar .menu-item").first.is_visible(), "y se abre igual")
     comprueba(pg.evaluate("localStorage.getItem('jn_sidebar_collapsed')") == "true",
               "sin tocarle la preferencia del ordenador")
     c.close()
 
     print("\n═══ en el ordenador ═══")
     c, pg = abre(br, 1200)
-    comprueba(pg.locator("#site-search").is_visible() and pg.locator(".sidebar .menu-item").first.is_visible(),
-              "el menú lateral está entero, como siempre")
+    comprueba(pg.locator(".lupa-btn").is_visible() and pg.locator(".sidebar .menu-item").first.is_visible(),
+              "el menú lateral está entero, con la lupa abajo")
     comprueba(pg.locator("#sidebar-toggle").get_attribute("aria-expanded") is None, "el botón no habla de plegado")
     pg.locator("#sidebar-toggle").click()
     pg.wait_for_timeout(450)
@@ -108,7 +116,7 @@ with sync_playwright() as p:
     comprueba(not pg.evaluate("document.body.classList.contains('menu-abierto')"), "sin mezclarse con lo del móvil")
     pg.locator("#sidebar-toggle").click()
     pg.wait_for_timeout(450)
-    comprueba(pg.locator("#site-search").is_visible(), "y vuelve a enseñarlo")
+    comprueba(pg.locator(".lupa-btn").is_visible() and pg.locator(".sidebar .menu-item").first.is_visible(), "y vuelve a enseñarlo")
     c.close()
     br.close()
 

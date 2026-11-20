@@ -26,21 +26,34 @@ bueno; lo pequeño y claro, hacerlo.
 - Las tablas, notas y tarjetas **nunca son transparentes**: solo se quitó el
   recuadro de fondo de la página. `herramientas/transparentes.py` lo vigila.
 - Estilo sobrio (noviembre 2026): títulos en Nunito, botones planos, tarjetas
-  blancas con el color solo en el icono. **Excepción querida por José:** el
-  saludo de la portada y «Cinco minutos de hoy» llevan el degradado violeta, el
-  «¡Hola!» escrito a mano (Caveat) y los globos «¿Qué tal? / ¡Vamos! / Poco a
-  poco». También son de José y no se quitan: el **título escrito a mano**
-  (Caveat, en el color de la materia) arriba de cada página, las **pestañas de
-  cuaderno** de colores junto al menú (siguen a su título; si no cabe, se
-  apilan en el borde) y la **puerta de entrada** con el degradado y su foto.
-- Los colores de las materias son de las materias (menú, iconos); no usarlos
-  para otras cosas.
+  blancas con el color solo en el icono, **esquinas poco redondeadas (6px)** y
+  **nada de rayas de color a la izquierda** de cajas ni filas («parece hecho
+  por una IA»). Mejor menos cajas: «Mis clases» es una agenda de filas, no
+  tarjetas. **Excepción querida por José:** el saludo de la portada y «Cinco
+  minutos de hoy» llevan el degradado violeta, el «¡Hola!» escrito a mano
+  (Caveat) y los globos «¿Qué tal? / ¡Vamos! / Poco a poco». También son de
+  José y no se quitan: el **título escrito a mano** (Caveat, en el color de su
+  sección) arriba de cada página y la **puerta de entrada** con el degradado y
+  su foto.
+- **Tres colores, uno por sección**, los del logo: violeta para «Mis clases»
+  (`--c-clases`), dorado para los ejercicios (`--c-ejer`) y rosa para **toda**
+  la teoría (`--c-teoria`), sin colores distintos por materia. En el menú los
+  iconos van en blanco y solo el título de cada sección lleva su color.
+- El nombre de la sección sale **una sola vez**: el título a mano (que lleva a
+  la portada de la sección). Sin etiqueta de color encima del título de la
+  página y, en el ordenador, sin ruta «Inicio / …» (en el móvil sí, porque ahí
+  no se ve el título a mano).
+- El buscador es una **lupa**: abajo a la izquierda del menú en el ordenador
+  (se estira al pulsarla) y arriba junto al botón del menú en el móvil. Cada
+  resultado lleva la etiqueta de su sección.
 - Banderas: siempre las de `banderas/*.svg`, nunca emoji (en Windows salen
   como letras).
 
 **Descartado o aparcado: no volver a proponerlo salvo que José lo saque**
 - Descartado: «Mis fallos», aviso en «Mira tu correo», botón «Entrar con
-  Google», LinkedIn, QR.
+  Google», LinkedIn, QR, las pestañas de cuaderno junto al menú, la frase
+  («Poco a poco se llega lejos»…) al pie del menú, un color por materia, la
+  foto de José en «Mis clases».
 - Aparcado para más adelante: dominio propio, portada pública, test de nivel,
   Google, app.
 

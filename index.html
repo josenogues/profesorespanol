@@ -9,7 +9,7 @@
 <link rel="preload" href="fuentes/iconos.woff2?v=13f2fec55c" as="font" type="font/woff2" crossorigin>
 <link rel="icon" type="image/png" href="icono.png">
 <link rel="apple-touch-icon" href="icono-movil.png">
-<link rel="stylesheet" href="styles.css?v=5a5084d41c">
+<link rel="stylesheet" href="styles.css?v=52dd0b5089">
 <script>if(localStorage.getItem('jn_theme')==='dark')document.documentElement.setAttribute('data-theme','dark');</script>
 </head>
 <body>
@@ -24,10 +24,11 @@
 </div>
 
 
+<div class="menu-sep sep-clases"><span class="i18n" data-es="Clases" data-it="Lezioni" data-en="Classes">Clases</span></div>
 <div class="menu-item">
 <a href="#" class="menu-button track-link" data-base="mis-clases"><i class="ti ti-notebook cat-clases"></i> <span class="i18n" data-es="Mis clases" data-it="Le mie lezioni" data-en="My classes">Mis clases</span></a>
 </div>
-<div class="menu-sep"><span class="i18n" data-es="Práctica libre" data-it="Pratica libera" data-en="Free practice">Práctica libre</span></div>
+<div class="menu-sep sep-ejer"><span class="i18n" data-es="Práctica libre" data-it="Pratica libera" data-en="Free practice">Práctica libre</span></div>
 <div class="menu-item menu-practica">
 <a href="#" class="menu-button track-link" data-base="ejercicios" data-q="modo=curso"><i class="ti ti-route cat-ejercicios"></i> <span class="i18n" data-es="Cursos" data-it="Corsi" data-en="Courses">Cursos</span></a>
 </div>
@@ -37,7 +38,7 @@
 <div class="menu-item menu-practica">
 <a href="#" class="menu-button track-link" data-base="ejercicios" data-q="modo=tema"><i class="ti ti-target cat-ejercicios"></i> <span class="i18n" data-es="Por tema" data-it="Per argomento" data-en="By topic">Por tema</span></a>
 </div>
-<div class="menu-sep"><span class="i18n" data-es="Teoría" data-it="Teoria" data-en="Theory">Teoría</span></div>
+<div class="menu-sep sep-teoria"><span class="i18n" data-es="Teoría" data-it="Teoria" data-en="Theory">Teoría</span></div>
 
 <div class="menu-item">
 <button class="menu-button"><i class="ti ti-microphone cat-verbos"></i> <span class="i18n" data-es="Verbos" data-it="Verbi" data-en="Verbs">Verbos</span> ▾</button>
@@ -117,18 +118,8 @@
 
 
 <div class="sidebar-filler">
-<p class="tagline"><span id="tagline-text">Poco a poco se llega lejos</span> <i class="ti ti-bolt"></i></p>
 </div>
 </aside>
-<div class="tab-rail">
-<div class="rail-tab" data-tab-cat="clases" style="--tab-color:#7A5230"></div>
-<div class="rail-tab" data-tab-cat="verbos" style="--tab-color:#D6488F"></div>
-<div class="rail-tab" data-tab-cat="gramatica" style="--tab-color:#5B9A3B"></div>
-<div class="rail-tab" data-tab-cat="vocabulario" style="--tab-color:#E8791E"></div>
-<div class="rail-tab" data-tab-cat="expresiones" style="--tab-color:#7A6FD1"></div>
-<div class="rail-tab" data-tab-cat="profesional" style="--tab-color:#0F6E56"></div>
-<div class="rail-tab" data-tab-cat="ejercicios" style="--tab-color:#3A6FC9"></div>
-</div>
 <main class="main">
 <div class="page-header"><div class="language-selector">
 <button class="lang-track-btn" data-track="es"><img class="bandera" src="banderas/es.svg" width="21" height="14" alt=""> Español</button>
@@ -157,13 +148,13 @@
 
 <h2 class="inicio-rot"><span class="i18n" data-es="¿Qué quieres hacer hoy?" data-it="Cosa vuoi fare oggi?" data-en="What do you want to do today?">¿Qué quieres hacer hoy?</span></h2>
 <section class="puertas">
-<a class="puerta track-link" href="#" data-base="mis-clases" style="--c:#B5651D">
+<a class="puerta track-link" href="#" data-base="mis-clases" style="--c:var(--c-clases)">
 <span class="puerta-ico"><i class="ti ti-notebook" aria-hidden="true"></i></span>
 <h3><span class="i18n" data-es="Mis clases" data-it="Le mie lezioni" data-en="My classes">Mis clases</span></h3>
 <p><span class="i18n" data-es="Lo que hemos dado, con su fecha y un sitio para tus apuntes. Y lo que toca la próxima vez." data-it="Quello che abbiamo fatto, con la data e uno spazio per i tuoi appunti. E cosa tocca la prossima volta." data-en="What we’ve covered, with its date and a place for your notes. And what’s next.">Lo que hemos dado, con su fecha y un sitio para tus apuntes. Y lo que toca la próxima vez.</span></p>
 <span class="ir"><span class="i18n" data-es="Ver mis clases" data-it="Vedi le mie lezioni" data-en="See my classes">Ver mis clases</span> <i class="ti ti-arrow-right" aria-hidden="true"></i></span>
 </a>
-<a class="puerta track-link" href="#" data-base="ejercicios" style="--c:#3A6FC9">
+<a class="puerta track-link" href="#" data-base="ejercicios" style="--c:var(--c-ejer)">
 <span class="puerta-ico"><i class="ti ti-pencil" aria-hidden="true"></i></span>
 <h3><span class="i18n" data-es="Ejercicios y cursos" data-it="Esercizi e corsi" data-en="Exercises &amp; courses">Ejercicios y cursos</span></h3>
 <p><span class="i18n" data-es="Cursos paso a paso que siguen donde los dejaste, o práctica suelta por tema o por nivel." data-it="Corsi passo passo che riprendono da dove li hai lasciati, o esercizi sciolti per argomento o per livello." data-en="Step-by-step courses that pick up where you left off, or loose practice by topic or level.">Cursos paso a paso que siguen donde los dejaste, o práctica suelta por tema o por nivel.</span></p>
@@ -173,11 +164,11 @@
 
 <h2 class="inicio-rot"><span class="i18n" data-es="La teoría, por materias" data-it="La teoria, per materie" data-en="The theory, by subject">La teoría, por materias</span></h2>
 <section class="tejas">
-<a class="teja track-link" href="#" data-base="tiempos-verbales" style="--c:#D6488F"><span class="teja-ico"><i class="ti ti-microphone" aria-hidden="true"></i></span><span class="teja-txt"><b><span class="i18n" data-es="Verbos" data-it="Verbi" data-en="Verbs">Verbos</span></b><span><span class="i18n" data-es="Tiempos, modos y los que se confunden" data-it="Tempi, modi e quelli che si confondono" data-en="Tenses, moods and the ones that get mixed up">Tiempos, modos y los que se confunden</span></span></span></a>
-<a class="teja track-link" href="#" data-base="articulos" style="--c:#5B9A3B"><span class="teja-ico"><i class="ti ti-book-2" aria-hidden="true"></i></span><span class="teja-txt"><b><span class="i18n" data-es="Gramática" data-it="Grammatica" data-en="Grammar">Gramática</span></b><span><span class="i18n" data-es="Artículos, pronombres, preposiciones…" data-it="Articoli, pronomi, preposizioni…" data-en="Articles, pronouns, prepositions…">Artículos, pronombres, preposiciones…</span></span></span></a>
-<a class="teja track-link" href="#" data-base="vocabulario" style="--c:#E8791E"><span class="teja-ico"><i class="ti ti-tags" aria-hidden="true"></i></span><span class="teja-txt"><b><span class="i18n" data-es="Vocabulario" data-it="Vocabolario" data-en="Vocabulary">Vocabulario</span></b><span><span class="i18n" data-es="La casa, la comida, los viajes, la hora…" data-it="La casa, il cibo, i viaggi, l’ora…" data-en="Home, food, travel, the time…">La casa, la comida, los viajes, la hora…</span></span></span></a>
-<a class="teja track-link" href="#" data-base="expresiones-comunes" style="--c:#7A6FD1"><span class="teja-ico"><i class="ti ti-message-circle-2" aria-hidden="true"></i></span><span class="teja-txt"><b><span class="i18n" data-es="Expresiones" data-it="Espressioni" data-en="Expressions">Expresiones</span></b><span><span class="i18n" data-es="Lo que se dice de verdad, y los modismos" data-it="Quello che si dice davvero, e i modi di dire" data-en="What people really say, and idioms">Lo que se dice de verdad, y los modismos</span></span></span></a>
-<a class="teja track-link" href="#" data-base="profesional" style="--c:#0F6E56"><span class="teja-ico"><i class="ti ti-briefcase" aria-hidden="true"></i></span><span class="teja-txt"><b><span class="i18n" data-es="Español profesional" data-it="Spagnolo al lavoro" data-en="Business Spanish">Español profesional</span></b><span><span class="i18n" data-es="Emails, reuniones, teléfono, entrevistas" data-it="Email, riunioni, telefono, colloqui" data-en="Emails, meetings, phone calls, interviews">Emails, reuniones, teléfono, entrevistas</span></span></span></a>
+<a class="teja track-link" href="#" data-base="tiempos-verbales" style="--c:var(--c-teoria)"><span class="teja-ico"><i class="ti ti-microphone" aria-hidden="true"></i></span><span class="teja-txt"><b><span class="i18n" data-es="Verbos" data-it="Verbi" data-en="Verbs">Verbos</span></b><span><span class="i18n" data-es="Tiempos, modos y los que se confunden" data-it="Tempi, modi e quelli che si confondono" data-en="Tenses, moods and the ones that get mixed up">Tiempos, modos y los que se confunden</span></span></span></a>
+<a class="teja track-link" href="#" data-base="articulos" style="--c:var(--c-teoria)"><span class="teja-ico"><i class="ti ti-book-2" aria-hidden="true"></i></span><span class="teja-txt"><b><span class="i18n" data-es="Gramática" data-it="Grammatica" data-en="Grammar">Gramática</span></b><span><span class="i18n" data-es="Artículos, pronombres, preposiciones…" data-it="Articoli, pronomi, preposizioni…" data-en="Articles, pronouns, prepositions…">Artículos, pronombres, preposiciones…</span></span></span></a>
+<a class="teja track-link" href="#" data-base="vocabulario" style="--c:var(--c-teoria)"><span class="teja-ico"><i class="ti ti-tags" aria-hidden="true"></i></span><span class="teja-txt"><b><span class="i18n" data-es="Vocabulario" data-it="Vocabolario" data-en="Vocabulary">Vocabulario</span></b><span><span class="i18n" data-es="La casa, la comida, los viajes, la hora…" data-it="La casa, il cibo, i viaggi, l’ora…" data-en="Home, food, travel, the time…">La casa, la comida, los viajes, la hora…</span></span></span></a>
+<a class="teja track-link" href="#" data-base="expresiones-comunes" style="--c:var(--c-teoria)"><span class="teja-ico"><i class="ti ti-message-circle-2" aria-hidden="true"></i></span><span class="teja-txt"><b><span class="i18n" data-es="Expresiones" data-it="Espressioni" data-en="Expressions">Expresiones</span></b><span><span class="i18n" data-es="Lo que se dice de verdad, y los modismos" data-it="Quello che si dice davvero, e i modi di dire" data-en="What people really say, and idioms">Lo que se dice de verdad, y los modismos</span></span></span></a>
+<a class="teja track-link" href="#" data-base="profesional" style="--c:var(--c-teoria)"><span class="teja-ico"><i class="ti ti-briefcase" aria-hidden="true"></i></span><span class="teja-txt"><b><span class="i18n" data-es="Español profesional" data-it="Spagnolo al lavoro" data-en="Business Spanish">Español profesional</span></b><span><span class="i18n" data-es="Emails, reuniones, teléfono, entrevistas" data-it="Email, riunioni, telefono, colloqui" data-en="Emails, meetings, phone calls, interviews">Emails, reuniones, teléfono, entrevistas</span></span></span></a>
 </section>
 
 <a class="sobre-tira" href="sobre-mi.html">
@@ -192,7 +183,7 @@
 <script type="module" src="firebase-sync.js?v=f15ffa3919"></script>
 <script src="clases.js?v=b45f79a397"></script>
 <script src="temas.js?v=29497494e8"></script>
-<script src="script.js?v=eda60858fe"></script>
+<script src="script.js?v=ae784e6455"></script>
 <script src="inicio.js?v=d8ac7c3478"></script>
 </body>
 </html>
