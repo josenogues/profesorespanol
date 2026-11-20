@@ -75,16 +75,16 @@ with sync_playwright() as p:
     print("\n═══ la ruta, el pie y los rótulos ═══")
     for pista, pagina, miga, pie, tema, menu in (
             ("it", "ser-estar-it.html", "Home / Verbi / Ser y estar", "Insegnante di spagnolo · Chi sono · Privacy",
-             "Modalità scura", "Mostra o nascondi il menù"),
+             "Modalità scura", "Tieni fisso il menù"),
             ("en", "perifrasis-en.html", "Home / Verbs / Verbal periphrases", "Spanish teacher · About me · Privacy",
-             "Dark mode", "Show or hide the menu"),
+             "Dark mode", "Keep the menu open"),
             ("es", "ser-estar-es.html", "Inicio / Verbos / Ser y estar", "Profesor de español · Sobre mí · Privacidad",
-             "Modo oscuro", "Mostrar u ocultar el menú")):
+             "Modo oscuro", "Dejar el menú fijo")):
         c, pg = abre(br, pagina, pista)
         comprueba(pg.locator(".breadcrumb").inner_text().strip() == miga, "%s: la ruta dice «%s»" % (pista, miga))
         comprueba(pie in pg.locator("footer").inner_text(), "%s: el pie, «%s»" % (pista, pie))
         comprueba(pg.locator(".theme-switch").get_attribute("title") == tema
-                  and pg.locator("#sidebar-toggle").get_attribute("aria-label") == menu,
+                  and pg.locator("#panel-teoria .panel-fijar").get_attribute("aria-label") == menu,
                   "%s: y los rótulos que no se ven («%s», «%s»)" % (pista, tema, menu))
         c.close()
 

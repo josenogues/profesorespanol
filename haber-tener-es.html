@@ -6,53 +6,46 @@
 <title>Haber y tener (español) | Aprende Español con José Nogues</title>
 <link rel="preconnect" href="https://www.gstatic.com" crossorigin>
 <link rel="preload" href="fuentes/nunito-latin.woff2?v=76388dbfe3" as="font" type="font/woff2" crossorigin>
-<link rel="preload" href="fuentes/iconos.woff2?v=13f2fec55c" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fuentes/iconos.woff2?v=5924756dff" as="font" type="font/woff2" crossorigin>
 <link rel="icon" type="image/png" href="icono.png">
 <link rel="apple-touch-icon" href="icono-movil.png">
-<link rel="stylesheet" href="styles.css?v=dd0d338d35">
+<link rel="stylesheet" href="styles.css?v=7205f9fb3c">
 <script>if(localStorage.getItem('jn_theme')==='dark')document.documentElement.setAttribute('data-theme','dark');</script>
 </head>
 <body data-category="verbos">
-<button id="sidebar-toggle" class="sidebar-toggle" aria-label="Mostrar/ocultar menú"><i class="ti ti-menu-2"></i></button>
-<aside class="sidebar">
+<script>try{var f=localStorage.getItem('jn_menu_fijo');if(f&&innerWidth>900){document.body.setAttribute('data-panel',f);document.body.classList.add('menu-fijo')}}catch(e){}</script>
+<aside class="menu">
+<div class="menu-movil">
 <a href="index.html" class="logo-header"><img src="logo.svg" alt="Aprende español con José" class="logo-img" width="323" height="69"></a>
-
-<div class="sidebar-search">
-<i class="ti ti-search"></i>
-<input type="text" id="site-search" placeholder="Buscar..." autocomplete="off">
-<div class="search-results" id="search-results"></div>
+<button type="button" class="ajustes-movil" aria-expanded="false"><i class="ti ti-language" aria-hidden="true"></i></button>
 </div>
-
-
-<div class="menu-sep sep-clases"><span class="i18n" data-es="Clases" data-it="Lezioni" data-en="Classes">Clases</span></div>
-<div class="menu-item">
-<a href="#" class="menu-button track-link" data-base="mis-clases"><i class="ti ti-notebook cat-clases"></i> <span class="i18n" data-es="Mis clases" data-it="Le mie lezioni" data-en="My classes">Mis clases</span></a>
+<nav class="riel">
+<a href="index.html" class="riel-logo"><img src="icono.png" alt="Aprende español con José" width="62" height="62"></a>
+<a href="#" class="riel-btn track-link" data-base="mis-clases" data-sec="clases"><i class="ti ti-chalkboard-teacher"></i> <span class="i18n" data-es="Mis clases" data-it="Le mie lezioni" data-en="My classes">Mis clases</span></a>
+<button type="button" class="riel-btn" data-sec="ejer" aria-controls="panel-ejer" aria-expanded="false"><i class="ti ti-pencil"></i> <span class="i18n" data-es="Práctica" data-it="Pratica" data-en="Practice">Práctica</span></button>
+<button type="button" class="riel-btn" data-sec="teoria" aria-controls="panel-teoria" aria-expanded="false"><i class="ti ti-brain"></i> <span class="i18n" data-es="Teoría" data-it="Teoria" data-en="Theory">Teoría</span></button>
+</nav>
+<div class="panel-menu" id="panel-ejer" data-sec="ejer">
+<div class="panel-cab"><i class="ti ti-pencil"></i> <span class="i18n" data-es="Práctica" data-it="Pratica" data-en="Practice">Práctica</span><button type="button" class="panel-fijar"><i class="ti ti-pin" aria-hidden="true"></i></button></div>
+<a href="#" class="panel-mat track-link" data-base="ejercicios" data-q="modo=curso"><i class="ti ti-route"></i> <span class="i18n" data-es="Cursos" data-it="Corsi" data-en="Courses">Cursos</span></a>
+<a href="#" class="panel-mat track-link" data-base="ejercicios" data-q="modo=nivel"><i class="ti ti-list-check"></i> <span class="i18n" data-es="Por nivel" data-it="Per livello" data-en="By level">Por nivel</span></a>
+<a href="#" class="panel-mat track-link" data-base="ejercicios" data-q="modo=tema"><i class="ti ti-target"></i> <span class="i18n" data-es="Por tema" data-it="Per argomento" data-en="By topic">Por tema</span></a>
 </div>
-<div class="menu-sep sep-ejer"><span class="i18n" data-es="Práctica libre" data-it="Pratica libera" data-en="Free practice">Práctica libre</span></div>
-<div class="menu-item menu-practica">
-<a href="#" class="menu-button track-link" data-base="ejercicios" data-q="modo=curso"><i class="ti ti-route cat-ejercicios"></i> <span class="i18n" data-es="Cursos" data-it="Corsi" data-en="Courses">Cursos</span></a>
-</div>
-<div class="menu-item menu-practica">
-<a href="#" class="menu-button track-link" data-base="ejercicios" data-q="modo=nivel"><i class="ti ti-list-check cat-ejercicios"></i> <span class="i18n" data-es="Por nivel" data-it="Per livello" data-en="By level">Por nivel</span></a>
-</div>
-<div class="menu-item menu-practica">
-<a href="#" class="menu-button track-link" data-base="ejercicios" data-q="modo=tema"><i class="ti ti-target cat-ejercicios"></i> <span class="i18n" data-es="Por tema" data-it="Per argomento" data-en="By topic">Por tema</span></a>
-</div>
-<div class="menu-sep sep-teoria"><span class="i18n" data-es="Teoría" data-it="Teoria" data-en="Theory">Teoría</span></div>
-
-<div class="menu-item">
-<button class="menu-button"><i class="ti ti-microphone cat-verbos"></i> <span class="i18n" data-es="Verbos" data-it="Verbi" data-en="Verbs">Verbos</span> ▾</button>
-<div class="submenu">
+<div class="panel-menu" id="panel-teoria" data-sec="teoria">
+<div class="panel-cab"><i class="ti ti-brain"></i> <span class="i18n" data-es="Teoría" data-it="Teoria" data-en="Theory">Teoría</span><button type="button" class="panel-fijar"><i class="ti ti-pin" aria-hidden="true"></i></button></div>
+<div class="panel-grupo">
+<button type="button" class="panel-mat" aria-expanded="false"><i class="ti ti-microphone"></i> <span class="i18n" data-es="Verbos" data-it="Verbi" data-en="Verbs">Verbos</span><i class="ti ti-chevron-down panel-flecha" aria-hidden="true"></i></button>
+<div class="panel-sub">
 <a href="#" class="track-link" data-base="tiempos-verbales"><span class="i18n" data-es="Qué tiempo uso" data-it="Che tempo uso" data-en="Which tense">Qué tiempo uso</span></a>
-<div class="menu-sep"><span class="i18n" data-es="Las formas" data-it="Le forme" data-en="The forms">Las formas</span></div>
+<div class="panel-sep"><span class="i18n" data-es="Las formas" data-it="Le forme" data-en="The forms">Las formas</span></div>
 <a href="#" class="track-link" data-base="conjugaciones"><span class="i18n" data-es="Conjugaciones" data-it="Coniugazioni" data-en="Conjugations">Conjugaciones</span></a>
 <a href="#" class="track-link" data-base="perifrasis"><span class="i18n" data-es="Perífrasis verbales" data-it="Perifrasi verbali" data-en="Verbal periphrases">Perífrasis verbales</span></a>
 <a href="#" class="track-link" data-base="formas-impersonales"><span class="i18n" data-es="Formas impersonales" data-it="Forme impersonali" data-en="Non-finite forms">Formas impersonales</span></a>
-<div class="menu-sep"><span class="i18n" data-es="Los modos" data-it="I modi" data-en="The moods">Los modos</span></div>
+<div class="panel-sep"><span class="i18n" data-es="Los modos" data-it="I modi" data-en="The moods">Los modos</span></div>
 <a href="#" class="track-link" data-base="indicativo"><span class="i18n" data-es="Indicativo" data-it="Indicativo" data-en="Indicative">Indicativo</span></a>
 <a href="#" class="track-link" data-base="subjuntivo"><span class="i18n" data-es="Subjuntivo" data-it="Congiuntivo" data-en="Subjunctive">Subjuntivo</span></a>
 <a href="#" class="track-link" data-base="imperativo"><span class="i18n" data-es="Imperativo" data-it="Imperativo" data-en="Imperative">Imperativo</span></a>
-<div class="menu-sep"><span class="i18n" data-es="Verbos concretos" data-it="Verbi concreti" data-en="Particular verbs">Verbos concretos</span></div>
+<div class="panel-sep"><span class="i18n" data-es="Verbos concretos" data-it="Verbi concreti" data-en="Particular verbs">Verbos concretos</span></div>
 <a href="#" class="track-link" data-base="ser-estar"><span class="i18n" data-es="Ser y estar" data-it="Ser y estar" data-en="Ser y estar">Ser y estar</span></a>
 <a href="#" class="track-link" data-base="haber-tener"><span class="i18n" data-es="Haber y tener" data-it="Haber y tener" data-en="Haber y tener">Haber y tener</span></a>
 <a href="#" class="track-link" data-base="verbos-reflexivos"><span class="i18n" data-es="Reflexivos" data-it="Riflessivi" data-en="Reflexive">Reflexivos</span></a>
@@ -61,45 +54,36 @@
 <a href="#" class="track-link track-only" data-track-show="en" data-base="especial-atencion-verbos">Watch out for this</a>
 </div>
 </div>
-
-<div class="menu-item">
-<button class="menu-button"><i class="ti ti-book-2 cat-gramatica"></i> <span class="i18n" data-es="Gramática" data-it="Grammatica" data-en="Grammar">Gramática</span> ▾</button>
-<div class="submenu">
-<div class="menu-sep"><span class="i18n" data-es="La frase" data-it="La frase" data-en="The sentence">La frase</span></div>
+<div class="panel-grupo">
+<button type="button" class="panel-mat" aria-expanded="false"><i class="ti ti-book-2"></i> <span class="i18n" data-es="Gramática" data-it="Grammatica" data-en="Grammar">Gramática</span><i class="ti ti-chevron-down panel-flecha" aria-hidden="true"></i></button>
+<div class="panel-sub">
+<div class="panel-sep"><span class="i18n" data-es="La frase" data-it="La frase" data-en="The sentence">La frase</span></div>
 <a href="#" class="track-link" data-base="articulos"><span class="i18n" data-es="Artículos" data-it="Articoli" data-en="Articles">Artículos</span></a>
 <a href="#" class="track-link" data-base="genero-numero"><span class="i18n" data-es="Género y número" data-it="Genere e numero" data-en="Gender &amp; number">Género y número</span></a>
 <a href="#" class="track-link" data-base="pronombres"><span class="i18n" data-es="Pronombres" data-it="Pronomi" data-en="Pronouns">Pronombres</span></a>
 <a href="#" class="track-link" data-base="preposiciones"><span class="i18n" data-es="Preposiciones" data-it="Preposizioni" data-en="Prepositions">Preposiciones</span></a>
 <a href="#" class="track-link" data-base="conectores"><span class="i18n" data-es="Conectores" data-it="Connettori" data-en="Connectors">Conectores</span></a>
 <a href="#" class="track-link" data-base="estilo-indirecto"><span class="i18n" data-es="Estilo indirecto" data-it="Discorso indiretto" data-en="Reported speech">Estilo indirecto</span></a>
-<div class="menu-sep"><span class="i18n" data-es="Cómo suena y cómo se escribe" data-it="Come suona e come si scrive" data-en="Sound and spelling">Cómo suena y cómo se escribe</span></div>
+<div class="panel-sep"><span class="i18n" data-es="Cómo suena y cómo se escribe" data-it="Come suona e come si scrive" data-en="Sound and spelling">Cómo suena y cómo se escribe</span></div>
 <a href="#" class="track-link" data-base="fonetica"><span class="i18n" data-es="Fonética" data-it="Fonetica" data-en="Phonetics">Fonética</span></a>
-<div class="menu-sep"><span class="i18n" data-es="Lo que te delata" data-it="Quello che ti tradisce" data-en="What gives you away">Lo que te delata</span></div>
+<div class="panel-sep"><span class="i18n" data-es="Lo que te delata" data-it="Quello che ti tradisce" data-en="What gives you away">Lo que te delata</span></div>
 <a href="#" class="track-link track-only" data-track-show="es" data-base="especial-atencion-gramatica">Gramática que delata</a>
 <a href="#" class="track-link track-only" data-track-show="it" data-base="especial-atencion-gramatica">Attenzione a questi</a>
 <a href="#" class="track-link track-only" data-track-show="en" data-base="especial-atencion-gramatica">Watch out for this</a>
 </div>
 </div>
-
-<div class="menu-item">
-<button class="menu-button"><i class="ti ti-tags cat-vocabulario"></i> <span class="i18n" data-es="Vocabulario" data-it="Vocabolario" data-en="Vocabulary">Vocabulario</span> ▾</button>
-<div class="submenu">
-<a href="#" class="track-link" data-base="vocabulario"><span class="i18n" data-es="Ver todos los temas" data-it="Vedi tutti gli argomenti" data-en="See all topics">Ver todos los temas</span></a>
-</div>
-</div>
-
-<div class="menu-item">
-<button class="menu-button"><i class="ti ti-message-circle-2 cat-expresiones"></i> <span class="i18n" data-es="Expresiones" data-it="Espressioni" data-en="Expressions">Expresiones</span> ▾</button>
-<div class="submenu">
+<a href="#" class="panel-mat track-link" data-base="vocabulario"><i class="ti ti-tags"></i> <span class="i18n" data-es="Vocabulario" data-it="Vocabolario" data-en="Vocabulary">Vocabulario</span></a>
+<div class="panel-grupo">
+<button type="button" class="panel-mat" aria-expanded="false"><i class="ti ti-message-circle-2"></i> <span class="i18n" data-es="Expresiones" data-it="Espressioni" data-en="Expressions">Expresiones</span><i class="ti ti-chevron-down panel-flecha" aria-hidden="true"></i></button>
+<div class="panel-sub">
 <a href="#" class="track-link" data-base="expresiones-comunes"><span class="i18n" data-es="Expresiones comunes" data-it="Espressioni comuni" data-en="Common expressions">Expresiones comunes</span></a>
 <a href="#" class="track-link hide-on-es" data-base="falsos-amigos"><span class="i18n" data-es="False friends" data-it="False friends" data-en="False friends">False friends</span></a>
 <a href="#" class="track-link" data-base="modismos"><span class="i18n" data-es="Modismos" data-it="Modi di dire" data-en="Idioms & sayings">Modismos</span></a>
 </div>
 </div>
-
-<div class="menu-item">
-<button class="menu-button"><i class="ti ti-briefcase cat-profesional"></i> <span class="i18n" data-es="Español profesional" data-it="Spagnolo al lavoro" data-en="Business Spanish">Español profesional</span> ▾</button>
-<div class="submenu">
+<div class="panel-grupo">
+<button type="button" class="panel-mat" aria-expanded="false"><i class="ti ti-briefcase"></i> <span class="i18n" data-es="Español profesional" data-it="Spagnolo al lavoro" data-en="Business Spanish">Español profesional</span><i class="ti ti-chevron-down panel-flecha" aria-hidden="true"></i></button>
+<div class="panel-sub">
 <a href="#" class="track-link" data-base="profesional"><span class="i18n" data-es="Visión general" data-it="Panoramica" data-en="Overview">Visión general</span></a>
 <a href="#" class="track-link" data-base="profesional-registro"><span class="i18n" data-es="Registro y tono" data-it="Registro e tono" data-en="Register and tone">Registro y tono</span></a>
 <a href="#" class="track-link" data-base="profesional-email"><span class="i18n" data-es="El email profesional" data-it="L'email professionale" data-en="The professional email">El email profesional</span></a>
@@ -114,10 +98,12 @@
 <a href="#" class="track-link" data-base="profesional-entrevista"><span class="i18n" data-es="La entrevista" data-it="Il colloquio" data-en="The job interview">La entrevista</span></a>
 </div>
 </div>
-
-
-
-<div class="sidebar-filler">
+</div>
+<div class="menu-velo"></div>
+<div class="sidebar-search">
+<i class="ti ti-search"></i>
+<input type="text" id="site-search" placeholder="Buscar..." autocomplete="off">
+<div class="search-results" id="search-results"></div>
 </div>
 </aside>
 <main class="main">
@@ -246,6 +232,6 @@
 <footer>© 2026 José N. · <span class="i18n" data-es="Profesor de español" data-it="Insegnante di spagnolo" data-en="Spanish teacher">Profesor de español</span> · <a href="sobre-mi.html"><span class="i18n" data-es="Sobre mí" data-it="Chi sono" data-en="About me">Sobre mí</span></a> · <a href="privacidad.html"><span class="i18n" data-es="Privacidad" data-it="Privacy" data-en="Privacy">Privacidad</span></a></footer>
 <script type="module" src="firebase-init.js?v=2c6879e2ff"></script>
 <script type="module" src="firebase-sync.js?v=f15ffa3919"></script>
-<script src="script.js?v=ae784e6455"></script>
+<script src="script.js?v=f7659e5c79"></script>
 </body>
 </html>

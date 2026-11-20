@@ -37,14 +37,25 @@ bueno; lo pequeño y claro, hacerlo.
   su foto.
 - **Tres colores, uno por sección**, los del logo: violeta para «Mis clases»
   (`--c-clases`), dorado para los ejercicios (`--c-ejer`) y rosa para **toda**
-  la teoría (`--c-teoria`), sin colores distintos por materia. En el menú los
-  iconos van en blanco y solo el título de cada sección lleva su color.
+  la teoría (`--c-teoria`), sin colores distintos por materia.
+- **El menú (noviembre 2026), estilo Canva:** una columna estrecha azul con el
+  logo y **tres botones** con icono y nombre: «Mis clases» (pizarra con
+  profesor, va directo), «Práctica» (lápiz) y «Teoría» (cerebro). Los iconos
+  van en blanco; el de la sección en la que estás, en su color. Práctica y
+  Teoría abren un **panel flotante**; en Teoría las materias se despliegan
+  (la de la página abierta, ya desplegada); Práctica no se despliega (sus
+  tres modos ya llevan a una página donde se elige). La **chincheta** del
+  panel (en el color de su sección cuando está puesta) lo deja **fijo** y la
+  página se aparta; se recuerda al cambiar de página. José prefirió la
+  chincheta a una flecha de plegar. En el móvil: barra abajo con los tres
+  botones, el panel sube como hoja, y arriba logo, lupa y un botón para
+  idioma y modo oscuro.
 - El nombre de la sección sale **una sola vez**: el título a mano (que lleva a
   la portada de la sección). Sin etiqueta de color encima del título de la
   página y, en el ordenador, sin ruta «Inicio / …» (en el móvil sí, porque ahí
   no se ve el título a mano).
-- El buscador es una **lupa**: abajo a la izquierda del menú en el ordenador
-  (se estira al pulsarla) y arriba junto al botón del menú en el móvil. Cada
+- El buscador es una **lupa**: abajo en la columna del menú en el ordenador
+  (se estira al pulsarla) y arriba en la barra del móvil. Cada
   resultado lleva la etiqueta de su sección.
 - Banderas: siempre las de `banderas/*.svg`, nunca emoji (en Windows salen
   como letras).

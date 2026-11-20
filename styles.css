@@ -18,8 +18,8 @@
 @font-face{font-family:'Nunito';font-style:normal;font-weight:800;font-display:swap;src:url("fuentes/nunito-latin.woff2?v=76388dbfe3") format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
 
 /* ── iconos:inicio ── generado por herramientas/iconos.py: no editar a mano ──
-   Tabler Icons 3.51.0 (MIT, https://tabler.io/icons): solo los 89 que usa la web. */
-@font-face{font-family:"tabler-icons";font-style:normal;font-weight:400;font-display:block;src:url("fuentes/iconos.woff2?v=13f2fec55c") format("woff2")}
+   Tabler Icons 3.51.0 (MIT, https://tabler.io/icons): solo los 80 que usa la web. */
+@font-face{font-family:"tabler-icons";font-style:normal;font-weight:400;font-display:block;src:url("fuentes/iconos.woff2?v=5924756dff") format("woff2")}
 .ti{font-family:"tabler-icons" !important;speak:none;font-style:normal;font-weight:normal;font-variant:normal;text-transform:none;line-height:1;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
 .ti-adjustments-horizontal:before{content:"\ec38"}
 .ti-alert-triangle:before{content:"\ea06"}
@@ -29,18 +29,18 @@
 .ti-arrow-up:before{content:"\ea25"}
 .ti-arrows-sort:before{content:"\eb5a"}
 .ti-ball-football:before{content:"\ee06"}
-.ti-bike:before{content:"\ea36"}
 .ti-bolt:before{content:"\ea38"}
 .ti-book:before{content:"\ea39"}
 .ti-book-2:before{content:"\efc5"}
 .ti-books:before{content:"\eff2"}
+.ti-brain:before{content:"\f59f"}
 .ti-briefcase:before{content:"\ea46"}
-.ti-building:before{content:"\ea4f"}
 .ti-bulb:before{content:"\ea51"}
 .ti-bus:before{content:"\ebe4"}
 .ti-calendar:before{content:"\ea53"}
 .ti-calendar-event:before{content:"\ea52"}
 .ti-cash:before{content:"\ea55"}
+.ti-chalkboard-teacher:before{content:"\10160"}
 .ti-check:before{content:"\ea5e"}
 .ti-chevron-down:before{content:"\ea5f"}
 .ti-chevron-left:before{content:"\ea60"}
@@ -51,13 +51,10 @@
 .ti-coffee:before{content:"\ef0e"}
 .ti-download:before{content:"\ea96"}
 .ti-droplet:before{content:"\ea97"}
-.ti-ear:before{content:"\ebce"}
 .ti-external-link:before{content:"\ea99"}
 .ti-file-description:before{content:"\f028"}
 .ti-file-text:before{content:"\eaa2"}
 .ti-files:before{content:"\edef"}
-.ti-hand-stop:before{content:"\ec2e"}
-.ti-history:before{content:"\ebea"}
 .ti-home:before{content:"\eac1"}
 .ti-info-circle:before{content:"\eac5"}
 .ti-key:before{content:"\eac7"}
@@ -67,26 +64,21 @@
 .ti-list-check:before{content:"\eb6a"}
 .ti-list-details:before{content:"\ef40"}
 .ti-lock:before{content:"\eae2"}
-.ti-luggage:before{content:"\efad"}
 .ti-mail:before{content:"\eae5"}
-.ti-map-pin:before{content:"\eae8"}
-.ti-menu-2:before{content:"\ec42"}
 .ti-message-2:before{content:"\eaec"}
-.ti-message-circle:before{content:"\eaed"}
 .ti-message-circle-2:before{content:"\eaed"}
 .ti-microphone:before{content:"\eaf0"}
 .ti-moon:before{content:"\eaf8"}
-.ti-music:before{content:"\eafc"}
 .ti-note:before{content:"\eb6d"}
 .ti-notebook:before{content:"\eb96"}
 .ti-pencil:before{content:"\eb04"}
 .ti-phone:before{content:"\eb09"}
+.ti-pin:before{content:"\ec9c"}
 .ti-plane:before{content:"\eb6f"}
 .ti-player-play:before{content:"\ed46"}
 .ti-plus:before{content:"\eb0b"}
 .ti-presentation:before{content:"\eb70"}
 .ti-puzzle:before{content:"\eb10"}
-.ti-quote:before{content:"\efbe"}
 .ti-refresh:before{content:"\eb13"}
 .ti-refresh-alert:before{content:"\ed57"}
 .ti-route:before{content:"\eb17"}
@@ -95,7 +87,6 @@
 .ti-search:before{content:"\eb1c"}
 .ti-seeding:before{content:"\ed51"}
 .ti-sparkles:before{content:"\f6d7"}
-.ti-stethoscope:before{content:"\edbe"}
 .ti-sun:before{content:"\eb30"}
 .ti-sunrise:before{content:"\ef1c"}
 .ti-tags:before{content:"\ef86"}
@@ -120,22 +111,9 @@ a{text-decoration:none;color:inherit}
 h1,h2,h3,h4,.logo,.button,.tab-btn{font-family:var(--font-head)}
 h1,h2,.section-title{font-weight:800;letter-spacing:-.01em}
 
-.sidebar{position:fixed;left:0;top:0;width:270px;height:100vh;background:var(--sidebar);padding:25px 20px;overflow-y:auto;display:flex;flex-direction:column;scrollbar-width:none;-ms-overflow-style:none}
-.sidebar::-webkit-scrollbar{display:none}
 .logo{display:block;font-size:23px;font-weight:700;color:#fff;margin-bottom:30px;letter-spacing:-.01em}
-.menu-item{margin-bottom:4px}
-.menu-button{display:flex;align-items:center;gap:7px;width:100%;background:none;border:0;padding:10px;text-align:left;font-size:17.5px;font-weight:600;cursor:pointer;color:#fff;border-radius:10px;transition:.15s;font-family:var(--font-body)}
-/* en fila: si el nombre de la sección no cabe, parte él, pero la flechita
-   nunca se queda sola en una segunda línea (pasaba con «Exercises and courses») */
-.menu-button > i{flex:none}
-.menu-button > span{min-width:0}
-.menu-button:hover{background:rgba(255,255,255,.15)}
-.submenu{display:none;padding-left:15px;border-left:2px solid rgba(255,255,255,.25);margin-left:10px}
-.submenu a{display:block;padding:7px 10px;color:rgba(255,255,255,.8);font-size:15px;font-weight:500;border-radius:8px;transition:.15s}
-.submenu a:hover{background:rgba(255,255,255,.15);color:#fff}
-.menu-item.active .submenu{display:block}
 
-.main{margin-left:294px;padding:40px 40px 40px 74px;max-width:1440px;min-height:calc(100vh - 66px)}
+.main{margin-left:120px;padding:40px 40px 40px 74px;max-width:1440px;min-height:calc(100vh - 66px)}
 .page-header{background:transparent;margin:0 0 44px;padding:0;border-bottom:0;display:flex;align-items:center;gap:20px;flex-wrap:wrap}
 .page-header .breadcrumb{margin:0;order:1;flex:1 1 0;min-width:0}
 .page-header .language-selector{margin:0 0 0 auto;padding:0;border:0;text-align:right;order:2}
@@ -242,8 +220,6 @@ footer{text-align:center;padding:30px;color:var(--muted);border-top:1px solid va
    sitio debajo: así al llegar al final no queda nada escondido detrás. */
 body:has(.apu-boton) footer,body:has(.cita-boton) footer{padding-bottom:96px}
 @media(max-width:900px){
-.sidebar{position:relative;width:100%;height:auto}
-.sidebar-filler{display:none}
 .main{margin-left:0;padding:22px}
 .buttons{justify-content:center}
 .cards{grid-template-columns:1fr}
@@ -251,8 +227,6 @@ body:has(.apu-boton) footer,body:has(.cita-boton) footer{padding-bottom:96px}
 .language-selector{text-align:center}
 }
 
-.submenu a.current-page{background:rgba(255,255,255,.22);color:#fff;font-weight:700}
-.menu-item.current-section>.menu-button{background:rgba(255,255,255,.1)}
 .placeholder-box{background:var(--card-bg);border:1px dashed var(--border);border-radius:6px;padding:28px;text-align:center;color:var(--muted);font-size:16px;font-weight:500}
 .breadcrumb{color:var(--muted);font-size:14.5px;margin-bottom:16px;font-weight:500}
 .breadcrumb a{color:var(--primary-dark);font-weight:700}
@@ -356,12 +330,6 @@ body:has(.apu-boton) footer,body:has(.cita-boton) footer{padding-bottom:96px}
 .access-gate-otro{background:transparent;color:var(--muted);border:1px solid var(--border);font-weight:600}
 .access-gate-otro:hover{background:var(--tint);color:var(--text)}
 
-/* El logo va a lo ancho y a la izquierda: a la derecha queda el botón que
-   pliega el menú (.sidebar-toggle, a 222px), y no se pueden tocar. */
-.logo-img{display:block;width:196px;height:auto;margin:0}
-.logo-header{display:flex;justify-content:flex-start;margin:-2px 0 24px;padding:0}
-.sidebar-filler{flex:1;position:relative;min-height:160px;margin:20px -20px -25px}
-.sidebar-filler .dot{position:absolute;border-radius:50%;background:rgba(255,255,255,.14)}
 
 
 .steps{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:20px}
@@ -674,7 +642,6 @@ h1 .ti,h2 .ti,h3 .ti{margin-right:8px}
 .card{background:var(--card-bg) !important;border-color:var(--border) !important}
 .card h3{color:var(--text) !important}
 
-.menu-item{margin-bottom:4px}
 
 /* Título escrito a mano por sección (lo pone script.js), en el color de la
    materia: la sensación de cuaderno. */
@@ -762,46 +729,11 @@ body[data-category] .eyebrow{background:var(--c-teoria-t);color:var(--c-teoria-d
 .reviews-dots .dot-btn{width:8px;height:8px;border-radius:50%;border:0;background:var(--border);cursor:pointer;padding:0}
 .reviews-dots .dot-btn.active{background:var(--primary);width:20px;border-radius:4px;transition:.2s}
 
-/* ---------- Botón de mostrar/ocultar menú lateral ---------- */
-.sidebar-toggle{position:fixed;top:22px;left:222px;z-index:60;width:36px;height:36px;border-radius:8px;border:0;background:transparent;color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:20px;transition:.2s}
-.sidebar-toggle:hover{background:rgba(255,255,255,.12)}
-body.sidebar-collapsed .sidebar-toggle{left:18px;color:var(--text)}
-body.sidebar-collapsed .sidebar-toggle:hover{background:var(--tint)}
-body.sidebar-collapsed .sidebar{transform:translateX(-100%)}
-body.sidebar-collapsed .main{margin-left:24px}
-.sidebar{transition:transform .25s ease}
 /* En los móviles más estrechos (320 px) los tres botones de idioma y el
    interruptor de tema no cabían en una fila y la página entera se movía de
    lado. Un poco menos de relleno y caben. */
 @media(max-width:380px){
   .language-selector button{padding:8px 9px;margin-left:3px;font-size:14px}
-}
-
-/* ── El menú en el móvil ──────────────────────────────────────────────
-   Antes el menú entero iba desplegado arriba de cada página: en un móvil
-   ocupaba toda la primera pantalla y el contenido empezaba debajo. Ahora
-   arriba queda una barra con el logo y el botón, y el menú se abre al
-   tocarlo (body.menu-abierto, que pone script.js). Cada página empieza con
-   él plegado. Lo de «sidebar-collapsed» es la preferencia del ordenador y
-   aquí no pinta nada: se anula para que no esconda la barra. */
-@media(max-width:900px){
-  .sidebar{padding:12px 16px}
-  .sidebar .logo-header{justify-content:flex-start;margin:0}
-  .sidebar .logo-img{width:auto;height:44px;margin:0}
-  body:not(.menu-abierto) .sidebar > *:not(.logo-header){display:none}
-  body.menu-abierto .sidebar .logo-header{margin-bottom:14px}
-  .sidebar-toggle,body.sidebar-collapsed .sidebar-toggle{display:flex;position:absolute;top:17px;right:14px;left:auto;color:#fff}
-  .sidebar-toggle:hover,body.sidebar-collapsed .sidebar-toggle:hover{background:rgba(255,255,255,.12)}
-  body.sidebar-collapsed .sidebar{transform:none}
-  body.sidebar-collapsed .main{margin-left:0}
-  /* el idioma y el tema, dentro del menú (los mueve script.js); mientras
-     carga no se enseñan arriba, para que no salten */
-  .page-header .language-selector{display:none}
-  .sidebar .language-selector{display:flex;flex-wrap:wrap;align-items:center;gap:6px;
-    margin:12px 0 0;padding:14px 0 0;border:0;border-top:1px solid rgba(255,255,255,.18);gap:5px}
-  .sidebar .language-selector button{margin:0;background:rgba(255,255,255,.1);color:#fff;padding:7px 8px;font-size:13.5px}
-  .sidebar .language-selector button.active,.sidebar .language-selector button:hover{background:#fff;color:#232C4F}
-  .sidebar .theme-switch{margin-left:auto;flex:none}
 }
 
 /* ---------- Vida visual para las tarjetas de Vocabulario ---------- */
@@ -840,9 +772,6 @@ body[data-category="vocabulario"] .mini-card h4{color:var(--c-teoria-d)}
 .group-btn.active{background:var(--card-bg);color:var(--primary-dark);box-shadow:0 1px 3px rgba(0,0,0,.1)}
 
 
-/* ---------- Espiral decorativa en el borde del menu ---------- */
-
-.sidebar{left:0;border-radius:0}
 
 /* ---------- Esquema del verbo (pagina Overview) ---------- */
 
@@ -1225,12 +1154,6 @@ body[data-category="clases"] .eyebrow{background:var(--c-clases-t);color:var(--c
 [data-theme="dark"] .par-futuro{--pc:#b39ae8}
 .par-h{font-family:var(--font-head);font-size:16px;margin:16px 0 0;color:var(--pc)}
 
-/* El menú en dos mitades: arriba lo del alumno, abajo la biblioteca */
-a.menu-button{text-decoration:none}
-a.menu-button.current-page{background:rgba(255,255,255,.15)}
-.menu-sep{margin:12px 0 10px;padding-top:14px;border-top:1px solid rgba(255,255,255,.18)}
-.menu-sep span{display:block;padding:0 10px;font-size:13px;font-weight:700;
-  color:rgba(255,255,255,.45)}
 
 /* ---------- «Mis clases»: la lista del alumno (noviembre 2026) ----------
    Una agenda, no un montón de tarjetas: cada clase es una fila sobre una
@@ -1470,11 +1393,6 @@ body:has(.access-gate-overlay) .cita-boton{display:none}
 .cl-apu-caja .apu-texto{min-height:120px}
 .track-aviso{order:3;flex-basis:100%;margin:10px 0 0;padding:9px 14px;background:var(--badge-gold-bg);color:var(--gold-dark);
   border-radius:10px;font-size:14px;font-weight:600;max-width:640px}
-/* Los mismos separadores, pero dentro de un submenú: más juntos y sin la
-   línea de arriba, que ahí ya la pone el propio submenú. */
-.submenu .menu-sep{margin:10px 0 4px;padding-top:9px}
-.submenu .menu-sep:first-child{margin-top:2px;padding-top:0;border-top:0}
-.submenu .menu-sep span{font-size:12px;padding:0 10px 0 12px}
 /* Aviso de que la tanda de ejercicios está acotada a un sub-grupo */
 .ex-solo{display:inline-flex;align-items:center;gap:8px;margin:0 0 14px;padding:7px 10px 7px 14px;
   background:var(--badge-gold-bg);color:var(--gold-dark);border-radius:20px;font-size:14px;font-weight:600}
@@ -1681,59 +1599,11 @@ ol.hablar li{padding:6px 0 6px 4px;font-size:16.5px;line-height:1.55}
      etiqueta de color de encima del título y, en el ordenador, la ruta;
    · esquinas más rectas. */
 
-/* el menú: iconos blancos, título de sección en color, más aire entre las tres */
-.sidebar .menu-button > i[class*="cat-"]{color:rgba(255,255,255,.72)}
-.sidebar > .menu-sep{margin:22px 0 8px;padding-top:16px}
-.sidebar > .menu-sep.sep-clases{margin-top:0;padding-top:0;border-top:0}
-.sidebar > .menu-sep span{font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
-.sidebar > .sep-clases span{color:#A99FF2}
-.sidebar > .sep-ejer span{color:#F2AB27}
-.sidebar > .sep-teoria span{color:#FF86BE}
-
-/* la lupa del ordenador: una franja fija abajo del menú */
-.sidebar{padding-bottom:84px}
-.sidebar-search{position:fixed;left:0;bottom:0;width:270px;z-index:58;padding:14px 20px 16px;
-  background:var(--sidebar);border-top:1px solid rgba(255,255,255,.08);display:flex;align-items:center;gap:8px;
-  transition:transform .25s ease}
-body.sidebar-collapsed .sidebar-search{transform:translateX(-100%)}
-.lupa-btn{flex:none;display:flex;align-items:center;justify-content:center;width:42px;height:42px;border-radius:21px;
-  border:0;background:rgba(255,255,255,.1);color:#fff;font-size:19px;cursor:pointer}
-.lupa-btn .ti,.lupa-movil .ti,.lupa-cerrar .ti{margin:0}
-.lupa-btn:hover{background:rgba(255,255,255,.18)}
-.sidebar-search > input{display:none;flex:1;min-width:0;height:42px;padding:0 12px;border-radius:21px;
-  border:1px solid rgba(255,255,255,.35);background:rgba(255,255,255,.12);color:#fff;font-family:var(--font-body);font-size:15px}
-.sidebar-search > input::placeholder{color:rgba(255,255,255,.6)}
-.sidebar-search > input:focus{outline:none;border-color:rgba(255,255,255,.7)}
-.sidebar-search.abierta > input{display:block;animation:lupa-abre .2s ease-out}
-@keyframes lupa-abre{from{opacity:0;transform:scaleX(.3);transform-origin:left}to{opacity:1;transform:none}}
-.lupa-cerrar{display:none;flex:none;border:0;background:none;color:rgba(255,255,255,.7);font-size:17px;cursor:pointer;padding:4px}
-.sidebar-search.abierta .lupa-cerrar{display:block}
-.sidebar-search .search-results{position:fixed;left:20px;bottom:76px;width:440px;max-width:calc(100vw - 40px);z-index:59}
-.lupa-movil{display:none}
 /* la etiqueta de sección de cada resultado */
 .search-sec{float:right;margin:1px 0 0 10px;font-size:11.5px;font-weight:700;padding:2px 9px;border-radius:4px}
 .search-sec-teoria{background:var(--c-teoria-t);color:var(--c-teoria-d)}
 .search-sec-ejercicios{background:var(--c-ejer-t);color:var(--c-ejer-d)}
 .search-sec-clase{background:var(--c-clases-t);color:var(--c-clases-d)}
-@media(prefers-reduced-motion:reduce){ .sidebar-search.abierta > input{animation:none} }
-
-@media(max-width:900px){
-  .sidebar{padding-bottom:12px}
-  /* en el móvil la búsqueda no va dentro del menú: la lupa está arriba */
-  .sidebar > .sidebar-search,body.menu-abierto .sidebar > .sidebar-search{display:none}
-  .lupa-movil{display:flex;align-items:center;justify-content:center;position:absolute;top:17px;right:58px;z-index:61;
-    width:36px;height:36px;border:0;border-radius:8px;background:transparent;color:#fff;font-size:21px;cursor:pointer}
-  .lupa-movil:hover{background:rgba(255,255,255,.12)}
-  body.busca-abierta .sidebar > .sidebar-search{display:flex;position:fixed;inset:0;width:auto;z-index:200;
-    flex-wrap:wrap;align-content:flex-start;padding:12vh 16px 16px;background:rgba(20,24,40,.5);border:0;transform:none}
-  body.busca-abierta .sidebar-search .lupa-btn{display:none}
-  body.busca-abierta .sidebar-search > input{display:block;flex:1;height:52px;border-radius:6px 0 0 6px;border:0;
-    background:var(--card-bg);color:var(--text);font-size:17px;padding:0 16px;animation:none}
-  body.busca-abierta .sidebar-search > input::placeholder{color:var(--muted)}
-  body.busca-abierta .lupa-cerrar{display:block;height:52px;padding:0 14px;border-radius:0 6px 6px 0;background:var(--card-bg);color:var(--muted)}
-  body.busca-abierta .sidebar-search .search-results{position:static;flex-basis:100%;width:auto;max-width:none;margin-top:8px;max-height:60vh}
-}
-
 /* el nombre de la sección, una sola vez */
 .page-header + .grammar-section > .eyebrow:first-child{display:none}
 a.handwritten-title{text-decoration:none}
@@ -1755,13 +1625,6 @@ body[data-category="ejercicios"] .grammar-section > h2::after{background:var(--c
 .puerta[data-base="ejercicios"] .ir{color:var(--c-ejer-d)}
 .ex-mode-card > .ti{color:var(--c-ejer)}
 .ex-mode-card{border-radius:6px}
-/* la lupa vieja del campo (la que iba dentro, a la izquierda) ya la pone el botón */
-.sidebar-search > i.ti-search{display:none}
-@media(max-width:900px){
-  body.busca-abierta .sidebar-search > input{order:1}
-  body.busca-abierta .lupa-cerrar{order:2}
-  body.busca-abierta .sidebar-search .search-results{order:3}
-}
 /* las portadas del hub, en dorado claro: oscurecido, el dorado sale marrón */
 .ex-pick-cover{background:linear-gradient(135deg,#F7C25A 0%,#E39A12 100%);color:#8a5b0a}
 /* sobre el dorado, letra oscura (como el botón «Empezar»); la etiqueta de
@@ -1790,4 +1653,149 @@ body[data-category="ejercicios"] .grammar-section > h2::after{background:var(--c
   .mc-barra .cl-buscar{flex-basis:100%}
   .mc-barra .mc-nota{order:2;margin:-4px 2px 4px}
   .mc-barra .aula-boton{order:3}
+}
+
+/* ══ El menú (noviembre 2026): una columna con tres botones ══════════════
+   José veía el menú de antes rígido y clásico. Ahora, como en Canva, una
+   columna estrecha con el logo y tres botones: Mis clases (va directo),
+   Práctica y Teoría (abren su panel). El panel sale flotando para elegir y
+   se cierra solo; con la chincheta se queda fijo al lado y la página se
+   aparta (body.menu-fijo, se recuerda en jn_menu_fijo). En el móvil la
+   columna es una barra abajo y el panel una hoja que sube. Lo mueve todo
+   script.js con body[data-panel="ejer|teoria"]. */
+:root{--riel:96px;--panel:280px;--barra:0px}
+.menu-movil,.menu-velo,.ajustes-pop{display:none}
+.riel{position:fixed;left:0;top:0;bottom:0;width:var(--riel);z-index:62;background:var(--sidebar);
+  display:flex;flex-direction:column;align-items:center;gap:14px;padding:18px 0 90px}
+.riel-logo{display:block;margin-bottom:18px}
+.riel-logo img{display:block;width:62px;height:62px}
+.riel-btn{display:flex;flex-direction:column;align-items:center;gap:6px;width:88px;padding:0;border:0;background:none;
+  cursor:pointer;color:rgba(255,255,255,.75);font:700 12.5px/1.15 var(--font-body);text-align:center;text-decoration:none}
+.riel-btn .ti{width:54px;height:46px;border-radius:6px;display:flex;align-items:center;justify-content:center;
+  font-size:27px;color:#fff;margin:0;transition:background .15s}
+.riel-btn:hover{color:#fff}
+.riel-btn:hover .ti{background:rgba(255,255,255,.1)}
+.riel-btn:focus-visible{outline:none}
+.riel-btn:focus-visible .ti{outline:2px solid #fff;outline-offset:2px}
+.riel-btn.actual,.riel-btn[aria-expanded="true"]{color:#fff;font-weight:800}
+.riel-btn.actual .ti,.riel-btn[aria-expanded="true"] .ti{background:rgba(255,255,255,.14)}
+/* el color de la sección, en claro para que se vea sobre el azul */
+.riel-btn[data-sec="clases"].actual .ti{color:#A99FF2}
+.riel-btn[data-sec="ejer"].actual .ti,.riel-btn[data-sec="ejer"][aria-expanded="true"] .ti{color:#F2AB27}
+.riel-btn[data-sec="teoria"].actual .ti,.riel-btn[data-sec="teoria"][aria-expanded="true"] .ti{color:#FF86BE}
+
+.panel-menu{display:none;position:fixed;left:calc(var(--riel) + 10px);top:12px;width:var(--panel);
+  max-height:calc(100vh - 24px);overflow-y:auto;overscroll-behavior:contain;z-index:61;
+  background:var(--card-bg);border:1px solid var(--border);border-radius:6px;
+  box-shadow:0 12px 32px rgba(20,24,40,.18);padding:16px 10px 12px}
+#panel-ejer{top:150px}
+body[data-panel="ejer"] #panel-ejer,body[data-panel="teoria"] #panel-teoria{display:block}
+body.menu-fijo .panel-menu,body.menu-fijo #panel-ejer{top:0;bottom:0;left:var(--riel);max-height:none;border-radius:0;box-shadow:none;
+  border-width:0 1px 0 0;padding-top:24px}
+body.menu-fijo .main{margin-left:calc(var(--riel) + var(--panel) + 24px)}
+.panel-cab{display:flex;align-items:center;gap:9px;margin:0 2px 8px 10px;color:var(--text);
+  font:800 17px/1.2 var(--font-head)}
+.panel-cab > .ti{font-size:21px;margin:0}
+#panel-teoria .panel-cab > .ti,#panel-teoria .panel-mat > .ti:first-child{color:var(--c-teoria)}
+#panel-ejer .panel-cab > .ti,#panel-ejer .panel-mat > .ti:first-child{color:var(--c-ejer)}
+.panel-fijar{margin-left:auto;flex:none;width:32px;height:32px;border:0;border-radius:6px;background:none;
+  color:var(--muted);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:18px}
+.panel-fijar .ti{margin:0}
+.panel-fijar:hover{background:var(--tint);color:var(--text)}
+body.menu-fijo #panel-teoria .panel-fijar{background:var(--c-teoria-t);color:var(--c-teoria-d)}
+body.menu-fijo #panel-ejer .panel-fijar{background:var(--c-ejer-t);color:var(--c-ejer-d)}
+.panel-mat{display:flex;align-items:center;gap:11px;width:100%;padding:10px;border:0;border-radius:6px;background:none;
+  color:var(--text);font:600 15px/1.25 var(--font-body);text-align:left;cursor:pointer;text-decoration:none}
+.panel-mat:hover{background:var(--tint)}
+.panel-mat > .ti{font-size:19px;margin:0;flex:none}
+.panel-mat > .panel-flecha{margin-left:auto;font-size:16px;color:var(--muted);transform:rotate(-90deg);transition:transform .15s}
+.panel-grupo.abierto > .panel-mat{font-weight:800}
+.panel-grupo.abierto > .panel-mat > .panel-flecha{transform:none}
+.panel-sub{display:none;margin:0 0 8px 20px;padding-left:10px;border-left:1px solid var(--border)}
+.panel-grupo.abierto > .panel-sub{display:block}
+.panel-sub a{display:block;padding:8px 10px;border-radius:6px;color:var(--text);font-size:15px;font-weight:500;text-decoration:none}
+.panel-sub a:hover{background:var(--tint)}
+.panel-sep{margin:14px 10px 4px;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.panel-sub > .panel-sep:first-child{margin-top:4px}
+.panel-menu a.current-page{background:var(--c-teoria-t);color:var(--c-teoria-d);font-weight:700}
+#panel-ejer a.current-page{background:var(--c-ejer-t);color:var(--c-ejer-d)}
+
+/* la lupa, abajo de la columna; al pulsarla se estira hacia la derecha */
+.sidebar-search{position:fixed;left:0;bottom:0;width:var(--riel);z-index:63;padding:0 0 20px 25px;
+  display:flex;align-items:center;gap:8px;background:var(--sidebar)}
+.sidebar-search > i.ti-search{display:none}
+.sidebar-search.abierta{width:480px;max-width:calc(100vw - 20px);padding-top:14px;padding-right:16px;
+  border-radius:0 6px 0 0;box-shadow:6px -6px 24px rgba(0,0,0,.2)}
+.lupa-btn{flex:none;display:flex;align-items:center;justify-content:center;width:46px;height:46px;border-radius:23px;
+  border:0;background:rgba(255,255,255,.1);color:#fff;font-size:21px;cursor:pointer}
+.lupa-btn .ti,.lupa-movil .ti,.lupa-cerrar .ti{margin:0}
+.lupa-btn:hover{background:rgba(255,255,255,.18)}
+.sidebar-search > input{display:none;flex:1;min-width:0;height:44px;padding:0 12px;border-radius:22px;
+  border:1px solid rgba(255,255,255,.35);background:rgba(255,255,255,.12);color:#fff;font-family:var(--font-body);font-size:15px}
+.sidebar-search > input::placeholder{color:rgba(255,255,255,.6)}
+.sidebar-search > input:focus{outline:none;border-color:rgba(255,255,255,.7)}
+.sidebar-search.abierta > input{display:block;animation:lupa-abre .2s ease-out}
+@keyframes lupa-abre{from{opacity:0;transform:scaleX(.3);transform-origin:left}to{opacity:1;transform:none}}
+.lupa-cerrar{display:none;flex:none;border:0;background:none;color:rgba(255,255,255,.7);font-size:17px;cursor:pointer;padding:4px}
+.sidebar-search.abierta .lupa-cerrar{display:block}
+.sidebar-search .search-results{position:fixed;left:20px;bottom:84px;width:440px;max-width:calc(100vw - 40px);z-index:64}
+.lupa-movil{display:none}
+@media(prefers-reduced-motion:reduce){
+  .sidebar-search.abierta > input{animation:none}
+  .riel-btn .ti,.panel-mat > .panel-flecha{transition:none}
+}
+
+/* ── en el móvil: barra arriba con el logo, barra abajo con los tres botones ── */
+@media(max-width:900px){
+  :root{--barra:64px}
+  body{padding-bottom:calc(var(--barra) + env(safe-area-inset-bottom))}
+  .menu-movil{display:flex;align-items:center;position:relative;background:var(--sidebar);padding:12px 16px;min-height:68px}
+  .logo-header{display:block;margin-right:auto}
+  .logo-img{display:block;width:auto;height:44px}
+  .ajustes-movil{display:flex;align-items:center;justify-content:center;width:36px;height:36px;border:0;border-radius:8px;
+    background:transparent;color:#fff;font-size:21px;cursor:pointer}
+  .ajustes-movil .ti{margin:0}
+  .ajustes-movil:hover,.ajustes-movil[aria-expanded="true"]{background:rgba(255,255,255,.14)}
+  .lupa-movil{display:flex;align-items:center;justify-content:center;position:absolute;top:16px;right:58px;z-index:61;
+    width:36px;height:36px;border:0;border-radius:8px;background:transparent;color:#fff;font-size:21px;cursor:pointer}
+  .lupa-movil:hover{background:rgba(255,255,255,.12)}
+  /* el idioma y el modo oscuro, en una cajita que abre el botón de arriba
+     (los mueve script.js); mientras carga no se enseñan, para que no salten */
+  .page-header .language-selector{display:none}
+  body.ajustes-abierto .ajustes-pop{display:block;position:absolute;top:calc(100% - 6px);right:10px;z-index:64;
+    width:max-content;max-width:calc(100vw - 20px);padding:12px;background:var(--card-bg);
+    border:1px solid var(--border);border-radius:6px;box-shadow:0 12px 32px rgba(20,24,40,.22)}
+  .ajustes-pop .language-selector{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin:0;padding:0;border:0}
+  .ajustes-pop .language-selector button{margin:0}
+  .ajustes-pop .theme-switch{flex:none;margin-left:4px}
+
+  .riel{top:auto;right:0;width:auto;height:calc(var(--barra) + env(safe-area-inset-bottom));flex-direction:row;
+    justify-content:space-around;align-items:center;gap:0;padding:0 6px env(safe-area-inset-bottom);
+    box-shadow:0 -2px 12px rgba(0,0,0,.15)}
+  .riel-logo{display:none}
+  .riel-btn{flex:1;width:auto;gap:3px;font-size:11.5px}
+  .riel-btn .ti{width:58px;height:32px;border-radius:16px;font-size:23px}
+
+  .panel-menu,#panel-ejer{left:0;right:0;top:auto;bottom:calc(var(--barra) + env(safe-area-inset-bottom));width:auto;
+    max-height:72vh;border:0;border-radius:14px 14px 0 0;box-shadow:0 -10px 30px rgba(0,0,0,.2);padding:10px 14px 16px}
+  .panel-menu::before{content:"";display:block;width:40px;height:4px;border-radius:2px;background:var(--border);margin:0 auto 14px}
+  .panel-fijar{display:none}
+  .panel-mat,.panel-sub a{padding-top:11px;padding-bottom:11px}
+  body[data-panel] .menu-velo{display:block;position:fixed;inset:0;z-index:60;background:rgba(20,24,40,.4)}
+
+  .sidebar-search{display:none}
+  body.busca-abierta .menu > .sidebar-search{display:flex;position:fixed;inset:0;width:auto;max-width:none;z-index:200;
+    flex-wrap:wrap;align-content:flex-start;padding:12vh 16px 16px;background:rgba(20,24,40,.5);border-radius:0;box-shadow:none}
+  body.busca-abierta .sidebar-search .lupa-btn{display:none}
+  body.busca-abierta .sidebar-search > input{display:block;order:1;flex:1;height:52px;border-radius:6px 0 0 6px;border:0;
+    background:var(--card-bg);color:var(--text);font-size:17px;padding:0 16px;animation:none}
+  body.busca-abierta .sidebar-search > input::placeholder{color:var(--muted)}
+  body.busca-abierta .lupa-cerrar{display:block;order:2;height:52px;padding:0 14px;border-radius:0 6px 6px 0;
+    background:var(--card-bg);color:var(--muted)}
+  body.busca-abierta .sidebar-search .search-results{order:3;position:static;flex-basis:100%;width:auto;max-width:none;
+    margin-top:8px;max-height:60vh}
+
+  /* los botones redondos de abajo a la derecha, por encima de la barra */
+  .apu-boton,.cita-boton{bottom:calc(14px + var(--barra) + env(safe-area-inset-bottom))}
+  .apu-panel{bottom:calc(74px + var(--barra) + env(safe-area-inset-bottom))}
 }

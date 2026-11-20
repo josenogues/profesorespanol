@@ -61,12 +61,6 @@ function jnRegisterVisit(email){
   })();
 }
 
-document.querySelectorAll(".menu-button").forEach(button=>{
-if(button.tagName==="BUTTON"){
-button.addEventListener("click",()=>button.parentElement.classList.toggle("active"));
-}
-});
-
 
 document.querySelectorAll(".grammar-section").forEach(section=>{
 const buttons=section.querySelectorAll(".tab-btn");
@@ -98,34 +92,30 @@ if(firstTab) firstTab.click();
 });
 });
 
-// Resalta el enlace de la página actual en el menú lateral y abre su submenú
+// Marca en los paneles del menú la página en la que estás y despliega su
+// materia, para que al abrir «Teoría» se vea enseguida dónde estás.
 (function(){
 const current=location.pathname.split("/").pop()||"index.html";
-document.querySelectorAll(".submenu a, a.menu-button").forEach(a=>{
-const href=a.getAttribute("href");
-if(href===current){
-a.classList.add("current-page");
-a.closest(".menu-item").classList.add("active","current-section");
-}
-});
-// las de "Verbos" no tienen href real (son track-link con data-base), así que se comparan por patrón base-it.html / base-en.html
+// los enlaces no tienen href real (son track-link con data-base), así que se
+// comparan por patrón base-it.html / base-en.html
 const m = current.match(/^(.+)-(it|en|es)\.html$/);
 if(m){
-document.querySelectorAll(".submenu a.track-link, a.menu-button.track-link").forEach(a=>{
-if(a.dataset.base === m[1] && !a.dataset.q){
+document.querySelectorAll(".panel-menu a.track-link:not([data-q])").forEach(a=>{
+if(a.dataset.base !== m[1]) return;
 a.classList.add("current-page");
-a.closest(".menu-item").classList.add("active","current-section");
+const g = a.closest(".panel-grupo");
+if(g){
+g.classList.add("abierto");
+g.querySelector(".panel-mat").setAttribute("aria-expanded","true");
 }
 });
 }
-// «Práctica libre»: los tres modos son la misma página (ejercicios-xx.html)
-// con ?modo=…; se marca el que está abierto. El hub avisa con «jn-modo»
-// cuando se cambia de modo sin salir de la página.
+// «Práctica»: los tres modos son la misma página (ejercicios-xx.html) con
+// ?modo=…; se marca el que está abierto. El hub avisa con «jn-modo» cuando
+// se cambia de modo sin salir de la página.
 function marcaModo(modo){
-document.querySelectorAll("a.menu-button[data-q]").forEach(a=>{
-const es = !!(m && a.dataset.base === m[1] && modo && a.dataset.q === "modo=" + modo);
-a.classList.toggle("current-page", es);
-a.closest(".menu-item").classList.toggle("current-section", es);
+document.querySelectorAll(".panel-menu a[data-q]").forEach(a=>{
+a.classList.toggle("current-page", !!(m && a.dataset.base === m[1] && modo && a.dataset.q === "modo=" + modo));
 });
 }
 marcaModo(new URLSearchParams(location.search).get("modo"));
@@ -155,13 +145,13 @@ document.addEventListener("jn-modo", e => marcaModo(e.detail));
 
   // Motor genérico: cualquier elemento con class="i18n" y data-es/data-it/data-en
   // cambia de texto según el idioma elegido (si no hay idioma elegido, se queda en español).
-  // Los rótulos que no son texto a la vista: el que sale al pasar el ratón
-  // por el interruptor de tema y el que lee un lector de pantalla en el botón
-  // del menú. Van escritos en español en las páginas.
+  // El rótulo que no es texto a la vista: el que sale al pasar el ratón por
+  // el interruptor de tema. Va escrito en español en las páginas. (Los de
+  // los botones del menú los pone el propio menú, más abajo.)
   const ROTULOS = {
-    es: { tema: 'Modo oscuro', menu: 'Mostrar u ocultar el menú' },
-    it: { tema: 'Modalità scura', menu: 'Mostra o nascondi il menù' },
-    en: { tema: 'Dark mode', menu: 'Show or hide the menu' }
+    es: { tema: 'Modo oscuro' },
+    it: { tema: 'Modalità scura' },
+    en: { tema: 'Dark mode' }
   };
 
   function applyI18n(){
@@ -177,8 +167,6 @@ document.addEventListener("jn-modo", e => marcaModo(e.detail));
     const r = ROTULOS[t] || ROTULOS.es;
     const tema = document.querySelector('.theme-switch');
     if(tema) tema.title = r.tema;
-    const menu = document.getElementById('sidebar-toggle');
-    if(menu) menu.setAttribute('aria-label', r.menu);
   }
 
   function goTo(base, track, q){
@@ -1041,60 +1029,130 @@ document.addEventListener("jn-modo", e => marcaModo(e.detail));
   header.insertBefore(span, header.firstChild);
 })();
 
-// --- Botón de mostrar/ocultar menú lateral ---
+// --- El menú: una columna con tres botones y los paneles de Práctica y Teoría ---
+// «Mis clases» lleva directo. «Práctica» y «Teoría» abren su panel, que sale
+// flotando y se cierra al elegir o al pulsar fuera. La chincheta lo deja fijo
+// al lado y la página se aparta; eso se recuerda (jn_menu_fijo) y lo vuelve a
+// poner, antes de pintar, el script corto que va al principio de cada página.
+// En el móvil la columna es una barra abajo, el panel una hoja que sube, y el
+// idioma y el modo oscuro van en una cajita que abre un botón de arriba.
 (function(){
-  const btn = document.getElementById('sidebar-toggle');
-  if(!btn) return;
-  if(localStorage.getItem('jn_sidebar_collapsed') === 'true'){
-    document.body.classList.add('sidebar-collapsed');
-  }
-  // En el móvil el botón hace otra cosa: el menú va plegado bajo una barra y
-  // se abre al tocarlo. No se guarda: cada página empieza con él cerrado, que
-  // es lo que uno espera después de elegir adónde ir. La preferencia de
-  // «menú escondido» es solo la del ordenador.
+  const menu = document.querySelector('aside.menu');
+  if(!menu) return;
+  const body = document.body;
   const movil = window.matchMedia('(max-width:900px)');
-  const icono = btn.querySelector('i');
-  function abreMenu(abierto){
-    document.body.classList.toggle('menu-abierto', abierto);
-    // «desplegado sí/no» solo tiene sentido en el móvil
-    if(movil.matches) btn.setAttribute('aria-expanded', abierto ? 'true' : 'false');
-    else btn.removeAttribute('aria-expanded');
-    if(icono) icono.className = abierto ? 'ti ti-x' : 'ti ti-menu-2';
+  const KEY = 'jn_menu_fijo';
+  const SECCIONES = ['ejer', 'teoria'];
+  const botones = [...menu.querySelectorAll('button.riel-btn[data-sec]')];
+  const chinchetas = [...menu.querySelectorAll('.panel-fijar')];
+  const ajustes = menu.querySelector('.ajustes-movil');
+
+  function leeFijo(){
+    try { const f = localStorage.getItem(KEY); return SECCIONES.indexOf(f) >= 0 ? f : ''; }
+    catch(e){ return ''; }
   }
-  abreMenu(false);
-  // El idioma y el modo oscuro se eligen una vez y luego estorban: en el
-  // móvil ocupaban una franja entera arriba de cada página. Ahí van dentro
-  // del menú, al final; en el ordenador se quedan arriba a la derecha.
+  function guardaFijo(v){
+    try { if(v) localStorage.setItem(KEY, v); else localStorage.removeItem(KEY); } catch(e){}
+  }
+  const TXT = {
+    es: { fijar: 'Dejar el menú fijo', soltar: 'Quitar el menú fijo', ajustes: 'Idioma y modo oscuro' },
+    it: { fijar: 'Tieni fisso il menù', soltar: 'Togli il menù fisso', ajustes: 'Lingua e modalità scura' },
+    en: { fijar: 'Keep the menu open', soltar: 'Unpin the menu', ajustes: 'Language and dark mode' }
+  };
+  function txt(){
+    let t = null;
+    try { t = localStorage.getItem('jn_track'); } catch(e){}
+    return TXT[t] || TXT.es;
+  }
+  function fijo(){ return body.classList.contains('menu-fijo'); }
+  function abierto(){ return body.getAttribute('data-panel') || ''; }
+  function rotula(){
+    const r = fijo() ? txt().soltar : txt().fijar;
+    chinchetas.forEach(b => {
+      b.setAttribute('aria-label', r);
+      b.title = r;
+      b.setAttribute('aria-pressed', fijo() ? 'true' : 'false');
+    });
+    if(ajustes) ajustes.setAttribute('aria-label', txt().ajustes);
+  }
+  function pon(sec, quedaFijo){
+    if(sec) body.setAttribute('data-panel', sec); else body.removeAttribute('data-panel');
+    body.classList.toggle('menu-fijo', !!sec && !!quedaFijo && !movil.matches);
+    botones.forEach(b => b.setAttribute('aria-expanded', b.dataset.sec === sec ? 'true' : 'false'));
+    rotula();
+  }
+
+  botones.forEach(b => b.addEventListener('click', () => {
+    const sec = b.dataset.sec;
+    const eraFijo = fijo();
+    if(abierto() === sec){
+      // pulsar otra vez el botón de su panel lo cierra (y, si estaba fijo, lo suelta)
+      pon('', false);
+      if(eraFijo) guardaFijo('');
+      return;
+    }
+    pon(sec, eraFijo);
+    if(eraFijo) guardaFijo(sec);
+  }));
+  chinchetas.forEach(b => b.addEventListener('click', () => {
+    if(fijo()){ guardaFijo(''); pon('', false); }
+    else { guardaFijo(abierto()); pon(abierto(), true); }
+  }));
+  // las materias de la teoría se despliegan y se pliegan
+  menu.querySelectorAll('.panel-grupo > .panel-mat').forEach(b => b.addEventListener('click', () => {
+    const g = b.parentElement;
+    const si = !g.classList.contains('abierto');
+    g.classList.toggle('abierto', si);
+    b.setAttribute('aria-expanded', si ? 'true' : 'false');
+  }));
+  // pulsar fuera del panel lo cierra, salvo que esté fijo
+  document.addEventListener('click', e => {
+    if(abierto() && !fijo() && !e.target.closest('.panel-menu, .riel-btn')) pon('', false);
+    if(body.classList.contains('ajustes-abierto') && !e.target.closest('.ajustes-pop, .ajustes-movil')) abreAjustes(false);
+  });
+  document.addEventListener('keydown', e => {
+    if(e.key !== 'Escape') return;
+    if(abierto() && !fijo()) pon('', false);
+    abreAjustes(false);
+  });
+  // al cambiar de idioma sin recargar, los rótulos también
+  document.addEventListener('click', e => { if(e.target.closest('.lang-track-btn')) setTimeout(rotula, 0); });
+
+  // la sección de la página, marcada en la columna
+  const cat = body.dataset.category;
+  const suya = !cat ? '' : cat === 'clases' ? 'clases' : cat === 'ejercicios' ? 'ejer' : 'teoria';
+  menu.querySelectorAll('.riel-btn').forEach(b => b.classList.toggle('actual', b.dataset.sec === suya));
+
+  // el idioma y el modo oscuro: arriba a la derecha en el ordenador; en el
+  // móvil, en la cajita del botón de arriba (ocupaban una franja entera)
+  const pop = document.createElement('div');
+  pop.className = 'ajustes-pop';
+  const barra = menu.querySelector('.menu-movil');
+  if(barra) barra.appendChild(pop);
   const selector = document.querySelector('.page-header .language-selector');
-  const sidebar = document.querySelector('.sidebar');
   const casa = selector && selector.parentNode;
   const sitio = selector && selector.nextSibling;
   function colocaIdioma(){
-    if(!selector || !sidebar) return;
-    if(movil.matches){
-      if(selector.parentNode !== sidebar){
-        sidebar.insertBefore(selector, sidebar.querySelector('.sidebar-filler'));
-      }
-    } else if(selector.parentNode !== casa){
-      casa.insertBefore(selector, sitio);
-    }
+    if(!selector) return;
+    if(movil.matches){ if(selector.parentNode !== pop) pop.appendChild(selector); }
+    else if(selector.parentNode !== casa) casa.insertBefore(selector, sitio);
   }
-  colocaIdioma();
-  movil.addEventListener('change', colocaIdioma);
-  btn.addEventListener('click', () => {
-    if(movil.matches){
-      abreMenu(!document.body.classList.contains('menu-abierto'));
-      return;
-    }
-    document.body.classList.toggle('sidebar-collapsed');
-    localStorage.setItem('jn_sidebar_collapsed', document.body.classList.contains('sidebar-collapsed'));
-  });
-  // al girar el móvil o ensanchar la ventana, el menú abierto del móvil no
-  // debe quedarse marcado en la vista de ordenador
-  movil.addEventListener('change', () => abreMenu(false));
-  document.addEventListener('keydown', e => {
-    if(e.key === 'Escape' && document.body.classList.contains('menu-abierto')) abreMenu(false);
-  });
+  function abreAjustes(si){
+    body.classList.toggle('ajustes-abierto', !!si);
+    if(ajustes) ajustes.setAttribute('aria-expanded', si ? 'true' : 'false');
+  }
+  if(ajustes) ajustes.addEventListener('click', () => abreAjustes(!body.classList.contains('ajustes-abierto')));
+  if(!selector && ajustes) ajustes.hidden = true;
+
+  // al empezar: el panel fijo que dejó el alumno (solo en el ordenador)
+  function empieza(){
+    const f = leeFijo();
+    if(f && !movil.matches) pon(f, true); else pon('', false);
+    colocaIdioma();
+    abreAjustes(false);
+  }
+  empieza();
+  movil.addEventListener('change', empieza);
 })();
 
 // --- Carrusel de reseñas (portada) ---
