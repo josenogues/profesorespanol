@@ -389,7 +389,7 @@ ${qHTML}`;
   function renderReadingPicker(){
     if(!cfg.readings) return;
     const levels = ['principiante','intermedio','avanzado'];
-    const readingColor = ((cfg.categories || []).find(c => c.key === 'lectura') || {}).color || '#0F6E56';
+    const readingColor = ((cfg.categories || []).find(c => c.key === 'lectura') || {}).color || '#F2AB27';
     pillsWrap.innerHTML = levels.map(lv =>
       `<button class="ex-pill" data-level="${lv}">${cfg.labels['level_' + lv] || lv}</button>`
     ).join('');
@@ -1924,7 +1924,8 @@ ${qHTML}`;
     });
     card.insertBefore(tapa, card.firstChild);
   }
-  const AZUL_EJ = '#3A6FC9';
+  // todo el hub en el dorado de los ejercicios (noviembre 2026)
+  const AZUL_EJ = '#F2AB27';
   levelBtns.forEach(card => portada(card, ART_NIVEL[card.dataset.level], AZUL_EJ));
   catBtns.forEach(card => {
     const cat = (cfg.categories || []).find(c => c.key === card.dataset.cat);

@@ -10,7 +10,7 @@
 <link rel="preload" href="fuentes/iconos.woff2?v=13f2fec55c" as="font" type="font/woff2" crossorigin>
 <link rel="icon" type="image/png" href="icono.png">
 <link rel="apple-touch-icon" href="icono-movil.png">
-<link rel="stylesheet" href="styles.css?v=52dd0b5089">
+<link rel="stylesheet" href="styles.css?v=a6243d0fbd">
 <script>if(localStorage.getItem('jn_theme')==='dark')document.documentElement.setAttribute('data-theme','dark');</script>
 <style>
 /* El ancho: con ocho columnas, los 1100px de antes se quedaban cortos. Pero
@@ -58,7 +58,7 @@ body{padding:40px clamp(12px,3vw,48px)}
 .ficha-alta label{display:block;font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
 .ficha-alta select,.ficha-alta input{display:block;margin-top:5px;padding:9px 11px;border-radius:10px;border:1px solid var(--border);background:var(--card-bg);color:var(--text);font-family:var(--font-body);font-size:15px}
 .ficha-alta select{min-width:260px;font-weight:600}
-.fi-row{display:grid;grid-template-columns:150px 1fr auto;gap:10px 14px;align-items:start;background:var(--card-bg);border:1px solid var(--border);border-left:4px solid #7A5230;border-radius:12px;padding:12px 16px;margin-bottom:8px}
+.fi-row{display:grid;grid-template-columns:150px 1fr auto;gap:10px 14px;align-items:start;background:var(--card-bg);border:1px solid var(--border);border-left:4px solid #5B4FB8;border-radius:12px;padding:12px 16px;margin-bottom:8px}
 .fi-row.pend{border-left-style:dashed}
 .fi-tit{grid-column:2;grid-row:1;font-family:var(--font-head);font-size:16.5px;font-weight:600}
 .fi-chips{grid-column:2;grid-row:2;display:flex;flex-wrap:wrap;gap:6px}
@@ -68,19 +68,19 @@ body{padding:40px clamp(12px,3vw,48px)}
 .ficha-estado{font-size:14px;color:var(--muted);min-height:20px;margin-top:10px}
 .ficha-estado.ok{color:#1c6b38}
 .ficha-estado.mal{color:#b3261e}
-.cat-row{display:grid;grid-template-columns:1fr auto auto;gap:10px 16px;align-items:center;background:var(--card-bg);border:1px solid var(--border);border-left:4px solid #7A5230;border-radius:12px;padding:14px 18px;margin-bottom:8px}
+.cat-row{display:grid;grid-template-columns:1fr auto auto;gap:10px 16px;align-items:center;background:var(--card-bg);border:1px solid var(--border);border-left:4px solid #5B4FB8;border-radius:12px;padding:14px 18px;margin-bottom:8px}
 .cat-tit{grid-column:1;grid-row:1;font-family:var(--font-head);font-size:16.5px;font-weight:600}
 .cat-chips{grid-column:1;grid-row:2;display:flex;flex-wrap:wrap;gap:6px;margin-top:4px}
 .cat-meta{grid-column:2;grid-row:1/3;display:flex;gap:6px;align-items:center}
 .cat-niv{background:var(--tint);color:var(--primary-dark);font-size:12px;font-weight:700;padding:3px 10px;border-radius:10px;white-space:nowrap}
 /* El número de la clase: los títulos están escritos para el alumno y a José
    no le dicen de cuál se trata. Esto sí. */
-.cat-num{display:inline-block;min-width:46px;margin-right:9px;color:#7A5230;font-weight:800;font-variant-numeric:tabular-nums;font-family:var(--font-body);font-size:14px}
+.cat-num{display:inline-block;min-width:46px;margin-right:9px;color:#5B4FB8;font-weight:800;font-variant-numeric:tabular-nums;font-family:var(--font-body);font-size:14px}
 [data-theme="dark"] .cat-num{color:#c99b6e}
 .cat-flimpia{border-style:dashed}
 /* «es la versión a fondo de aquella», para que dos clases sobre lo mismo a
    dos niveles no parezcan una copia */
-.cat-rel{display:inline-block;background:transparent;border:1px dashed #7A5230;color:#7A5230;font-size:12px;font-weight:700;padding:2px 9px;border-radius:10px}
+.cat-rel{display:inline-block;background:transparent;border:1px dashed #5B4FB8;color:#5B4FB8;font-size:12px;font-weight:700;padding:2px 9px;border-radius:10px}
 [data-theme="dark"] .cat-rel{border-color:#c99b6e;color:#c99b6e}
 .cat-abrir{grid-column:3;grid-row:1/3;display:flex;gap:6px;white-space:nowrap}
 .cat-abrir a{background:var(--card-bg);border:1px solid var(--border);border-radius:9px;padding:6px 11px;font-size:13px;font-weight:700;color:var(--primary-dark);text-decoration:none}
@@ -120,15 +120,15 @@ body{padding:40px clamp(12px,3vw,48px)}
 .rap-addetq input{flex:1;padding:8px 11px;border-radius:9px;border:1px solid var(--border);background:var(--card-bg);color:var(--text);font-family:var(--font-body);font-size:14px}
 .rap-als{display:flex;flex-wrap:wrap;gap:8px}
 .rap-al{display:inline-flex;align-items:center;gap:7px;background:var(--card-bg);border:1px solid var(--border);border-radius:10px;padding:8px 13px;font-size:15px;font-weight:600;cursor:pointer}
-.rap-al.on{border-color:#7A5230;background:var(--tint)}
+.rap-al.on{border-color:#5B4FB8;background:var(--tint)}
 .rap-prev{position:sticky;top:20px}
 .rap-prevcab{font-size:12.5px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--muted);margin-bottom:8px}
 .pv{background:var(--bg);border:1px solid var(--border);border-radius:14px;padding:20px;min-height:120px}
 .pv-h3{font-family:var(--font-head);font-size:19px;margin:0 0 10px}
-.pv-bloque{border-left:3px solid #7A5230;padding-left:12px;margin-bottom:14px}
+.pv-bloque{border-left:3px solid #5B4FB8;padding-left:12px;margin-bottom:14px}
 .pv-bloque b{font-family:var(--font-head);font-size:15.5px}
 .pv-bloque p{margin:3px 0 0;font-size:14.5px;line-height:1.5}
-.pv-deb{background:var(--tint);border-left:3px solid #7A5230;border-radius:8px;padding:12px 14px;margin-top:16px}
+.pv-deb{background:var(--tint);border-left:3px solid #5B4FB8;border-radius:8px;padding:12px 14px;margin-top:16px}
 .pv-deb b{font-family:var(--font-head);font-size:15px}
 .pv-deb p{margin:3px 0 0;font-size:14.5px}
 .pv-vacio{color:var(--muted);font-size:14.5px}
@@ -160,7 +160,7 @@ tbody tr.al-fila.baja{opacity:.55}
 .al-sin{color:var(--muted);font-size:13.5px}
 /* Ficha: se despega de la tabla y lleva la marca de la fila que has pulsado,
    para que se vea que es «ese» alumno y no otra sección más de la página */
-#ficha{margin-top:30px;border-left:4px solid #7A5230;scroll-margin-top:20px}
+#ficha{margin-top:30px;border-left:4px solid #5B4FB8;scroll-margin-top:20px}
 #ficha > .ficha-cab{padding-bottom:16px;border-bottom:1px solid var(--border)}
 /* cada cosa en su caja: los datos y el ponerle clase se mezclaban */
 .fi-bloque{background:var(--tint);border-radius:12px;padding:16px 18px;margin-top:18px}
@@ -226,19 +226,19 @@ tbody tr.al-fila:hover .al-vercl{background:var(--primary);border-color:var(--pr
    demás secciones de la página. */
 :root{--ficha-bg:#FBF4EC;--ficha-bd:#E3CDB4}
 [data-theme="dark"]{--ficha-bg:#241c15;--ficha-bd:#4a3829}
-#ficha{background:var(--ficha-bg);border-color:var(--ficha-bd);border-left:5px solid #7A5230}
+#ficha{background:var(--ficha-bg);border-color:var(--ficha-bd);border-left:5px solid #5B4FB8}
 #ficha > .ficha-cab{border-bottom-color:var(--ficha-bd)}
 /* dentro de la ficha las cajas vuelven a ser claras: así el fondo cálido
    enmarca y el contenido sigue leyéndose igual de bien */
 #ficha .fi-bloque,#ficha .fi-row,#ficha .cat-row{background:var(--card-bg);border:1px solid var(--ficha-bd)}
-#ficha .fi-row{border-left:4px solid #7A5230}
-.fi-paso{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;background:#7A5230;color:#fff;font-size:12px;font-weight:800;margin-right:7px;font-family:var(--font-body)}
+#ficha .fi-row{border-left:4px solid #5B4FB8}
+.fi-paso{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;background:#5B4FB8;color:#fff;font-size:12px;font-weight:800;margin-right:7px;font-family:var(--font-body)}
 .fi-como{margin:-4px 0 14px;font-size:13.5px;color:var(--muted);line-height:1.5}
-.fi-poner{border-left:4px solid #7A5230!important}
+.fi-poner{border-left:4px solid #5B4FB8!important}
 .button-lg{padding:11px 20px;font-size:15.5px}
 /* el título de una clase asignada abre la clase, en otra pestaña */
 .fi-tit a{color:inherit;text-decoration:none;border-bottom:1px solid var(--ficha-bd)}
-.fi-tit a:hover{color:#7A5230;border-bottom-color:#7A5230}
+.fi-tit a:hover{color:#5B4FB8;border-bottom-color:#5B4FB8}
 [data-theme="dark"] .fi-tit a:hover{color:#c99b6e;border-bottom-color:#c99b6e}
 .fi-tit i{font-size:14px;color:var(--muted);margin-left:5px;vertical-align:baseline}
 .fi-rap{display:inline-block;background:var(--tint);color:var(--muted);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;padding:2px 8px;border-radius:9px;margin-left:8px;vertical-align:middle}

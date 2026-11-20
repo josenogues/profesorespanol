@@ -1762,3 +1762,9 @@ body[data-category="ejercicios"] .grammar-section > h2::after{background:var(--c
   body.busca-abierta .lupa-cerrar{order:2}
   body.busca-abierta .sidebar-search .search-results{order:3}
 }
+/* las portadas del hub, en dorado claro: oscurecido, el dorado sale marrón */
+.ex-pick-cover{background:linear-gradient(135deg,#F7C25A 0%,#E39A12 100%);color:#8a5b0a}
+/* sobre el dorado, letra oscura (como el botón «Empezar»); la etiqueta de
+   cada ejercicio, en el dorado oscuro para que se lea sobre blanco */
+.ex-pill.active{color:#232220}
+.exercise-cat-tag{color:var(--c-ejer-d)!important}
