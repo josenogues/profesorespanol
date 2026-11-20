@@ -1751,10 +1751,12 @@ body.menu-fijo #panel-ejer .panel-fijar{background:var(--c-ejer-t);color:var(--c
   .riel-btn .ti,.panel-mat > .panel-flecha{transition:none}
 }
 
-/* ── en el móvil: barra arriba con el logo, barra abajo con los tres botones ── */
+/* ── en el móvil: barra arriba con el logo, barra abajo con los tres botones ──
+   La de abajo deja aire debajo (--abajo): en el iPhone, con la barra de
+   Safari recogida, la rayita de volver al inicio se comía los nombres. */
 @media(max-width:900px){
-  :root{--barra:64px}
-  body{padding-bottom:calc(var(--barra) + env(safe-area-inset-bottom))}
+  :root{--barra:62px;--abajo:max(14px, env(safe-area-inset-bottom))}
+  body{padding-bottom:calc(var(--barra) + var(--abajo))}
   .menu-movil{display:flex;align-items:center;position:relative;background:var(--sidebar);padding:12px 16px;min-height:68px}
   .logo-header{display:block;margin-right:auto}
   .logo-img{display:block;width:auto;height:44px}
@@ -1775,14 +1777,14 @@ body.menu-fijo #panel-ejer .panel-fijar{background:var(--c-ejer-t);color:var(--c
   .ajustes-pop .language-selector button{margin:0}
   .ajustes-pop .theme-switch{flex:none;margin-left:4px}
 
-  .riel{top:auto;right:0;width:auto;height:calc(var(--barra) + env(safe-area-inset-bottom));flex-direction:row;
-    justify-content:space-around;align-items:center;gap:0;padding:0 6px env(safe-area-inset-bottom);
+  .riel{top:auto;right:0;width:auto;height:calc(var(--barra) + var(--abajo));flex-direction:row;
+    justify-content:space-around;align-items:center;gap:0;padding:0 6px var(--abajo);
     box-shadow:0 -2px 12px rgba(0,0,0,.15)}
   .riel-logo{display:none}
   .riel-btn{flex:1;width:auto;gap:3px;font-size:11.5px}
   .riel-btn .ti{width:58px;height:32px;border-radius:16px;font-size:23px}
 
-  .panel-menu,#panel-ejer{left:0;right:0;top:auto;bottom:calc(var(--barra) + env(safe-area-inset-bottom));width:auto;
+  .panel-menu,#panel-ejer{left:0;right:0;top:auto;bottom:calc(var(--barra) + var(--abajo));width:auto;
     max-height:72vh;border:0;border-radius:14px 14px 0 0;box-shadow:0 -10px 30px rgba(0,0,0,.2);padding:10px 14px 16px}
   .panel-menu::before{content:"";display:block;width:40px;height:4px;border-radius:2px;background:var(--border);margin:0 auto 14px}
   .panel-fijar{display:none}
@@ -1802,6 +1804,6 @@ body.menu-fijo #panel-ejer .panel-fijar{background:var(--c-ejer-t);color:var(--c
     margin-top:8px;max-height:60vh}
 
   /* los botones redondos de abajo a la derecha, por encima de la barra */
-  .apu-boton,.cita-boton{bottom:calc(14px + var(--barra) + env(safe-area-inset-bottom))}
-  .apu-panel{bottom:calc(74px + var(--barra) + env(safe-area-inset-bottom))}
+  .apu-boton,.cita-boton{bottom:calc(14px + var(--barra) + var(--abajo))}
+  .apu-panel{bottom:calc(74px + var(--barra) + var(--abajo))}
 }
