@@ -284,7 +284,8 @@ window.jnHubCargado = true;
     const hint = item.hint ? `<p class="exercise-hint">${item.hint}</p>` : '';
     const cat = item._cat;
     const catTag = cat ? `<p class="exercise-cat-tag" style="color:${cat.color}">${cat.label}</p>` : '';
-    const borderStyle = cat ? `style="border-left:4px solid ${cat.color}"` : '';
+    // sin raya de color a la izquierda (regla de José): el color ya va en la etiqueta de la materia
+    const borderStyle = '';
     const levelBadge = item.level ? `<span class="exercise-level-badge">${item.level}</span>` : '';
     if(item.type === 'order'){
       const words = shuffle([...item.words]);
