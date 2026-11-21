@@ -682,6 +682,11 @@ body[data-category] .eyebrow{background:var(--c-teoria-t);color:var(--c-teoria-d
     repeating-linear-gradient(#14171d 0 27px, #191d23 27px 28px);
 }
 [data-theme="dark"] .page-header .breadcrumb{background:#14171d}
+/* en el móvil, sin la raya roja del margen: ahí cruzaba los textos */
+@media(max-width:900px){
+  .main{background-image:repeating-linear-gradient(#FCFCFA 0 27px, #F1F1EE 27px 28px)}
+  [data-theme="dark"] .main{background-image:repeating-linear-gradient(#14171d 0 27px, #191d23 27px 28px)}
+}
 [data-theme="dark"] .tip-box{background:#3a2c0d;color:#e8d5a3;box-shadow:3px 4px 10px rgba(0,0,0,.35)}
 [data-theme="dark"] .tip-box::before{background:rgba(255,255,255,.1);border-top-color:rgba(255,255,255,.16);border-bottom-color:rgba(0,0,0,.2)}
 [data-theme="dark"] .tip-box strong{color:#f2c94c}
@@ -1052,9 +1057,9 @@ a.prof-card:hover{transform:translateY(-2px);box-shadow:0 4px 10px rgba(0,0,0,.0
 
 /* anatomía: cada pieza lleva su nota debajo */
 .mail-note{display:block;font-size:13.5px;color:var(--c-teoria-d);background:var(--c-teoria-t);
-  border-left:3px solid var(--c-teoria);border-radius:0 8px 8px 0;padding:7px 13px;margin:6px 0 14px}
+  border-radius:6px;padding:7px 13px;margin:6px 0 14px}
 .mail-note b{color:var(--c-teoria-d)}
-[data-theme="dark"] .mail-note{background:#14312a;color:#7fd6a0;border-left-color:#2f9c7c}
+[data-theme="dark"] .mail-note{background:#14312a;color:#7fd6a0}
 [data-theme="dark"] .mail-note b{color:#7fd6a0}
 .mail-head .mail-note{margin:8px 0 2px}
 
@@ -1302,7 +1307,7 @@ body[data-category="clases"] .eyebrow{background:var(--c-clases-t);color:var(--c
 [data-theme="dark"] .cl-rep-boton{background:#4b5894}
 [data-theme="dark"] .cl-rep-boton:hover{background:#5a68a8}
 /* la cabecera del repaso en el hub de ejercicios */
-.ex-repaso{background:var(--tint);border-left:4px solid var(--gold);border-radius:6px;
+.ex-repaso{background:var(--tint);border-radius:6px;
   padding:14px 18px;margin-bottom:18px}
 .ex-repaso .eyebrow{margin-bottom:2px}
 .ex-repaso h4{margin:4px 0 8px;font-family:var(--font-head);font-size:18px;color:var(--text)}
