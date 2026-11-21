@@ -310,13 +310,13 @@ function pintaTabla(){
       <td><div class="al-quien"><b>${esc(nombre || s.email || '—')}</b>
         <span>${esc(nombre ? s.email : (marca || 'sin nombre'))}</span></div>${flags}</td>
       <td>${clasesHtml}</td>
-      <td class="al-n">${esc(s.exerciseCount || 0)}${cursosHtml}</td>
-      <td class="al-n">${(s.clasesDadas || s.clasesDadas === 0) ? esc(s.clasesDadas) : '<span class="al-sin">—</span>'}</td>
-      <td class="al-n">${pagadoHtml}</td>
-      <td class="al-n">${!cuentaParaDinero(s) ? '<span class="al-sin">no cuenta</span>'
+      <td data-label="Práctica" class="al-n">${esc(s.exerciseCount || 0)}${cursosHtml}</td>
+      <td data-label="Clases dadas" class="al-n">${(s.clasesDadas || s.clasesDadas === 0) ? esc(s.clasesDadas) : '<span class="al-sin">—</span>'}</td>
+      <td data-label="Pagado" class="al-n">${pagadoHtml}</td>
+      <td data-label="Tarifa media" class="al-n">${!cuentaParaDinero(s) ? '<span class="al-sin">no cuenta</span>'
         : tarifaDe(s) !== null ? `<span class="al-eur">${esc(euros(tarifaDe(s)))}</span>`
         : '<span class="al-sin">—</span>'}</td>
-      <td>${haceCuanto(s.updatedAt)}</td>
+      <td data-label="Últ. actividad">${haceCuanto(s.updatedAt)}</td>
     </tr>`;
   }).join('');
 
