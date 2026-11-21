@@ -1,4 +1,7 @@
-# Aprende Español con José
+# Habla Español con José
+
+(Hasta noviembre de 2026 se llamó «Aprende español con José». El proyecto de
+Firebase sigue llamándose `aprendeespanol`: es interno y no se cambia.)
 
 Web de José, profesor particular de español. Sus alumnos (sobre todo de Preply,
 de muchos países) entran con su email y encuentran sus clases, los ejercicios y
