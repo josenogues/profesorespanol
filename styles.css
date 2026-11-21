@@ -1673,8 +1673,13 @@ body[data-category="ejercicios"] .grammar-section > h2::after{background:var(--c
 .menu-movil,.menu-velo,.ajustes-pop{display:none}
 .riel{position:fixed;left:0;top:0;bottom:0;width:var(--riel);z-index:62;background:var(--sidebar);
   display:flex;flex-direction:column;align-items:center;gap:14px;padding:18px 0 90px}
-.riel-logo{display:block;margin-bottom:18px}
-.riel-logo img{display:block;width:62px;height:62px}
+/* Debajo del icono, el nombre escrito a mano y una rayita fina que lo separa de los botones. */
+.riel-logo{display:block;position:relative;margin-bottom:4px;padding-bottom:22px;text-align:center;text-decoration:none}
+.riel-logo:after{content:'';position:absolute;left:14px;right:14px;bottom:0;height:1px;background:rgba(255,255,255,.18)}
+.riel-logo img{display:block;width:62px;height:62px;margin:0 auto}
+.riel-nombre{display:block;margin-top:6px;font:700 19px/1 'Caveat',cursive;color:#fff;letter-spacing:.2px}
+.riel-nombre b{display:block;font-size:22px;color:#F2AB27}
+@media (max-height:640px){.riel-nombre{display:none}.riel-logo{padding-bottom:16px}}
 .riel-btn{display:flex;flex-direction:column;align-items:center;gap:6px;width:88px;padding:0;border:0;background:none;
   cursor:pointer;color:rgba(255,255,255,.75);font:700 12.5px/1.15 var(--font-body);text-align:center;text-decoration:none}
 .riel-btn .ti{width:54px;height:46px;border-radius:6px;display:flex;align-items:center;justify-content:center;
