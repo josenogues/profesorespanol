@@ -1355,9 +1355,9 @@ document.addEventListener("jn-modo", e => marcaModo(e.detail));
   // tres pistas. El ?v= de cada uno lo pone herramientas/versiones.py.
   const PARTES = {
     comun: 'search-index-comun.js?v=7aacba98ee',
-    es: 'search-index-es.js?v=df4ca0aec2',
-    it: 'search-index-it.js?v=5b9187f21c',
-    en: 'search-index-en.js?v=0dea543c71'
+    es: 'search-index-es.js?v=b8fda19107',
+    it: 'search-index-it.js?v=3d42cdaef8',
+    en: 'search-index-en.js?v=174ea5cf50'
   };
   const pedidas = {};   // parte → promesa de su descarga
   function pide(parte){
