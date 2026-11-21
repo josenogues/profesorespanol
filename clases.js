@@ -135,6 +135,27 @@ window.JN_CLASES = [
                 'e→ie', 'o→ue', 'ser', 'estar', 'ir', 'tener']
   },
   {
+    // La 140 enseña las formas; esta, para qué sirve el presente donde el
+    // inglés usa otra cosa. El «estoy trabajando» que sobra y el «mañana
+    // trabajo» ya están en la 310 y la 210: aquí no se repiten.
+    num: 145,
+    id: 'presente-usos',
+    continua: 'presente',
+    temas: ['indicativo'],
+    pagina: 'clase-presente-usos',
+    nivel: 'A1',
+    perfil: 'angloparlantes',
+    pistas: ['en'],
+    titulo: {
+      es: 'El presente hace más de lo que crees',
+      it: 'Il presente fa più di quanto credi',
+      en: 'The present does more than you think'
+    },
+    etiquetas: ['presente', 'desde', 'desde hace', 'hace que', 'cuánto tiempo hace',
+                'desde cuándo', '¿te ayudo?', '¿me pasas?', 'ofrecer', 'pedir un favor',
+                'contar una historia', 'casi me caigo']
+  },
+  {
     num: 150,
     id: 'to-be',
     temas: ['ser-estar', 'haber-tener'],

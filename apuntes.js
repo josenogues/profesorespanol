@@ -308,7 +308,7 @@
     return new Promise(function(listo){
       if(window.jnClasePorId){ listo(); return; }
       const s = document.createElement('script');
-      s.src = 'clases.js?v=b45f79a397';
+      s.src = 'clases.js?v=5c543ab051';
       s.onload = s.onerror = function(){ listo(); };
       document.head.appendChild(s);
     });
