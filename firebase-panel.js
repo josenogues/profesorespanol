@@ -25,6 +25,7 @@ function withTimeout(promise, ms, label){
 
 const bodyEl = document.getElementById('panel-table-body');
 const loadingEl = document.getElementById('panel-loading');
+const ecoBodyEl = document.getElementById('eco-body');
 const refreshBtn = document.getElementById('panel-refresh');
 
 // Señal para panel-profesor.html: si este módulo ha llegado a cargar (y por
@@ -153,7 +154,7 @@ function paginaDeClase(a, idioma){
 
 // Los números de arriba dependen de los mismos datos que la tabla, así que
 // se repintan con ella: si no, al cobrarle a alguien el KPI seguía en lo viejo.
-function repinta(){ pintaKpis(); pintaTabla(); }
+function repinta(){ pintaKpis(); pintaTabla(); pintaEco(); pintaCatalogo(); }
 
 // ───────────────── La tabla de alumnos ─────────────────
 // Se vuelve a pintar sin tocar Firebase cuando escribes en el buscador o
@@ -176,19 +177,63 @@ function puedeEntrar(s){
 
 // Filtros: estado ('alta' | 'baja' | '') y acceso ('si' | 'no' | '')
 const filtros = { estado: 'alta', acceso: '' };
-// Orden: la columna y el sentido. Al abrir, por última actividad, el que
-// acaba de estar arriba, que es como estaba antes.
-const orden = { col: 'actividad', desc: true };
+// Orden de cada tabla: la columna y el sentido. La de alumnos abre por
+// quién tiene la clase más cercana, que es lo que mira quien da clases; la de
+// economía, por nombre.
+const ordenes = {
+  clases: { col: 'proxima', desc: false },
+  eco: { col: 'nombre', desc: false }
+};
+
+// La última clase dada (fecha de hoy o anterior) y la próxima (posterior a
+// hoy) de un alumno. Una clase sin fecha no es ni una cosa ni la otra.
+function ultimaDe(s){
+  const hoy = hoyISO();
+  let m = null;
+  (Array.isArray(s.clases) ? s.clases : []).forEach(a => {
+    if(a.fecha && a.fecha <= hoy && (!m || a.fecha > m.fecha)) m = a;
+  });
+  return m;
+}
+function proximaDe(s){
+  const hoy = hoyISO();
+  let m = null;
+  (Array.isArray(s.clases) ? s.clases : []).forEach(a => {
+    if(a.fecha && a.fecha > hoy && (!m || a.fecha < m.fecha)) m = a;
+  });
+  return m;
+}
 
 const VALOR = {
   nombre: s => (nombreDe(s) || s.email || '').toLowerCase(),
   clases: s => (Array.isArray(s.clases) ? s.clases.length : 0),
-  practica: s => (+s.exerciseCount || 0),
-  dadas: s => (s.clasesDadas || s.clasesDadas === 0) ? +s.clasesDadas : null,
-  pagado: s => (s.pagado || s.pagado === 0) ? +s.pagado : null,
-  tarifa: s => cuentaParaDinero(s) ? tarifaDe(s) : null,
+  ultima: s => { const a = ultimaDe(s); return a ? a.fecha : null; },
+  proxima: s => { const a = proximaDe(s); return a ? a.fecha : null; },
   actividad: s => (s.updatedAt && s.updatedAt.toMillis) ? s.updatedAt.toMillis() : null
 };
+
+const VALOR_ECO = {
+  nombre: VALOR.nombre,
+  dadas: s => (s.clasesDadas || s.clasesDadas === 0) ? +s.clasesDadas : null,
+  pagado: s => (s.pagado || s.pagado === 0) ? +s.pagado : null,
+  tarifa: s => cuentaParaDinero(s) ? tarifaDe(s) : null
+};
+
+// Ordena por la columna que hayas pulsado. Lo que no tiene valor —un
+// alumno sin tarifa, sin próxima clase— se va siempre al final, mires como
+// mires: si no, al ordenar de menos a más la tabla empieza con una fila de
+// guiones, que es justo lo que no estabas buscando.
+function ordena(lista, o, valores){
+  const valor = valores[o.col] || valores.nombre;
+  return lista.sort((a, b) => {
+    const va = valor(a), vb = valor(b);
+    if(va === null && vb === null) return 0;
+    if(va === null) return 1;
+    if(vb === null) return -1;
+    const cmp = typeof va === 'string' ? va.localeCompare(vb) : va - vb;
+    return o.desc ? -cmp : cmp;
+  });
+}
 
 // ───────────────── Los números de arriba ─────────────────
 // Vivían al final de la tabla y gráficamente no pegaban. Suben, y de paso
@@ -249,20 +294,10 @@ function pintaTabla(){
     (!filtros.acceso || (filtros.acceso === 'si' ? puedeEntrar(s) : !puedeEntrar(s))) &&
     (!q || (s.email + ' ' + nombreDe(s)).toLowerCase().includes(q)));
 
-  // Ordena por la columna que hayas pulsado. Lo que no tiene valor —un
-  // alumno sin tarifa, sin pagos— se va siempre al final, mires como mires:
-  // si no, al ordenar de menos a más la tabla empieza con una fila de
-  // guiones, que es justo lo que no estabas buscando.
-  const valor = VALOR[orden.col] || VALOR.actividad;
-  lista.sort((a, b) => {
-    const va = valor(a), vb = valor(b);
-    if(va === null && vb === null) return 0;
-    if(va === null) return 1;
-    if(vb === null) return -1;
-    const cmp = typeof va === 'string' ? va.localeCompare(vb) : va - vb;
-    return orden.desc ? -cmp : cmp;
-  });
+  ordena(lista, ordenes.clases, VALOR);
   pintaCabeceras();
+  const mov = document.getElementById('al-orden-movil');
+  if(mov) mov.value = ordenes.clases.col + ':' + (ordenes.clases.desc ? 'desc' : 'asc');
 
   if(!lista.length){
     bodyEl.innerHTML = '';
@@ -279,15 +314,6 @@ function pintaTabla(){
     const baja = s.activo === false;
     const nombre = nombreDe(s);
     const marca = [s.nivel, (s.idioma || '').toUpperCase()].filter(Boolean).join(' · ');
-    // los cursos se metieron dentro de «Práctica»: casi siempre están vacíos y
-    // una columna entera para un guion no se gana el sitio
-    const cursos = courseChips(s);
-    const cursosHtml = cursos.length
-      ? `<div class="panel-levels" style="margin-top:4px">${cursos.map(c => {
-          const count = c.total ? `${c.done}/${c.total}` : `${c.done} pasos`;
-          return `<span class="panel-course-chip${c.complete ? ' done' : ''}">${esc(c.name)} <b>${esc(count)}</b></span>`;
-        }).join('')}</div>`
-      : '';
     const nClases = Array.isArray(s.clases) ? s.clases.length : 0;
     // el botón de las clases: antes era un número suelto y no se veía que
     // llevara a ninguna parte
@@ -295,10 +321,11 @@ function pintaTabla(){
       ? `<span class="al-vercl">${nClases === 1 ? 'Ver su clase' : 'Ver sus ' + nClases + ' clases'
         } <i class="ti ti-arrow-right"></i></span>`
       : '<span class="al-vercl cero">Ponerle una <i class="ti ti-arrow-right"></i></span>';
-    const pagadoHtml = (s.pagado || s.pagado === 0)
-      ? `<span class="al-eur">${esc(euros(s.pagado))}</span>${
-          s.pagadoAt ? `<span class="al-desde">al ${esc(fechaCorta(s.pagadoAt))}</span>` : ''}`
+    const ult = ultimaDe(s), prox = proximaDe(s);
+    const celdaClase = a => a
+      ? `<div class="al-fecha"><b>${esc(fechaCorta(a.fecha))}</b><span>${esc(tituloDe(a))}</span></div>`
       : '<span class="al-sin">—</span>';
+    const apuntes = (s.paraProxima || '').trim();
     // dos marcas, no una: si está de baja, y si entra o no. Solo se enseña
     // el acceso cuando dice algo que no se deduce del estado: un alumno de
     // alta que no entra, o uno de baja que sí.
@@ -310,12 +337,10 @@ function pintaTabla(){
       <td><div class="al-quien"><b>${esc(nombre || s.email || '—')}</b>
         <span>${esc(nombre ? s.email : (marca || 'sin nombre'))}</span></div>${flags}</td>
       <td>${clasesHtml}</td>
-      <td data-label="Práctica" class="al-n">${esc(s.exerciseCount || 0)}${cursosHtml}</td>
-      <td data-label="Clases dadas" class="al-n">${(s.clasesDadas || s.clasesDadas === 0) ? esc(s.clasesDadas) : '<span class="al-sin">—</span>'}</td>
-      <td data-label="Pagado" class="al-n">${pagadoHtml}</td>
-      <td data-label="Tarifa media" class="al-n">${!cuentaParaDinero(s) ? '<span class="al-sin">no cuenta</span>'
-        : tarifaDe(s) !== null ? `<span class="al-eur">${esc(euros(tarifaDe(s)))}</span>`
-        : '<span class="al-sin">—</span>'}</td>
+      <td data-label="Última clase">${celdaClase(ult)}</td>
+      <td data-label="Próxima clase">${prox ? celdaClase(prox) : '<span class="al-sin">sin programar</span>'}</td>
+      <td data-label="Para la próxima clase"${apuntes ? '' : ' class="vacio"'}>${apuntes
+        ? `<div class="al-prox-txt">${esc(apuntes)}</div>` : '<span class="al-sin">—</span>'}</td>
       <td data-label="Últ. actividad">${haceCuanto(s.updatedAt)}</td>
     </tr>`;
   }).join('');
@@ -324,28 +349,55 @@ function pintaTabla(){
 
 if(busqEl) busqEl.addEventListener('input', pintaTabla);
 
+// en el móvil no hay cabeceras que pulsar: el orden se elige aquí
+const ordMovil = document.getElementById('al-orden-movil');
+if(ordMovil) ordMovil.addEventListener('change', function(){
+  const [col, sentido] = ordMovil.value.split(':');
+  ordenes.clases = { col: col, desc: sentido === 'desc' };
+  pintaTabla();
+});
+
 // La flecha en la cabecera de la columna por la que está ordenando.
 function pintaCabeceras(){
   document.querySelectorAll('th.al-orden').forEach(th => {
-    const esta = th.dataset.col === orden.col;
+    const o = ordenes[th.closest('table').dataset.t];
+    const esta = th.dataset.col === o.col;
     th.classList.toggle('on', esta);
     // el nombre del icono va entero, no a trozos: herramientas/iconos.py
     // recorta la fuente a los ti-… que encuentra escritos, y uno montado
     // pegando el prefijo a una variable no lo vería y se quedaría sin dibujo
-    const flecha = esta ? (orden.desc ? 'ti-arrow-down' : 'ti-arrow-up') : 'ti-arrows-sort';
+    const flecha = esta ? (o.desc ? 'ti-arrow-down' : 'ti-arrow-up') : 'ti-arrows-sort';
     th.innerHTML = th.textContent.replace(/\s*$/, '') +
       ' <i class="ti ' + flecha + '" aria-hidden="true"></i>';
   });
 }
 
+// Las dos pestañas. Se abre siempre en «Clases»: la economía está ahí, pero
+// no tiene por qué verse al entrar.
+function ponTab(t){
+  document.querySelectorAll('.pn-tab').forEach(b => {
+    const on = b.dataset.tab === t;
+    b.classList.toggle('on', on);
+    b.setAttribute('aria-selected', on ? 'true' : 'false');
+  });
+  ['clases', 'eco'].forEach(n => {
+    const el = document.getElementById('tab-' + n);
+    if(el) el.style.display = n === t ? '' : 'none';
+  });
+}
+
 document.addEventListener('click', function(e){
+  const tab = e.target.closest('.pn-tab');
+  if(tab){ ponTab(tab.dataset.tab); return; }
   const th = e.target.closest('th.al-orden');
   if(th){
     // la misma columna cambia el sentido; una nueva empieza por lo más alto,
-    // salvo los nombres, que empiezan por la A
-    if(orden.col === th.dataset.col) orden.desc = !orden.desc;
-    else { orden.col = th.dataset.col; orden.desc = th.dataset.col !== 'nombre'; }
-    pintaTabla();
+    // salvo los nombres y las fechas próximas, que empiezan por lo primero
+    const t = th.closest('table').dataset.t;
+    const o = ordenes[t];
+    if(o.col === th.dataset.col) o.desc = !o.desc;
+    else { o.col = th.dataset.col; o.desc = !(o.col === 'nombre' || o.col === 'proxima'); }
+    if(t === 'eco') pintaEco(); else pintaTabla();
     return;
   }
   const f = e.target.closest('.al-fbtn');
@@ -360,6 +412,7 @@ async function loadStudents(){
   loadingEl.textContent = 'Cargando...';
   loadingEl.style.display = 'block';
   bodyEl.innerHTML = '';
+  if(ecoBodyEl) ecoBodyEl.innerHTML = '';
   if(kpisEl) kpisEl.innerHTML = '';
   refreshBtn.disabled = true;
   try {
@@ -373,13 +426,13 @@ async function loadStudents(){
     porEmail.clear();
     students.forEach(s => { if(s.email) porEmail.set(s.email, s); });
 
-    pintaKpis();
-    pintaTabla();
+    repinta();
     // si tenías una ficha abierta, se queda abierta y con los datos frescos
     // (sin volver a saltar hacia ella, que estabas mirándola)
     if(emailAbierto && porEmail.has(emailAbierto)){
       const abierto = porEmail.get(emailAbierto);
       clasesAbiertas = Array.isArray(abierto.clases) ? abierto.clases.map(c => Object.assign({}, c)) : [];
+      document.getElementById('fi-proxima').value = abierto.paraProxima || '';
       pintaFicha();
     }
   } catch(err) {
@@ -390,6 +443,69 @@ async function loadStudents(){
 }
 
 refreshBtn.addEventListener('click', loadStudents);
+
+// ───────────────── Pestaña «Economía» ─────────────────
+// Lo del dinero vive aparte, en su pestaña: no hace falta tenerlo al día y no
+// tiene por qué estar a la vista cada vez que se abre el panel. Cada fila se
+// edita ahí mismo y se guarda al salir del campo.
+
+function tarifaHtml(s){
+  return !cuentaParaDinero(s) ? '<span class="al-sin">no cuenta</span>'
+    : tarifaDe(s) !== null ? `<span class="al-eur">${esc(euros(tarifaDe(s)))}</span>`
+    : '<span class="al-sin">—</span>';
+}
+
+function pintaEco(){
+  if(!ecoBodyEl) return;
+  const lista = ordena([...porEmail.values()], ordenes.eco, VALOR_ECO);
+  pintaCabeceras();
+  const val = v => (v || v === 0) ? esc(v) : '';
+  ecoBodyEl.innerHTML = lista.map(s => {
+    const baja = s.activo === false;
+    const nombre = nombreDe(s);
+    return `<tr class="eco-fila${baja ? ' baja' : ''}" data-eco="${esc(s.email || '')}">
+      <td><div class="al-quien"><b>${esc(nombre || s.email || '—')}</b>
+        <span>${esc(nombre ? s.email : '')}</span></div>${baja ? '<span class="panel-flag baja">Baja</span>' : ''}</td>
+      <td data-label="Clases dadas"><input type="number" class="eco-in" data-campo="clasesDadas" min="0" step="1" value="${val(s.clasesDadas)}" placeholder="0"></td>
+      <td data-label="Pagado (€)"><input type="number" class="eco-in" data-campo="pagado" min="0" step="0.5" value="${val(s.pagado)}" placeholder="0"></td>
+      <td data-label="Al día a fecha de"><div class="eco-fecha-caja"><input type="date" class="eco-in" data-campo="pagadoAt" value="${esc(s.pagadoAt || '')}">
+        <button type="button" class="button button-secondary button-sm" data-eco-hoy>Hoy</button></div></td>
+      <td data-label="Tarifa media" class="al-n eco-tarifa">${tarifaHtml(s)}</td>
+      <td data-label="No cuenta"><input type="checkbox" class="eco-in" data-campo="sinCobro" ${cuentaParaDinero(s) ? '' : 'checked'}></td>
+    </tr>`;
+  }).join('');
+}
+
+// Guarda un solo campo de un alumno. Vacío se guarda como null, no como 0,
+// para poder distinguir «no cobra» de «no lo he puesto». No se repinta la
+// tabla entera —perderías el sitio donde estás escribiendo—: solo su tarifa
+// y los números de arriba.
+async function guardaDinero(email, el){
+  const s = porEmail.get(email);
+  if(!s) return;
+  const campo = el.dataset.campo;
+  let v;
+  if(campo === 'sinCobro') v = !!el.checked;
+  else if(campo === 'pagadoAt') v = el.value || '';
+  else { const t = (el.value || '').trim(); v = (t === '' || isNaN(+t)) ? null : +t; }
+  const aviso = document.getElementById('eco-estado');
+  const di = (txt, tipo) => { if(aviso){ aviso.textContent = txt; aviso.className = 'ficha-estado' + (tipo ? ' ' + tipo : ''); } };
+  di('Guardando...');
+  try {
+    const db = getFirestore(app);
+    await withTimeout(setDoc(doc(db, 'students', email),
+      { email: email, [campo]: v }, { merge: true }), 8000, 'setDoc');
+    s[campo] = v;
+    const fila = el.closest('tr');
+    const t = fila && fila.querySelector('.eco-tarifa');
+    if(t) t.innerHTML = tarifaHtml(s);
+    pintaKpis();
+    di('Guardado.', 'ok');
+    setTimeout(() => di(''), 1800);
+  } catch(err) {
+    di('No se ha podido guardar: ' + (err && err.message ? err.message : 'error'), 'mal');
+  }
+}
 
 // ─────────────────── Ficha del alumno: asignar clases ───────────────────
 // El catálogo (qué clases existen) es código, en clases.js. Aquí solo se
@@ -409,6 +525,12 @@ const PERFIL = { nombre: 'fi-nombre', idioma: 'fi-idioma', nivel: 'fi-nivel', ac
 
 let emailAbierto = null;
 let clasesAbiertas = [];
+
+// Cómo se ordenan «sus clases»: por fecha (la última primero o la primera
+// primero) o por número del catálogo. Se acuerda de lo que elegiste.
+let ordenFicha = 'fecha-desc';
+try { ordenFicha = localStorage.getItem('jn_panel_orden_ficha') || ordenFicha; } catch(e) {}
+if(['fecha-desc', 'fecha-asc', 'num'].indexOf(ordenFicha) < 0) ordenFicha = 'fecha-desc';
 
 function hoyISO(){
   const d = new Date();
@@ -446,17 +568,54 @@ function avisa(txt, tipo){
   fEstado.className = 'ficha-estado' + (tipo ? ' ' + tipo : '');
 }
 
+// El desplegable del catálogo, con ✓ delante de las clases que este alumno
+// ya tiene: así se ve de un vistazo qué no le has dado todavía.
+function pintaSelectClases(){
+  if(!fSelect) return;
+  const ya = new Set(clasesAbiertas.filter(c => c.id).map(c => c.id));
+  const antes = fSelect.value;
+  fSelect.innerHTML = porNumero()
+    // con el catálogo creciendo, el nivel y la pista ahorran abrir la clase
+    .map(c => {
+      const marca = [c.nivel, (c.pistas || []).join('/').toUpperCase()].filter(Boolean).join(' · ');
+      // el número delante: es con lo que se acuerda de cuál es cuál
+      return `<option value="${esc(c.id)}">${ya.has(c.id) ? '✓ ' : ''}${esc(numDe(c))} · ${esc(c.titulo.es)}${
+        marca ? ' · ' + esc(marca) : ''}</option>`;
+    }).join('')
+    || '<option value="">(todavía no hay clases en el catálogo)</option>';
+  if(antes) fSelect.value = antes;
+}
+
 function pintaFicha(){
   if(!fLista) return;
   const hoy = hoyISO();
-  // fechadas primero, de más reciente a más antigua; las sin fecha al final
+  // Por fecha, las sin fecha siempre al final. Por número del catálogo, las
+  // clases rápidas —que no tienen número— van detrás, de la más reciente a la
+  // más antigua.
+  const numDeAsig = c => {
+    const cat = (!c.rapida && window.jnClasePorId) ? window.jnClasePorId(c.id) : null;
+    return cat && cat.num ? cat.num : null;
+  };
+  const porFecha = (a, b, desc) => {
+    if(!a.c.fecha && !b.c.fecha) return 0;
+    if(!a.c.fecha) return 1;
+    if(!b.c.fecha) return -1;
+    return desc ? b.c.fecha.localeCompare(a.c.fecha) : a.c.fecha.localeCompare(b.c.fecha);
+  };
   const orden = clasesAbiertas.map((c, i) => ({ c, i }))
     .sort((a, b) => {
-      if(!a.c.fecha && !b.c.fecha) return 0;
-      if(!a.c.fecha) return 1;
-      if(!b.c.fecha) return -1;
-      return b.c.fecha.localeCompare(a.c.fecha);
+      if(ordenFicha === 'num'){
+        const na = numDeAsig(a.c), nb = numDeAsig(b.c);
+        if(na !== null && nb !== null) return na - nb;
+        if(na !== null) return -1;
+        if(nb !== null) return 1;
+        return porFecha(a, b, true);
+      }
+      return porFecha(a, b, ordenFicha === 'fecha-desc');
     });
+  const selOrden = document.getElementById('ficha-orden');
+  if(selOrden) selOrden.value = ordenFicha;
+  pintaSelectClases();
 
   fLista.innerHTML = orden.length ? orden.map(({ c, i }) => {
     const chips = etiquetasDe(c).map(t => `<span class="panel-course-chip">${esc(t)}</span>`).join('');
@@ -486,14 +645,16 @@ function pintaFicha(){
              placeholder="Nota para ti: cómo fue, qué repetir...">
       ${rep}<button class="fi-quitar" data-quitar="${i}" title="Quitar de su lista">×</button>
     </div>`;
-  }).join('') : '<p class="panel-empty">Todavía no tiene ninguna clase asignada.</p>';
+  }).join('') : '<p class="panel-empty">Todavía no le has dado ninguna clase.</p>';
 
   const n = clasesAbiertas.length;
   // el email va aquí: el título de la ficha ya lleva su nombre, pero el email
   // es con lo que entra en la web y hay que poder verlo
   if(fResumen){
+    const ej = +((porEmail.get(emailAbierto) || {}).exerciseCount) || 0;
     fResumen.textContent = emailAbierto + ' · ' +
-      (n === 1 ? '1 clase asignada' : n + ' clases asignadas');
+      (n === 1 ? '1 clase asignada' : n + ' clases asignadas') +
+      (ej ? ' · ' + ej + (ej === 1 ? ' ejercicio hecho en la web' : ' ejercicios hechos en la web') : '');
   }
 }
 
@@ -520,23 +681,12 @@ async function guarda(){
 async function guardaPerfil(){
   if(!emailAbierto) return;
   const s = porEmail.get(emailAbierto) || {};
-  // clases dadas y pagado los escribe él a mano; la tarifa sale de dividirlos
-  // (tarifaDe) y no se guarda. Vacío se guarda como null, no como 0, para
-  // poder distinguir «no cobra» de «no lo he puesto».
-  const num = function(id){
-    const v = (document.getElementById(id).value || '').trim();
-    return v === '' || isNaN(+v) ? null : +v;
-  };
   const campos = {
     nombre: (document.getElementById(PERFIL.nombre).value || '').trim(),
     idioma: document.getElementById(PERFIL.idioma).value || '',
     nivel: document.getElementById(PERFIL.nivel).value || '',
     activo: document.getElementById(PERFIL.activo).value !== 'no',
-    acceso: document.getElementById('fi-acceso').value !== 'no',
-    clasesDadas: num('fi-clases-dadas'),
-    pagado: num('fi-pagado'),
-    pagadoAt: document.getElementById('fi-pagado-fecha').value || '',
-    sinCobro: !!document.getElementById('fi-sincobro').checked
+    acceso: document.getElementById('fi-acceso').value !== 'no'
   };
   avisa('Guardando...');
   try {
@@ -549,6 +699,27 @@ async function guardaPerfil(){
     repinta();
     avisa(campos.acceso ? 'Guardado.' : 'Guardado: ya no puede entrar en la web.', 'ok');
     setTimeout(() => avisa(''), 2500);
+  } catch(err) {
+    avisa('No se ha podido guardar: ' + (err && err.message ? err.message : 'error'), 'mal');
+  }
+}
+
+// Lo que harás en la siguiente clase: lo escribes al terminar cada una y lo
+// lees antes de empezar la próxima. Va en la ficha del alumno, igual que sus
+// clases, y tampoco toca "updatedAt".
+async function guardaProxima(){
+  if(!emailAbierto) return;
+  const texto = (document.getElementById('fi-proxima').value || '').trim();
+  avisa('Guardando...');
+  try {
+    const db = getFirestore(app);
+    await withTimeout(setDoc(doc(db, 'students', emailAbierto),
+      { email: emailAbierto, paraProxima: texto }, { merge: true }), 8000, 'setDoc');
+    const s = porEmail.get(emailAbierto);
+    if(s) s.paraProxima = texto;
+    pintaTabla();
+    avisa('Guardado.', 'ok');
+    setTimeout(() => avisa(''), 2000);
   } catch(err) {
     avisa('No se ha podido guardar: ' + (err && err.message ? err.message : 'error'), 'mal');
   }
@@ -626,22 +797,7 @@ function abreFicha(email){
   document.getElementById(PERFIL.activo).value = s.activo === false ? 'no' : 'si';
   document.getElementById('fi-acceso').value = puedeEntrar(s) ? 'si' : 'no';
   avisaAcceso();
-  document.getElementById('fi-clases-dadas').value = (s.clasesDadas || s.clasesDadas === 0) ? s.clasesDadas : '';
-  document.getElementById('fi-pagado').value = (s.pagado || s.pagado === 0) ? s.pagado : '';
-  document.getElementById('fi-pagado-fecha').value = s.pagadoAt || '';
-  // sin marcar nunca: la del profesor sale marcada de salida (cuentaParaDinero)
-  document.getElementById('fi-sincobro').checked = !cuentaParaDinero(s);
-  if(fSelect){
-    fSelect.innerHTML = porNumero()
-      // con el catálogo creciendo, el nivel y la pista ahorran abrir la clase
-      .map(c => {
-        const marca = [c.nivel, (c.pistas || []).join('/').toUpperCase()].filter(Boolean).join(' · ');
-        // el número delante: es con lo que se acuerda de cuál es cuál
-        return `<option value="${esc(c.id)}">${esc(numDe(c))} · ${esc(c.titulo.es)}${
-          marca ? ' · ' + esc(marca) : ''}</option>`;
-      }).join('')
-      || '<option value="">(todavía no hay clases en el catálogo)</option>';
-  }
+  document.getElementById('fi-proxima').value = s.paraProxima || '';
   if(fFecha) fFecha.value = hoyISO();
   avisa('');
   pintaFicha();
@@ -656,11 +812,11 @@ document.addEventListener('click', function(e){
   const cerrar = e.target.closest('#ficha-cerrar');
   if(cerrar){ ficha.style.display = 'none'; emailAbierto = null; return; }
 
-  // «Actualizar a hoy»: no calcula nada, solo deja la fecha de hoy en el
-  // campo y guarda. Es la marca de hasta cuándo están cuadradas las cuentas.
-  if(e.target.closest('#fi-cobro-hoy')){
-    const f = document.getElementById('fi-pagado-fecha');
-    if(f){ f.value = hoyISO(); guardaPerfil(); }
+  // «Hoy» en la fila de economía: deja la fecha de hoy y guarda
+  const hoyBtn = e.target.closest('[data-eco-hoy]');
+  if(hoyBtn){
+    const f = hoyBtn.closest('tr').querySelector('input[data-campo="pagadoAt"]');
+    if(f){ f.value = hoyISO(); guardaDinero(hoyBtn.closest('tr').dataset.eco, f); }
     return;
   }
 
@@ -719,12 +875,19 @@ document.addEventListener('click', function(e){
 // la fecha, la nota y los datos del alumno se guardan al salir del campo,
 // no en cada tecla
 document.addEventListener('change', function(e){
+  const eco = e.target.closest('[data-eco] [data-campo]');
+  if(eco){ guardaDinero(eco.closest('tr').dataset.eco, eco); return; }
+  if(e.target && e.target.id === 'fi-proxima'){ guardaProxima(); return; }
+  if(e.target && e.target.id === 'ficha-orden'){
+    ordenFicha = e.target.value;
+    try { localStorage.setItem('jn_panel_orden_ficha', ordenFicha); } catch(err) {}
+    pintaFicha();
+    return;
+  }
   const f = e.target.closest('.fi-fecha');
   if(f){ clasesAbiertas[+f.dataset.i].fecha = f.value; pintaFicha(); repinta(); guarda(); return; }
   const n = e.target.closest('.fi-nota');
   if(n){ clasesAbiertas[+n.dataset.i].nota = n.value; guarda(); return; }
-  // la casilla de «no cuenta para el dinero» vive fuera de .fi-perfil
-  if(e.target && e.target.id === 'fi-sincobro'){ guardaPerfil(); return; }
   if(e.target && e.target.closest('.fi-perfil') && ficha.contains(e.target)){
     if(e.target.id === PERFIL.activo || e.target.id === 'fi-acceso') avisaAcceso();
     guardaPerfil();
@@ -986,6 +1149,34 @@ document.addEventListener('keydown', function(e){
 // que solo existe en inglés es para un inglés.
 const catFiltro = { nivel: [], pista: [], q: '' };
 
+// Cómo se ordena el catálogo: por número, o por la última vez que diste cada
+// clase (a quien sea). «antigua» pone primero las que todavía no has dado y
+// luego las que hace más que no das: lo que buscas cuando no sabes qué poner.
+let catOrden = 'num';
+try { catOrden = localStorage.getItem('jn_panel_orden_cat') || catOrden; } catch(e) {}
+if(['num', 'reciente', 'antigua'].indexOf(catOrden) < 0) catOrden = 'num';
+
+// Qué clases se han dado, a quién y cuándo: sale de las fichas de los alumnos.
+// «Dada» es una con fecha de hoy o anterior; con fecha futura, o sin fecha,
+// está puesta pero todavía no cuenta.
+function usoDeClases(){
+  const hoy = hoyISO();
+  const uso = new Map();
+  porEmail.forEach(s => {
+    (Array.isArray(s.clases) ? s.clases : []).forEach(a => {
+      if(!a.id) return;
+      let u = uso.get(a.id);
+      if(!u){ u = { alumnos: new Set(), ultima: null, quien: '' }; uso.set(a.id, u); }
+      u.alumnos.add(s.email);
+      if(a.fecha && a.fecha <= hoy && (!u.ultima || a.fecha > u.ultima)){
+        u.ultima = a.fecha;
+        u.quien = nombreDe(s) || s.email;
+      }
+    });
+  });
+  return uso;
+}
+
 // El número de la clase, con el mismo aspecto en todas partes. La centena
 // es el nivel (1xx A1, 2xx A1–A2, 3xx A2, 4xx A2–B1, 5xx B1–B2, 6xx B2) y
 // van de diez en diez para poder meter una en medio sin mover las demás.
@@ -1047,7 +1238,13 @@ function pintaFiltros(){
     (puestos ? '<button type="button" class="cat-fbtn cat-flimpia" id="cat-limpia">' +
                'Quitar filtros</button>' : '') +
     `<input type="search" class="cat-buscar" id="cat-buscar" placeholder="número, título o etiqueta..."
-      value="${esc(catFiltro.q)}" autocomplete="off">`;
+      value="${esc(catFiltro.q)}" autocomplete="off">` +
+    `<label class="fi-ordena cat-ordena">Ordenar
+      <select id="cat-orden" class="pn-sel">
+        <option value="num"${catOrden === 'num' ? ' selected' : ''}>Por número</option>
+        <option value="reciente"${catOrden === 'reciente' ? ' selected' : ''}>Por fecha, la última dada primero</option>
+        <option value="antigua"${catOrden === 'antigua' ? ' selected' : ''}>Por fecha, sin dar y las más antiguas primero</option>
+      </select></label>`;
 }
 
 function pintaCatalogo(){
@@ -1074,20 +1271,44 @@ function pintaCatalogo(){
     return true;
   });
 
+  // el orden por fecha: dentro de cada grupo, por número
+  if(catOrden !== 'num'){
+    const uso = usoDeClases();
+    const f = c => (uso.get(c.id) || {}).ultima || null;
+    lista.sort((a, b) => {
+      const fa = f(a), fb = f(b);
+      if(fa === fb) return (a.num || 9999) - (b.num || 9999);
+      if(catOrden === 'reciente'){
+        if(fa === null) return 1;
+        if(fb === null) return -1;
+        return fb.localeCompare(fa);
+      }
+      if(fa === null) return -1;
+      if(fb === null) return 1;
+      return fa.localeCompare(fb);
+    });
+  }
+
   if(res){
     res.textContent = (todas.length === 1 ? '1 clase escrita' : todas.length + ' clases escritas') +
       (lista.length !== todas.length ? ' · ' + lista.length + ' con estos filtros' : '');
   }
 
+  const usoTodas = usoDeClases();
   caja.innerHTML = lista.length ? lista.map(c => {
     const chips = (c.etiquetas || []).map(e => `<span class="panel-course-chip">${esc(e)}</span>`).join('');
     // una clase solo existe en las pistas que diga; sin el campo, en las tres
     const idiomas = (c.pistas || ['es', 'it', 'en']).map(l =>
       `<a href="${esc(c.pagina)}-${l}.html" target="_blank" rel="noopener">${l.toUpperCase()}</a>`).join('');
     const rel = relacionDe(c);
+    const u = usoTodas.get(c.id);
+    const usoTxt = !u ? 'Sin dar todavía'
+      : !u.ultima ? 'Puesta, aún sin dar'
+      : 'Última vez: ' + fechaCorta(u.ultima) + ' · ' + u.quien +
+        (u.alumnos.size > 1 ? ' · ' + u.alumnos.size + ' alumnos' : '');
     return `<div class="cat-row">
       <div class="cat-tit"><span class="cat-num">${esc(numDe(c))}</span>${esc(c.titulo.es)}</div>
-      <div class="cat-chips">${rel ? `<span class="cat-rel">${esc(rel)}</span>` : ''}${chips}</div>
+      <div class="cat-chips"><span class="cat-uso">${esc(usoTxt)}</span>${rel ? `<span class="cat-rel">${esc(rel)}</span>` : ''}${chips}</div>
       <div class="cat-meta"><span class="cat-niv">${esc(c.nivel || '')}</span></div>
       <div class="cat-abrir">${idiomas}</div>
     </div>`;
@@ -1127,6 +1348,14 @@ document.addEventListener('click', function(e){
 
 document.addEventListener('input', function(e){
   if(e.target && e.target.id === 'cat-buscar'){ catFiltro.q = e.target.value; pintaCatalogo(); }
+});
+
+document.addEventListener('change', function(e){
+  if(e.target && e.target.id === 'cat-orden'){
+    catOrden = e.target.value;
+    try { localStorage.setItem('jn_panel_orden_cat', catOrden); } catch(err) {}
+    pintaCatalogo();
+  }
 });
 
 // ──────────────────── Dar de alta y dar de baja ────────────────────

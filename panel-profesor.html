@@ -243,12 +243,34 @@ tbody tr.al-fila:hover .al-vercl{background:var(--primary);border-color:var(--pr
 [data-theme="dark"] .fi-tit a:hover{color:#c99b6e;border-bottom-color:#c99b6e}
 .fi-tit i{font-size:14px;color:var(--muted);margin-left:5px;vertical-align:baseline}
 .fi-rap{display:inline-block;background:var(--tint);color:var(--muted);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;padding:2px 8px;border-radius:9px;margin-left:8px;vertical-align:middle}
-#fi-clases-dadas,#fi-pagado{min-width:120px}
 .fi-check{display:block;margin-top:14px;font-size:14.5px;cursor:pointer}
 .fi-check input{margin-right:7px;vertical-align:-1px}
 .fi-check b{font-weight:700}
 .fi-check span{display:block;margin:3px 0 0 24px;font-size:13.5px;color:var(--muted);line-height:1.5}
 .pie-nota{display:block;font-weight:400;font-size:13px;margin-top:2px}
+
+/* pestañas: Clases (lo de cada día) y Economía (aparte, sin presión) */
+.pn-tabs{display:flex;gap:4px;margin:0 0 22px;border-bottom:1px solid var(--border)}
+.pn-tab{background:none;border:0;border-bottom:3px solid transparent;margin-bottom:-1px;padding:10px 16px;font-family:var(--font-body);font-size:15.5px;font-weight:600;color:var(--muted);cursor:pointer;display:inline-flex;gap:8px;align-items:center}
+.pn-tab:hover{color:var(--text)}
+.pn-tab.on{color:var(--primary-dark);border-bottom-color:var(--primary)}
+.pn-sel{padding:7px 10px;border-radius:8px;border:1px solid var(--border);background:var(--card-bg);color:var(--text);font-family:var(--font-body);font-size:14px;font-weight:600}
+.al-ordena-movil{display:none}
+.eco-nota{color:var(--muted);font-size:14.5px;margin:0 0 16px}
+.eco-in{width:110px;padding:7px 9px;border:1px solid var(--border);border-radius:8px;background:var(--card-bg);color:var(--text);font-family:var(--font-body);font-size:15px;box-sizing:border-box}
+.eco-in[type=date],.eco-in[type=checkbox]{width:auto}
+tbody tr.eco-fila.baja{opacity:.6}
+.eco-fecha-caja{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.fi-proxbloque .fi-bh{margin-top:0}
+.fi-prox{width:100%;box-sizing:border-box;min-height:96px;padding:10px 12px;border-radius:10px;border:1px solid var(--border);background:var(--card-bg);color:var(--text);font-family:var(--font-body);font-size:15.5px;line-height:1.5;resize:vertical}
+.fi-lista-cab{display:flex;justify-content:space-between;align-items:flex-end;gap:10px 16px;flex-wrap:wrap;margin-top:22px}
+.fi-lista-cab .ficha-h3{margin:0}
+.fi-ordena{font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;display:flex;gap:8px;align-items:center}
+.al-prox-txt{max-width:320px;font-size:13.5px;line-height:1.4;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;white-space:pre-line}
+.al-fecha b{display:block;font-variant-numeric:tabular-nums}
+.al-fecha span{display:block;font-size:12.5px;color:var(--muted);max-width:200px}
+.cat-uso{font-size:12.5px;color:var(--muted);align-self:center;margin-right:4px}
+.cat-ordena{margin-left:auto}
 
 /* móvil: cada alumno es una tarjeta, no una fila de 7 columnas cortada por la derecha */
 @media(max-width:700px){
@@ -260,12 +282,23 @@ body{padding:20px 12px}
 .panel-stat .l{font-size:12px}
 .table-wrap table,.table-wrap tbody{display:block}
 .table-wrap thead{display:none}
-.table-wrap tbody tr.al-fila{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding:12px;border-top:1px solid var(--border)}
-.table-wrap tbody tr.al-fila:first-child{border-top:0}
-.table-wrap tbody tr.al-fila td{display:block;padding:0;border:0}
-.table-wrap tbody tr.al-fila td:nth-child(1),.table-wrap tbody tr.al-fila td:nth-child(2){grid-column:1/-1}
-.table-wrap tbody tr.al-fila td:nth-child(7){grid-column:2/-1}
+.al-ordena-movil{display:block;margin:0 0 10px}
+.al-ordena-movil label{display:flex;gap:8px;align-items:center;font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+.al-ordena-movil select{flex:1;min-width:0;font-size:16px}
+.table-wrap tbody tr.al-fila,.table-wrap tbody tr.eco-fila{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;padding:12px;border-top:1px solid var(--border)}
+.table-wrap tbody tr:first-child{border-top:0}
+.table-wrap tbody tr.al-fila td,.table-wrap tbody tr.eco-fila td{display:block;padding:0;border:0}
+.table-wrap tbody tr.al-fila td:nth-child(1),.table-wrap tbody tr.al-fila td:nth-child(2),.table-wrap tbody tr.al-fila td:nth-child(5),.table-wrap tbody tr.al-fila td:nth-child(6),
+.table-wrap tbody tr.eco-fila td:nth-child(1),.table-wrap tbody tr.eco-fila td:nth-child(4){grid-column:1/-1}
 .table-wrap tbody td[data-label]::before{content:attr(data-label);display:block;font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;margin-bottom:2px}
+.eco-in{width:100%;font-size:16px}
+.eco-in[type=date]{width:auto;flex:1}
+.eco-in[type=checkbox]{width:22px;height:22px}
+.table-wrap tbody tr.al-fila td.vacio{display:none}
+.fi-lista-cab{align-items:stretch}
+.fi-ordena{width:100%}
+.fi-ordena select{flex:1;min-width:0;font-size:16px}
+.cat-ordena{margin-left:0;width:100%}
 .al-vercl{display:flex;justify-content:space-between;width:100%;box-sizing:border-box;padding:11px 12px}
 .panel-link{padding:14px 12px}
 .fi-bloque{padding:12px}
@@ -297,8 +330,12 @@ body{padding:20px 12px}
 <button class="button button-secondary button-sm" id="panel-refresh"><i class="ti ti-refresh"></i> Actualizar</button>
 </div>
 
-<div class="kpis" id="panel-kpis"></div>
+<div class="pn-tabs" role="tablist">
+<button type="button" class="pn-tab on" role="tab" aria-selected="true" data-tab="clases"><i class="ti ti-notebook" aria-hidden="true"></i> Clases</button>
+<button type="button" class="pn-tab" role="tab" aria-selected="false" data-tab="eco"><i class="ti ti-cash" aria-hidden="true"></i> Economía</button>
+</div>
 
+<div id="tab-clases">
 <div class="al-acciones">
 <button class="button button-secondary" id="alta-abrir"><i class="ti ti-user-plus" aria-hidden="true"></i> Dar de alta</button>
 <button class="button button-secondary" id="rap-abrir2" title="Para montar una clase y repartirla entre varios alumnos a la vez"><i class="ti ti-bolt" aria-hidden="true"></i> Clase rápida para varios</button>
@@ -335,14 +372,21 @@ body{padding:20px 12px}
 
 </div>
 
-<div class="table-wrap"><table>
+<div class="al-ordena-movil"><label>Ordenar por
+<select id="al-orden-movil" class="pn-sel">
+<option value="proxima:asc">Próxima clase (la más cercana)</option>
+<option value="ultima:desc">Última clase (la más reciente)</option>
+<option value="ultima:asc">Última clase (la más antigua)</option>
+<option value="nombre:asc">Nombre (A–Z)</option>
+<option value="actividad:desc">Última actividad en la web</option>
+</select></label></div>
+<div class="table-wrap"><table data-t="clases">
 <thead><tr>
 <th class="al-orden" data-col="nombre">Alumno</th>
 <th class="al-orden" data-col="clases">Sus clases</th>
-<th class="al-orden" data-col="practica">Práctica</th>
-<th class="al-orden" data-col="dadas">Clases dadas</th>
-<th class="al-orden" data-col="pagado">Pagado</th>
-<th class="al-orden" data-col="tarifa">Tarifa media</th>
+<th class="al-orden" data-col="ultima">Última clase</th>
+<th class="al-orden" data-col="proxima">Próxima clase</th>
+<th>Para la próxima clase</th>
 <th class="al-orden" data-col="actividad">Últ. actividad</th>
 </tr></thead>
 <tbody id="panel-table-body"></tbody>
@@ -356,8 +400,40 @@ body{padding:20px 12px}
 <button class="button button-secondary button-sm" id="ficha-cerrar"><i class="ti ti-x"></i> Cerrar</button>
 </div>
 
+<div class="fi-bloque fi-proxbloque">
+<h3 class="fi-bh"><i class="ti ti-notebook" aria-hidden="true"></i> Para la próxima clase</h3>
+<textarea class="fi-prox" id="fi-proxima" rows="4" placeholder="Lo que haremos en la siguiente: repasar por y para, empezar el motor, pedirle que me lea sus frases..."></textarea>
+<p class="fi-como">Se guarda al salir del cuadro. Es solo para ti.</p>
+</div>
+
+<div class="fi-lista-cab">
+<h3 class="ficha-h3">Lo que hemos dado <span class="ficha-op">pulsa el título para abrir la clase como la ve él</span></h3>
+<label class="fi-ordena">Ordenar
+<select id="ficha-orden" class="pn-sel">
+<option value="fecha-desc">Por fecha, la última primero</option>
+<option value="fecha-asc">Por fecha, la primera primero</option>
+<option value="num">Por número del catálogo</option>
+</select></label>
+</div>
+<div id="ficha-lista"></div>
+<p class="ficha-estado" id="ficha-estado"></p>
+
+<div class="fi-bloque fi-poner">
+<h3 class="fi-bh">Ponerle una clase</h3>
+<p class="fi-como">Elige una del catálogo, ponle el día y dale a <b>Añadir</b>. Aparece arriba, en «Lo que hemos dado», y él la ve al momento en su «Mis clases».</p>
+<div class="ficha-alta">
+<label>Del catálogo <span class="ficha-op">✓ = ya la tiene</span><select id="ficha-clase"></select></label>
+<label>Fecha <span class="ficha-op">déjala vacía si no te acuerdas</span>
+<input type="date" id="ficha-fecha"></label>
+<button class="button button-primary button-lg" id="ficha-add"><i class="ti ti-plus"></i> Añadir</button>
+<span class="fi-o">o</span>
+<button class="button button-secondary" id="rap-abrir3"><i class="ti ti-bolt" aria-hidden="true"></i> Montar una clase rápida</button>
+</div>
+</div>
+
+
 <div class="fi-bloque">
-<h3 class="fi-bh">Sus datos</h3>
+<h3 class="fi-bh">Sus datos <span class="ficha-op">nombre, nivel, si puede entrar…</span></h3>
 <div class="fi-perfil">
 <label>Nombre<input type="text" id="fi-nombre" placeholder="como le llamas tú" autocomplete="off"></label>
 <label>Idioma<select id="fi-idioma"><option value="">—</option><option value="es">Español</option><option value="it">Italiano</option><option value="en">English</option></select></label>
@@ -368,34 +444,7 @@ body{padding:20px 12px}
 <p class="fi-como" id="fi-aviso-acceso"></p>
 </div>
 
-<div class="fi-bloque fi-cobros">
-<h3 class="fi-bh"><i class="ti ti-cash" aria-hidden="true"></i> Lo que paga</h3>
-<div class="fi-perfil">
-<label>Clases dadas hasta hoy <span class="ficha-op">nº en total</span><input type="number" id="fi-clases-dadas" min="0" step="1" placeholder="0" autocomplete="off"></label>
-<label>Pagado hasta la fecha <span class="ficha-op">€ en total</span><input type="number" id="fi-pagado" min="0" step="0.5" placeholder="0" autocomplete="off"></label>
-<label>Al día a fecha de<input type="date" id="fi-pagado-fecha"></label>
-<button class="button button-secondary" id="fi-cobro-hoy"><i class="ti ti-check"></i> Actualizar a hoy</button>
-</div>
-<label class="fi-check"><input type="checkbox" id="fi-sincobro"> <b>Este no cuenta para el dinero</b>
-<span>Para tu propia ficha, y para quien recibe clases pero las paga otra persona. Sigue saliendo en la tabla y con su acceso, pero se queda fuera de las medias y de lo cobrado: si no, su cero las hunde.</span></label>
-<p class="fi-como">Las clases dadas y lo pagado los pones tú; la tarifa media sale sola (pagado ÷ clases dadas). «Actualizar a hoy» solo deja la fecha de hoy, para que sepas hasta cuándo está cuadrado.</p>
-</div>
-<div class="fi-bloque fi-poner">
-<h3 class="fi-bh"><span class="fi-paso">1</span> Ponerle una clase</h3>
-<p class="fi-como">Elige una del catálogo, ponle el día y dale a <b>Añadir</b>. Aparece abajo, en «Sus clases», y él la ve al momento en su «Mis clases».</p>
-<div class="ficha-alta">
-<label>Del catálogo<select id="ficha-clase"></select></label>
-<label>Fecha <span class="ficha-op">déjala vacía si no te acuerdas</span>
-<input type="date" id="ficha-fecha"></label>
-<button class="button button-primary button-lg" id="ficha-add"><i class="ti ti-plus"></i> Añadir</button>
-<span class="fi-o">o</span>
-<button class="button button-secondary" id="rap-abrir3"><i class="ti ti-bolt" aria-hidden="true"></i> Montar una clase rápida</button>
-</div>
-</div>
 
-<h3 class="ficha-h3"><span class="fi-paso">2</span> Sus clases <span class="ficha-op">pulsa el título para abrir la clase como la ve él</span></h3>
-<div id="ficha-lista"></div>
-<p class="ficha-estado" id="ficha-estado"></p>
 
 
 
@@ -489,6 +538,25 @@ Si solo quieres que deje de entrar, ponle «No entra» en «¿Ve la web?» ahí 
 <input type="text" id="link-url" readonly>
 <button class="button button-primary" id="link-copy">Copiar</button>
 </div>
+</div>
+</div>
+
+<div id="tab-eco" style="display:none">
+<p class="eco-nota">Esto es solo para ti. No hace falta tenerlo al día: rellénalo cuando te venga bien.</p>
+<div class="kpis" id="panel-kpis"></div>
+<p class="ficha-estado" id="eco-estado"></p>
+<div class="table-wrap"><table data-t="eco">
+<thead><tr>
+<th class="al-orden" data-col="nombre">Alumno</th>
+<th class="al-orden" data-col="dadas">Clases dadas</th>
+<th class="al-orden" data-col="pagado">Pagado (€)</th>
+<th>Al día a fecha de</th>
+<th class="al-orden" data-col="tarifa">Tarifa media</th>
+<th title="Para tu ficha o para quien recibe clases que paga otra persona: no entra en las medias">No cuenta</th>
+</tr></thead>
+<tbody id="eco-body"></tbody>
+</table></div>
+<p class="fi-como">Tarifa media = pagado ÷ clases dadas. Las medias de arriba suman a todos a la vez, y dejan fuera a quien está marcado en «No cuenta».</p>
 </div>
 </div>
 
@@ -662,6 +730,6 @@ Si solo quieres que deje de entrar, ponle «No entra» en «¿Ve la web?» ahí 
 <script src="clases.js?v=b45f79a397"></script>
 <script src="temas.js?v=29497494e8"></script>
 <script type="module" src="firebase-sync.js?v=34c910e4bb"></script>
-<script type="module" src="firebase-panel.js?v=06b2f49324"></script>
+<script type="module" src="firebase-panel.js?v=1f8ef534ba"></script>
 </body>
 </html>

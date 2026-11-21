@@ -93,40 +93,27 @@ with sync_playwright() as p:
     pg.locator('.al-fbtn[data-f="estado"][data-v="alta"]').click(); pg.wait_for_timeout(350)
 
     fila = pg.locator('tr[data-ficha="anna@x.com"]')
-    comprueba("25 €" in fila.inner_text(), "la tarifa media sale calculada (400 ÷ 16)")
-    comprueba("400 €" in fila.inner_text(), "lo pagado sale en su fila")
     comprueba("ayer" in fila.inner_text(), "la última actividad se dice en días, no en fecha y hora")
-
-    print("\n═══ los números de arriba ═══")
-    kpis = pg.locator("#panel-kpis").inner_text()
-    comprueba("Alumnos de alta" in kpis and "5" in kpis, "cuántos hay de alta")
-    comprueba("400 €" in kpis and "Cobrado en total" in kpis, "lo cobrado")
-    comprueba("Tarifa media ahora" in kpis and "Tarifa media histórica" in kpis,
-              "las dos tarifas medias, cada una en su tarjeta")
-    comprueba("Clases dadas en total" in kpis and "24" in kpis,
-              "y el total de clases dadas, también las que no se cobran")
-    comprueba("El que más ha pagado" in kpis and "Anna" in kpis, "quién paga más")
-    comprueba("El de más clases" in kpis, "y quién tiene más clases dadas")
-    comprueba(pg.locator("#panel-table-foot").count() == 0,
-              "y no queda pie de tabla: los números están arriba")
+    comprueba("gustan" in fila.inner_text() and "Por y para" in fila.inner_text(),
+              "su fila dice cuál fue la última clase y cuál es la próxima")
+    comprueba("€" not in pg.locator("#tab-clases").inner_text(),
+              "en «Clases» no sale ni un euro")
+    comprueba(not pg.locator("#tab-eco").is_visible() and not pg.locator("#panel-kpis").is_visible(),
+              "y la economía no se ve al abrir: está en su pestaña")
+    nombres = [r.locator(".al-quien b").inner_text() for r in pg.locator(".al-fila").all()]
+    comprueba(nombres[:2] == ["Brandon", "Anna"],
+              "de salida van primero los que tienen la clase más cercana (%s)" % nombres[:3])
 
     print("\n═══ ordenar pulsando la cabecera ═══")
-    def columna(n):
-        return [td.inner_text().split("\n")[0] for td in pg.locator('.al-fila td:nth-child(%d)' % n).all()]
-    pg.locator('th[data-col="dadas"]').click(); pg.wait_for_timeout(350)
-    abajo = [x for x in columna(4) if x != "—"]
-    comprueba(abajo == sorted(abajo, key=int, reverse=True),
-              "un clic ordena de más a menos (%s)" % abajo)
-    pg.locator('th[data-col="dadas"]').click(); pg.wait_for_timeout(350)
-    arriba = [x for x in columna(4) if x != "—"]
-    comprueba(arriba == sorted(arriba, key=int),
-              "y el segundo, de menos a más (%s)" % arriba)
-    comprueba(pg.evaluate("document.querySelector('th.al-orden.on').dataset.col") == "dadas",
-              "la flecha se queda en la columna por la que ordena")
-    pg.locator('th[data-col="nombre"]').click(); pg.wait_for_timeout(350)
+    pg.locator('th[data-col="ultima"]').click(); pg.wait_for_timeout(350)
+    comprueba(pg.locator(".al-fila .al-quien b").first.inner_text() == "Anna",
+              "por última clase, la más reciente primero")
+    pg.locator('table[data-t="clases"] th[data-col="nombre"]').click(); pg.wait_for_timeout(350)
     nombres = [r.locator(".al-quien b").inner_text() for r in pg.locator(".al-fila").all()]
     comprueba(nombres == sorted(nombres, key=str.lower),
               "los nombres empiezan por la A, no por lo más alto (%s)" % nombres[:3])
+    comprueba(pg.evaluate("document.querySelector('table[data-t=clases] th.al-orden.on').dataset.col") == "nombre",
+              "la flecha se queda en la columna por la que ordena")
 
     print("\n═══ llegar a sus clases ═══")
     pg.locator('tr[data-ficha="anna@x.com"] .al-vercl').click(); pg.wait_for_timeout(700)
@@ -153,46 +140,74 @@ with sync_playwright() as p:
               "y el botón de su fila ya dice 4")
 
     # quitarla otra vez
-    pg.locator("#ficha-lista [data-quitar]").first.click(); pg.wait_for_timeout(900)
+    pg.locator("#ficha-lista .fi-row").filter(has=pg.locator('.fi-fecha[value="%s"]' % mas(3))) \
+        .locator("[data-quitar]").click(); pg.wait_for_timeout(900)
     comprueba(pg.evaluate("window.__DB['anna@x.com'].clases.length") == antes,
               "y se puede quitar")
 
-    print("\n═══ lo que paga ═══")
-    pg.fill("#fi-clases-dadas", "10")
-    pg.fill("#fi-pagado", "505")
-    pg.locator("#fi-cobro-hoy").click(); pg.wait_for_timeout(900)
+    print("\n═══ la pestaña de economía ═══")
+    pg.locator('.pn-tab[data-tab="eco"]').click(); pg.wait_for_timeout(300)
+    comprueba(pg.locator("#tab-eco").is_visible() and not pg.locator("#tab-clases").is_visible(),
+              "pulsarla enseña la economía y esconde lo demás")
+    kpis = pg.locator("#panel-kpis").inner_text()
+    comprueba("Alumnos de alta" in kpis and "5" in kpis, "cuántos hay de alta")
+    comprueba("400 €" in kpis and "Cobrado en total" in kpis, "lo cobrado")
+    comprueba("Tarifa media ahora" in kpis and "Tarifa media histórica" in kpis,
+              "las dos tarifas medias, cada una en su tarjeta")
+    comprueba("Clases dadas en total" in kpis and "24" in kpis,
+              "y el total de clases dadas, también las que no se cobran")
+    comprueba("El que más ha pagado" in kpis and "Anna" in kpis, "quién paga más")
+    comprueba("El de más clases" in kpis, "y quién tiene más clases dadas")
+    fe = pg.locator('tr[data-eco="anna@x.com"]')
+    comprueba(fe.locator('[data-campo="clasesDadas"]').input_value() == "16" and
+              fe.locator('[data-campo="pagado"]').input_value() == "400",
+              "los números de cada alumno salen en su fila, listos para editar")
+    comprueba("25 €" in fe.locator(".eco-tarifa").inner_text(), "la tarifa media sale calculada (400 ÷ 16)")
+
+    def col(campo):
+        return [i.input_value() for i in pg.locator('.eco-fila [data-campo="%s"]' % campo).all()]
+    pg.locator('th[data-col="dadas"]').click(); pg.wait_for_timeout(350)
+    abajo = [int(x) for x in col("clasesDadas") if x != ""]
+    comprueba(abajo == sorted(abajo, reverse=True), "un clic ordena de más a menos (%s)" % abajo)
+    pg.locator('th[data-col="dadas"]').click(); pg.wait_for_timeout(350)
+    arriba = [int(x) for x in col("clasesDadas") if x != ""]
+    comprueba(arriba == sorted(arriba), "y el segundo, de menos a más (%s)" % arriba)
+
+    fe = pg.locator('tr[data-eco="anna@x.com"]')
+    fe.locator('[data-campo="clasesDadas"]').fill("10")
+    fe.locator('[data-campo="pagado"]').fill("505")
+    fe.locator('[data-eco-hoy]').click(); pg.wait_for_timeout(900)
     d = pg.evaluate("({t: window.__DB['anna@x.com'].clasesDadas, p: window.__DB['anna@x.com'].pagado,"
                     " f: window.__DB['anna@x.com'].pagadoAt})")
     comprueba(d["t"] == 10 and d["p"] == 505, "se guarda tal cual se escribe (%s)" % d)
-    comprueba(d["f"] == HOY, "«Actualizar a hoy» deja la fecha de hoy y nada más (%s)" % d["f"])
-    comprueba("505 €" in pg.locator('tr[data-ficha="anna@x.com"]').inner_text(),
-              "y la tabla lo enseña al momento")
-    comprueba("50,50 €" in pg.locator('tr[data-ficha="anna@x.com"]').inner_text(),
-              "y la tarifa se recalcula sola, con la coma decimal española (505 ÷ 10)")
+    comprueba(d["f"] == HOY, "«Hoy» deja la fecha de hoy y nada más (%s)" % d["f"])
+    comprueba("50,50 €" in fe.locator(".eco-tarifa").inner_text(),
+              "la tarifa se recalcula sola, con la coma decimal española (505 ÷ 10)")
+    comprueba("505 €" in pg.locator("#panel-kpis").inner_text(), "y los números de arriba se enteran")
     # vaciarlo tiene que borrarlo, no dejar un 0
-    pg.fill("#fi-clases-dadas", "")
-    pg.locator("#fi-pagado").click(); pg.wait_for_timeout(900)
+    fe.locator('[data-campo="clasesDadas"]').fill("")
+    fe.locator('[data-campo="pagado"]').click(); pg.wait_for_timeout(900)
     comprueba(pg.evaluate("window.__DB['anna@x.com'].clasesDadas") is None,
               "vaciar las clases dadas las deja vacía, no en cero")
 
     print("\n═══ quién cuenta para el dinero ═══")
     # Sabrina da 8 clases y paga 0 porque paga otra: si contara, la media se
     # hundiría. Y la ficha del propio profesor tampoco es un cliente.
-    comprueba("no cuenta" in pg.locator('tr[data-ficha="sabrina@x.com"]').inner_text(),
+    comprueba("no cuenta" in pg.locator('tr[data-eco="sabrina@x.com"] .eco-tarifa').inner_text(),
               "la que paga otra persona sale marcada «no cuenta»")
-    comprueba("no cuenta" in pg.locator('tr[data-ficha="%s"]' % PROF).inner_text(),
+    comprueba("no cuenta" in pg.locator('tr[data-eco="%s"] .eco-tarifa' % PROF).inner_text(),
               "y la ficha del propio profesor, también, sin tocar nada")
     kpis_con = pg.locator("#panel-kpis").inner_text()
-    pg.locator('tr[data-ficha="sabrina@x.com"] .al-vercl').click(); pg.wait_for_timeout(700)
-    comprueba(pg.locator("#fi-sincobro").is_checked(), "su casilla sale marcada en la ficha")
-    pg.locator("#fi-sincobro").uncheck(); pg.wait_for_timeout(900)
+    caja = pg.locator('tr[data-eco="sabrina@x.com"] [data-campo="sinCobro"]')
+    comprueba(caja.is_checked(), "su casilla sale marcada")
+    caja.uncheck(); pg.wait_for_timeout(900)
     comprueba(pg.evaluate("window.__DB['sabrina@x.com'].sinCobro") is False, "desmarcarla se guarda")
     comprueba(pg.locator("#panel-kpis").inner_text() != kpis_con,
               "y entonces sí entra en la media, que cambia")
-    pg.locator("#fi-sincobro").check(); pg.wait_for_timeout(900)
+    caja.check(); pg.wait_for_timeout(900)
     comprueba(pg.locator("#panel-kpis").inner_text() == kpis_con,
               "y volver a marcarla lo deja como estaba")
-    pg.locator("#ficha-cerrar").click(); pg.wait_for_timeout(300)
+    pg.locator('.pn-tab[data-tab="clases"]').click(); pg.wait_for_timeout(300)
 
     print("\n═══ de baja pero entrando, y de alta sin entrar ═══")
     # Dar de baja y quitar el acceso son dos cosas distintas: hay quien se da
@@ -231,10 +246,44 @@ with sync_playwright() as p:
     comprueba(pg.evaluate("window.__DB['anna@x.com'].apuntes !== undefined"),
               "pero sus apuntes siguen guardados: solo se ha quitado de la vista")
     print("\n═══ el orden de la ficha ═══")
-    bloques = [h.inner_text().strip().split("\n")[0]
+    bloques = [h.inner_text().strip().split("\n")[0].upper()
                for h in pg.locator("#ficha .fi-bh, #ficha .ficha-h3").all()]
-    comprueba(bloques[0].startswith("SUS DATOS") and "PAGA" in bloques[1] and "PONERLE" in bloques[2],
-              "sus datos, lo que paga, y las clases al final (%s)" % bloques)
+    comprueba(bloques[0].startswith("PARA LA PRÓXIMA") and bloques[1].startswith("LO QUE HEMOS DADO") and
+              bloques[2].startswith("PONERLE") and bloques[3].startswith("SUS DATOS"),
+              "primero lo que harás, luego lo dado, luego ponerle una y al final sus datos (%s)" % bloques)
+    comprueba("PAGA" not in " ".join(bloques) and "€" not in pg.locator("#ficha").inner_text(),
+              "y en la ficha no hay nada de dinero")
+
+    print("\n═══ para la próxima clase ═══")
+    ms0 = pg.evaluate("window.__DB['anna@x.com'].updatedAt.__ms")
+    pg.fill("#fi-proxima", "Repasar el pluscuamperfecto\ny empezar el motor")
+    pg.locator("#ficha-quien").click(); pg.wait_for_timeout(900)
+    comprueba(pg.evaluate("window.__DB['anna@x.com'].paraProxima") ==
+              "Repasar el pluscuamperfecto\ny empezar el motor", "al salir del cuadro se guarda en su ficha")
+    comprueba("pluscuamperfecto" in pg.locator('tr[data-ficha="anna@x.com"] .al-prox-txt').inner_text(),
+              "y sale en su fila de la lista")
+    comprueba(pg.evaluate("window.__DB['anna@x.com'].updatedAt.__ms") == ms0,
+              "sin mover su «última actividad», que es del alumno")
+
+    print("\n═══ lo que hemos dado: por fecha o por número ═══")
+    def fechas():
+        return [i.input_value() for i in pg.locator("#ficha-lista .fi-fecha").all()]
+    comprueba(fechas() == [mas(4), mas(-2), mas(-7)], "de salida, por fecha y la última primero (%s)" % fechas())
+    pg.select_option("#ficha-orden", "fecha-asc"); pg.wait_for_timeout(300)
+    comprueba(fechas() == [mas(-7), mas(-2), mas(4)], "por fecha, la primera primero (%s)" % fechas())
+    pg.select_option("#ficha-orden", "num"); pg.wait_for_timeout(300)
+    numeros = [t.inner_text().strip() for t in pg.locator("#ficha-lista .fi-tit .cat-num").all()]
+    comprueba(numeros == sorted(numeros) and len(numeros) == 2,
+              "por número del catálogo (%s)" % numeros)
+    comprueba("RÁPIDA" in pg.locator("#ficha-lista .fi-row").last.inner_text().upper(),
+              "y la clase rápida, que no tiene número, va detrás")
+    pg.select_option("#ficha-orden", "fecha-desc"); pg.wait_for_timeout(300)
+
+    print("\n═══ elegir clase: lo que ya tiene va con ✓ ═══")
+    con = pg.locator("#ficha-clase option").filter(has_text="✓").count()
+    comprueba(con == 2, "las dos del catálogo que ya tiene llevan ✓ (%d)" % con)
+    comprueba(not pg.locator('#ficha-clase option[value="sobre-ti"]').inner_text().startswith("✓"),
+              "y las que no tiene, no")
     pg.locator("#ficha-cerrar").click(); pg.wait_for_timeout(300)
 
     print("\n═══ buscar algo que no está ═══")
@@ -297,6 +346,24 @@ with sync_playwright() as p:
               % sueltas)
     nums = [d["n"] for d in datos]
     comprueba(nums == sorted(nums), "el catálogo sale ordenado por número")
+
+    def txt_fila(num):
+        return [r for r in pg.locator(".cat-row").all()
+                if r.locator(".cat-num").inner_text().strip() == num][0].inner_text()
+    comprueba("Última vez" in txt_fila("#510") and "Anna" in txt_fila("#510") and "2 alumnos" in txt_fila("#510"),
+              "cada clase dice la última vez que se dio, a quién y a cuántos")
+    comprueba("Puesta, aún sin dar" in txt_fila("#110") or "Sin dar todavía" in txt_fila("#110"),
+              "y las que no se han dado lo dicen")
+    pg.select_option("#cat-orden", "reciente"); pg.wait_for_timeout(300)
+    primero = pg.locator(".cat-num").first.inner_text().strip()
+    comprueba(primero == "#180", "por fecha, la última dada va arriba (%s)" % primero)
+    pg.select_option("#cat-orden", "antigua"); pg.wait_for_timeout(300)
+    filas = [r.inner_text() for r in pg.locator(".cat-row").all()]
+    comprueba("Última vez" not in filas[0] and "Última vez" in filas[-1] and
+              pg.locator(".cat-num").last.inner_text().strip() == "#180",
+              "y al revés: las sin dar primero y la dada más recientemente al final")
+    pg.select_option("#cat-orden", "num"); pg.wait_for_timeout(300)
+
     # y la prueba de fuego: meter una clase en el hueco no mueve a ninguna.
     # Se cuela una de mentira con el 115 y tiene que caer entre la 110 y la 120.
     pg.evaluate("""window.JN_CLASES.push({num:115, id:'__prueba', pagina:'clase-sonidos',
@@ -354,6 +421,25 @@ with sync_playwright() as p:
     comprueba(pg.evaluate("window.__DB['%s'].visitCount === undefined" % PROF),
               "abrir el panel no le apunta ninguna visita en su ficha")
 
+    # ── en el móvil ──
+    print("\n═══ en el móvil ═══")
+    c.close()
+    c = br.new_context(viewport={"width": 390, "height": 844}, is_mobile=True, has_touch=True)
+    monta(c, json.loads(json.dumps(DB)), profesor=PROF)
+    c.add_init_script("localStorage.setItem('__falso_usuario','%s');" % PROF)
+    pg = c.new_page()
+    pg.on("pageerror", lambda e: err.append("JS: %s" % e))
+    pg.goto(B + "/panel-profesor.html", wait_until="domcontentloaded")
+    pg.wait_for_timeout(2600)
+    ancho = lambda: pg.evaluate("document.documentElement.scrollWidth <= innerWidth")
+    comprueba(ancho(), "la lista no se sale de la pantalla")
+    pg.locator('tr[data-ficha="anna@x.com"] .al-vercl').click(); pg.wait_for_timeout(900)
+    comprueba(ancho(), "ni la ficha abierta")
+    pg.select_option("#al-orden-movil", "nombre:asc"); pg.wait_for_timeout(300)
+    comprueba(pg.locator(".al-fila .al-quien b").first.inner_text() == "Anna",
+              "y sin cabeceras se ordena con el desplegable")
+    pg.locator('.pn-tab[data-tab="eco"]').click(); pg.wait_for_timeout(400)
+    comprueba(ancho(), "ni la economía")
     c.close()
 
     # ── la puerta de una clase, para él ──
