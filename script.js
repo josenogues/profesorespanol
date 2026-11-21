@@ -156,6 +156,10 @@ document.addEventListener("jn-modo", e => marcaModo(e.detail));
 
   function applyI18n(){
     const t = getTrack();
+    // las páginas comunes (portada, «Sobre mí»…) van en el idioma del alumno:
+    // así un lector de pantalla no lee el italiano o el inglés con voz española.
+    // Las de cada pista (-it.html, -en.html) ya lo llevan puesto.
+    if(!/-(es|it|en)\.html$/.test(location.pathname)) document.documentElement.lang = (t === 'it' || t === 'en') ? t : 'es';
     document.querySelectorAll('.i18n').forEach(el=>{
       const val = t === 'it' ? el.dataset.it : t === 'en' ? el.dataset.en : el.dataset.es;
       if(val) el.textContent = val;
@@ -1082,7 +1086,7 @@ document.addEventListener("jn-modo", e => marcaModo(e.detail));
     atencion: {es:'Especial atención', it:'Attenzione a questi', en:'Watch out for this'},
     profesional: {es:'Español profesional', it:'Spagnolo al lavoro', en:'Business Spanish'},
     clases: {es:'Mis clases', it:'Le mie lezioni', en:'My classes'},
-    ejercicios: {es:'Práctica libre', it:'Pratica libera', en:'Free practice'}
+    ejercicios: {es:'Práctica', it:'Pratica', en:'Practice'}
   };
   // adónde lleva: la primera página de cada sección, la misma que en la portada
   const portada = {
@@ -1354,7 +1358,7 @@ document.addEventListener("jn-modo", e => marcaModo(e.detail));
   // entonces se busca en todas. Antes era un solo archivo de 450 KB con las
   // tres pistas. El ?v= de cada uno lo pone herramientas/versiones.py.
   const PARTES = {
-    comun: 'search-index-comun.js?v=7aacba98ee',
+    comun: 'search-index-comun.js?v=d1d869e5eb',
     es: 'search-index-es.js?v=b8fda19107',
     it: 'search-index-it.js?v=3d42cdaef8',
     en: 'search-index-en.js?v=174ea5cf50'

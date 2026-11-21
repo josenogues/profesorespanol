@@ -11,13 +11,34 @@
   if(!saludo) return;
   const prox = document.getElementById('hola-prox');
   const hoyBtn = document.getElementById('hola-hoy');
+  const botones = hoyBtn.parentNode;
   const NOMBRE = 'jn_nombre';
 
   const T = {
-    es: { proxima: 'Tu próxima clase:' },
-    it: { proxima: 'La tua prossima lezione:' },
-    en: { proxima: 'Your next class:' }
+    es: { proxima: 'Tu próxima clase:', hoy: 'hoy', manana: 'mañana', dentro: n => 'dentro de ' + n + ' días',
+          primera: 'Tu primera clase saldrá aquí en cuanto José la apunte.', reservar: 'Reservar clase' },
+    it: { proxima: 'La tua prossima lezione:', hoy: 'oggi', manana: 'domani', dentro: n => 'tra ' + n + ' giorni',
+          primera: 'La tua prima lezione apparirà qui appena José la segna.', reservar: 'Prenota lezione' },
+    en: { proxima: 'Your next class:', hoy: 'today', manana: 'tomorrow', dentro: n => 'in ' + n + ' days',
+          primera: 'Your first class will show up here as soon as José adds it.', reservar: 'Book a class' }
   };
+  const RESERVAR = 'https://tidycal.com/josenogues';
+
+  // la fecha de hoy en la hora del alumno (no la de Londres): con toISOString,
+  // en América la clase de hoy desaparecía por la tarde
+  function hoyLocal(){
+    const d = new Date();
+    return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+  }
+  // «hoy», «mañana», «dentro de 3 días»; de una semana en adelante, nada
+  function cuando(iso, hoy, L){
+    const t = T[L] || T.es;
+    const dias = Math.round((new Date(iso + 'T12:00:00') - new Date(hoy + 'T12:00:00')) / 864e5);
+    if(dias === 0) return t.hoy;
+    if(dias === 1) return t.manana;
+    if(dias > 1 && dias < 7) return t.dentro(dias);
+    return '';
+  }
   function pista(){
     const t = localStorage.getItem('jn_track');
     return (t === 'it' || t === 'en') ? t : 'es';
@@ -36,14 +57,50 @@
     return d.toLocaleDateString({ es: 'es-ES', it: 'it-IT', en: 'en-GB' }[L], { weekday: 'long', day: 'numeric', month: 'long' });
   }
 
+  // el botón de reservar, solo para quien aún no tiene clases: sale en el
+  // sitio de «cinco minutos», que a esa persona todavía no le toca
+  let reservar = null;
+  function botonReservar(L){
+    if(!reservar){
+      reservar = document.createElement('a');
+      reservar.className = 'hola-btn hola-btn-oro';
+      reservar.id = 'hola-reservar';
+      reservar.href = RESERVAR;
+      reservar.target = '_blank';
+      reservar.rel = 'noopener noreferrer';
+      botones.insertBefore(reservar, botones.firstChild);
+    }
+    reservar.innerHTML = '<i class="ti ti-calendar" aria-hidden="true"></i> ';
+    reservar.append((T[L] || T.es).reservar);
+    reservar.hidden = false;
+  }
+
   let ficha = null;
   function pinta(){
     const L = pista();
+    const t = T[L] || T.es;
+    if(reservar) reservar.hidden = true;
     if(!ficha){ prox.hidden = true; hoyBtn.hidden = true; return; }
-    const hoy = new Date().toISOString().slice(0, 10);
+    const hoy = hoyLocal();
     const clases = Array.isArray(ficha.clases) ? ficha.clases : [];
+    prox.textContent = '';
+    prox.classList.remove('sin');
+    const ico = document.createElement('i');
+    ico.className = 'ti ti-calendar-event';
+    ico.setAttribute('aria-hidden', 'true');
 
-    // la próxima: la primera con fecha de hoy en adelante
+    // sin ninguna clase todavía: qué va a pasar y cómo reservar
+    if(!clases.length){
+      prox.classList.add('sin');
+      prox.append(ico, ' ' + t.primera);
+      prox.hidden = false;
+      hoyBtn.hidden = true;
+      botonReservar(L);
+      return;
+    }
+
+    // la próxima: la primera con fecha de hoy en adelante; lleva a «Mis
+    // clases», donde está con todo lo demás
     const futura = clases.filter(a => a.fecha && a.fecha >= hoy)
       .sort((a, b) => a.fecha.localeCompare(b.fecha))[0];
     if(futura){
@@ -55,13 +112,13 @@
         const c = window.jnClasePorId(futura.id);
         titulo = c ? ((c.titulo && (c.titulo[L] || c.titulo.es)) || '') : '';
       }
-      prox.textContent = '';
-      const ico = document.createElement('i');
-      ico.className = 'ti ti-calendar-event';
-      ico.setAttribute('aria-hidden', 'true');
+      const rel = cuando(futura.fecha, hoy, L);
+      const a = document.createElement('a');
+      a.href = 'mis-clases-' + L + '.html';
       const b = document.createElement('b');
-      b.textContent = (T[L] || T.es).proxima;
-      prox.append(ico, ' ', b, ' ' + fechaLarga(futura.fecha, L) + (titulo ? ' · ' + titulo : ''));
+      b.textContent = t.proxima;
+      a.append(b, ' ' + (rel ? rel + ', ' : '') + fechaLarga(futura.fecha, L) + (titulo ? ' · ' + titulo : ''));
+      prox.append(ico, ' ', a);
       prox.hidden = false;
     } else {
       prox.hidden = true;

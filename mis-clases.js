@@ -130,7 +130,11 @@
     return d.toLocaleDateString(LOCALE, { day: 'numeric', month: 'long' });
   }
 
-  function hoyISO(){ return new Date().toISOString().slice(0, 10); }
+  // en la hora del alumno, no en la de Londres (toISOString va en UTC)
+  function hoyISO(){
+    const d = new Date();
+    return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+  }
 
   function mesesDesde(iso){
     const d = new Date(iso + 'T12:00:00');
@@ -220,7 +224,7 @@
 
     if(!filas.length){
       pinta('<div class="placeholder-box">' +
-        '<i class="ti ti-notebook" style="font-size:42px;color:var(--c-clases);display:block;margin-bottom:14px"></i>' +
+        '<i class="ti ti-chalkboard-teacher" style="font-size:42px;color:var(--c-clases);display:block;margin-bottom:14px"></i>' +
         '<h3 style="font-size:20px;margin-bottom:10px;color:var(--text)">' + esc(T.sinClases) + '</h3>' +
         '<p style="max-width:520px;margin:0 auto 22px;font-weight:400">' + esc(T.sinClasesP) + '</p>' +
         '<a href="ejercicios-' + track + '.html" class="button button-primary">' +

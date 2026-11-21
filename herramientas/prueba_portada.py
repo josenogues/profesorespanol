@@ -64,6 +64,11 @@ with sync_playwright() as p:
     prox = pg.locator("#hola-prox")
     comprueba(prox.is_visible() and "La tua prossima lezione:" in prox.inner_text() and "Si tuviera dinero" in prox.inner_text()
               and "Cuando llegues" not in prox.inner_text(), "enseña la próxima clase, que es la más cercana, y en italiano")
+    comprueba("tra 3 giorni," in prox.inner_text(), "y dice cuánto falta («tra 3 giorni»)")
+    comprueba(prox.locator("a").get_attribute("href") == "mis-clases-it.html", "y lleva a «Mis clases»")
+    comprueba(pg.evaluate("document.documentElement.lang") == "it", "la página dice que está en italiano (lectores de pantalla)")
+    comprueba(not pg.locator(".page-header .breadcrumb").is_visible(), "en el ordenador, sin ruta «Home» suelta")
+    comprueba(not pg.locator("#hola-reservar").is_visible(), "quien ya tiene clases no ve «Reservar clase»")
     hoy = pg.locator("#hola-hoy")
     comprueba(hoy.is_visible() and hoy.get_attribute("href") == "ejercicios-it.html?hoy=t:por-para,motor",
               "«cinco minutos» lleva a lo ya visto, de lo último a lo más antiguo (%s)" % hoy.get_attribute("href"))
@@ -71,8 +76,11 @@ with sync_playwright() as p:
     # cambiar de idioma sin recargar
     pg.locator('.lang-track-btn[data-track="en"]').click()
     pg.wait_for_timeout(300)
-    comprueba("Your next class:" in prox.inner_text() and hoy.get_attribute("href").startswith("ejercicios-en.html"),
+    comprueba("Your next class:" in prox.inner_text() and "in 3 days," in prox.inner_text()
+              and hoy.get_attribute("href").startswith("ejercicios-en.html"),
               "al pasar a inglés cambian la próxima clase y el enlace")
+    comprueba(prox.locator("a").get_attribute("href") == "mis-clases-en.html" and pg.evaluate("document.documentElement.lang") == "en",
+              "y también el enlace de la próxima clase y el idioma de la página")
     comprueba(pg.locator("#hola-saludo").inner_text().strip() == "¡Hola, Anna!", "y el saludo sigue en español")
 
     print("\n═══ adónde llevan las cosas ═══")
@@ -106,8 +114,13 @@ with sync_playwright() as p:
     print("\n═══ sin nombre y sin clases ═══")
     c, pg = abre(br, "nueva@x.com", "es")
     comprueba(pg.locator("#hola-saludo").inner_text().strip() == "¡Hola!", "sin nombre en la ficha, saluda a secas")
-    comprueba(not pg.locator("#hola-prox").is_visible() and not pg.locator("#hola-hoy").is_visible(),
-              "sin clases, ni próxima clase ni «cinco minutos»")
+    comprueba(not pg.locator("#hola-hoy").is_visible(), "sin clases, no hay «cinco minutos»")
+    comprueba(pg.locator("#hola-prox").is_visible() and "Tu primera clase saldrá aquí" in pg.locator("#hola-prox").inner_text(),
+              "pero se le dice que su primera clase saldrá ahí")
+    res = pg.locator("#hola-reservar")
+    comprueba(res.is_visible() and res.get_attribute("href") == "https://tidycal.com/josenogues" and "Reservar clase" in res.inner_text(),
+              "y tiene «Reservar clase» a mano")
+    comprueba(pg.locator(".hola-btn-linea").is_visible(), "sin quitarle «Entrar a clase», por si la primera es ya")
     comprueba(pg.locator('.puerta[data-base="mis-clases"]').is_visible(), "pero «Mis clases» está")
     c.close()
 
@@ -117,6 +130,7 @@ with sync_playwright() as p:
         comprueba(pg.evaluate("document.documentElement.scrollWidth <= innerWidth"), "a %d px nada se sale por los lados" % ancho)
         comprueba(pg.evaluate("document.getElementById('hola-saludo').getBoundingClientRect().top") < 330,
                   "a %d px el saludo está arriba, a la vista" % ancho)
+        comprueba(pg.locator(".hola-globos span").nth(2).is_visible(), "a %d px se ven los tres globos" % ancho)
         c.close()
     br.close()
 

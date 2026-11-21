@@ -1341,7 +1341,7 @@ body[data-category="clases"] .eyebrow{background:var(--c-clases-t);color:var(--c
 .cl-hoy-cab b{font-family:var(--font-head);font-weight:800;font-size:19px;line-height:1.2}
 .cl-hoy-sub{display:block;margin:8px 0 14px;font-size:14px;line-height:1.45;color:rgba(255,255,255,.84)}
 .cl-hoy-ir{display:flex;align-items:center;justify-content:center;gap:6px;background:var(--gold);color:#232220;
-  box-shadow:0 3px 0 #b97c0c;border-radius:999px;padding:10px 18px;font-family:var(--font-head);font-weight:700;font-size:15px}
+  border-radius:999px;padding:10px 18px;font-family:var(--font-head);font-weight:700;font-size:15px}
 .cl-hoy-ir .ti{margin:0}
 [data-theme="dark"] .cl-hoy{background:linear-gradient(135deg,#2c3560 0%,#3d4a82 55%,#55499e 100%);box-shadow:0 8px 20px rgba(0,0,0,.4)}
 [data-theme="dark"] .cl-hoy:hover,[data-theme="dark"] .cl-hoy:focus-visible{box-shadow:0 12px 26px rgba(0,0,0,.5)}
@@ -1455,21 +1455,24 @@ body:has(.access-gate-overlay) .cita-boton{display:none}
   background:linear-gradient(135deg,#3A4570 0%,#4b5894 55%,#6a5fc0 100%);color:#fff;
   border-radius:22px;padding:34px 36px;margin-bottom:34px;box-shadow:0 10px 26px rgba(58,69,112,.28)}
 .hola-txt{position:relative;z-index:1;flex:1;min-width:0}
-.hola h1{font-family:'Caveat',cursive;font-weight:700;font-size:64px;line-height:1;color:var(--gold);
+.hola h1{font-family:'Caveat',cursive;font-weight:700;font-size:64px;line-height:1;color:#ffc94f;
   transform:rotate(-1.5deg);transform-origin:left center;margin:0 0 12px}
 .hola-sub{font-size:18px;line-height:1.55;color:rgba(255,255,255,.9);max-width:52ch;margin:0 0 16px}
-.hola-prox{display:table;background:rgba(255,255,255,.14);
+.hola-prox{display:table;background:rgba(20,24,50,.2);
   border-radius:6px;padding:9px 14px;font-size:15.5px;line-height:1.5;margin:0 0 18px;color:#fff}
 .hola-prox[hidden]{display:none}
-.hola-prox i{color:var(--gold);font-size:18px;vertical-align:-2px;margin-right:2px}
+.hola-prox i{color:#ffc94f;font-size:18px;vertical-align:-2px;margin-right:2px}
+.hola-prox a{color:#fff;text-decoration:underline;text-decoration-color:rgba(255,255,255,.45);text-underline-offset:3px}
+.hola-prox a:hover{text-decoration-color:#fff}
+.hola-prox a:focus-visible{outline:3px solid #fff;outline-offset:3px;border-radius:2px}
 .hola-botones{display:flex;flex-wrap:wrap;gap:12px}
 .hola-btn{display:inline-flex;align-items:center;gap:8px;border-radius:999px;padding:12px 22px;
   font-family:var(--font-head);font-weight:700;font-size:16px;text-decoration:none;
-  transition:transform .12s,box-shadow .12s,background .12s}
+  transition:background .12s}
 .hola-btn[hidden]{display:none}
-.hola-btn:hover,.hola-btn:focus-visible{transform:translateY(-2px)}
 .hola-btn:focus-visible{outline:3px solid #fff;outline-offset:3px}
-.hola-btn-oro{background:var(--gold);color:#232220;box-shadow:0 4px 0 #b97c0c}
+.hola-btn-oro{background:var(--gold);color:#232220}
+.hola-btn-oro:hover{background:#f7bd45}
 .hola-btn-linea{background:transparent;color:#fff;border:2px solid rgba(255,255,255,.6)}
 .hola-btn-linea:hover{background:rgba(255,255,255,.12)}
 /* tres bocadillos de adorno, como los del logo */
@@ -1532,7 +1535,10 @@ body:has(.access-gate-overlay) .cita-boton{display:none}
   .hola{padding:26px 22px;border-radius:6px}
   .hola h1{font-size:50px}
   .hola-sub{font-size:16.5px}
-  .hola-globos{display:none}
+  /* en el móvil los globos van en fila, pequeños, encima del saludo */
+  .hola{flex-direction:column;align-items:stretch;gap:14px}
+  .hola-globos{order:-1;width:auto;height:auto;display:flex;flex-wrap:wrap;gap:8px 10px;padding:2px 0 0 2px}
+  .hola-globos span{position:static;font-size:19px;padding:6px 12px;border-radius:14px;box-shadow:0 2px 6px rgba(0,0,0,.16)}
   .hola-btn{flex:1 1 auto;justify-content:center}
 }
 @media(max-width:520px){
@@ -1616,6 +1622,8 @@ a.handwritten-title{text-decoration:none}
 a.handwritten-title:hover{opacity:.8}
 @media(min-width:901px){
   .page-header:has(.handwritten-title) .breadcrumb{display:none}
+  /* en la portada tampoco: «Inicio» suelto no dice nada */
+  .page-header:has(+ .hola) .breadcrumb{display:none}
 }
 /* la raya de los títulos de página, del color de su sección */
 body[data-category] .grammar-section > h2::after{background:var(--c-teoria);opacity:.35}
