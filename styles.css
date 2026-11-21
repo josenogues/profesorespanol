@@ -303,7 +303,7 @@ body:has(.apu-boton) footer,body:has(.cita-boton) footer{padding-bottom:96px}
   background:linear-gradient(135deg,#3A4570 0%,#4b5894 55%,#6a5fc0 100%)}
 [data-theme="dark"] .access-gate-overlay{background:linear-gradient(135deg,#2c3560 0%,#3d4a82 55%,#55499e 100%)}
 .access-gate-overlay::before,.access-gate-overlay::after{content:'';flex:1}
-.access-gate-logo{display:block;width:230px;max-width:100%;height:auto;flex:none}
+.access-gate-logo{display:block;width:194px;max-width:100%;height:auto;flex:none}
 .access-gate-modal{background:var(--card-bg);border-radius:20px;padding:58px 34px 26px;max-width:410px;width:100%;
   text-align:center;position:relative;flex:none;margin-top:30px;box-shadow:0 14px 36px rgba(20,24,50,.35)}
 .access-gate-foto{position:absolute;top:-44px;left:50%;transform:translateX(-50%);width:88px;height:88px;

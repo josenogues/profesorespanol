@@ -12,9 +12,10 @@ Saca cuatro archivos en la raíz:
 El logo lo eligió José en noviembre de 2026, probando opciones en un taller:
 dos globos de conversación (el violeta con la ñ, que es él, y uno rosa más
 pequeño detrás, el alumno), destellos amarillos finos en la esquina de cada
-uno, «Aprende español» en la Nunito de la web y «con José» a mano (Caveat),
+uno, «Habla español» en la Nunito de la web y «con José» a mano (Caveat),
 en blanco y marcado con un subrayador del mismo amarillo de los destellos.
-El amarillo es el del logo viejo.
+El amarillo es el del logo viejo. En noviembre de 2026 el nombre pasó de
+«Aprende español» a «Habla español»: «aprender» sonaba a algo enorme.
 No poner juntos rojo, amarillo y morado: recuerda a la bandera republicana
 y José no quiere líos.
 
@@ -142,11 +143,11 @@ def subrayador(c, base, tam):
 
 
 def nombre(x, arriba, centrado_en=None):
-    """«Aprende español» y, debajo, «con José». Devuelve (svg, caja)."""
+    """«Habla español» y, debajo, «con José». Devuelve (svg, caja)."""
     t1, t2 = K, K * 1.12
     b1 = base_de_linea(NUNITO, t1, arriba)
     b2 = base_de_linea(CAVEAT, t2, arriba + t1 + K * .14)
-    d1, c1 = texto(NUNITO, "Aprende español", t1, 0, b1, {"wght": 800})
+    d1, c1 = texto(NUNITO, "Habla español", t1, 0, b1, {"wght": 800})
     d2, c2 = texto(CAVEAT, "con José", t2, 0, b2)
     if centrado_en is None:
         dx1 = dx2 = x
@@ -190,14 +191,14 @@ if __name__ == "__main__":
     arriba = -8 + (76 - K * 2.26) / 2
     txt, ct = nombre(94 + K * .3, arriba)
     caja = (-6, -1, ct[2], max(64, ct[3]))
-    w, h = guarda("logo.svg", dibujo + txt, caja, "Aprende español con José")
+    w, h = guarda("logo.svg", dibujo + txt, caja, "Habla español con José")
     print("logo.svg          %.0f × %.0f" % (w, h))
 
     # apilado: el dibujo arriba, centrado sobre el nombre
     centro_dibujo = (-5.4 + 83.62) / 2
     txt2, ct2 = nombre(0, 68 + K * .25, centrado_en=centro_dibujo)
     caja2 = (min(-6, ct2[0]), -1, max(84.5, ct2[2]), ct2[3])
-    w, h = guarda("logo-apilado.svg", dibujo + txt2, caja2, "Aprende español con José")
+    w, h = guarda("logo-apilado.svg", dibujo + txt2, caja2, "Habla español con José")
     print("logo-apilado.svg  %.0f × %.0f" % (w, h))
 
     # pestaña: solo los globos, sin destellos (tan pequeño no se verían)
