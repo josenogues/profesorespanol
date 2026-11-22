@@ -130,9 +130,11 @@ with sync_playwright() as p:
 
     print("\n═══ ponerle una clase ═══")
     antes = pg.evaluate("window.__DB['anna@x.com'].clases.length")
-    pg.select_option("#ficha-clase", "sobre-ti")
+    pg.fill("#ficha-busca", "350")
+    comprueba(pg.locator("#ficha-cat .fc-row").count() == 1, "se busca en el catálogo de la ficha por número")
+    pg.fill("#ficha-busca", "")
     pg.fill("#ficha-fecha", mas(3))
-    pg.locator("#ficha-add").click(); pg.wait_for_timeout(900)
+    pg.locator('[data-anade="sobre-ti"]').click(); pg.wait_for_timeout(900)
     guardadas = pg.evaluate("window.__DB['anna@x.com'].clases.map(c => c.id || 'rapida')")
     comprueba(len(guardadas) == antes + 1 and "sobre-ti" in guardadas,
               "la clase se guarda en su ficha de verdad (%s)" % guardadas)
@@ -144,6 +146,13 @@ with sync_playwright() as p:
         .locator("[data-quitar]").click(); pg.wait_for_timeout(900)
     comprueba(pg.evaluate("window.__DB['anna@x.com'].clases.length") == antes,
               "y se puede quitar")
+    comprueba(pg.locator("[data-deshacer]").count() == 1, "al quitarla sale «Deshacer»")
+    pg.locator("[data-deshacer]").click(); pg.wait_for_timeout(900)
+    comprueba(pg.evaluate("window.__DB['anna@x.com'].clases.length") == antes + 1 and
+              pg.locator('#ficha-lista .fi-fecha[value="%s"]' % mas(3)).count() == 1,
+              "y deshacer la devuelve, con su fecha")
+    pg.locator("#ficha-lista .fi-row").filter(has=pg.locator('.fi-fecha[value="%s"]' % mas(3))) \
+        .locator("[data-quitar]").click(); pg.wait_for_timeout(900)
 
     print("\n═══ la pestaña de economía ═══")
     pg.locator('.pn-tab[data-tab="eco"]').click(); pg.wait_for_timeout(300)
@@ -306,10 +315,15 @@ with sync_playwright() as p:
     pg.select_option("#ficha-orden", "fecha-desc"); pg.wait_for_timeout(300)
 
     print("\n═══ elegir clase: lo que ya tiene va con ✓ ═══")
-    con = pg.locator("#ficha-clase option").filter(has_text="✓").count()
+    con = pg.locator("#ficha-cat .fc-row.ya").count()
     comprueba(con == 2, "las dos del catálogo que ya tiene llevan ✓ (%d)" % con)
-    comprueba(not pg.locator('#ficha-clase option[value="sobre-ti"]').inner_text().startswith("✓"),
-              "y las que no tiene, no")
+    comprueba(pg.locator('[data-anade="sobre-ti"]').count() == 1 and
+              pg.locator("#ficha-cat .fc-row.ya [data-anade]").count() == 0,
+              "y las que no tiene llevan su botón «Añadir», las que sí no")
+    pg.select_option("#ficha-cat-orden", "reciente"); pg.wait_for_timeout(300)
+    comprueba(pg.locator("#ficha-cat .cat-num").first.inner_text().strip() == "#180",
+              "el catálogo de la ficha también se ordena por fecha")
+    pg.select_option("#ficha-cat-orden", "num"); pg.wait_for_timeout(300)
     pg.locator("#ficha-cerrar").click(); pg.wait_for_timeout(300)
 
     comprueba(pg.locator("details.deberes[open]").count() == 0 and not pg.locator("#link-url").is_visible(),

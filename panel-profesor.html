@@ -152,7 +152,7 @@ tbody tr.al-fila:hover{background:var(--tint)}
 tbody tr.al-fila.baja .al-quien b,tbody tr.eco-fila.baja .al-quien b{color:var(--muted)}
 .al-quien b{display:block;font-family:var(--font-head);font-size:16px}
 .al-quien span{display:block;font-size:13px;color:var(--muted);font-weight:400}
-.panel-flag.baja{background:var(--border);color:#4f4d48}
+.panel-flag.baja{background:var(--border);color:var(--text)}
 .panel-flag.sinacceso{background:#FDECEA;color:#b3261e}
 [data-theme="dark"] .panel-flag.sinacceso{background:#3a1d1a;color:#e88078}
 .panel-flag.conacceso{background:#DFF2E4;color:#1c6b38}
@@ -255,6 +255,14 @@ tbody tr.al-fila:hover .al-vercl{background:var(--primary);border-color:var(--pr
 .fi-check span{display:block;margin:3px 0 0 24px;font-size:13.5px;color:var(--muted);line-height:1.5}
 .pie-nota{display:block;font-weight:400;font-size:13px;margin-top:2px}
 
+.fc-lista{max-height:340px;overflow-y:auto;overscroll-behavior:contain;border:1px solid var(--ficha-bd);border-radius:6px;margin:12px 0;background:var(--card-bg)}
+.fc-row{display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:center;padding:8px 12px;border-top:1px solid var(--ficha-bd)}
+.fc-row:first-child{border-top:0}
+.fc-row.ya .fc-tit{color:var(--muted)}
+.fc-tit{font-weight:600;line-height:1.3}
+.fc-tit small{display:block;font-weight:400;font-size:12.5px;color:var(--muted)}
+.fc-ya{font-size:13px;font-weight:700;color:#1c6b38;white-space:nowrap}
+[data-theme="dark"] .fc-ya{color:#7fd6a0}
 /* el foco del teclado se ve en todo el panel */
 .pn-tab:focus-visible,.button:focus-visible,.al-fbtn:focus-visible,.cat-fbtn:focus-visible,.al-vercl:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible,summary:focus-visible,[data-eco-hoy]:focus-visible{outline:2px solid var(--primary);outline-offset:2px}
 
@@ -318,6 +326,8 @@ body{padding:20px 12px}
 #ficha > .ficha-cab h2{font-size:18px}
 .fi-fecha,.fi-nota,.fi-prox,.al-buscar input,.eco-in,.cat-buscar,.rap-inp,#link-url,.pn-sel{font-size:16px !important;min-height:44px;box-sizing:border-box}
 .fi-quitar{min-width:44px;min-height:44px}
+.fc-row .button{min-height:40px}
+#ficha-busca{font-size:16px}
 .fi-repaso{min-height:40px}
 .al-fbtn,.cat-fbtn{min-height:40px}
 .al-mas>summary{min-height:40px;display:flex;align-items:center}
@@ -447,15 +457,20 @@ body{padding:20px 12px}
 
 <div class="fi-bloque fi-poner">
 <h3 class="fi-bh">Ponerle una clase</h3>
-<p class="fi-como">Elige una del catálogo, ponle el día y dale a <b>Añadir</b>. Aparece arriba, en «Lo que hemos dado», y él la ve al momento en su «Mis clases».</p>
+<p class="fi-como">Busca en el catálogo, ponle el día y pulsa <b>Añadir</b> en la clase que quieras. Aparece arriba, en «Lo que hemos dado», y él la ve al momento en su «Mis clases». Las que ya tiene van con ✓.</p>
 <div class="ficha-alta">
-<label>Del catálogo <span class="ficha-op">✓ = ya la tiene</span><select id="ficha-clase"></select></label>
+<label>Buscar<input type="search" id="ficha-busca" placeholder="número, título o etiqueta..." autocomplete="off"></label>
 <label>Fecha <span class="ficha-op">déjala vacía si no te acuerdas</span>
 <input type="date" id="ficha-fecha"></label>
-<button class="button button-primary button-lg" id="ficha-add"><i class="ti ti-plus"></i> Añadir</button>
-<span class="fi-o">o</span>
-<button class="button button-secondary" id="rap-abrir3"><i class="ti ti-bolt" aria-hidden="true"></i> Montar una clase rápida</button>
+<label class="fi-ordena">Ordenar
+<select id="ficha-cat-orden" class="pn-sel">
+<option value="num">Por número</option>
+<option value="reciente">Por fecha, la última dada primero</option>
+<option value="antigua">Por fecha, sin dar y las más antiguas primero</option>
+</select></label>
 </div>
+<div class="fc-lista" id="ficha-cat"></div>
+<button class="button button-secondary" id="rap-abrir3"><i class="ti ti-bolt" aria-hidden="true"></i> Clase rápida para este alumno</button>
 </div>
 
 
@@ -756,6 +771,6 @@ Si solo quieres que deje de entrar, ponle «No entra» en «¿Ve la web?» ahí 
 <script src="clases.js?v=5c543ab051"></script>
 <script src="temas.js?v=29497494e8"></script>
 <script type="module" src="firebase-sync.js?v=34c910e4bb"></script>
-<script type="module" src="firebase-panel.js?v=e97b8b4aba"></script>
+<script type="module" src="firebase-panel.js?v=1383a49237"></script>
 </body>
 </html>

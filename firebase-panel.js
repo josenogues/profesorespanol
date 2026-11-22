@@ -500,7 +500,6 @@ async function guardaDinero(email, el){
 const ficha = document.getElementById('ficha');
 const fQuien = document.getElementById('ficha-quien');
 const fResumen = document.getElementById('ficha-resumen');
-const fSelect = document.getElementById('ficha-clase');
 const fFecha = document.getElementById('ficha-fecha');
 const fLista = document.getElementById('ficha-lista');
 const fEstado = document.getElementById('ficha-estado');
@@ -509,6 +508,7 @@ const PERFIL = { nombre: 'fi-nombre', idioma: 'fi-idioma', nivel: 'fi-nivel', ac
 
 let emailAbierto = null;
 let clasesAbiertas = [];
+let quitada = null;   // la última clase que quitaste, por si te arrepientes
 
 // Cómo se ordenan «sus clases»: por fecha (la última primero o la primera
 // primero) o por número del catálogo. Se acuerda de lo que elegiste.
@@ -552,22 +552,27 @@ function avisa(txt, tipo){
   fEstado.className = 'ficha-estado' + (tipo ? ' ' + tipo : '');
 }
 
-// El desplegable del catálogo, con ✓ delante de las clases que este alumno
-// ya tiene: así se ve de un vistazo qué no le has dado todavía.
-function pintaSelectClases(){
-  if(!fSelect) return;
+// El catálogo dentro de la ficha: se busca, se ve qué clases ya tiene este
+// alumno (✓) y se pulsa «Añadir» en la que toque. Va en el mismo orden que el
+// catálogo de abajo (por número o por fecha).
+let fcQ = '';
+function pintaPicker(){
+  const caja = document.getElementById('ficha-cat');
+  if(!caja) return;
   const ya = new Set(clasesAbiertas.filter(c => c.id).map(c => c.id));
-  const antes = fSelect.value;
-  fSelect.innerHTML = porNumero()
-    // con el catálogo creciendo, el nivel y la pista ahorran abrir la clase
-    .map(c => {
-      const marca = [c.nivel, (c.pistas || []).join('/').toUpperCase()].filter(Boolean).join(' · ');
-      // el número delante: es con lo que se acuerda de cuál es cuál
-      return `<option value="${esc(c.id)}">${ya.has(c.id) ? '✓ ' : ''}${esc(numDe(c))} · ${esc(c.titulo.es)}${
-        marca ? ' · ' + esc(marca) : ''}</option>`;
-    }).join('')
-    || '<option value="">(todavía no hay clases en el catálogo)</option>';
-  if(antes) fSelect.value = antes;
+  const q = normaliza(fcQ).trim();
+  const lista = ordenaCat(porNumero().filter(c => !q ||
+    normaliza([numDe(c), String(c.num || ''), c.titulo.es].concat(c.etiquetas || []).join(' ')).includes(q)));
+  const sel = document.getElementById('ficha-cat-orden');
+  if(sel) sel.value = catOrden;
+  caja.innerHTML = lista.length ? lista.map(c => {
+    const marca = [c.nivel, (c.pistas || []).join('/').toUpperCase()].filter(Boolean).join(' · ');
+    const tiene = ya.has(c.id);
+    return `<div class="fc-row${tiene ? ' ya' : ''}"><span class="cat-num">${esc(numDe(c))}</span>
+      <span class="fc-tit">${esc(c.titulo.es)}<small>${esc(marca)}</small></span>${tiene
+        ? '<span class="fc-ya">✓ ya la tiene</span>'
+        : `<button type="button" class="button button-secondary button-sm" data-anade="${esc(c.id)}"><i class="ti ti-plus"></i> Añadir</button>`}</div>`;
+  }).join('') : '<p class="panel-empty" style="padding:10px 12px">Ninguna clase con eso.</p>';
 }
 
 function pintaFicha(){
@@ -599,7 +604,7 @@ function pintaFicha(){
     });
   const selOrden = document.getElementById('ficha-orden');
   if(selOrden) selOrden.value = ordenFicha;
-  pintaSelectClases();
+  pintaPicker();
 
   fLista.innerHTML = orden.length ? orden.map(({ c, i }) => {
     const chips = etiquetasDe(c).map(t => `<span class="panel-course-chip">${esc(t)}</span>`).join('');
@@ -654,7 +659,7 @@ async function guarda(){
     if(s) s.clases = clasesAbiertas.slice();
     repinta();   // cambian sus columnas de clases, de próxima clase y la agenda
     avisa('Guardado.', 'ok');
-    setTimeout(() => avisa(''), 2000);
+    setTimeout(() => { if(fEstado.textContent === 'Guardado.') avisa(''); }, 2000);
   } catch(err) {
     avisa('No se ha podido guardar: ' + (err && err.message ? err.message : 'error'), 'mal');
   }
@@ -794,6 +799,10 @@ function abreFicha(email){
   document.getElementById('fi-acceso').value = puedeEntrar(s) ? 'si' : 'no';
   avisaAcceso();
   document.getElementById('fi-proxima').value = s.paraProxima || '';
+  fcQ = '';
+  const fb = document.getElementById('ficha-busca');
+  if(fb) fb.value = '';
+  quitada = null;
   if(fFecha) fFecha.value = hoyISO();
   avisa('');
   pintaFicha();
@@ -821,10 +830,9 @@ document.addEventListener('click', function(e){
   if(e.target.closest('#fi-borrar-no')){ preguntaBorrar(false); return; }
   if(e.target.closest('#fi-borrar-si')){ borraAlumno(); return; }
 
-  const add = e.target.closest('#ficha-add');
+  const add = e.target.closest('[data-anade]');
   if(add){
-    const id = fSelect && fSelect.value;
-    if(!id){ avisa('No hay ninguna clase que añadir.', 'mal'); return; }
+    const id = add.dataset.anade;
     if(clasesAbiertas.some(c => c.id === id)){
       avisa('Esa clase ya está en su lista.', 'mal');
       return;
@@ -863,7 +871,22 @@ document.addEventListener('click', function(e){
 
   const quitar = e.target.closest('[data-quitar]');
   if(quitar){
-    clasesAbiertas.splice(parseInt(quitar.dataset.quitar, 10), 1);
+    const i = parseInt(quitar.dataset.quitar, 10);
+    quitada = { c: clasesAbiertas[i], i: i };
+    clasesAbiertas.splice(i, 1);
+    pintaFicha();
+    guarda().then(() => {
+      // un fallo al guardar ya ha dejado su aviso: no se le pisa
+      if(fEstado.classList.contains('mal')) return;
+      fEstado.className = 'ficha-estado';
+      fEstado.innerHTML = 'Clase quitada. <button type="button" class="button button-secondary button-sm" data-deshacer>Deshacer</button>';
+      setTimeout(() => { if(fEstado.querySelector('[data-deshacer]')){ quitada = null; avisa(''); } }, 10000);
+    });
+    return;
+  }
+  if(e.target.closest('[data-deshacer]') && quitada){
+    clasesAbiertas.splice(Math.min(quitada.i, clasesAbiertas.length), 0, quitada.c);
+    quitada = null;
     pintaFicha();
     guarda();
   }
@@ -1222,6 +1245,27 @@ function porNumero(){
     .sort((a, b) => (a.num || 9999) - (b.num || 9999));
 }
 
+// El orden del catálogo (por número o por la última vez que se dio): sirve
+// tanto para el catálogo de abajo como para el de dentro de la ficha. Dentro
+// de cada grupo, por número.
+function ordenaCat(lista){
+  if(catOrden === 'num') return lista;
+  const uso = usoDeClases();
+  const f = c => (uso.get(c.id) || {}).ultima || null;
+  return lista.sort((a, b) => {
+    const fa = f(a), fb = f(b);
+    if(fa === fb) return (a.num || 9999) - (b.num || 9999);
+    if(catOrden === 'reciente'){
+      if(fa === null) return 1;
+      if(fb === null) return -1;
+      return fb.localeCompare(fa);
+    }
+    if(fa === null) return -1;
+    if(fb === null) return 1;
+    return fa.localeCompare(fb);
+  });
+}
+
 function pintaFiltros(){
   const caja = document.getElementById('cat-filtros');
   if(!caja) return;
@@ -1274,23 +1318,7 @@ function pintaCatalogo(){
     return true;
   });
 
-  // el orden por fecha: dentro de cada grupo, por número
-  if(catOrden !== 'num'){
-    const uso = usoDeClases();
-    const f = c => (uso.get(c.id) || {}).ultima || null;
-    lista.sort((a, b) => {
-      const fa = f(a), fb = f(b);
-      if(fa === fb) return (a.num || 9999) - (b.num || 9999);
-      if(catOrden === 'reciente'){
-        if(fa === null) return 1;
-        if(fb === null) return -1;
-        return fb.localeCompare(fa);
-      }
-      if(fa === null) return -1;
-      if(fb === null) return 1;
-      return fa.localeCompare(fb);
-    });
-  }
+  ordenaCat(lista);
 
   if(res){
     res.textContent = (todas.length === 1 ? '1 clase escrita' : todas.length + ' clases escritas') +
@@ -1350,14 +1378,18 @@ document.addEventListener('click', function(e){
 });
 
 document.addEventListener('input', function(e){
+  if(e.target && e.target.id === 'ficha-busca'){ fcQ = e.target.value; pintaPicker(); return; }
   if(e.target && e.target.id === 'cat-buscar'){ catFiltro.q = e.target.value; pintaCatalogo(); }
 });
 
 document.addEventListener('change', function(e){
-  if(e.target && e.target.id === 'cat-orden'){
+  if(e.target && (e.target.id === 'cat-orden' || e.target.id === 'ficha-cat-orden')){
     catOrden = e.target.value;
     try { localStorage.setItem('jn_panel_orden_cat', catOrden); } catch(err) {}
+    const o = document.getElementById('cat-orden');
+    if(o) o.value = catOrden;
     pintaCatalogo();
+    pintaPicker();
   }
 });
 
