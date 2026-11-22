@@ -71,6 +71,20 @@ bueno; lo pequeño y claro, hacerlo.
 - Aparcado para más adelante: dominio propio, portada pública, test de nivel,
   Google, app.
 
+## Impeccable (diseño)
+José tiene instalado el plugin impeccable (una skill y cinco agentes), sin
+revisiones automáticas.
+- **Solo cuando José lo pida**: la skill solo arranca si él escribe
+  `/impeccable`; los agentes `impeccable-*`, solo si él los nombra.
+- **Nada automático**: no activar `/impeccable hooks` ni el instalador, no
+  crear `PRODUCT.md` ni `DESIGN.md`, ni lanzar `/impeccable doctor` sin
+  preguntarle antes.
+- **Las decisiones de José mandan**: lo que ya dice este CLAUDE.md (colores,
+  letras, estilo) es su sistema de diseño. Impeccable solo revisa y propone;
+  nunca rediseña ni cambia nada sin su visto bueno. Si una regla de
+  impeccable choca con algo que José decidió, gana José: comentárselo y que
+  él decida.
+
 ## Privacidad y permisos
 - El email de José y los de los alumnos son privados: no mandarlos a ningún
   servicio de fuera. Si hace falta el de José, leerlo de `const PROFESOR` en
