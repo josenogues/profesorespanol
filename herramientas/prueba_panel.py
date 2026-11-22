@@ -156,8 +156,8 @@ with sync_playwright() as p:
               "las dos tarifas medias, cada una en su tarjeta")
     comprueba("Clases dadas en total" in kpis and "24" in kpis,
               "y el total de clases dadas, también las que no se cobran")
-    comprueba("El que más ha pagado" in kpis and "Anna" in kpis, "quién paga más")
-    comprueba("El de más clases" in kpis, "y quién tiene más clases dadas")
+    comprueba(pg.locator("#panel-kpis .kpi").count() == 0 and pg.locator("#panel-kpis").bounding_box()["height"] < 50,
+              "y todo va en una sola línea de texto, sin tarjetas")
     fe = pg.locator('tr[data-eco="anna@x.com"]')
     comprueba(fe.locator('[data-campo="clasesDadas"]').input_value() == "16" and
               fe.locator('[data-campo="pagado"]').input_value() == "400",
@@ -229,6 +229,8 @@ with sync_playwright() as p:
     comprueba(pg.evaluate("window.__DB['anna@x.com'].acceso") is False, "quitarle el acceso se guarda")
     comprueba("No entra" in pg.locator('tr[data-ficha="anna@x.com"]').inner_text(),
               "y la marca cambia a «No entra»")
+    comprueba(pg.locator('.al-mas[open]').count() == 0, "«¿Ve la web?» está plegado en «Más filtros»")
+    pg.locator(".al-mas summary").click()
     pg.locator('.al-fbtn[data-f="acceso"][data-v="no"]').click(); pg.wait_for_timeout(400)
     comprueba(any("Anna" in r.inner_text() for r in pg.locator(".al-fila").all()),
               "y el filtro «no entra» la encuentra")
@@ -254,6 +256,26 @@ with sync_playwright() as p:
     comprueba("PAGA" not in " ".join(bloques) and "€" not in pg.locator("#ficha").inner_text(),
               "y en la ficha no hay nada de dinero")
 
+    print("\n═══ la ficha, sobria y a un lado ═══")
+    est = pg.evaluate("""() => {
+        const q = s => document.querySelector(s);
+        const r = e => { const c = getComputedStyle(e); return { izq: c.borderLeftWidth, rad: c.borderRadius, pos: c.position }; };
+        return { ficha: r(q('#ficha')), fila: r(q('#ficha .fi-row')), poner: r(q('#ficha .fi-poner')),
+                 box: q('#ficha').getBoundingClientRect().toJSON(), ancho: innerWidth };
+    }""")
+    comprueba(all(est[k]["izq"] in ("0px", "1px") for k in ("ficha", "fila", "poner")),
+              "ni la ficha ni sus filas llevan raya de color a la izquierda (%s)" %
+              [est[k]["izq"] for k in ("ficha", "fila", "poner")])
+    comprueba(est["fila"]["rad"] == "6px" and est["poner"]["rad"] in ("0px", "6px"),
+              "las esquinas son de 6 px (%s)" % est["fila"]["rad"])
+    comprueba(est["ficha"]["pos"] == "fixed" and est["box"]["right"] >= est["ancho"] - 1 and est["box"]["left"] > 300,
+              "la ficha se abre como panel a la derecha, con la lista a la vista")
+    comprueba(pg.locator('tr[data-ficha="brandon@x.com"] .al-vercl').is_visible(),
+              "y se puede pulsar otro alumno de la lista sin cerrarla")
+    pg.keyboard.press("Escape"); pg.wait_for_timeout(300)
+    comprueba(not pg.locator("#ficha").is_visible(), "Esc la cierra")
+    pg.locator('tr[data-ficha="anna@x.com"] .al-vercl').click(); pg.wait_for_timeout(700)
+
     print("\n═══ para la próxima clase ═══")
     ms0 = pg.evaluate("window.__DB['anna@x.com'].updatedAt.__ms")
     pg.fill("#fi-proxima", "Repasar el pluscuamperfecto\ny empezar el motor")
@@ -262,6 +284,10 @@ with sync_playwright() as p:
               "Repasar el pluscuamperfecto\ny empezar el motor", "al salir del cuadro se guarda en su ficha")
     comprueba("pluscuamperfecto" in pg.locator('tr[data-ficha="anna@x.com"] .al-prox-txt').inner_text(),
               "y sale en su fila de la lista")
+    pg.locator("#fi-proxima").press_sequentially(" Y pedirle sus frases.")
+    pg.wait_for_timeout(1900)
+    comprueba(pg.evaluate("window.__DB['anna@x.com'].paraProxima").endswith("sus frases."),
+              "también se guarda sola mientras escribes, sin salir del cuadro")
     comprueba(pg.evaluate("window.__DB['anna@x.com'].updatedAt.__ms") == ms0,
               "sin mover su «última actividad», que es del alumno")
 
@@ -285,6 +311,9 @@ with sync_playwright() as p:
     comprueba(not pg.locator('#ficha-clase option[value="sobre-ti"]').inner_text().startswith("✓"),
               "y las que no tiene, no")
     pg.locator("#ficha-cerrar").click(); pg.wait_for_timeout(300)
+
+    comprueba(pg.locator("details.deberes[open]").count() == 0 and not pg.locator("#link-url").is_visible(),
+              "«Mandar deberes» está plegado hasta que lo abres")
 
     print("\n═══ buscar algo que no está ═══")
     pg.fill("#al-buscar", "zzzz"); pg.wait_for_timeout(500)
@@ -435,6 +464,16 @@ with sync_playwright() as p:
     comprueba(ancho(), "la lista no se sale de la pantalla")
     pg.locator('tr[data-ficha="anna@x.com"] .al-vercl').click(); pg.wait_for_timeout(900)
     comprueba(ancho(), "ni la ficha abierta")
+    mov = pg.evaluate("""() => {
+        const h = s => { const e = document.querySelector(s); const r = e.getBoundingClientRect(); return [Math.round(r.width), Math.round(r.height)]; };
+        const f = s => parseFloat(getComputedStyle(document.querySelector(s)).fontSize);
+        return { ficha: h('#ficha'), quitar: h('.fi-quitar'), fecha: f('.fi-fecha'), nota: f('.fi-nota'), prox: f('#fi-proxima'), ancho: innerWidth };
+    }""")
+    comprueba(mov["ficha"][0] == mov["ancho"], "la ficha ocupa toda la pantalla (%s)" % mov["ficha"])
+    comprueba(mov["quitar"][1] >= 40, "la × de quitar una clase se puede pulsar con el dedo (%s)" % mov["quitar"])
+    comprueba(min(mov["fecha"], mov["nota"], mov["prox"]) >= 16,
+              "la letra de los campos es de 16 px, para que el móvil no haga zoom (%s)" % [mov["fecha"], mov["nota"], mov["prox"]])
+    pg.locator("#ficha-cerrar").click(); pg.wait_for_timeout(300)
     pg.select_option("#al-orden-movil", "nombre:asc"); pg.wait_for_timeout(300)
     comprueba(pg.locator(".al-fila .al-quien b").first.inner_text() == "Anna",
               "y sin cabeceras se ordena con el desplegable")

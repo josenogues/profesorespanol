@@ -255,35 +255,19 @@ function pintaKpis(){
     const clases = con.reduce((n, s) => n + (+s.clasesDadas), 0);
     return clases ? con.reduce((n, s) => n + (+s.pagado), 0) / clases : null;
   };
-  const mejor = function(arr, f){
-    let g = null;
-    arr.forEach(s => { if(f(s) > 0 && (!g || f(s) > f(g))) g = s; });
-    return g;
-  };
 
   const cobrado = cobran.reduce((n, s) => n + (+s.pagado || 0), 0);
   const dadas = todos.reduce((n, s) => n + (+s.clasesDadas || 0), 0);
-  const queMasPaga = mejor(cobran, s => +s.pagado || 0);
-  const queMasClases = mejor(todos, s => +s.clasesDadas || 0);
 
-  const num = (n, l, extra, clase) =>
-    `<div class="kpi${clase ? ' ' + clase : ''}"><div class="n">${n}</div>
-      <div class="l">${esc(l)}</div>${extra ? `<div class="s">${esc(extra)}</div>` : ''}</div>`;
   const nadie = '<span class="al-sin">—</span>';
+  const dato = (l, v, clase) => `<span>${esc(l)}<b${clase ? ' class="' + clase + '"' : ''}>${v}</b></span>`;
 
   kpisEl.innerHTML = [
-    num(esc(altas.length), 'Alumnos de alta',
-        todos.length === altas.length ? '' : todos.length + ' en total, con las bajas'),
-    num(cobrado ? esc(euros(cobrado)) : nadie, 'Cobrado en total', '', 'dinero'),
-    num(media(altas) === null ? nadie : esc(euros(media(altas))), 'Tarifa media ahora',
-        'solo los de alta'),
-    num(media(todos) === null ? nadie : esc(euros(media(todos))), 'Tarifa media histórica',
-        'contando también las bajas'),
-    num(esc(dadas), 'Clases dadas en total', 'también las que no cobras'),
-    num(queMasPaga ? `<span class="txt">${esc(nombreDe(queMasPaga) || queMasPaga.email)}</span>` : nadie,
-        'El que más ha pagado', queMasPaga ? euros(queMasPaga.pagado) : ''),
-    num(queMasClases ? `<span class="txt">${esc(nombreDe(queMasClases) || queMasClases.email)}</span>` : nadie,
-        'El de más clases', queMasClases ? queMasClases.clasesDadas + ' clases' : '')
+    dato('Alumnos de alta', esc(altas.length)),
+    dato('Cobrado en total', cobrado ? esc(euros(cobrado)) : nadie, 'dinero'),
+    dato('Tarifa media ahora', media(altas) === null ? nadie : esc(euros(media(altas)))),
+    dato('Tarifa media histórica', media(todos) === null ? nadie : esc(euros(media(todos)))),
+    dato('Clases dadas en total', esc(dadas))
   ].join('');
 }
 
@@ -707,7 +691,19 @@ async function guardaPerfil(){
 // Lo que harás en la siguiente clase: lo escribes al terminar cada una y lo
 // lees antes de empezar la próxima. Va en la ficha del alumno, igual que sus
 // clases, y tampoco toca "updatedAt".
+let proxTimer = null;
+document.addEventListener('input', function(e){
+  if(e.target && e.target.id === 'fi-proxima'){
+    clearTimeout(proxTimer);
+    proxTimer = setTimeout(guardaProxima, 1200);
+  }
+});
+document.addEventListener('visibilitychange', function(){
+  if(document.visibilityState === 'hidden' && proxTimer){ clearTimeout(proxTimer); proxTimer = null; guardaProxima(); }
+});
+
 async function guardaProxima(){
+  clearTimeout(proxTimer); proxTimer = null;
   if(!emailAbierto) return;
   const texto = (document.getElementById('fi-proxima').value || '').trim();
   avisa('Guardando...');
@@ -802,7 +798,8 @@ function abreFicha(email){
   avisa('');
   pintaFicha();
   ficha.style.display = 'block';
-  ficha.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  // es un panel al lado de la lista: se abre arriba del todo, sin mover la página
+  ficha.scrollTop = 0;
 }
 
 document.addEventListener('click', function(e){
@@ -874,6 +871,12 @@ document.addEventListener('click', function(e){
 
 // la fecha, la nota y los datos del alumno se guardan al salir del campo,
 // no en cada tecla
+document.addEventListener('keydown', function(e){
+  if(e.key === 'Escape' && ficha && ficha.style.display === 'block'){
+    ficha.style.display = 'none'; emailAbierto = null;
+  }
+});
+
 document.addEventListener('change', function(e){
   const eco = e.target.closest('[data-eco] [data-campo]');
   if(eco){ guardaDinero(eco.closest('tr').dataset.eco, eco); return; }
@@ -1067,7 +1070,7 @@ async function guardaRapida(){
     }
     rEstado.textContent = 'Asignada a ' + rQuien.length + (rQuien.length === 1 ? ' alumno.' : ' alumnos.');
     rEstado.className = 'ficha-estado ok';
-    setTimeout(() => { rap.style.display = 'none'; loadStudents(); }, 1200);
+    setTimeout(() => { rap.style.display = 'none'; loadStudents().then(() => { if(emailAbierto) abreFicha(emailAbierto); }); }, 1200);
   } catch(err) {
     rEstado.textContent = 'No se ha podido guardar: ' + (err && err.message ? err.message : 'error');
     rEstado.className = 'ficha-estado mal';
@@ -1079,7 +1082,7 @@ document.addEventListener('click', function(e){
     document.getElementById('rap-todo').classList.toggle('on');
     return;
   }
-  if(e.target.closest('#rap-cerrar')){ rap.style.display = 'none'; return; }
+  if(e.target.closest('#rap-cerrar')){ rap.style.display = 'none'; if(emailAbierto) abreFicha(emailAbierto); return; }
 
   const sug = e.target.closest('[data-tema]');
   if(sug){
@@ -1318,7 +1321,7 @@ function pintaCatalogo(){
 document.addEventListener('click', function(e){
   if(e.target.closest('#rap-abrir2')){ abreRapida(); return; }
   // desde dentro de la ficha: ya sabemos a quién
-  if(e.target.closest('#rap-abrir3')){ abreRapida(emailAbierto); return; }
+  if(e.target.closest('#rap-abrir3')){ ficha.style.display = 'none'; abreRapida(emailAbierto); return; }
 
   const tog = e.target.closest('#cat-toggle');
   if(tog){
