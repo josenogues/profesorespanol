@@ -222,6 +222,8 @@ with sync_playwright() as p:
     # Dar de baja y quitar el acceso son dos cosas distintas: hay quien se da
     # de baja y sigue viendo la web un tiempo, y eso lo decide él.
     pg.locator('tr[data-ficha="anna@x.com"] .al-vercl').click(); pg.wait_for_timeout(700)
+    comprueba(not pg.locator("#sec-datos").evaluate("e => e.open"), "«Sus datos» sale plegada, que se toca poco")
+    pg.locator("#sec-datos > summary").click(); pg.wait_for_timeout(300)
     comprueba(pg.locator("#fi-activo").input_value() == "si" and
               pg.locator("#fi-acceso").input_value() == "si",
               "una ficha sin «acceso» puesto sigue a su estado, como antes")
@@ -345,6 +347,24 @@ with sync_playwright() as p:
         const c = getComputedStyle(e); return [c.borderTopWidth, c.borderRadius, c.backgroundColor]; })""")
     comprueba(len(sec) == 4 and all(x[0] == "1px" and x[1] == "6px" and x[2] != "rgba(0, 0, 0, 0)" for x in sec),
               "cada sección es una tarjeta con su marco y su fondo, que se distingue de las demás (%s)" % sec[:1])
+
+    print("\n═══ cada sección se pliega ═══")
+    ids = ["sec-prox", "sec-poner", "ficha-dadas", "sec-datos", "sec-borrar"]
+    estado = {i: pg.locator("#" + i).evaluate("e => e.open") for i in ids}
+    comprueba(estado == {"sec-prox": True, "sec-poner": True, "ficha-dadas": True, "sec-datos": True, "sec-borrar": False},
+              "las de uso diario están abiertas, «Sus datos» la abrimos antes y «Borrar» sigue plegada (%s)" % estado)
+    for i in ["sec-prox", "sec-poner"]:
+        pg.locator("#%s > summary" % i).click()
+    pg.wait_for_timeout(300)
+    comprueba(not pg.locator("#fi-proxima").is_visible() and not pg.locator("#ficha-cat").is_visible(),
+              "al pulsar el título se pliega «Para la próxima clase» y «Ponerle una clase»")
+    comprueba(pg.evaluate("localStorage.getItem('jn_panel_sec_sec-prox')") == "0",
+              "y se acuerda de cómo las dejaste")
+    for i in ["sec-prox", "sec-poner"]:
+        pg.locator("#%s > summary" % i).click()
+    pg.wait_for_timeout(300)
+    comprueba(pg.locator("#fi-proxima").is_visible() and pg.locator("#ficha-cat").is_visible(), "y se vuelven a abrir")
+    comprueba(not pg.locator("#fi-borrar").is_visible(), "el botón de borrar no se ve hasta abrir «Borrar a este alumno»")
 
     print("\n═══ elegir clase: lo que ya tiene va con ✓ ═══")
     con = pg.locator("#ficha-cat .fc-row.ya").count()

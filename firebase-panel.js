@@ -510,16 +510,20 @@ let emailAbierto = null;
 let clasesAbiertas = [];
 let quitada = null;   // la última clase que quitaste, por si te arrepientes
 
-// «Lo que hemos dado» se pliega con un clic para que la ficha sea más corta, y
-// se acuerda de cómo lo dejaste.
-const fDadas = document.getElementById('ficha-dadas');
-if(fDadas){
-  try { if(localStorage.getItem('jn_panel_dadas') === '0') fDadas.open = false; } catch(e) {}
-  fDadas.addEventListener('toggle', () => {
+// Cada sección de la ficha se pliega con un clic para que sea más corta, y se
+// acuerda de cómo la dejaste. De salida «Sus datos» y «Borrar» van plegadas:
+// se tocan poco.
+document.querySelectorAll('#ficha details[id]').forEach(d => {
+  try {
+    const v = localStorage.getItem('jn_panel_sec_' + d.id);
+    if(v === '1') d.open = true;
+    if(v === '0') d.open = false;
+  } catch(e) {}
+  d.addEventListener('toggle', () => {
     ajustaChips();
-    try { localStorage.setItem('jn_panel_dadas', fDadas.open ? '1' : '0'); } catch(e) {}
+    try { localStorage.setItem('jn_panel_sec_' + d.id, d.open ? '1' : '0'); } catch(e) {}
   });
-}
+});
 
 // Cómo se ordenan «sus clases»: por fecha (la última primero o la primera
 // primero) o por número del catálogo. Se acuerda de lo que elegiste.

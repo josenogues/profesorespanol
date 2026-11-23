@@ -239,10 +239,16 @@ tbody tr.al-fila:hover .al-vercl{background:var(--primary);border-color:var(--pr
 /* cada sección es una tarjeta con su franja de título arriba: se ve dónde
    empieza y dónde acaba, sin rayas sueltas entre unas y otras */
 #ficha .fi-bloque,#ficha .fi-peligro{background:var(--card-bg);border:1px solid var(--ficha-bd);border-radius:6px;margin:0 0 14px;padding:0 16px 16px;overflow:hidden}
-#ficha .fi-bloque > .fi-bh,#ficha .fi-bloque > summary{margin:0 -16px 14px;padding:11px 16px;background:var(--tint);border-bottom:1px solid var(--ficha-bd);color:var(--text)}
-#ficha .fi-dadas:not([open]){padding-bottom:0}
-#ficha .fi-dadas:not([open]) > summary{margin-bottom:0;border-bottom:0}
-#ficha .fi-peligro{padding:14px 16px}
+#ficha .fi-bloque > summary,#ficha .fi-peligro > summary{margin:0 -16px 14px;padding:11px 16px;background:var(--tint);border-bottom:1px solid var(--ficha-bd);color:var(--text);cursor:pointer;list-style:none;display:flex;align-items:center;justify-content:space-between;gap:10px}
+#ficha .fi-bloque > summary::-webkit-details-marker,#ficha .fi-peligro > summary::-webkit-details-marker{display:none}
+#ficha .fi-bloque > summary .fi-bh,#ficha .fi-peligro > summary .fi-bh{margin:0;color:var(--text)}
+#ficha .fi-bloque > summary::after,#ficha .fi-peligro > summary::after{content:'';width:9px;height:9px;border-right:2px solid var(--muted);border-bottom:2px solid var(--muted);transform:rotate(-135deg);margin:0 4px 0 8px;flex:none;transition:transform .15s}
+#ficha .fi-bloque:not([open]) > summary::after,#ficha .fi-peligro:not([open]) > summary::after{transform:rotate(45deg)}
+#ficha .fi-bloque:not([open]),#ficha .fi-peligro:not([open]){padding-bottom:0}
+#ficha .fi-bloque:not([open]) > summary,#ficha .fi-peligro:not([open]) > summary{margin-bottom:0;border-bottom:0}
+#ficha .fi-peligro{display:block;padding:0 16px 16px}
+.fi-peligro-in{display:flex;gap:14px;align-items:center;flex-wrap:wrap}
+.fi-peligro-in > div:first-child{flex:1;min-width:240px}
 /* las clases puestas, en filas compactas dentro de su tarjeta */
 #ficha .fi-row{background:var(--card-bg);border:0;border-top:1px solid var(--border);border-radius:0;padding:9px 0;margin:0;grid-template-columns:132px 1fr auto auto;gap:3px 12px}
 #ficha .fi-row:first-child{border-top:0}
@@ -301,11 +307,6 @@ tbody tr.al-fila:hover .al-vercl{background:var(--primary);border-color:var(--pr
 .eco-fecha-caja{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
 .fi-proxbloque .fi-bh{margin-top:0}
 .fi-prox{width:100%;box-sizing:border-box;min-height:96px;padding:10px 12px;border-radius:6px;border:1px solid var(--border);background:var(--card-bg);color:var(--text);font-family:var(--font-body);font-size:15.5px;line-height:1.5;resize:vertical}
-.fi-dadas>summary{cursor:pointer;list-style:none;display:flex;align-items:center;justify-content:space-between;gap:10px}
-.fi-dadas>summary::-webkit-details-marker{display:none}
-.fi-dadas>summary .ficha-h3{margin:0}
-.fi-dadas>summary::after{content:'';width:9px;height:9px;border-right:2px solid var(--muted);border-bottom:2px solid var(--muted);transform:rotate(-135deg);margin:0 4px 0 8px;flex:none;transition:transform .15s}
-.fi-dadas:not([open])>summary::after{transform:rotate(45deg)}
 .fi-dadas>.fi-ordena{margin:12px 0 0}
 .fi-ordena{font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;display:flex;gap:8px;align-items:center}
 .al-prox-txt{max-width:320px;font-size:13.5px;line-height:1.4;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;white-space:pre-line}
@@ -460,14 +461,14 @@ body{padding:20px 12px}
 <button class="button button-secondary button-sm" id="ficha-cerrar"><i class="ti ti-x"></i> Cerrar</button>
 </div>
 
-<div class="fi-bloque fi-proxbloque">
-<h3 class="fi-bh"><i class="ti ti-notebook" aria-hidden="true"></i> Para la próxima clase</h3>
+<details class="fi-bloque fi-proxbloque" id="sec-prox" open>
+<summary><h3 class="fi-bh"><i class="ti ti-notebook" aria-hidden="true"></i> Para la próxima clase</h3></summary>
 <textarea class="fi-prox" id="fi-proxima" rows="4" placeholder="Lo que haremos en la siguiente: repasar por y para, empezar el motor, pedirle que me lea sus frases..."></textarea>
 <p class="fi-como">Se guarda sola mientras escribes. Es solo para ti.</p>
-</div>
+</details>
 
-<div class="fi-bloque fi-poner">
-<h3 class="fi-bh">Ponerle una clase</h3>
+<details class="fi-bloque fi-poner" id="sec-poner" open>
+<summary><h3 class="fi-bh">Ponerle una clase</h3></summary>
 <p class="fi-como">Busca en el catálogo, ponle el día y pulsa <b>Añadir</b> en la clase que quieras. Aparece debajo, en «Lo que hemos dado», y él la ve al momento en su «Mis clases». Las que ya tiene van con ✓.</p>
 <div class="ficha-alta">
 <label>Buscar<input type="search" id="ficha-busca" placeholder="número, título o etiqueta..." autocomplete="off"></label>
@@ -482,10 +483,10 @@ body{padding:20px 12px}
 </div>
 <div class="fc-lista" id="ficha-cat"></div>
 <button class="button button-secondary" id="rap-abrir3"><i class="ti ti-bolt" aria-hidden="true"></i> Clase rápida para este alumno</button>
-</div>
+</details>
 
 <details class="fi-bloque fi-dadas" id="ficha-dadas" open>
-<summary><h3 class="ficha-h3">Lo que hemos dado <span class="ficha-op" id="ficha-dadas-n"></span></h3></summary>
+<summary><h3 class="fi-bh">Lo que hemos dado <span class="ficha-op" id="ficha-dadas-n"></span></h3></summary>
 <label class="fi-ordena">Ordenar
 <select id="ficha-orden" class="pn-sel">
 <option value="fecha-desc">Por fecha, la última primero</option>
@@ -497,8 +498,8 @@ body{padding:20px 12px}
 </details>
 <p class="ficha-estado" id="ficha-estado"></p>
 
-<div class="fi-bloque">
-<h3 class="fi-bh">Sus datos <span class="ficha-op">nombre, nivel, si puede entrar…</span></h3>
+<details class="fi-bloque" id="sec-datos">
+<summary><h3 class="fi-bh">Sus datos <span class="ficha-op">nombre, nivel, si puede entrar…</span></h3></summary>
 <div class="fi-perfil">
 <label>Nombre<input type="text" id="fi-nombre" placeholder="como le llamas tú" autocomplete="off"></label>
 <label>Idioma<select id="fi-idioma"><option value="">—</option><option value="es">Español</option><option value="it">Italiano</option><option value="en">English</option></select></label>
@@ -507,15 +508,16 @@ body{padding:20px 12px}
 <label>¿Ve la web?<select id="fi-acceso"><option value="si">Sí, entra</option><option value="no">No entra</option></select></label>
 </div>
 <p class="fi-como" id="fi-aviso-acceso"></p>
-</div>
+</details>
 
 
 
 
 
-<div class="fi-peligro">
-<div><b>Borrar a este alumno</b>
-<p>Se va del todo: su ficha, sus clases y lo que haya escrito. No se puede deshacer.
+<details class="fi-peligro" id="sec-borrar">
+<summary><h3 class="fi-bh">Borrar a este alumno</h3></summary>
+<div class="fi-peligro-in">
+<div><p>Se va del todo: su ficha, sus clases y lo que haya escrito. No se puede deshacer.
 Si solo quieres que deje de entrar, ponle «No entra» en «¿Ve la web?» ahí arriba.</p></div>
 <button class="button button-secondary button-sm" id="fi-borrar"><i class="ti ti-trash"></i> Borrar</button>
 <div class="fi-seguro" id="fi-seguro" style="display:none">
@@ -524,6 +526,7 @@ Si solo quieres que deje de entrar, ponle «No entra» en «¿Ve la web?» ahí 
 <button class="button button-secondary button-sm" id="fi-borrar-no">Cancelar</button>
 </div>
 </div>
+</details>
 </div>
 
 <div class="panel-link" id="rapida" style="display:none">
@@ -794,6 +797,6 @@ Si solo quieres que deje de entrar, ponle «No entra» en «¿Ve la web?» ahí 
 <script src="clases.js?v=5c543ab051"></script>
 <script src="temas.js?v=29497494e8"></script>
 <script type="module" src="firebase-sync.js?v=34c910e4bb"></script>
-<script type="module" src="firebase-panel.js?v=3e5d4e1bcd"></script>
+<script type="module" src="firebase-panel.js?v=f1879e2e4b"></script>
 </body>
 </html>
