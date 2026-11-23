@@ -320,8 +320,10 @@ with sync_playwright() as p:
     comprueba(pg.locator('[data-anade="sobre-ti"]').count() == 1 and
               pg.locator("#ficha-cat .fc-row.ya [data-anade]").count() == 0,
               "y las que no tiene llevan su botón «Añadir», las que sí no")
+    comprueba(all("✓" in n.inner_text() for n in pg.locator("#ficha-cat .fc-row.ya .cat-num").all()),
+              "el ✓ va delante del número de las que ya tiene, donde se ve al recorrer la lista")
     pg.select_option("#ficha-cat-orden", "reciente"); pg.wait_for_timeout(300)
-    comprueba(pg.locator("#ficha-cat .cat-num").first.inner_text().strip() == "#180",
+    comprueba(pg.locator("#ficha-cat .cat-num").first.inner_text().replace("✓", "").strip() == "#180",
               "el catálogo de la ficha también se ordena por fecha")
     pg.select_option("#ficha-cat-orden", "num"); pg.wait_for_timeout(300)
     pg.locator("#ficha-cerrar").click(); pg.wait_for_timeout(300)

@@ -568,7 +568,7 @@ function pintaPicker(){
   caja.innerHTML = lista.length ? lista.map(c => {
     const marca = [c.nivel, (c.pistas || []).join('/').toUpperCase()].filter(Boolean).join(' · ');
     const tiene = ya.has(c.id);
-    return `<div class="fc-row${tiene ? ' ya' : ''}"><span class="cat-num">${esc(numDe(c))}</span>
+    return `<div class="fc-row${tiene ? ' ya' : ''}"><span class="cat-num">${tiene ? '✓ ' : ''}${esc(numDe(c))}</span>
       <span class="fc-tit">${esc(c.titulo.es)}<small>${esc(marca)}</small></span>${tiene
         ? '<span class="fc-ya">✓ ya la tiene</span>'
         : `<button type="button" class="button button-secondary button-sm" data-anade="${esc(c.id)}"><i class="ti ti-plus"></i> Añadir</button>`}</div>`;
