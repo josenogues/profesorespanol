@@ -731,7 +731,7 @@ window.jnClasePorId = function(id){
 };
 
 // Lo que un alumno ya ha dado, de lo último a lo más antiguo, tal como lo
-// quiere «Cinco minutos de hoy» (ejercicios.js): el id de cada clase del
+// quiere «Cinco minutos de tus clases» (ejercicios.js): el id de cada clase del
 // catálogo —también la de un repaso— y «t:tema» por cada tema de una clase
 // rápida. Solo lo que ya ha pasado: de una clase que todavía no se ha dado no
 // tiene sentido preguntarle. Lo que no tiene fecha va al final.

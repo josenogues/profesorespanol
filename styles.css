@@ -1243,6 +1243,36 @@ body[data-category="clases"] .eyebrow{background:var(--c-clases-t);color:var(--c
   .aula-boton{padding:11px 12px;font-size:14px}
 }
 
+/* El repaso y la lectura de una clase: botones a la derecha de su fila, en
+   el dorado de los ejercicios. La fila entera lleva a la clase: el enlace es
+   el título, estirado a toda la fila; los botones van por encima. */
+.cl-row{position:relative}
+.cl-con-hijas,.cl-suelta{grid-template-columns:64px 1fr auto auto}
+.cl-con-hijas .cl-flecha,.cl-suelta .cl-flecha{grid-column:4}
+.cl-enlace{color:inherit;text-decoration:none}
+.cl-enlace::after{content:"";position:absolute;inset:0}
+.cl-enlace:focus-visible{outline:none}
+.cl-enlace:focus-visible::after{outline:2px solid var(--primary-light);outline-offset:-2px}
+.cl-hijas{grid-column:3;grid-row:1/3;position:relative;z-index:1;display:flex;gap:8px}
+.cl-hija{display:flex;flex-direction:column;align-items:center;gap:1px;min-width:86px;padding:7px 10px;
+  border:1px solid var(--border);border-radius:6px;background:var(--card-bg);color:var(--text);
+  text-decoration:none;line-height:1.25;transition:border-color .12s,background .12s}
+.cl-hija:hover{border-color:var(--c-ejer);background:var(--c-ejer-t);color:var(--text)}
+.cl-hija .ti{font-size:19px;color:var(--c-ejer)}
+.cl-hija b{font-size:13.5px;font-weight:700}
+.cl-hija small{font-size:12px;font-weight:600;color:var(--muted)}
+/* un repaso o una lectura sin su clase en la lista: fila propia con etiqueta */
+.cl-tipo{grid-column:3;grid-row:1/3;display:flex;align-items:center;gap:8px;font-size:12.5px;
+  font-weight:800;letter-spacing:.07em;text-transform:uppercase;color:var(--muted)}
+.cl-tipo .ti{font-size:20px;color:var(--c-ejer)}
+@media(max-width:620px){
+  .cl-con-hijas{grid-template-columns:52px 1fr}
+  .cl-hijas{grid-column:2;grid-row:3;margin-top:10px}
+  .cl-suelta{grid-template-columns:52px 1fr auto}
+  .cl-tipo{grid-row:1;align-self:start;padding-top:3px}
+  .cl-tipo > span{display:none}
+}
+
 /* Clase rápida desplegable dentro de la lista del alumno */
 .cl-abre{cursor:pointer}
 .cl-detalle{grid-column:1/-1;display:none;margin-top:12px;padding-top:12px;border-top:1px solid var(--border)}

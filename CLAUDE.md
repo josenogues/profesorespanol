@@ -33,8 +33,13 @@ bueno; lo pequeño y claro, hacerlo.
   blancas con el color solo en el icono, **esquinas poco redondeadas (6px)** y
   **nada de rayas de color a la izquierda** de cajas ni filas («parece hecho
   por una IA»). Mejor menos cajas: «Mis clases» es una agenda de filas, no
-  tarjetas. **Excepción querida por José:** el saludo de la portada y «Cinco
-  minutos de hoy» llevan el degradado violeta, el «¡Hola!» escrito a mano
+  tarjetas. El repaso y la lectura de una clase **no van en fila propia**:
+  son botones dorados (lápiz / libro, con su fecha) a la derecha de la fila
+  de su clase; solo si esa clase no está en la lista van sueltos, con
+  etiqueta. Sin filtro por tipo (José lo descartó al agruparlos).
+  **Excepción querida por José:** el saludo de la portada y «Cinco minutos de
+  tus clases» (antes «de hoy»: los alumnos no entendían que salen solo de sus
+  clases) llevan el degradado violeta, el «¡Hola!» escrito a mano
   (Caveat) y los globos «¿Qué tal? / ¡Vamos! / Poco a poco». También son de
   José y no se quitan: el **título escrito a mano** (Caveat, en el color de su
   sección) arriba de cada página y la **puerta de entrada** con el degradado y
@@ -63,6 +68,24 @@ bueno; lo pequeño y claro, hacerlo.
   resultado lleva la etiqueta de su sección.
 - Banderas: siempre las de `banderas/*.svg`, nunca emoji (en Windows salen
   como letras).
+
+**Lecturas (decidido el 23 nov 2026, en construcción)**
+- Cada clase de teoría puede tener dos hijas: el **repaso** (ejercicios del
+  banco, ya existe) y la **lectura**. No se combinan clases en una lectura:
+  para mezclar, José pone dos.
+- La lectura: un texto en español escrito para esa clase, 6–8 preguntas
+  **solo sobre el texto** (elegir o escribir una palabra, con trampas: «el
+  texto no lo dice», tiempos casi iguales…), corregidas por el motor de
+  siempre y sin nota final, y al final un **cuadro de escritura libre** que es
+  el de los apuntes (se guarda solo, sin «hecho» ni «pendiente»; José lo
+  corrige en la clase en vídeo).
+- Todo en español. Cada pregunta y la consigna llevan la **traducción
+  escondida** tras un botón, en todos los niveles (excepción aceptada a la
+  regla B1/B2). El texto no se traduce: solo las palabras difíciles, al
+  tocarlas.
+- En el panel, lo escrito por el alumno sale en un desplegable dentro de esa
+  clase. La primera lectura es la de la clase 540 («Si tuviera dinero…»);
+  José la revisa antes de publicarla.
 
 **Descartado o aparcado: no volver a proponerlo salvo que José lo saque**
 - Descartado: «Mis fallos», aviso en «Mira tu correo», botón «Entrar con

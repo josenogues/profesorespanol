@@ -25,7 +25,11 @@ DB={"anna@x.com":{"email":"anna@x.com","nombre":"Anna","idioma":"it","activo":Tr
                # entre pestañas, así que la parte de la alumna se siembra aquí
                {"rapida":{"rid":"r-prueba","titulo":"Repaso: El presente, y los que lo rompen",
                           "repasoDe":"presente","temas":[],"extra":[],"deberes":""},
-                "fecha":"2026-11-02","nota":""}]}}
+                "fecha":"2026-11-02","nota":""},
+               # un repaso de una clase que no tiene en la lista: va en fila propia
+               {"rapida":{"rid":"r-suelto","titulo":"Repaso: Las cosas te gustan a ti",
+                          "repasoDe":"gustar","temas":[],"extra":[],"deberes":""},
+                "fecha":"2026-11-03","nota":""}]}}
 fallos=[]
 def ok(c,t):
     print(('   ok  ' if c else '  FALLO ')+t)
@@ -41,12 +45,12 @@ with sync_playwright() as p:
     pg.goto('http://localhost:8947/panel-profesor.html'); pg.wait_for_timeout(2500)
     pg.locator('tr', has_text='anna@x.com').first.click(); pg.wait_for_timeout(900)
     filas=pg.locator('.fi-row')
-    ok(filas.count()==3, 'la ficha enseña sus clases y el repaso ya puesto')
+    ok(filas.count()==4, 'la ficha enseña sus clases y los repasos ya puestos')
     ok(pg.locator('.fi-repaso').count()==2, 'cada clase del catálogo trae su botón de Repaso, y el repaso no')
     # repaso de «El presente»
     fila=pg.locator('.fi-row:has(.fi-repaso)', has_text='El presente').first
     fila.locator('.fi-repaso').click(); pg.wait_for_timeout(1200)
-    ok(pg.locator('.fi-row').count()==4, 'al pulsar Repaso aparece una clase más')
+    ok(pg.locator('.fi-row').count()==5, 'al pulsar Repaso aparece una clase más')
     nueva=pg.locator('.fi-row', has_text='Repaso:').last
     ok(nueva.count()>0, 'y se llama «Repaso: ...»')
     print('   fila:', nueva.inner_text().replace('\n',' | ')[:150])
@@ -63,17 +67,30 @@ with sync_playwright() as p:
       "localStorage.setItem('jn_student_email','anna@x.com');"
       "localStorage.setItem('jn_track','it');")
     pg2.goto('http://localhost:8947/mis-clases-it.html'); pg2.wait_for_timeout(2500)
-    fila=pg2.locator('.cl-row', has_text='Ripasso')
-    ok(fila.count()==1, 'el repaso le sale como una clase más, y en su idioma')
-    ok('Ripasso: Il presente' in fila.first.inner_text(),
-       'con el título de la clase traducido: ' + fila.first.inner_text().split('\n')[1][:60])
+    # el repaso no va en fila propia: es un botón a la derecha de su clase
+    clase=pg2.locator('.cl-row', has_text='Il presente')
+    ok(clase.count()==1, 'el repaso no sale como fila aparte de su clase')
+    boton=clase.first.locator('.cl-hija')
+    ok(boton.count()==1 and 'Ripasso' in boton.inner_text() and '2 nov' in boton.inner_text(),
+       'sale como botón dentro de su clase, en su idioma y con su fecha: ' + boton.inner_text().replace('\n',' '))
+    ok(boton.get_attribute('href')=='ejercicios-it.html?repaso=presente',
+       'el botón abre el repaso: '+str(boton.get_attribute('href')))
+    ok(pg2.locator('.cl-row', has_text='Ripasso: ').count()==0, 'y ningún título repite «Ripasso:»')
+    # pulsar la fila, fuera del botón, sigue llevando a la clase
+    clase.first.click(position={'x':300,'y':20}); pg2.wait_for_timeout(1200)
+    ok('clase-presente-en.html' in pg2.url, 'la fila sigue llevando a la clase: '+pg2.url)
+    pg2.go_back(); pg2.wait_for_timeout(2500)
+    # el repaso de una clase que no está en su lista va en fila propia, con etiqueta
+    fila=pg2.locator('.cl-suelta')
+    ok(fila.count()==1 and 'ripasso' in fila.first.locator('.cl-tipo').inner_text().lower(),
+       'un repaso sin su clase en la lista sale en fila propia, con la etiqueta «Ripasso»')
     fila.first.click(); pg2.wait_for_timeout(500)
     det=fila.first.locator('.cl-repaso')
     print('   dentro:', det.inner_text().replace('\n',' | ')[:200])
     ok('Teoria' not in det.inner_text() and 'Teoría' not in det.inner_text(),
        'dentro no hay bloques de teoría')
     href=det.locator('.cl-rep-boton').get_attribute('href')
-    ok(href=='ejercicios-it.html?repaso=presente', 'el botón abre el repaso: '+str(href))
+    ok(href=='ejercicios-it.html?repaso=gustar', 'el botón abre el repaso: '+str(href))
     ok(not errs2, 'sin errores de JS: %s' % errs2)
 
     print('\n═══ la tanda ═══')

@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""«Cinco minutos de hoy»: del botón de «Mis clases» a la tanda en el hub.
+"""«Cinco minutos de tus clases»: del botón de «Mis clases» a la tanda en el hub.
 
     python3 herramientas/prueba_hoy.py
 
@@ -98,7 +98,7 @@ with sync_playwright() as p:
     pg.wait_for_timeout(1200)
     boton = pg.locator("#cl-hoy")
     comprueba(boton.count() == 1 and boton.is_visible(), "con clases dadas, sale el botón")
-    comprueba("Cinque minuti di oggi" in boton.inner_text(), "y en su idioma")
+    comprueba("Cinque minuti delle tue lezioni" in boton.inner_text(), "y en su idioma")
     href = boton.get_attribute("href") or ""
     lista = href.split("?hoy=")[1].split(",") if "?hoy=" in href else []
     comprueba(href.startswith("ejercicios-it.html?hoy="), "lleva al hub de su pista")
@@ -119,7 +119,7 @@ with sync_playwright() as p:
     pg.wait_for_timeout(900)
     comprueba("ejercicios-it.html" in pg.url and "hoy=" in pg.url, "el botón abre el hub")
     cab = pg.locator("#ex-repaso")
-    comprueba(cab.count() == 1 and "Cinque minuti di oggi" in cab.inner_text(), "con su cabecera")
+    comprueba(cab.count() == 1 and "Cinque minuti delle tue lezioni" in cab.inner_text(), "con su cabecera")
     comprueba(not pg.locator("#ex-mode-panel-tema .ex-category-grid").first.is_visible(),
               "sin pedirle que elija materia")
     comprueba(not pg.locator("#ex-level-filter-step").is_visible() and not pg.locator("#ex-hub-mix").is_visible()
@@ -297,7 +297,7 @@ with sync_playwright() as p:
               "si nada de la lista existe, el hub se queda como siempre")
     pg.goto(B + "/ejercicios-en.html?hoy=no-existe,frio", wait_until="load")
     pg.wait_for_timeout(700)
-    comprueba("Five minutes for today" in pg.locator("#ex-repaso").inner_text()
+    comprueba("Five minutes of your classes" in pg.locator("#ex-repaso").inner_text()
               and pg.locator("#ex-hub-container .exercise-block").count() == 6,
               "si algo existe, salta lo que no y hace la tanda con el resto")
     # con una sola clase vista, las seis salen de ella
@@ -314,7 +314,7 @@ with sync_playwright() as p:
         c.close()
 
     print("\n═══ en español y en inglés ═══")
-    for pista, titulo in (("es", "Cinco minutos de hoy"), ("en", "Five minutes for today")):
+    for pista, titulo in (("es", "Cinco minutos de tus clases"), ("en", "Five minutes of your classes")):
         c, pg = entra(br, "anna@x.com", pista)
         pg.goto(B + "/mis-clases-%s.html" % pista, wait_until="load")
         pg.wait_for_timeout(1200)

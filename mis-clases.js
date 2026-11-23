@@ -35,10 +35,10 @@
       teoria: 'Teoría', practicar: 'Practicar', deberes: 'Deberes',
       hoy: 'hoy', anteriores: 'Clases anteriores', sinF: 'sin fecha',
       apuntes: 'Mis apuntes', conApuntes: 'Tienes apuntes en esta clase',
-      repTit: 'Repaso',
+      repTit: 'Repaso', lecTit: 'Lectura', lecBoton: 'Leer el texto',
       repHecho: 'Solo ejercicios. La teoría está en la clase donde la vimos.', repBoton: 'Hacer los ejercicios', repTeoria: 'Ver esa clase',
-      hoyTit: 'Cinco minutos de hoy',
-      hoySub: 'Seis ejercicios de lo que hemos visto en clase.', hoyIr: 'Empezar',
+      hoyTit: 'Cinco minutos de tus clases',
+      hoySub: 'Seis ejercicios sacados solo de lo que hemos visto tú y yo en clase.', hoyIr: 'Empezar',
       bajarTodo: 'Descargar todos mis apuntes'
     },
     it: {
@@ -62,10 +62,10 @@
       teoria: 'Teoria', practicar: 'Esercitati', deberes: 'Compiti',
       hoy: 'oggi', anteriores: 'Lezioni precedenti', sinF: 'senza data',
       apuntes: 'I miei appunti', conApuntes: 'Hai appunti in questa lezione',
-      repTit: 'Ripasso',
+      repTit: 'Ripasso', lecTit: 'Lettura', lecBoton: 'Leggi il testo',
       repHecho: 'Solo esercizi. La teoria è nella lezione dove l’abbiamo vista.', repBoton: 'Fai gli esercizi', repTeoria: 'Vedi quella lezione',
-      hoyTit: 'Cinque minuti di oggi',
-      hoySub: 'Sei esercizi su quello che abbiamo visto a lezione.', hoyIr: 'Inizia',
+      hoyTit: 'Cinque minuti delle tue lezioni',
+      hoySub: 'Sei esercizi presi solo da quello che abbiamo visto io e te a lezione.', hoyIr: 'Inizia',
       bajarTodo: 'Scarica tutti i miei appunti'
     },
     en: {
@@ -89,10 +89,10 @@
       teoria: 'Theory', practicar: 'Practise', deberes: 'Homework',
       hoy: 'today', anteriores: 'Earlier classes', sinF: 'no date',
       apuntes: 'My notes', conApuntes: 'You have notes in this class',
-      repTit: 'Review',
+      repTit: 'Review', lecTit: 'Reading', lecBoton: 'Read the text',
       repHecho: 'Exercises only. The theory is in the class where we saw it.', repBoton: 'Do the exercises', repTeoria: 'See that class',
-      hoyTit: 'Five minutes for today',
-      hoySub: 'Six exercises from what we’ve covered in class.', hoyIr: 'Start',
+      hoyTit: 'Five minutes of your classes',
+      hoySub: 'Six exercises taken only from what you and I have covered in class.', hoyIr: 'Start',
       bajarTodo: 'Download all my notes'
     }
   }[track] || {};
@@ -128,6 +128,20 @@
     const d = new Date(iso + 'T12:00:00');
     if(isNaN(d)) return null;
     return d.toLocaleDateString(LOCALE, { day: 'numeric', month: 'long' });
+  }
+
+  // «2026-10-12» → «12 oct», para los botones del repaso y la lectura
+  function fechaCorta(iso){
+    const d = iso ? new Date(iso + 'T12:00:00') : null;
+    if(!d || isNaN(d)) return null;
+    return d.toLocaleDateString(LOCALE, { day: 'numeric', month: 'short' }).replace('.', '');
+  }
+
+  // adónde lleva el botón de un repaso o de una lectura
+  function hrefHija(tipo, id){
+    return tipo === 'rep'
+      ? 'ejercicios-' + track + '.html?repaso=' + encodeURIComponent(id)
+      : 'lectura-' + track + '.html?clase=' + encodeURIComponent(id);
   }
 
   // en la hora del alumno, no en la de Londres (toISOString va en UTC)
@@ -185,7 +199,10 @@
         // un repaso no guarda sus temas: los lee de la clase que repasa, así
         // que si José corrige los temas de esa clase, los repasos ya puestos
         // se corrigen solos
-        const base = r.repasoDe && window.jnClasePorId(r.repasoDe);
+        // una lectura funciona igual que un repaso: va atada a una clase
+        // del catálogo con lecturaDe en vez de repasoDe
+        const tipo = r.repasoDe ? 'rep' : (r.lecturaDe ? 'lec' : null);
+        const base = tipo && window.jnClasePorId(r.repasoDe || r.lecturaDe);
         const temas = base ? (base.temas || []) : (r.temas || []);
         temas.forEach(id => {
           const t = window.jnTemaPorId && window.jnTemaPorId(id);
@@ -193,11 +210,17 @@
         });
         // el título guardado está en español, que es el idioma del panel;
         // aquí se vuelve a construir en el del alumno
+        const nomBase = base ? ((base.titulo && (base.titulo[track] || base.titulo.es)) || '') : '';
         const tit = base
-          ? T.repTit + ': ' + ((base.titulo && (base.titulo[track] || base.titulo.es)) || '')
+          ? (tipo === 'rep' ? T.repTit : T.lecTit) + ': ' + nomBase
           : (r.titulo || (fechaLarga(a.fecha) || T.sinF));
         return {
           titulo: tit,
+          // en la fila ya lo dice la etiqueta: «Repaso: …» sería repetirlo
+          tituloFila: base ? nomBase : tit,
+          tipo: base ? tipo : null,
+          baseId: base ? base.id : null,
+          hrefHija: base ? hrefHija(tipo, base.id) : null,
           href: null,
           rapida: r,
           clave: clave,
@@ -212,8 +235,11 @@
       // sigue enseñando al alumno aunque cambie el idioma de la web: José se
       // la asignó, y es peor que le desaparezca de la lista
       const pista = (c.pistas && c.pistas.indexOf(track) < 0) ? c.pistas[0] : track;
+      const tc = (c.titulo && (c.titulo[track] || c.titulo.es)) || a.id;
       return {
-        titulo: (c.titulo && (c.titulo[track] || c.titulo.es)) || a.id,
+        titulo: tc,
+        tituloFila: tc,
+        id: c.id,
         href: c.pagina + '-' + pista + '.html',
         clave: clave,
         conApuntes: hayApuntes(clave),
@@ -239,13 +265,29 @@
     const sinF = filas.filter(f => !f.fecha);
     const orden = conF.concat(sinF);
 
+    // El repaso y la lectura de una clase no van en fila propia: salen como
+    // botones a la derecha de la clase que repasan, para que se vea de un
+    // vistazo qué va con qué. Si esa clase se dio varias veces, van con la
+    // última que se dio antes que ellos. Si la clase no está en la lista (se
+    // dio antes de la web, por ejemplo), siguen saliendo en fila propia.
+    const padres = orden.filter(f => f.id);
+    orden.forEach(f => {
+      if(!f.baseId) return;
+      const cand = padres.filter(p => p.id === f.baseId);
+      if(!cand.length) return;
+      const p = cand.find(p => p.fecha && f.fecha && p.fecha <= f.fecha) || cand[cand.length - 1];
+      (p.hijas = p.hijas || []).unshift(f);
+      f.dentro = true;
+    });
+    const vista = orden.filter(f => !f.dentro);
+
     const futuras = conF.filter(f => f.fecha > hoy).sort((a, b) => a.fecha.localeCompare(b.fecha));
     const proxima = futuras[0] || null;
 
     const temas = new Set();
     filas.forEach(f => f.etiquetas.forEach(t => temas.add(t)));
 
-    // «Cinco minutos de hoy»: lo que ya se ha dado (ver jnVisto en clases.js)
+    // «Cinco minutos de tus clases»: lo que ya se ha dado (ver jnVisto en clases.js)
     const visto = window.jnVisto(asignadas, hoy);
     const tarjetaHoy = visto.length
       ? '<a class="cl-hoy" id="cl-hoy" href="ejercicios-' + track + '.html?hoy=' +
@@ -259,7 +301,9 @@
     const masAntigua = conF.length ? conF[conF.length - 1].fecha : null;
     const meses = masAntigua ? mesesDesde(masAntigua) : null;
 
-    let nums = tarjeta(filas.length, filas.length === 1 ? T.clase : T.clases) +
+    // los repasos y las lecturas no son clases: no cuentan como tales
+    const nClases = filas.filter(f => !f.tipo).length;
+    let nums = tarjeta(nClases, nClases === 1 ? T.clase : T.clases) +
                tarjeta(temas.size, temas.size === 1 ? T.tema : T.temas);
     nums += meses ? tarjeta(meses, meses === 1 ? T.mes : T.meses)
                   : tarjeta('—', T.sinFecha, true);
@@ -276,29 +320,55 @@
       : '<p class="cl-prox sin"><i class="ti ti-calendar-event" aria-hidden="true"></i> <b>' +
         esc(T.proxima) + '</b> ' + esc(T.porDefinir) + '</p>';
 
-    const lista = orden.map(f => {
+    const lista = vista.map(f => {
       // se ven las tres primeras (el resto lo esconde la hoja de estilos) y
       // se cuenta lo que queda; el buscador sigue mirando todas
       const chips = f.etiquetas.map(t => '<span class="cl-chip">' + esc(t) + '</span>').join('') +
         (f.etiquetas.length > 3 ? '<span class="cl-mas">' + esc(T.mas(f.etiquetas.length - 3)) + '</span>' : '');
-      const busca = (f.titulo + ' ' + f.etiquetas.join(' ')).toLowerCase();
+      const busca = (f.titulo + ' ' + (f.hijas || []).map(h => h.titulo).join(' ') + ' ' +
+        f.etiquetas.join(' ')).toLowerCase();
       const agenda = fechaAgenda(f.fecha);
       const pendiente = f.fecha && f.fecha > hoy;
-      const clases = 'cl-row' + (pendiente ? ' cl-prox-row' : '') + (f.rapida ? ' cl-abre' : '');
+      const hijas = (f.hijas || []).map(h => {
+        const cuando = fechaCorta(h.fecha) || T.sinF;
+        const nom = h.tipo === 'rep' ? T.repTit : T.lecTit;
+        return '<a class="cl-hija' + (h.fecha && h.fecha > hoy ? ' pend' : '') + '" href="' + esc(h.hrefHija) +
+          '" aria-label="' + esc(nom + ', ' + cuando) + '">' +
+          '<i class="ti ' + (h.tipo === 'rep' ? 'ti-pencil' : 'ti-book') + '" aria-hidden="true"></i>' +
+          '<b>' + esc(nom) + '</b><small>' + esc(cuando) + '</small></a>';
+      }).join('');
+      // la etiqueta, solo en un repaso o una lectura que va en fila propia
+      const tipo = f.tipo
+        ? '<span class="cl-tipo" title="' + esc(f.tipo === 'rep' ? T.repTit : T.lecTit) + '">' +
+          '<i class="ti ' + (f.tipo === 'rep' ? 'ti-pencil' : 'ti-book') + '" aria-hidden="true"></i>' +
+          '<span>' + esc(f.tipo === 'rep' ? T.repTit : T.lecTit) + '</span></span>'
+        : '';
+      const clases = 'cl-row' + (pendiente ? ' cl-prox-row' : '') + (f.rapida ? ' cl-abre' : '') +
+        (hijas ? ' cl-con-hijas' : '') + (tipo ? ' cl-suelta' : '');
       const marca = f.conApuntes
         ? '<i class="ti ti-note cl-apu-marca" title="' + esc(T.conApuntes) + '" aria-label="' +
           esc(T.conApuntes) + '"></i>'
         : '';
       const cab = (agenda ? '<span class="cl-fecha">' + agenda + '</span>'
                           : '<span class="cl-fecha sin">' + esc(f.fecha || T.sinF) + '</span>') +
-                  '<span class="cl-tit">' + esc(f.titulo) + marca + '</span>' +
+                  '<span class="cl-tit">' + (hijas
+                    // con botones dentro la fila no puede ser un enlace (no
+                    // se meten enlaces dentro de otro): el enlace es el título,
+                    // estirado por la hoja de estilos a toda la fila
+                    ? '<a class="cl-enlace" href="' + esc(f.href) + '">' + esc(f.tituloFila) + '</a>'
+                    : esc(f.tituloFila)) + marca + '</span>' +
                   '<span class="cl-temas">' + chips + '</span>';
+      if(hijas){
+        return '<div class="' + clases + '" data-busca="' + esc(busca) + '">' + cab +
+               '<span class="cl-hijas">' + hijas + '</span>' +
+               '<i class="ti ti-chevron-right cl-flecha" aria-hidden="true"></i></div>';
+      }
       if(!f.rapida){
         return '<a class="' + clases + '" href="' + esc(f.href) + '" data-busca="' + esc(busca) + '">' +
                cab + '<i class="ti ti-chevron-right cl-flecha" aria-hidden="true"></i></a>';
       }
       return '<div class="' + clases + '" data-busca="' + esc(busca) + '" tabindex="0" role="button">' +
-             cab + '<i class="ti ti-chevron-down cl-flecha" aria-hidden="true"></i>' +
+             cab + tipo + '<i class="ti ti-chevron-down cl-flecha" aria-hidden="true"></i>' +
              '<div class="cl-detalle">' + detalleRapida(f.rapida, f.clave) + '</div></div>';
     }).join('\n');
 
@@ -352,8 +422,10 @@
     // Un repaso es otra cosa: sin teoría y sin reglas, solo los temas que
     // entran y un botón que abre la tanda ya mezclada. La teoría está en la
     // clase donde se dio, y ahí se manda.
-    if(r.repasoDe){
-      const c = window.jnClasePorId && window.jnClasePorId(r.repasoDe);
+    // Una lectura que va en fila propia, lo mismo con su botón.
+    if(r.repasoDe || r.lecturaDe){
+      const c = window.jnClasePorId && window.jnClasePorId(r.repasoDe || r.lecturaDe);
+      const tipo = r.repasoDe ? 'rep' : 'lec';
       if(c){
         const nombres = (c.temas || []).map(id => {
           const t = window.jnTemaPorId && window.jnTemaPorId(id);
@@ -370,10 +442,11 @@
           : '';
         return '<div class="cl-repaso">' +
           '<p class="cl-rep-temas">' + nombres + '</p>' +
-          '<p class="cl-rep-nota">' + esc(T.repHecho) + '</p>' +
+          (tipo === 'rep' ? '<p class="cl-rep-nota">' + esc(T.repHecho) + '</p>' : '') +
           '<div class="cl-links">' +
-          '<a class="cl-rep-boton" href="ejercicios-' + track + '.html?repaso=' + esc(c.id) + '">' +
-          '<i class="ti ti-pencil" aria-hidden="true"></i> ' + esc(T.repBoton) + '</a>' + aEsa +
+          '<a class="cl-rep-boton" href="' + esc(hrefHija(tipo, c.id)) + '">' +
+          '<i class="ti ' + (tipo === 'rep' ? 'ti-pencil' : 'ti-book') + '" aria-hidden="true"></i> ' +
+          esc(tipo === 'rep' ? T.repBoton : T.lecBoton) + '</a>' + aEsa +
           '</div></div>' + apuR;
       }
     }

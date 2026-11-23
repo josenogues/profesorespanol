@@ -1,5 +1,5 @@
 // La portada: saluda por el nombre y pone delante lo que el alumno viene a
-// buscar —la próxima clase y «cinco minutos de hoy»—.
+// buscar —la próxima clase y «cinco minutos de tus clases»—.
 //
 // La página se pinta entera sin esperar a nadie: el saludo sale ya con el
 // nombre de la última vez (guardado en este navegador) y, cuando llega su

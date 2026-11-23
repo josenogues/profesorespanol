@@ -421,7 +421,7 @@ ${qHTML}`;
   // aunque sean de categorías distintas: el resto del hub no sabe hacer eso
   // porque sus temas van siempre dentro de una materia.
   let repasoClase = null;
-  // «Cinco minutos de hoy» (más abajo): [[temas de lo último], [temas de lo anterior]…]
+  // «Cinco minutos de tus clases» (más abajo): [[temas de lo último], [temas de lo anterior]…]
   let hoy = null;
 
   const REPASO_T = {
@@ -534,7 +534,7 @@ ${qHTML}`;
     if(caja && caja.scrollIntoView) requestAnimationFrame(() => caja.scrollIntoView({ block: 'start' }));
   }
 
-  // ── Cinco minutos de hoy ───────────────────────────────────────────────
+  // ── Cinco minutos de tus clases ───────────────────────────────────────────────
   // Entre clase y clase, lo que frena al alumno no es hacer ejercicios: es
   // tener que decidir cuáles (modo, materia, tema, nivel). Desde «Mis
   // clases» hay un botón que lo decide por él: seis ejercicios de lo que ya
@@ -550,14 +550,14 @@ ${qHTML}`;
   const HOY_CUANTOS = 6;
 
   const HOY_T = {
-    es: { eyebrow: 'Para hoy', titulo: 'Cinco minutos de hoy',
-          nota: 'Seis ejercicios de lo que hemos visto en clase: la mitad, de lo último.',
+    es: { eyebrow: 'Para hoy', titulo: 'Cinco minutos de tus clases',
+          nota: 'Seis ejercicios sacados solo de lo que hemos visto tú y yo en clase: la mitad, de lo último.',
           vacio: 'Todavía no hay ejercicios de lo que hemos visto en clase.' },
-    it: { eyebrow: 'Per oggi', titulo: 'Cinque minuti di oggi',
-          nota: 'Sei esercizi su quello che abbiamo visto a lezione: metà sull’ultima.',
+    it: { eyebrow: 'Per oggi', titulo: 'Cinque minuti delle tue lezioni',
+          nota: 'Sei esercizi presi solo da quello che abbiamo visto io e te a lezione: metà sull’ultima.',
           vacio: 'Non ci sono ancora esercizi su quello che abbiamo visto a lezione.' },
-    en: { eyebrow: 'For today', titulo: 'Five minutes for today',
-          nota: 'Six exercises from what we’ve covered in class: half of them from the latest.',
+    en: { eyebrow: 'For today', titulo: 'Five minutes of your classes',
+          nota: 'Six exercises taken only from what you and I have covered in class: half of them from the latest.',
           vacio: 'There are no exercises yet for what we’ve covered in class.' }
   };
   function hoyLabels(){ return HOY_T[cfg.lang] || HOY_T.es; }
@@ -2219,7 +2219,7 @@ ${nextHTML}<div class="ex-signal-btns">${btns}</div></div>`;
     entraRepaso(repasoParam);
   }
 
-  // ?hoy=si-tuviera,t:por-para,gustar — «cinco minutos de hoy», desde «Mis clases»
+  // ?hoy=si-tuviera,t:por-para,gustar — «cinco minutos de tus clases», desde «Mis clases»
   const hoyParam = params.get('hoy');
   if(hoyParam){
     const unidades = leeHoy(hoyParam);

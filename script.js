@@ -1358,7 +1358,7 @@ document.addEventListener("jn-modo", e => marcaModo(e.detail));
   // entonces se busca en todas. Antes era un solo archivo de 450 KB con las
   // tres pistas. El ?v= de cada uno lo pone herramientas/versiones.py.
   const PARTES = {
-    comun: 'search-index-comun.js?v=d1d869e5eb',
+    comun: 'search-index-comun.js?v=f3afcfaca9',
     es: 'search-index-es.js?v=b8fda19107',
     it: 'search-index-it.js?v=3d42cdaef8',
     en: 'search-index-en.js?v=174ea5cf50'

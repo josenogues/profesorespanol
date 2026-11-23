@@ -47,7 +47,7 @@ python3 -m http.server 8947
 | `prueba_portada.py` | La portada: el saludo con el nombre, la próxima clase, «cinco minutos» y adónde lleva cada cosa. |
 | `prueba_idioma.py` | Lo que rodea al contenido —ventana de idioma, ruta, pie, rótulos— en el idioma del alumno. |
 | `prueba_menu.py` | El menú: columna con tres botones y paneles (chincheta para dejarlo fijo); en el móvil, barra abajo. |
-| `prueba_hoy.py` | «Cinco minutos de hoy»: el botón de «Mis clases» y la tanda del hub, de uno en uno y con final. |
+| `prueba_hoy.py` | «Cinco minutos de tus clases»: el botón de «Mis clases» y la tanda del hub, de uno en uno y con final. |
 | `prueba_hub.py` | El hub de ejercicios: arranca, corrige, cambia de modo; también con una página antigua en caché. |
 | `prueba_examen.py` | El examen de nivel: acertar, fallar, salir a medias, continuar. |
 | `prueba_buscador.py` | El buscador del menú, en las tres pistas y sin pista. |
