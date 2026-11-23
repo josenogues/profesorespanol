@@ -297,11 +297,13 @@ document.addEventListener("jn-modo", e => marcaModo(e.detail));
         const destino = m[1] + '-' + t + '.html';
         fetch(destino, { method: 'HEAD' })
           .then(function(r){
-            if(r.ok) window.location.href = destino;
+            // la lectura es una sola página para todas: el ?clase= dice cuál,
+            // y sin él la otra pista no sabría qué texto enseñar
+            if(r.ok) window.location.href = destino + (m[1] === 'lectura' ? location.search : '');
             else avisaFaltaIdioma(t, m[2]);
           })
           // sin conexión no podemos comprobarlo: se intenta igual, como antes
-          .catch(function(){ window.location.href = destino; });
+          .catch(function(){ window.location.href = destino + (m[1] === 'lectura' ? location.search : ''); });
       }
       return;
     }

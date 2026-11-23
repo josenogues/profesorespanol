@@ -42,6 +42,7 @@ python3 -m http.server 8947
 | `prueba_entrada.py` | La puerta: pedir el enlace, entrar, quién pasa y quién no. |
 | `prueba_panel.py` | El panel del profesor: tabla, ficha, asignar clases, catálogo. |
 | `prueba_repaso.py` | Las clases de repaso, del panel al hub de ejercicios. |
+| `prueba_lectura.py` | La lectura de una clase: el botón del panel, el botón en «Mis clases», el texto con su glosario, las preguntas con su traducción, lo que escribe el alumno y cómo lo ve José. |
 | `prueba_ejercicios.py` | Los ejercicios de todas las páginas de clase, con respuestas buenas y malas. |
 | `prueba_banco.py` | Una muestra del banco del hub pasada por el motor que corrige. |
 | `prueba_portada.py` | La portada: el saludo con el nombre, la próxima clase, «cinco minutos» y adónde lleva cada cosa. |

@@ -144,6 +144,11 @@ function euros(n){
 // que a un italiano con una clase de angloparlantes se le abre la inglesa,
 // que es la única que hay.
 function paginaDeClase(a, idioma){
+  // una lectura se abre tal y como la ve el alumno
+  if(a && a.rapida && a.rapida.lecturaDe){
+    const l = ['es', 'it', 'en'].indexOf(idioma) >= 0 ? idioma : 'es';
+    return 'lectura-' + l + '.html?clase=' + encodeURIComponent(a.rapida.lecturaDe);
+  }
   if(!a || a.rapida) return null;
   const c = window.jnClasePorId && window.jnClasePorId(a.id);
   if(!c || !c.pagina) return null;
@@ -545,8 +550,8 @@ function tituloDe(a){
 }
 
 function etiquetasDe(a){
-  if(a && a.rapida && a.rapida.repasoDe){
-    const c = window.jnClasePorId && window.jnClasePorId(a.rapida.repasoDe);
+  if(a && a.rapida && (a.rapida.repasoDe || a.rapida.lecturaDe)){
+    const c = window.jnClasePorId && window.jnClasePorId(a.rapida.repasoDe || a.rapida.lecturaDe);
     return (c && c.etiquetas) || [];
   }
   if(a && a.rapida){
@@ -649,17 +654,36 @@ function pintaFicha(){
     const rep = (cat && (cat.temas || []).length)
       ? `<button class="fi-repaso" data-repaso="${i}" title="Ponerle un repaso de esta clase: solo ejercicios">Repaso</button>`
       : '';
+    // «Lectura»: lo mismo con la lectura de esta clase (lecturas.js), si la
+    // tiene. Una sola por clase: si ya se la has puesto, el botón lo dice.
+    const yaLec = cat && clasesAbiertas.some(x => x.rapida && x.rapida.lecturaDe === cat.id);
+    const lec = (cat && window.jnLecturaDe && window.jnLecturaDe(cat.id))
+      ? `<button class="fi-repaso fi-lectura" data-lectura="${i}"${yaLec ? ' disabled' : ''} title="${
+          yaLec ? 'Ya tiene la lectura de esta clase' : 'Ponerle la lectura de esta clase: texto, preguntas y escritura'}">Lectura</button>`
+      : '';
+    // lo que ha escrito el alumno en una lectura, plegado para no ocupar
+    let escrito = '';
+    if(c.rapida && c.rapida.lecturaDe){
+      const ap = ((porEmail.get(emailAbierto) || {}).apuntes || {})['lectura-' + c.rapida.lecturaDe];
+      const txt = (ap && typeof ap.t === 'string') ? ap.t.trim() : '';
+      const nPal = txt ? txt.split(/\s+/).length : 0;
+      escrito = txt
+        ? `<details class="fi-escrito"><summary>Lo que ha escrito (${nPal} ${nPal === 1 ? 'palabra' : 'palabras'})</summary>` +
+          `<div class="fi-escrito-txt" lang="es">${esc(txt)}</div></details>`
+        : '<p class="fi-escrito vacio">Todavía no ha escrito nada en la lectura.</p>';
+    }
     const tit = url
       ? `${nm}<a href="${esc(url)}" target="_blank" rel="noopener" title="Abrir la clase en otra pestaña">${
           esc(tituloDe(c))}<i class="ti ti-external-link"></i></a>`
       : nm + esc(tituloDe(c)) + (c.rapida
-          ? '<span class="fi-rap">' + (c.rapida.repasoDe ? 'repaso' : 'clase rápida') + '</span>'
+          ? '<span class="fi-rap">' + (c.rapida.repasoDe ? 'repaso' : c.rapida.lecturaDe ? 'lectura' : 'clase rápida') + '</span>'
           : '');
     return `<div class="fi-row${pend ? ' pend' : ''}">
       <input type="date" class="fi-fecha" data-i="${i}" value="${esc(c.fecha || '')}">
       <div class="fi-tit">${tit}</div>
       <div class="fi-chiprow"><div class="fi-chips">${chips}</div><button type="button" class="fi-mas" data-mas hidden title="Ver todas las etiquetas">+</button></div>
-      ${rep}<button class="fi-quitar" data-quitar="${i}" title="Quitar de su lista">×</button>
+      ${(rep || lec) ? '<div class="fi-botones">' + rep + lec + '</div>' : ''}<button class="fi-quitar" data-quitar="${i}" title="Quitar de su lista">×</button>
+      ${escrito}
     </div>`;
   }).join('') : '<p class="panel-empty">Todavía no le has dado ninguna clase.</p>';
 
@@ -904,6 +928,31 @@ document.addEventListener('click', function(e){
   if(mas){
     mas.parentNode.querySelector('.fi-chips').classList.toggle('abierto');
     ajustaChips();
+    return;
+  }
+
+  const lecB = e.target.closest('[data-lectura]');
+  if(lecB){
+    const base = clasesAbiertas[parseInt(lecB.dataset.lectura, 10)];
+    const cat = window.jnClasePorId && window.jnClasePorId(base && base.id);
+    if(!cat || !window.jnLecturaDe || !window.jnLecturaDe(cat.id)) return;
+    if(clasesAbiertas.some(x => x.rapida && x.rapida.lecturaDe === cat.id)) return;
+    // como el repaso: una clase rápida con el id de la clase dentro. El
+    // texto vive en lecturas.js, así que si lo corrijo, se corrige para todos.
+    clasesAbiertas.push({
+      rapida: {
+        rid: 'l-' + Date.now().toString(36),
+        titulo: 'Lectura: ' + (cat.titulo.es || cat.id),
+        lecturaDe: cat.id,
+        temas: [],
+        extra: [],
+        deberes: ''
+      },
+      fecha: (fFecha && fFecha.value) || hoyISO(),
+      nota: ''
+    });
+    pintaFicha();
+    guarda();
     return;
   }
 

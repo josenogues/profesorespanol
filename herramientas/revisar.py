@@ -255,6 +255,8 @@ for s in CUERPO.values():
 SUELTAS_OK = {"index.html", "panel-profesor.html"}
 # a las clases se llega desde «Mis clases», que las pinta con JavaScript
 SUELTAS_OK |= {p for p in PAGINAS if p.startswith("clase-")}
+# y a las lecturas, desde el botón de su clase en «Mis clases» y desde el panel
+SUELTAS_OK |= {p for p in PAGINAS if p.startswith("lectura-")}
 for pag in PAGINAS:
     if pag not in enlazadas and pag not in SUELTAS_OK:
         apunta("páginas huérfanas", pag)

@@ -37,7 +37,7 @@
           esta: 'Esta clase', todas: 'Todos mis apuntes', volver: 'Volver a la lista',
           irClase: 'Abrir la clase', irClaseT: 'Abre esa clase en otra pestaña: esta se queda aquí',
           sinOtras: 'Todavía no tienes apuntes en otras clases.', cargando: 'Cargando...',
-          repaso: 'Repaso', sinTitulo: 'Clase', bajarTodo: 'Descargar todos mis apuntes',
+          repaso: 'Repaso', lectura: 'Lectura', sinTitulo: 'Clase', bajarTodo: 'Descargar todos mis apuntes',
           locale: 'es-ES' },
     it: { abrir: 'I miei appunti', titulo: 'I miei appunti', cerrar: 'Chiudi',
           sitio: 'Scrivi qui quello che esce in lezione: esempi, frasi, dubbi...',
@@ -50,7 +50,7 @@
           esta: 'Questa lezione', todas: 'Tutti i miei appunti', volver: 'Torna alla lista',
           irClase: 'Apri la lezione', irClaseT: 'Apre quella lezione in un’altra scheda: questa resta qui',
           sinOtras: 'Non hai ancora appunti in altre lezioni.', cargando: 'Carico...',
-          repaso: 'Ripasso', sinTitulo: 'Lezione', bajarTodo: 'Scarica tutti i miei appunti',
+          repaso: 'Ripasso', lectura: 'Lettura', sinTitulo: 'Lezione', bajarTodo: 'Scarica tutti i miei appunti',
           locale: 'it-IT' },
     en: { abrir: 'My notes', titulo: 'My notes', cerrar: 'Close',
           sitio: 'Write down whatever comes up in class: examples, phrases, questions...',
@@ -63,7 +63,7 @@
           esta: 'This class', todas: 'All my notes', volver: 'Back to the list',
           irClase: 'Open the class', irClaseT: 'Opens that class in another tab: this one stays here',
           sinOtras: 'You don’t have notes in other classes yet.', cargando: 'Loading...',
-          repaso: 'Review', sinTitulo: 'Class', bajarTodo: 'Download all my notes',
+          repaso: 'Review', lectura: 'Reading', sinTitulo: 'Class', bajarTodo: 'Download all my notes',
           locale: 'en-GB' }
   }[track] || {};
 
@@ -331,11 +331,18 @@
   function datosDe(clave, asignadas){
     const a = asignadas.find(function(x){ return window.jnClaveApuntes(x) === clave; });
     const c0 = window.jnClasePorId && window.jnClasePorId(clave);
+    // lo escrito en una lectura: la clave es 'lectura-' + la clase
+    const cl = /^lectura-/.test(clave) && window.jnClasePorId && window.jnClasePorId(clave.slice(8));
+    if(cl){
+      return { titulo: T.lectura + ': ' + tituloDe(cl),
+               href: 'lectura-' + track + '.html?clase=' + encodeURIComponent(cl.id) };
+    }
     if(a && a.rapida){
       const r = a.rapida;
-      const base = r.repasoDe && window.jnClasePorId && window.jnClasePorId(r.repasoDe);
+      const base = (r.repasoDe || r.lecturaDe) && window.jnClasePorId &&
+                   window.jnClasePorId(r.repasoDe || r.lecturaDe);
       const pistaWeb = localStorage.getItem('jn_track') || track;
-      return { titulo: base ? T.repaso + ': ' + tituloDe(base) : (r.titulo || T.sinTitulo),
+      return { titulo: base ? (r.repasoDe ? T.repaso : T.lectura) + ': ' + tituloDe(base) : (r.titulo || T.sinTitulo),
                href: 'mis-clases-' + pistaWeb + '.html' };
     }
     if(c0){

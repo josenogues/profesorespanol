@@ -1273,6 +1273,45 @@ body[data-category="clases"] .eyebrow{background:var(--c-clases-t);color:var(--c
   .cl-tipo > span{display:none}
 }
 
+/* La lectura (lectura-XX.html): el texto a la izquierda, siempre a la vista,
+   y las preguntas a la derecha; debajo, el recuadro para escribir. Es un
+   ejercicio, así que el color es el dorado. */
+.lec-h{font-size:23px;margin:6px 0 4px}
+.lec-de{margin:0 0 6px}
+.lec-de .ti{color:var(--c-ejer);margin-right:3px}
+.lec-de a{color:var(--c-clases);font-weight:700;text-decoration:none}
+.lec-de a:hover{text-decoration:underline}
+.lec-leer{margin:0 0 18px;font-size:15px;color:var(--muted)}
+.lec-grid{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:26px;align-items:start}
+.lec-texto{position:sticky;top:20px;max-height:calc(100vh - 40px);overflow:auto;background:var(--card-bg);
+  border:1px solid var(--border);border-radius:6px;padding:24px 28px}
+.lec-texto p{margin:0 0 12px;font-size:17.5px;line-height:1.7;color:var(--text)}
+.lec-texto p:last-child{margin-bottom:0}
+.lec-pal{display:inline;padding:0;margin:0;border:0;background:none;font:inherit;color:inherit;cursor:pointer;
+  text-decoration:underline dotted var(--c-ejer);text-decoration-thickness:2px;text-underline-offset:4px}
+.lec-pal[aria-expanded="true"]{background:var(--c-ejer-t);border-radius:3px}
+.lec-burbuja{position:absolute;z-index:60;padding:9px 12px;border-radius:6px;background:var(--primary-dark);color:#fff;
+  font-size:14.5px;line-height:1.45;box-shadow:0 6px 18px rgba(0,0,0,.18)}
+.lec-burbuja b{color:var(--gold)}
+.lec-preg .topic-card{margin-top:0}
+.lec-preg h4,.lec-escribe h4{font-size:19px;margin:0 0 6px}
+.lec-preg h4 .ti,.lec-escribe h4 .ti{color:var(--c-ejer)}
+.lec-trad-btn{display:inline-flex;align-items:center;gap:5px;margin:-2px 0 8px;padding:3px 9px;border:1px solid var(--border);
+  border-radius:6px;background:var(--card-bg);color:var(--muted);font:600 13px var(--font-body);cursor:pointer}
+.lec-trad-btn:hover,.lec-trad-btn[aria-expanded="true"]{color:var(--text);border-color:var(--muted)}
+.lec-trad{margin:0 0 10px;font-size:14.5px;font-style:italic;color:var(--text-secondary)}
+.lec-escribe{margin-top:26px}
+.lec-consigna{margin:4px 0 8px;font-size:16.5px;line-height:1.55;color:var(--text)}
+.lec-escribe .cl-apu-caja{border-radius:6px}
+.lec-escribe .apu-texto{min-height:190px;font-size:16px;line-height:1.6}
+.lec-nota{margin:8px 0 0;font-size:13.5px;color:var(--muted)}
+.lec-pie{margin:22px 0 0}
+@media(max-width:900px){
+  .lec-grid{grid-template-columns:1fr;gap:18px}
+  .lec-texto{position:static;max-height:none;padding:20px}
+  .lec-texto p{font-size:17px}
+}
+
 /* Clase rápida desplegable dentro de la lista del alumno */
 .cl-abre{cursor:pointer}
 .cl-detalle{grid-column:1/-1;display:none;margin-top:12px;padding-top:12px;border-top:1px solid var(--border)}

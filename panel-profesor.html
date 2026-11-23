@@ -11,7 +11,7 @@
 <link rel="icon" type="image/png" href="icono.png">
 <link rel="apple-touch-icon" href="icono-movil.png">
 <meta name="apple-mobile-web-app-title" content="Habla Español">
-<link rel="stylesheet" href="styles.css?v=23704f4401">
+<link rel="stylesheet" href="styles.css?v=311d126894">
 <script>if(localStorage.getItem('jn_theme')==='dark')document.documentElement.setAttribute('data-theme','dark');</script>
 <style>
 /* El ancho: con ocho columnas, los 1100px de antes se quedaban cortos. Pero
@@ -254,7 +254,14 @@ tbody tr.al-fila:hover .al-vercl{background:var(--primary);border-color:var(--pr
 #ficha .fi-row:first-child{border-top:0}
 #ficha .fi-row.pend .fi-fecha{border-style:dashed}
 #ficha .cat-row{background:var(--card-bg);border:1px solid var(--ficha-bd)}
-.fi-repaso{grid-column:3;grid-row:1/3;align-self:center}
+.fi-botones{grid-column:3;grid-row:1/3;align-self:center;display:flex;gap:6px}
+.fi-lectura:disabled{opacity:.5;cursor:default}
+/* lo que ha escrito el alumno en una lectura, plegado */
+.fi-escrito{grid-column:2/-1;margin:4px 0 2px;font-size:13.5px}
+.fi-escrito summary{cursor:pointer;color:#5B4FB8;font-weight:700}
+.fi-escrito-txt{margin-top:6px;padding:10px 12px;border:1px solid var(--border);border-radius:6px;background:var(--card-bg);
+  white-space:pre-wrap;font-size:15px;line-height:1.55;color:var(--text)}
+.fi-escrito.vacio{color:var(--muted)}
 /* dentro de la ficha las cajas vuelven a ser claras: así el fondo cálido
    enmarca y el contenido sigue leyéndose igual de bien */
 .fi-paso{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;background:#5B4FB8;color:#fff;font-size:12px;font-weight:800;margin-right:7px;font-family:var(--font-body)}
@@ -344,7 +351,8 @@ body{padding:20px 12px}
 #ficha .fi-quitar{grid-column:2;grid-row:1;align-self:start}
 #ficha .fi-chiprow{grid-column:1/-1;grid-row:2}
 #ficha .fi-fecha{grid-column:1;grid-row:3;width:100%;max-width:190px;min-height:40px}
-#ficha .fi-repaso{grid-column:2;grid-row:3;align-self:center;justify-self:end}
+#ficha .fi-botones{grid-column:2;grid-row:3;align-self:center;justify-self:end}
+#ficha .fi-escrito{grid-column:1/-1;grid-row:4}
 #ficha > .ficha-cab{flex-wrap:nowrap;align-items:center;margin:0 -12px 14px;padding:10px 12px}
 #ficha > .ficha-cab p{font-size:13px;line-height:1.35}
 #ficha > .ficha-cab h2{font-size:18px}
@@ -795,8 +803,9 @@ Si solo quieres que deje de entrar, ponle «No entra» en «¿Ve la web?» ahí 
 })();
 </script>
 <script src="clases.js?v=cb7f00e3c3"></script>
+<script src="lecturas.js?v=283f74db90"></script>
 <script src="temas.js?v=29497494e8"></script>
 <script type="module" src="firebase-sync.js?v=34c910e4bb"></script>
-<script type="module" src="firebase-panel.js?v=f1879e2e4b"></script>
+<script type="module" src="firebase-panel.js?v=20be773828"></script>
 </body>
 </html>

@@ -106,7 +106,8 @@
     if(futura){
       let titulo = '';
       if(futura.rapida){
-        const base = futura.rapida.repasoDe && window.jnClasePorId(futura.rapida.repasoDe);
+        const baseId = futura.rapida.repasoDe || futura.rapida.lecturaDe;
+        const base = baseId && window.jnClasePorId(baseId);
         titulo = base ? ((base.titulo && (base.titulo[L] || base.titulo.es)) || '') : (futura.rapida.titulo || '');
       } else {
         const c = window.jnClasePorId(futura.id);
