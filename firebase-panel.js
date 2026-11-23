@@ -510,6 +510,16 @@ let emailAbierto = null;
 let clasesAbiertas = [];
 let quitada = null;   // la última clase que quitaste, por si te arrepientes
 
+// «Lo que hemos dado» se pliega con un clic para que la ficha sea más corta, y
+// se acuerda de cómo lo dejaste.
+const fDadas = document.getElementById('ficha-dadas');
+if(fDadas){
+  try { if(localStorage.getItem('jn_panel_dadas') === '0') fDadas.open = false; } catch(e) {}
+  fDadas.addEventListener('toggle', () => {
+    try { localStorage.setItem('jn_panel_dadas', fDadas.open ? '1' : '0'); } catch(e) {}
+  });
+}
+
 // Cómo se ordenan «sus clases»: por fecha (la última primero o la primera
 // primero) o por número del catálogo. Se acuerda de lo que elegiste.
 let ordenFicha = 'fecha-desc';
@@ -637,6 +647,8 @@ function pintaFicha(){
   }).join('') : '<p class="panel-empty">Todavía no le has dado ninguna clase.</p>';
 
   const n = clasesAbiertas.length;
+  const cnt = document.getElementById('ficha-dadas-n');
+  if(cnt) cnt.textContent = '(' + n + ')';
   // el email va aquí: el título de la ficha ya lleva su nombre, pero el email
   // es con lo que entra en la web y hay que poder verlo
   if(fResumen){

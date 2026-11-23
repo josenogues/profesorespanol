@@ -259,9 +259,16 @@ with sync_playwright() as p:
     print("\n═══ el orden de la ficha ═══")
     bloques = [h.inner_text().strip().split("\n")[0].upper()
                for h in pg.locator("#ficha .fi-bh, #ficha .ficha-h3").all()]
-    comprueba(bloques[0].startswith("PARA LA PRÓXIMA") and bloques[1].startswith("LO QUE HEMOS DADO") and
-              bloques[2].startswith("PONERLE") and bloques[3].startswith("SUS DATOS"),
-              "primero lo que harás, luego lo dado, luego ponerle una y al final sus datos (%s)" % bloques)
+    comprueba(bloques[0].startswith("PARA LA PRÓXIMA") and bloques[1].startswith("PONERLE") and
+              bloques[2].startswith("LO QUE HEMOS DADO") and bloques[3].startswith("SUS DATOS"),
+              "primero lo que harás, luego ponerle una clase, luego lo dado y al final sus datos (%s)" % bloques)
+    comprueba(pg.locator("#ficha-dadas").evaluate("e => e.open"), "«Lo que hemos dado» abre desplegado")
+    pg.locator("#ficha-dadas > summary").click(); pg.wait_for_timeout(300)
+    comprueba(not pg.locator("#ficha-lista").is_visible() and
+              "(3)" in pg.locator("#ficha-dadas > summary").inner_text(),
+              "con un clic se pliega, y el título dice cuántas son")
+    pg.locator("#ficha-dadas > summary").click(); pg.wait_for_timeout(300)
+    comprueba(pg.locator("#ficha-lista").is_visible(), "y con otro vuelve a abrirse")
     comprueba("PAGA" not in " ".join(bloques) and "€" not in pg.locator("#ficha").inner_text(),
               "y en la ficha no hay nada de dinero")
 
@@ -400,7 +407,7 @@ with sync_playwright() as p:
     comprueba("Puesta, aún sin dar" in txt_fila("#110") or "Sin dar todavía" in txt_fila("#110"),
               "y las que no se han dado lo dicen")
     pg.select_option("#cat-orden", "reciente"); pg.wait_for_timeout(300)
-    primero = pg.locator(".cat-num").first.inner_text().strip()
+    primero = pg.locator("#cat-lista .cat-num").first.inner_text().strip()
     comprueba(primero == "#180", "por fecha, la última dada va arriba (%s)" % primero)
     pg.select_option("#cat-orden", "antigua"); pg.wait_for_timeout(300)
     filas = [r.inner_text() for r in pg.locator(".cat-row").all()]

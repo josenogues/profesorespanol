@@ -236,7 +236,6 @@ tbody tr.al-fila:hover .al-vercl{background:var(--primary);border-color:var(--pr
 #ficha > .ficha-cab{position:sticky;top:0;z-index:3;background:var(--card-bg);padding:16px 0 12px;margin:0 0 6px;border-bottom:1px solid var(--ficha-bd)}
 #ficha .fi-bloque{border:0;border-top:1px solid var(--ficha-bd);border-radius:0;margin-top:0;padding:18px 0;background:var(--card-bg)}
 #ficha .fi-bloque.fi-proxbloque{border-top:0}
-#ficha .fi-lista-cab{margin-top:0;padding-top:18px;border-top:1px solid var(--ficha-bd)}
 #ficha .fi-row,#ficha .cat-row{background:var(--card-bg);border:1px solid var(--ficha-bd)}
 /* dentro de la ficha las cajas vuelven a ser claras: así el fondo cálido
    enmarca y el contenido sigue leyéndose igual de bien */
@@ -290,8 +289,12 @@ tbody tr.al-fila:hover .al-vercl{background:var(--primary);border-color:var(--pr
 .eco-fecha-caja{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
 .fi-proxbloque .fi-bh{margin-top:0}
 .fi-prox{width:100%;box-sizing:border-box;min-height:96px;padding:10px 12px;border-radius:6px;border:1px solid var(--border);background:var(--card-bg);color:var(--text);font-family:var(--font-body);font-size:15.5px;line-height:1.5;resize:vertical}
-.fi-lista-cab{display:flex;justify-content:space-between;align-items:flex-end;gap:10px 16px;flex-wrap:wrap;margin-top:22px}
-.fi-lista-cab .ficha-h3{margin:0}
+.fi-dadas>summary{cursor:pointer;list-style:none;display:flex;align-items:center;justify-content:space-between;gap:10px}
+.fi-dadas>summary::-webkit-details-marker{display:none}
+.fi-dadas>summary .ficha-h3{margin:0}
+.fi-dadas>summary::after{content:'';width:9px;height:9px;border-right:2px solid var(--muted);border-bottom:2px solid var(--muted);transform:rotate(-135deg);margin:0 4px 0 8px;flex:none;transition:transform .15s}
+.fi-dadas:not([open])>summary::after{transform:rotate(45deg)}
+.fi-dadas>.fi-ordena{margin:12px 0 0}
 .fi-ordena{font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;display:flex;gap:8px;align-items:center}
 .al-prox-txt{max-width:320px;font-size:13.5px;line-height:1.4;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;white-space:pre-line}
 .al-fecha b{display:block;font-variant-numeric:tabular-nums}
@@ -322,7 +325,6 @@ body{padding:20px 12px}
 .eco-in[type=date]{width:auto;flex:1}
 .eco-in[type=checkbox]{width:22px;height:22px}
 .table-wrap tbody tr.al-fila td.vacio{display:none}
-.fi-lista-cab{align-items:stretch}
 #ficha{width:100vw;padding:0 12px 28px}
 #ficha > .ficha-cab{flex-wrap:nowrap;align-items:center;padding:10px 0}
 #ficha > .ficha-cab p{font-size:13px;line-height:1.35}
@@ -446,21 +448,9 @@ body{padding:20px 12px}
 <p class="fi-como">Se guarda sola mientras escribes. Es solo para ti.</p>
 </div>
 
-<div class="fi-lista-cab">
-<h3 class="ficha-h3">Lo que hemos dado <span class="ficha-op">pulsa el título para abrir la clase como la ve él</span></h3>
-<label class="fi-ordena">Ordenar
-<select id="ficha-orden" class="pn-sel">
-<option value="fecha-desc">Por fecha, la última primero</option>
-<option value="fecha-asc">Por fecha, la primera primero</option>
-<option value="num">Por número del catálogo</option>
-</select></label>
-</div>
-<div id="ficha-lista"></div>
-<p class="ficha-estado" id="ficha-estado"></p>
-
 <div class="fi-bloque fi-poner">
 <h3 class="fi-bh">Ponerle una clase</h3>
-<p class="fi-como">Busca en el catálogo, ponle el día y pulsa <b>Añadir</b> en la clase que quieras. Aparece arriba, en «Lo que hemos dado», y él la ve al momento en su «Mis clases». Las que ya tiene van con ✓.</p>
+<p class="fi-como">Busca en el catálogo, ponle el día y pulsa <b>Añadir</b> en la clase que quieras. Aparece debajo, en «Lo que hemos dado», y él la ve al momento en su «Mis clases». Las que ya tiene van con ✓.</p>
 <div class="ficha-alta">
 <label>Buscar<input type="search" id="ficha-busca" placeholder="número, título o etiqueta..." autocomplete="off"></label>
 <label>Fecha <span class="ficha-op">déjala vacía si no te acuerdas</span>
@@ -476,6 +466,18 @@ body{padding:20px 12px}
 <button class="button button-secondary" id="rap-abrir3"><i class="ti ti-bolt" aria-hidden="true"></i> Clase rápida para este alumno</button>
 </div>
 
+<details class="fi-bloque fi-dadas" id="ficha-dadas" open>
+<summary><h3 class="ficha-h3">Lo que hemos dado <span class="ficha-op" id="ficha-dadas-n"></span></h3></summary>
+<label class="fi-ordena">Ordenar
+<select id="ficha-orden" class="pn-sel">
+<option value="fecha-desc">Por fecha, la última primero</option>
+<option value="fecha-asc">Por fecha, la primera primero</option>
+<option value="num">Por número del catálogo</option>
+</select></label>
+<p class="fi-como" style="margin:8px 0">Pulsa el título para abrir la clase como la ve él.</p>
+<div id="ficha-lista"></div>
+</details>
+<p class="ficha-estado" id="ficha-estado"></p>
 
 <div class="fi-bloque">
 <h3 class="fi-bh">Sus datos <span class="ficha-op">nombre, nivel, si puede entrar…</span></h3>
@@ -774,6 +776,6 @@ Si solo quieres que deje de entrar, ponle «No entra» en «¿Ve la web?» ahí 
 <script src="clases.js?v=5c543ab051"></script>
 <script src="temas.js?v=29497494e8"></script>
 <script type="module" src="firebase-sync.js?v=34c910e4bb"></script>
-<script type="module" src="firebase-panel.js?v=353f4dd5ab"></script>
+<script type="module" src="firebase-panel.js?v=73c3835188"></script>
 </body>
 </html>
