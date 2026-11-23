@@ -68,8 +68,22 @@ bueno; lo pequeño y claro, hacerlo.
   Google», LinkedIn, QR, las pestañas de cuaderno junto al menú, la frase
   («Poco a poco se llega lejos»…) al pie del menú, un color por materia, la
   foto de José en «Mis clases».
-- Aparcado para más adelante: dominio propio, portada pública, test de nivel,
-  Google, app.
+- Aparcado para más adelante: portada pública, test de nivel, Google, app.
+- El dominio propio ya no está aparcado: José compró `hablaconjose.com`
+  (Cloudflare, 20 nov 2026) y la mudanza de la web está a medias. La lleva
+  la conversación «Web».
+
+## Cómo se reparte el trabajo (noviembre 2026)
+José llegó a tener 9 conversaciones abiertas a la vez y se pisaban. Ahora son
+tres. **No abrir conversaciones nuevas para un tema que ya tiene dueña**: si
+José pide algo de otro frente, decírselo y mandarlo a la que toca.
+- **Web**: la única que cambia este repositorio (la web de los alumnos, el
+  panel del profesor y la mudanza al dominio).
+- **Redes y vídeo**: los vídeos (repositorio `estudio-profesorespanol`), las
+  cuentas @hablaconjose (YouTube, TikTok; Instagram pendiente) y el plan de
+  marketing. No toca este repositorio.
+- **PM · gestión del proyecto**: lleva el orden y las prioridades y hace los
+  resúmenes. No cambia la web; como mucho, este CLAUDE.md.
 
 ## Impeccable (diseño)
 José tiene instalado el plugin impeccable (una skill y cinco agentes), sin
