@@ -69,7 +69,7 @@ bueno; lo pequeño y claro, hacerlo.
 - Banderas: siempre las de `banderas/*.svg`, nunca emoji (en Windows salen
   como letras).
 
-**Lecturas (decidido el 23 nov 2026, en construcción)**
+**Lecturas (en la web desde el 23 nov 2026)**
 - Cada clase de teoría puede tener dos hijas: el **repaso** (ejercicios del
   banco, ya existe) y la **lectura**. No se combinan clases en una lectura:
   para mezclar, José pone dos.
@@ -84,8 +84,13 @@ bueno; lo pequeño y claro, hacerlo.
   regla B1/B2). El texto no se traduce: solo las palabras difíciles, al
   tocarlas.
 - En el panel, lo escrito por el alumno sale en un desplegable dentro de esa
-  clase. La primera lectura es la de la clase 540 («Si tuviera dinero…»);
-  José la revisa antes de publicarla.
+  clase. Hay una: «El décimo», de la 540 («Si tuviera dinero…»).
+- Cómo está hecha: los textos en `lecturas.js` (formato explicado arriba del
+  archivo); `lectura-XX.html?clase=<id>` es una sola página por pista
+  (`lectura.js`); el botón «Lectura» del panel sale solo en las clases que
+  tienen una. Para una nueva: escribir texto y preguntas, **enseñárselos a
+  José y esperar su visto bueno**, añadirla a `lecturas.js` y pasar
+  `prueba_lectura.py`.
 
 **Descartado o aparcado: no volver a proponerlo salvo que José lo saque**
 - Descartado: «Mis fallos», aviso en «Mira tu correo», botón «Entrar con
@@ -101,7 +106,10 @@ bueno; lo pequeño y claro, hacerlo.
   GitHub Pages. Firebase tiene autorizados `hablaconjose.com` y
   `www.hablaconjose.com`; `pages.dev` NO (solo falla el envío del enlace ahí).
   No hizo falta tocar el código: las rutas son relativas y el enlace usa la
-  dirección en la que esté el alumno. **Pendiente** (la lleva «Web», con
+  dirección en la que esté el alumno. **Ojo:** Cloudflare sirve las páginas
+  sin «.html» (`clase-motor-it`): todo lo que lea el idioma de la dirección
+  tiene que aceptar las dos formas (se arregló el 23 nov: el botón de idioma
+  no cambiaba de página). **Pendiente** (la lleva «Web», con
   calma y sin prisa): avisar a los alumnos por WhatsApp, pasar el repositorio
   a privado (ojo: Cloudflare publica todo lo que está en git, incluidos
   `CLAUDE.md` y `herramientas/`) y dejar la dirección vieja reenviando a la
