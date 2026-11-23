@@ -40,7 +40,7 @@ DB = {s["email"]: s for s in [
   # Anna es italiana y tiene una clase del catálogo trilingüe, una solo en
   # inglés y una rápida: los tres casos de enlace en la misma ficha
   al("anna@x.com", "Anna", "it", "B1", 1, [
-      {"id": "motor", "fecha": mas(-7), "nota": ""},
+      {"id": "motor", "fecha": mas(-7), "nota": "se lía con el pluscuamperfecto"},
       {"id": "gustar", "fecha": mas(-2), "nota": ""},
       {"rapida": {"titulo": "Por y para, de una vez", "temas": ["por-para"]},
        "fecha": mas(4), "nota": ""}],
@@ -282,8 +282,8 @@ with sync_playwright() as p:
     comprueba(all(est[k]["izq"] in ("0px", "1px") for k in ("ficha", "fila", "poner")),
               "ni la ficha ni sus filas llevan raya de color a la izquierda (%s)" %
               [est[k]["izq"] for k in ("ficha", "fila", "poner")])
-    comprueba(est["fila"]["rad"] == "6px" and est["poner"]["rad"] in ("0px", "6px"),
-              "las esquinas son de 6 px (%s)" % est["fila"]["rad"])
+    comprueba(est["poner"]["rad"] == "6px" and est["fila"]["rad"] in ("0px", "6px"),
+              "las esquinas son de 6 px (%s)" % est["poner"]["rad"])
     comprueba(est["ficha"]["pos"] == "fixed" and est["box"]["right"] >= est["ancho"] - 1 and est["box"]["left"] > 300,
               "la ficha se abre como panel a la derecha, con la lista a la vista")
     comprueba(pg.locator('tr[data-ficha="brandon@x.com"] .al-vercl').is_visible(),
@@ -320,6 +320,31 @@ with sync_playwright() as p:
     comprueba("RÁPIDA" in pg.locator("#ficha-lista .fi-row").last.inner_text().upper(),
               "y la clase rápida, que no tiene número, va detrás")
     pg.select_option("#ficha-orden", "fecha-desc"); pg.wait_for_timeout(300)
+
+    print("\n═══ la ficha compacta ═══")
+    comprueba(pg.locator("#ficha .fi-nota").count() == 0 and "Nota para ti" not in pg.locator("#ficha").inner_html(),
+              "las clases ya no llevan el campo «Nota para ti»")
+    comprueba(pg.evaluate("window.__DB['anna@x.com'].clases.find(c => c.id === 'motor').nota") ==
+              "se lía con el pluscuamperfecto",
+              "pero las notas que ya había escrito siguen guardadas, no se pierden")
+    filas = pg.locator("#ficha-lista .fi-row")
+    alturas = [filas.nth(i).evaluate("e => e.querySelector('.fi-chips').getBoundingClientRect().height")
+               for i in range(filas.count())]
+    comprueba(all(a < 32 for a in alturas), "las etiquetas ocupan una sola línea en todas (%s)" % [round(a) for a in alturas])
+    mas = pg.locator("#ficha-lista .fi-mas:visible")
+    comprueba(mas.count() >= 1, "y las clases con muchas etiquetas llevan un «+» (%d)" % mas.count())
+    h0 = pg.locator("#ficha-lista .fi-chips").nth(0).evaluate("e => e.getBoundingClientRect().height")
+    fila_mas = pg.locator("#ficha-lista .fi-row").filter(has=pg.locator(".fi-mas:visible")).first
+    fila_mas.locator(".fi-mas").click(); pg.wait_for_timeout(200)
+    comprueba(fila_mas.locator(".fi-chips").evaluate("e => e.classList.contains('abierto') && e.getBoundingClientRect().height > 32"),
+              "pulsar «+» enseña todas las etiquetas")
+    fila_mas.locator(".fi-mas").click(); pg.wait_for_timeout(200)
+    comprueba(fila_mas.locator(".fi-chips").evaluate("e => e.getBoundingClientRect().height < 32"),
+              "y volver a pulsar las recoge en una línea")
+    sec = pg.evaluate("""() => [...document.querySelectorAll('#ficha .fi-bloque')].map(e => {
+        const c = getComputedStyle(e); return [c.borderTopWidth, c.borderRadius, c.backgroundColor]; })""")
+    comprueba(len(sec) == 4 and all(x[0] == "1px" and x[1] == "6px" and x[2] != "rgba(0, 0, 0, 0)" for x in sec),
+              "cada sección es una tarjeta con su marco y su fondo, que se distingue de las demás (%s)" % sec[:1])
 
     print("\n═══ elegir clase: lo que ya tiene va con ✓ ═══")
     con = pg.locator("#ficha-cat .fc-row.ya").count()
@@ -490,12 +515,12 @@ with sync_playwright() as p:
     mov = pg.evaluate("""() => {
         const h = s => { const e = document.querySelector(s); const r = e.getBoundingClientRect(); return [Math.round(r.width), Math.round(r.height)]; };
         const f = s => parseFloat(getComputedStyle(document.querySelector(s)).fontSize);
-        return { ficha: h('#ficha'), quitar: h('.fi-quitar'), fecha: f('.fi-fecha'), nota: f('.fi-nota'), prox: f('#fi-proxima'), ancho: innerWidth };
+        return { ficha: h('#ficha'), quitar: h('.fi-quitar'), fecha: f('.fi-fecha'), prox: f('#fi-proxima'), ancho: innerWidth };
     }""")
     comprueba(mov["ficha"][0] == mov["ancho"], "la ficha ocupa toda la pantalla (%s)" % mov["ficha"])
     comprueba(mov["quitar"][1] >= 40, "la × de quitar una clase se puede pulsar con el dedo (%s)" % mov["quitar"])
-    comprueba(min(mov["fecha"], mov["nota"], mov["prox"]) >= 16,
-              "la letra de los campos es de 16 px, para que el móvil no haga zoom (%s)" % [mov["fecha"], mov["nota"], mov["prox"]])
+    comprueba(min(mov["fecha"], mov["prox"]) >= 16,
+              "la letra de los campos es de 16 px, para que el móvil no haga zoom (%s)" % [mov["fecha"], mov["prox"]])
     pg.locator("#ficha-cerrar").click(); pg.wait_for_timeout(300)
     pg.select_option("#al-orden-movil", "nombre:asc"); pg.wait_for_timeout(300)
     comprueba(pg.locator(".al-fila .al-quien b").first.inner_text() == "Anna",

@@ -516,6 +516,7 @@ const fDadas = document.getElementById('ficha-dadas');
 if(fDadas){
   try { if(localStorage.getItem('jn_panel_dadas') === '0') fDadas.open = false; } catch(e) {}
   fDadas.addEventListener('toggle', () => {
+    ajustaChips();
     try { localStorage.setItem('jn_panel_dadas', fDadas.open ? '1' : '0'); } catch(e) {}
   });
 }
@@ -565,6 +566,20 @@ function avisa(txt, tipo){
 // El catálogo dentro de la ficha: se busca, se ve qué clases ya tiene este
 // alumno (✓) y se pulsa «Añadir» en la que toque. Va en el mismo orden que el
 // catálogo de abajo (por número o por fecha).
+// Las etiquetas de cada clase van en una sola línea; si no caben todas, sale
+// un «+» para verlas todas (y un «−» para volver a una línea).
+function ajustaChips(){
+  document.querySelectorAll('#ficha-lista .fi-chiprow').forEach(f => {
+    const c = f.querySelector('.fi-chips');
+    const b = f.querySelector('.fi-mas');
+    if(!c || !b) return;
+    const abierto = c.classList.contains('abierto');
+    b.hidden = !(abierto || c.scrollWidth > c.clientWidth + 1);
+    b.textContent = abierto ? '−' : '+';
+  });
+}
+window.addEventListener('resize', ajustaChips);
+
 let fcQ = '';
 function pintaPicker(){
   const caja = document.getElementById('ficha-cat');
@@ -639,14 +654,13 @@ function pintaFicha(){
     return `<div class="fi-row${pend ? ' pend' : ''}">
       <input type="date" class="fi-fecha" data-i="${i}" value="${esc(c.fecha || '')}">
       <div class="fi-tit">${tit}</div>
-      <div class="fi-chips">${chips}</div>
-      <input type="text" class="fi-nota" data-i="${i}" value="${esc(c.nota || '')}"
-             placeholder="Nota para ti: cómo fue, qué repetir...">
+      <div class="fi-chiprow"><div class="fi-chips">${chips}</div><button type="button" class="fi-mas" data-mas hidden title="Ver todas las etiquetas">+</button></div>
       ${rep}<button class="fi-quitar" data-quitar="${i}" title="Quitar de su lista">×</button>
     </div>`;
   }).join('') : '<p class="panel-empty">Todavía no le has dado ninguna clase.</p>';
 
   const n = clasesAbiertas.length;
+  ajustaChips();
   const cnt = document.getElementById('ficha-dadas-n');
   if(cnt) cnt.textContent = '(' + n + ')';
   // el email va aquí: el título de la ficha ya lleva su nombre, pero el email
@@ -819,6 +833,7 @@ function abreFicha(email){
   avisa('');
   pintaFicha();
   ficha.style.display = 'block';
+  ajustaChips();
   // es un panel al lado de la lista: se abre arriba del todo, sin mover la página
   ficha.scrollTop = 0;
 }
@@ -881,6 +896,13 @@ document.addEventListener('click', function(e){
     return;
   }
 
+  const mas = e.target.closest('[data-mas]');
+  if(mas){
+    mas.parentNode.querySelector('.fi-chips').classList.toggle('abierto');
+    ajustaChips();
+    return;
+  }
+
   const quitar = e.target.closest('[data-quitar]');
   if(quitar){
     const i = parseInt(quitar.dataset.quitar, 10);
@@ -924,8 +946,6 @@ document.addEventListener('change', function(e){
   }
   const f = e.target.closest('.fi-fecha');
   if(f){ clasesAbiertas[+f.dataset.i].fecha = f.value; pintaFicha(); repinta(); guarda(); return; }
-  const n = e.target.closest('.fi-nota');
-  if(n){ clasesAbiertas[+n.dataset.i].nota = n.value; guarda(); return; }
   if(e.target && e.target.closest('.fi-perfil') && ficha.contains(e.target)){
     if(e.target.id === PERFIL.activo || e.target.id === 'fi-acceso') avisaAcceso();
     guardaPerfil();
