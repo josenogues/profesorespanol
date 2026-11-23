@@ -70,9 +70,19 @@ bueno; lo pequeño y claro, hacerlo.
   («Poco a poco se llega lejos»…) al pie del menú, un color por materia, la
   foto de José en «Mis clases».
 - Aparcado para más adelante: portada pública, test de nivel, Google, app.
-- El dominio propio ya no está aparcado: José compró `hablaconjose.com`
-  (Cloudflare, 20 nov 2026) y la mudanza de la web está a medias. La lleva
-  la conversación «Web».
+- Dominio propio: `hablaconjose.com` (Cloudflare, comprado el 20 nov 2026).
+  **Ya está activo** (23 nov): la web se sirve desde Cloudflare Pages
+  (proyecto `profesorespanol`, repo conectado, rama `main`, sin build ni
+  carpeta de salida; también `www.` y `profesorespanol.pages.dev`) y la
+  entrada por enlace de email funciona en el dominio nuevo y en el viejo de
+  GitHub Pages. Firebase tiene autorizados `hablaconjose.com` y
+  `www.hablaconjose.com`; `pages.dev` NO (solo falla el envío del enlace ahí).
+  No hizo falta tocar el código: las rutas son relativas y el enlace usa la
+  dirección en la que esté el alumno. **Pendiente** (la lleva «Web», con
+  calma y sin prisa): avisar a los alumnos por WhatsApp, pasar el repositorio
+  a privado (ojo: Cloudflare publica todo lo que está en git, incluidos
+  `CLAUDE.md` y `herramientas/`) y dejar la dirección vieja reenviando a la
+  nueva; antes de privatizar hay que comprobar cómo quedaría ese reenvío.
 
 ## Cómo se reparte el trabajo (noviembre 2026)
 José llegó a tener 9 conversaciones abiertas a la vez y se pisaban. Ahora son
@@ -120,7 +130,7 @@ revisiones automáticas.
 
 ## Cómo está montada
 - Sitio estático, **sin compilar**: lo que hay en el repo es lo que se publica
-  (GitHub Pages desde `main`).
+  (GitHub Pages y Cloudflare Pages, los dos desde `main`).
 - `script.js` va en todas las páginas (menú, idioma, puerta de entrada, motor
   que corrige ejercicios, buscador). `ejercicios.js` es el hub de ejercicios,
   solo en `ejercicios-*.html`.
