@@ -85,6 +85,14 @@ José pide algo de otro frente, decírselo y mandarlo a la que toca.
 - **PM · gestión del proyecto**: lleva el orden y las prioridades y hace los
   resúmenes. No cambia la web; como mucho, este CLAUDE.md.
 
+**Una conversación activa por frente, y una nueva por cada tarea grande.**
+Las conversaciones largas gastan más: cada mensaje carga toda la historia.
+Cuando se termina una tarea grande (por ejemplo, la mudanza al dominio), se
+publica, se archiva esa conversación y lo siguiente va en una nueva del mismo
+frente. La memoria está en este CLAUDE.md, no en el chat; lo pendiente que no
+esté aquí se lo pasa la de gestión a la nueva. Nunca dos conversaciones
+tocando la web a la vez.
+
 ## Impeccable (diseño)
 José tiene instalado el plugin impeccable (una skill y cinco agentes), sin
 revisiones automáticas.
