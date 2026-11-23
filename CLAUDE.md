@@ -8,7 +8,8 @@ de muchos países) entran con su email y encuentran sus clases, los ejercicios y
 la teoría. Es el complemento de las clases en vídeo, no un curso suelto.
 
 Hablar con José **en español, corto y claro**, sin jerga técnica: él decide
-sobre la web, no programa. Antes de algo grande, proponer y esperar su visto
+sobre la web, no programa. Es un proyecto de pasión y va a su ritmo: **nada
+de plazos, fechas ni planes del día** que no pida él. Antes de algo grande, proponer y esperar su visto
 bueno; lo pequeño y claro, hacerlo.
 
 ## Reglas de José (permanentes)
