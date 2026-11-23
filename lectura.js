@@ -12,7 +12,9 @@
   const cont = document.getElementById('lec-cont');
   if(!cont) return;
 
-  const track = (location.pathname.match(/-(es|it|en)\.html$/) || [])[1] || 'es';
+  // Cloudflare sirve las páginas sin el «.html» (lectura-it en vez de
+  // lectura-it.html): el idioma tiene que leerse con y sin él
+  const track = (location.pathname.match(/-(es|it|en)(?:\.html)?$/) || [])[1] || 'es';
   const T = {
     es: { eyebrow: 'Lectura', de: 'Lectura de la clase', leer: 'Lee el texto. Si una palabra subrayada no la entiendes, tócala.',
           preguntas: 'Preguntas', pregSub: 'Todas sobre el texto: vuelve a él siempre que quieras.',

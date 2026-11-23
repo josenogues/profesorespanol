@@ -14,6 +14,7 @@ dentro de esa clase.
 """
 import sys
 import os
+import re
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from firebase_falso import monta, hora
 from playwright.sync_api import sync_playwright
@@ -162,6 +163,28 @@ with sync_playwright() as p:
     pg = ctx.new_page(); pg.goto(URL + 'lectura-it.html?clase=si-tuviera'); pg.wait_for_timeout(2500)
     ancho = pg.evaluate('document.documentElement.scrollWidth')
     ok(ancho <= 390, 'en el móvil no se sale de la pantalla (%d px)' % ancho)
+    ctx.close()
+
+    print('\n═══ como lo sirve Cloudflare: sin «.html» ═══')
+    # hablaconjose.com sirve lectura-es en vez de lectura-es.html. La web
+    # leía el idioma del «-es.html» del final, y ahí el botón de idioma se
+    # marcaba pero no cambiaba de página (lo vio José el 23 nov 2026).
+    ctx = b.new_context(viewport={'width': 1300, 'height': 900}); monta(ctx, DB)
+    alumna(ctx, 'marco@x.com', 'es')
+    raiz = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+    def sin_html(route):
+        ruta = route.request.url.split('?')[0].rsplit('/', 1)[1]
+        route.fulfill(path=os.path.join(raiz, ruta + '.html'), content_type='text/html; charset=utf-8')
+    ctx.route(re.compile(r'/lectura-(es|it|en)(\?.*)?$'), sin_html)
+    pg = ctx.new_page(); errs = []; pg.on('pageerror', lambda e: errs.append(str(e)))
+    pg.goto(URL + 'lectura-es?clase=si-tuviera'); pg.wait_for_timeout(2500)
+    ok(pg.locator('.lec-preg h4').inner_text().strip() == 'Preguntas', 'lectura-es (sin .html) sale en español')
+    pg.locator('.lang-track-btn[data-track="en"]').click(); pg.wait_for_timeout(2500)
+    ok(pg.url.endswith('lectura-en?clase=si-tuviera') and pg.locator('.lec-preg h4').inner_text().strip() == 'Questions',
+       'el botón English lleva a lectura-en, la misma lectura y en inglés: ' + pg.url)
+    ok(pg.locator('.lec-trad-btn').count() > 0, 'y ahí están los botones de traducción')
+    ok(not errs, 'sin errores de JS: %s' % errs)
     ctx.close()
     b.close()
 

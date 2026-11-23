@@ -23,7 +23,7 @@
   // Se saca del nombre del archivo —página-en.html— que es de donde lo saca
   // toda la web. El atributo lang del <html> pone "es" en todas, así que no
   // sirve para esto.
-  const porArchivo = (location.pathname.match(/-(es|it|en)\.html$/) || [])[1];
+  const porArchivo = (location.pathname.match(/-(es|it|en)(?:\.html)?$/) || [])[1];
   const track = porArchivo || localStorage.getItem('jn_track') || 'es';
   const T = {
     es: { abrir: 'Mis apuntes', titulo: 'Mis apuntes', cerrar: 'Cerrar',

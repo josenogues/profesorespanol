@@ -98,7 +98,8 @@ if(firstTab) firstTab.click();
 const current=location.pathname.split("/").pop()||"index.html";
 // los enlaces no tienen href real (son track-link con data-base), así que se
 // comparan por patrón base-it.html / base-en.html
-const m = current.match(/^(.+)-(it|en|es)\.html$/);
+// Cloudflare sirve las páginas sin el «.html»: vale con y sin él
+const m = current.match(/^(.+)-(it|en|es)(?:\.html)?$/);
 if(m){
 document.querySelectorAll(".panel-menu a.track-link:not([data-q])").forEach(a=>{
 if(a.dataset.base !== m[1]) return;
@@ -159,7 +160,7 @@ document.addEventListener("jn-modo", e => marcaModo(e.detail));
     // las páginas comunes (portada, «Sobre mí»…) van en el idioma del alumno:
     // así un lector de pantalla no lee el italiano o el inglés con voz española.
     // Las de cada pista (-it.html, -en.html) ya lo llevan puesto.
-    if(!/-(es|it|en)\.html$/.test(location.pathname)) document.documentElement.lang = (t === 'it' || t === 'en') ? t : 'es';
+    if(!/-(es|it|en)(?:\.html)?$/.test(location.pathname)) document.documentElement.lang = (t === 'it' || t === 'en') ? t : 'es';
     document.querySelectorAll('.i18n').forEach(el=>{
       const val = t === 'it' ? el.dataset.it : t === 'en' ? el.dataset.en : el.dataset.es;
       if(val) el.textContent = val;
@@ -289,12 +290,16 @@ document.addEventListener("jn-modo", e => marcaModo(e.detail));
       const t = langBtn.dataset.track;
       setTrack(t);
       const current = location.pathname.split('/').pop() || '';
-      const m = current.match(/^(.+)-(it|en|es)\.html$/);
+      // en Cloudflare la dirección llega sin «.html» (clase-motor-it): antes
+      // no cuadraba y el botón cambiaba el idioma pero no la página
+      const m = current.match(/^(.+)-(it|en|es)(?:\.html)?$/);
       if(m && m[2] !== t){
         // No todas las páginas existen en los tres idiomas: las clases para
         // angloparlantes solo en inglés, los false friends no en español.
         // Antes se saltaba a ciegas y el alumno acababa en un 404.
-        const destino = m[1] + '-' + t + '.html';
+        // con «.html» o sin él, como venga la de ahora: así Cloudflare no
+        // tiene que redirigir (y el ?clase= de una lectura no se arriesga)
+        const destino = m[1] + '-' + t + (/\.html$/.test(current) ? '.html' : '');
         fetch(destino, { method: 'HEAD' })
           .then(function(r){
             // la lectura es una sola página para todas: el ?clase= dice cuál,
