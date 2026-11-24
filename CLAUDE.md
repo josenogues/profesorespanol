@@ -92,12 +92,32 @@ bueno; lo pequeño y claro, hacerlo.
   José y esperar su visto bueno**, añadirla a `lecturas.js` y pasar
   `prueba_lectura.py`.
 
+**Bienvenida (en la web desde el 24 nov 2026)**
+- `bienvenida.html`: lo que ve quien llega a hablaconjose.com sin haber
+  entrado nunca (la portada le manda ahí; con `?entrar`, con el enlace del
+  correo o esperándolo, no). Es para captar alumnos: la idea que vende es que
+  **la web sale de las clases** («tus clases no se quedan en la
+  videollamada»), no «teoría y ejercicios como cualquier web».
+- Lleva: el degradado con «¡Hola!», un **vídeo** de la web por dentro con una
+  alumna inventada (Sara; nunca datos reales) en los tres idiomas y en versión
+  ordenador y móvil (`bienvenida/`), cómo funciona en tres filas, la **clase
+  de muestra** (la 540 y su lectura, abiertas sin entrar, con una franja que
+  lleva a reservar), la foto de José **pequeña, no protagonista**, tres
+  reseñas, y reservar **en Preply o directamente (TidyCal)**: que elija el
+  alumno. Sin precio en la web.
+- La puerta enlaza con la bienvenida («¿Todavía no eres alumno?»).
+- Si cambia el aspecto de la web, los vídeos se vuelven a grabar con
+  `herramientas/graba_recorrido.py`.
+- Pendiente de decidir: un contacto («escríbeme»). El número de WhatsApp no se
+  puede esconder.
+
 **Descartado o aparcado: no volver a proponerlo salvo que José lo saque**
 - Descartado: «Mis fallos», aviso en «Mira tu correo», botón «Entrar con
   Google», LinkedIn, QR, las pestañas de cuaderno junto al menú, la frase
   («Poco a poco se llega lejos»…) al pie del menú, un color por materia, la
   foto de José en «Mis clases».
-- Aparcado para más adelante: portada pública, test de nivel, Google, app.
+- Aparcado para más adelante: test de nivel, Google, app, suscripción a la
+  web (que la clase sea un extra que se contrata aparte).
 - Dominio propio: `hablaconjose.com` (Cloudflare, comprado el 20 nov 2026).
   **Ya está activo** (23 nov): la web se sirve desde Cloudflare Pages
   (proyecto `profesorespanol`, repo conectado, rama `main`, sin build ni

@@ -665,7 +665,9 @@ document.addEventListener("jn-modo", e => marcaModo(e.detail));
           enotro:'Si puedes, ábrelo en este mismo navegador: si lo abres en otro te pediré el email otra vez.',
           app:'Estás usando la web desde la pantalla de inicio. No pulses el enlace del correo, porque se abriría en el navegador: mantén el dedo sobre él, elige «Copiar» y vuelve aquí.',
           pega:'Pegar el enlace', pegaph:'Pega aquí el enlace', entrando:'Entrando...',
-          nopega:'No encuentro el enlace en lo que has copiado. Vuelve al correo, mantén el dedo sobre el enlace y elige «Copiar».' },
+          nopega:'No encuentro el enlace en lo que has copiado. Vuelve al correo, mantén el dedo sobre el enlace y elige «Copiar».',
+          nuevo:'¿Todavía no eres alumno?', nuevoir:'Mira cómo funciona',
+          muestra:'Estás viendo una clase de muestra, tal cual la ve un alumno.', muestrair:'Reserva una clase y se abre todo' },
     it: { titulo:'Accesso per studenti', ph:'tua@email.com',
           pide:'Scrivi l’email con cui prenoti le lezioni. Ti mando un link per entrare.',
           boton:'Mandami il link', mandando:'Invio...',
@@ -684,7 +686,9 @@ document.addEventListener("jn-modo", e => marcaModo(e.detail));
           enotro:'Se puoi, aprilo in questo stesso browser: se lo apri in un altro ti richiederò l’email.',
           app:'Stai usando il sito dalla schermata Home. Non toccare il link nella mail, perché si aprirebbe nel browser: tieni il dito premuto sopra, scegli «Copia» e torna qui.',
           pega:'Incolla il link', pegaph:'Incolla qui il link', entrando:'Entro...',
-          nopega:'Non trovo il link in quello che hai copiato. Torna alla mail, tieni il dito premuto sul link e scegli «Copia».' },
+          nopega:'Non trovo il link in quello che hai copiato. Torna alla mail, tieni il dito premuto sul link e scegli «Copia».',
+          nuevo:'Non sei ancora studente?', nuevoir:'Guarda come funziona',
+          muestra:'Stai guardando una lezione di prova, così come la vede uno studente.', muestrair:'Prenota una lezione e si apre tutto' },
     en: { titulo:'Student access', ph:'you@email.com',
           pide:'Enter the email you book your lessons with. I’ll send you a link to get in.',
           boton:'Send me the link', mandando:'Sending...',
@@ -703,7 +707,9 @@ document.addEventListener("jn-modo", e => marcaModo(e.detail));
           enotro:'If you can, open it in this same browser: if you open it elsewhere I’ll ask for your email again.',
           app:'You’re using the site from your Home Screen. Don’t tap the link in the email, as it would open in the browser: press and hold it, choose “Copy” and come back here.',
           pega:'Paste the link', pegaph:'Paste the link here', entrando:'Signing in...',
-          nopega:'I can’t find the link in what you copied. Go back to the email, press and hold the link and choose “Copy”.' }
+          nopega:'I can’t find the link in what you copied. Go back to the email, press and hold the link and choose “Copy”.',
+          nuevo:'Not a student yet?', nuevoir:'See how it works',
+          muestra:'You’re looking at a sample lesson, exactly as a student sees it.', muestrair:'Book a lesson and it all opens up' }
   };
   let t = T[window.jnIdioma()] || T.es;
 
@@ -760,7 +766,8 @@ document.addEventListener("jn-modo", e => marcaModo(e.detail));
             (T[l[0]] === t ? ' class="activo" aria-pressed="true"' : ' aria-pressed="false"') +
             '><img class="bandera" src="banderas/' + l[1] + '.svg" width="21" height="14" alt=""> ' + l[2] + '</button>';
         }).join('') +
-      '</div>';
+      '</div>' +
+      '<p class="access-gate-nuevo">' + esc(t.nuevo) + ' <a href="bienvenida.html">' + esc(t.nuevoir) + ' →</a></p>';
     input = cuerpo.querySelector('.access-gate-input');
     btn = cuerpo.querySelector('.access-gate-btn');
     errorEl = cuerpo.querySelector('.access-gate-error');
@@ -954,6 +961,29 @@ document.addEventListener("jn-modo", e => marcaModo(e.detail));
   // debe verlo.
   const pista = localStorage.getItem(PROFE_KEY) === 'true' ||
     (localStorage.getItem(ACCESS_KEY) === 'true' && localStorage.getItem('jn_student_email'));
+
+  // La clase de muestra de la bienvenida (la 540 y su lectura) se ve sin
+  // entrar, con una franja arriba que lleva a reservar. Al que es alumno no
+  // le cambia nada. El resto de la web sigue cerrado: al pulsar en el menú
+  // sale la puerta, que también enlaza con la bienvenida.
+  const MUESTRA = 'si-tuviera';
+  const pag = location.pathname.split('/').pop() || '';
+  const esMuestra = new RegExp('^clase-' + MUESTRA + '-(es|it|en)(\\.html)?$').test(pag) ||
+    (/^lectura-(es|it|en)(\.html)?$/.test(pag) && new URLSearchParams(location.search).get('clase') === MUESTRA);
+  if(esMuestra && !pista && !/[?&]oobCode=/.test(location.search)){
+    const pon = function(){
+      const main = document.querySelector('main');
+      if(!main || document.querySelector('.muestra-franja')) return;
+      const f = document.createElement('div');
+      f.className = 'muestra-franja';
+      f.innerHTML = '<i class="ti ti-eye" aria-hidden="true"></i><span>' + esc(t.muestra) + '</span>' +
+        '<a href="bienvenida.html#reservar">' + esc(t.muestrair) + ' →</a>';
+      main.insertBefore(f, main.firstChild);
+    };
+    if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', pon); else pon();
+    return;
+  }
+
   if(!pista) abrePuerta('');
 
   esperaNube(10000)

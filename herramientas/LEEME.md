@@ -53,6 +53,7 @@ python3 -m http.server 8947
 | `prueba_examen.py` | El examen de nivel: acertar, fallar, salir a medias, continuar. |
 | `prueba_buscador.py` | El buscador del menú, en las tres pistas y sin pista. |
 | `prueba_resenas.py` | El carrusel de reseñas de «Sobre mí»: se ven todas, en móvil y ordenador. |
+| `prueba_bienvenida.py` | La bienvenida para quien no es alumno: quién va a ella desde la portada, el idioma y el vídeo, la clase de muestra abierta y el resto cerrado. |
 
 Toda la batería de una vez (unos 15 minutos): `bash herramientas/todas.sh`.
 

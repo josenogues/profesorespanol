@@ -6,12 +6,18 @@
 <title>Habla Español | Habla Español con José Nogues</title>
 <link rel="preconnect" href="https://www.gstatic.com" crossorigin>
 <link rel="preload" href="fuentes/nunito-latin.woff2?v=76388dbfe3" as="font" type="font/woff2" crossorigin>
-<link rel="preload" href="fuentes/iconos.woff2?v=bf18469665" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fuentes/iconos.woff2?v=c3d28d0ee0" as="font" type="font/woff2" crossorigin>
 <link rel="icon" type="image/png" href="icono.png">
 <link rel="apple-touch-icon" href="icono-movil.png">
 <meta name="apple-mobile-web-app-title" content="Habla Español">
-<link rel="stylesheet" href="styles.css?v=610b3be23f">
+<link rel="stylesheet" href="styles.css?v=9b989d7f41">
 <script>if(localStorage.getItem('jn_theme')==='dark')document.documentElement.setAttribute('data-theme','dark');</script>
+<script>
+// Quien llega sin haber entrado nunca no es (todavía) alumno: ve la
+// bienvenida. Se queda aquí, con la puerta, si viene a entrar (?entrar), si
+// vuelve con el enlace del correo (oobCode) o si está esperando ese enlace.
+try{if(!(localStorage.getItem('jn_profe')==='true'||(localStorage.getItem('jn_access_granted')==='true'&&localStorage.getItem('jn_student_email')))&&!/[?&](entrar|oobCode)\b/.test(location.search)&&!localStorage.getItem('jn_email_pendiente'))location.replace('bienvenida.html')}catch(e){}
+</script>
 </head>
 <body>
 <script>try{var f=localStorage.getItem('jn_menu_fijo');if(f&&innerWidth>900){document.body.setAttribute('data-panel',f);document.body.classList.add('menu-fijo')}}catch(e){}</script>
@@ -170,7 +176,7 @@
 <script type="module" src="firebase-sync.js?v=34c910e4bb"></script>
 <script src="clases.js?v=cb7f00e3c3"></script>
 <script src="temas.js?v=29497494e8"></script>
-<script src="script.js?v=d2e8c16085"></script>
+<script src="script.js?v=8fceccb2a0"></script>
 <script src="inicio.js?v=a2a9512e5c"></script>
 </body>
 </html>

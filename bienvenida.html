@@ -6,13 +6,14 @@
 <title>Habla Español con José · Clases de español por videollamada</title>
 <meta name="description" content="Clases particulares de español por videollamada, y después una web hecha a partir de tus clases: ejercicios, lecturas y toda la teoría.">
 <link rel="preload" href="fuentes/nunito-latin.woff2?v=76388dbfe3" as="font" type="font/woff2" crossorigin>
-<link rel="preload" href="fuentes/iconos.woff2?v=bf18469665" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fuentes/iconos.woff2?v=c3d28d0ee0" as="font" type="font/woff2" crossorigin>
 <link rel="icon" type="image/png" href="icono.png">
 <link rel="apple-touch-icon" href="icono-movil.png">
-<link rel="stylesheet" href="styles.css?v=610b3be23f">
+<link rel="stylesheet" href="styles.css?v=9b989d7f41">
 <script>if(localStorage.getItem('jn_theme')==='dark')document.documentElement.setAttribute('data-theme','dark');</script>
 <style>
-/* Bienvenida: la página para quien todavía no es alumno. Boceto. */
+/* Bienvenida: la página para quien todavía no es alumno. A ella lleva la portada
+   (index.html) a quien no ha entrado nunca, y la puerta con «Mira cómo funciona». */
 .bv{max-width:1040px;margin:0 auto;padding:0 24px}
 .bv-cab{display:flex;align-items:center;justify-content:space-between;gap:16px;margin:-20px -16px 34px}
 .bv-cab img.bv-logo{height:46px;width:auto;display:block}
@@ -54,6 +55,10 @@
 .bv-barra i{width:10px;height:10px;border-radius:50%;background:var(--border);display:block}
 .bv-barra span{margin-left:10px;font:600 12.5px var(--font-body);color:var(--muted)}
 .bv-ventana video{display:block;width:100%;height:auto;aspect-ratio:1280/800;background:var(--bg)}
+/* en el móvil, el vídeo grabado en un móvil, dentro de un teléfono */
+.bv-video.es-movil .bv-ventana{max-width:280px;margin:0 auto;border:9px solid #232C4F;border-radius:30px}
+.bv-video.es-movil .bv-barra{display:none}
+.bv-video.es-movil video{aspect-ratio:390/844}
 .bv-pie-video{text-align:center;color:var(--muted);font-size:14.5px;margin-top:12px}
 
 .bv-sec{margin:72px 0 0}
@@ -142,7 +147,7 @@
 <button type="button" data-l="en"><img class="bandera" src="banderas/gb.svg" width="21" height="14" alt=""><span class="bv-nom">English</span></button>
 <button type="button" data-l="es"><img class="bandera" src="banderas/es.svg" width="21" height="14" alt=""><span class="bv-nom">Español</span></button>
 </div>
-<a class="bv-entrar" href="index.html"><i class="ti ti-login" aria-hidden="true"></i><span><span class="i18n bv-nom-largo" data-es="Ya soy alumno · " data-it="Sono già studente · " data-en="I’m a student · ">Ya soy alumno · </span><span class="i18n" data-es="Entrar" data-it="Entra" data-en="Sign in">Entrar</span></span></a>
+<a class="bv-entrar" href="index.html?entrar"><i class="ti ti-login" aria-hidden="true"></i><span><span class="i18n bv-nom-largo" data-es="Ya soy alumno · " data-it="Sono già studente · " data-en="I’m a student · ">Ya soy alumno · </span><span class="i18n" data-es="Entrar" data-it="Entra" data-en="Sign in">Entrar</span></span></a>
 </div>
 </header>
 <p class="bv-mano">¡Hola!</p>
@@ -231,7 +236,7 @@
 <a class="bv-btn bv-btn-violeta" href="https://tidycal.com/josenogues" target="_blank" rel="noopener noreferrer"><span class="i18n" data-es="Reservar conmigo" data-it="Prenota con me" data-en="Book with me">Reservar conmigo</span> <i class="ti ti-arrow-right" aria-hidden="true"></i></a>
 </div>
 </div>
-<p class="bv-ya"><span class="i18n" data-es="¿Ya eres alumno?" data-it="Sei già studente?" data-en="Already a student?">¿Ya eres alumno?</span> <a href="index.html"><span class="i18n" data-es="Entra en tu cuaderno" data-it="Entra nel tuo quaderno" data-en="Go to your notebook">Entra en tu cuaderno</span> →</a></p>
+<p class="bv-ya"><span class="i18n" data-es="¿Ya eres alumno?" data-it="Sei già studente?" data-en="Already a student?">¿Ya eres alumno?</span> <a href="index.html?entrar"><span class="i18n" data-es="Entra en tu cuaderno" data-it="Entra nel tuo quaderno" data-en="Go to your notebook">Entra en tu cuaderno</span> →</a></p>
 </section>
 
 </div>
@@ -245,6 +250,7 @@
   var guardado = null;
   try { guardado = localStorage.getItem('jn_track'); } catch(e){}
   var nav = (navigator.language || '').slice(0, 2).toLowerCase();
+  var estrecho = window.matchMedia('(max-width:640px)');
   var l = /^(es|it|en)$/.test(guardado || '') ? guardado : (nav === 'it' || nav === 'es' ? nav : 'en');
   function pon(nuevo){
     l = nuevo;
@@ -258,10 +264,12 @@
     document.querySelectorAll('.bv-idiomas button').forEach(function(b){
       var si = b.dataset.l === l; b.classList.toggle('activo', si); b.setAttribute('aria-pressed', si);
     });
-    // el vídeo y su primera imagen, en su idioma
-    var v = document.getElementById('bv-video'), src = 'bienvenida/recorrido-' + l + '.mp4';
+    // el vídeo y su primera imagen, en su idioma; en el móvil, el grabado en un móvil
+    var v = document.getElementById('bv-video'), movil = estrecho.matches;
+    var cual = (movil ? 'movil-' : '') + l, src = 'bienvenida/recorrido-' + cual + '.mp4';
+    v.parentNode.parentNode.classList.toggle('es-movil', movil);
     if(v.getAttribute('src') !== src){
-      v.setAttribute('poster', 'bienvenida/portada-' + l + '.jpg');
+      v.setAttribute('poster', 'bienvenida/portada-' + cual + '.jpg');
       v.setAttribute('src', src);
       var va = v.play && v.play(); if(va && va.catch) va.catch(function(){});
     }
@@ -272,7 +280,14 @@
       try { localStorage.setItem('jn_track', l); } catch(e){}
     });
   });
+  // Al ir a la clase de muestra o a entrar, la web sigue en el idioma de aquí
+  // (si no, el menú de la clase saldría en español sobre una página italiana).
+  document.querySelectorAll('[data-pag], a[href^="index.html"]').forEach(function(a){
+    a.addEventListener('click', function(){ try { localStorage.setItem('jn_track', l); } catch(e){} });
+  });
   pon(l);
+  var otra = function(){ pon(l); };
+  if(estrecho.addEventListener) estrecho.addEventListener('change', otra); else if(estrecho.addListener) estrecho.addListener(otra);
 })();
 </script>
 </body>

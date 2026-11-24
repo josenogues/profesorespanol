@@ -253,6 +253,8 @@ for s in CUERPO.values():
     for base in re.findall(r'data-base="([a-z0-9-]+)"', s):
         enlazadas |= {f"{base}-{L}.html" for L in PISTAS}
 SUELTAS_OK = {"index.html", "panel-profesor.html"}
+# a la bienvenida lleva la portada a quien no ha entrado, y la puerta (con JavaScript)
+SUELTAS_OK.add("bienvenida.html")
 # a las clases se llega desde «Mis clases», que las pinta con JavaScript
 SUELTAS_OK |= {p for p in PAGINAS if p.startswith("clase-")}
 # y a las lecturas, desde el botón de su clase en «Mis clases» y desde el panel
