@@ -18,8 +18,8 @@
 @font-face{font-family:'Nunito';font-style:normal;font-weight:800;font-display:swap;src:url("fuentes/nunito-latin.woff2?v=76388dbfe3") format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
 
 /* ── iconos:inicio ── generado por herramientas/iconos.py: no editar a mano ──
-   Tabler Icons 3.51.0 (MIT, https://tabler.io/icons): solo los 80 que usa la web. */
-@font-face{font-family:"tabler-icons";font-style:normal;font-weight:400;font-display:block;src:url("fuentes/iconos.woff2?v=5924756dff") format("woff2")}
+   Tabler Icons 3.51.0 (MIT, https://tabler.io/icons): solo los 81 que usa la web. */
+@font-face{font-family:"tabler-icons";font-style:normal;font-weight:400;font-display:block;src:url("fuentes/iconos.woff2?v=bf18469665") format("woff2")}
 .ti{font-family:"tabler-icons" !important;speak:none;font-style:normal;font-weight:normal;font-variant:normal;text-transform:none;line-height:1;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
 .ti-adjustments-horizontal:before{content:"\ec38"}
 .ti-alert-triangle:before{content:"\ea06"}
@@ -64,6 +64,7 @@
 .ti-list-check:before{content:"\eb6a"}
 .ti-list-details:before{content:"\ef40"}
 .ti-lock:before{content:"\eae2"}
+.ti-login:before{content:"\eba7"}
 .ti-mail:before{content:"\eae5"}
 .ti-message-2:before{content:"\eaec"}
 .ti-message-circle-2:before{content:"\eaed"}

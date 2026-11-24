@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Habla Español con José · Clases de español por videollamada</title>
+<meta name="description" content="Clases particulares de español por videollamada, y después una web hecha a partir de tus clases: ejercicios, lecturas y toda la teoría.">
+<link rel="preload" href="fuentes/nunito-latin.woff2?v=76388dbfe3" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fuentes/iconos.woff2?v=bf18469665" as="font" type="font/woff2" crossorigin>
+<link rel="icon" type="image/png" href="icono.png">
+<link rel="apple-touch-icon" href="icono-movil.png">
+<link rel="stylesheet" href="styles.css?v=610b3be23f">
+<script>if(localStorage.getItem('jn_theme')==='dark')document.documentElement.setAttribute('data-theme','dark');</script>
+<style>
+/* Bienvenida: la página para quien todavía no es alumno. Boceto. */
+.bv{max-width:1040px;margin:0 auto;padding:0 24px}
+.bv-cab{display:flex;align-items:center;justify-content:space-between;gap:16px;margin:-20px -16px 34px}
+.bv-cab img.bv-logo{height:46px;width:auto;display:block}
+.bv-cab-der{display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+.bv-idiomas{display:flex;gap:4px}
+.bv-idiomas button{display:inline-flex;align-items:center;gap:6px;background:transparent;border:1px solid transparent;border-radius:6px;
+  padding:6px 10px;font:600 14px var(--font-body);color:rgba(255,255,255,.78);cursor:pointer}
+.bv-idiomas button:hover{background:rgba(255,255,255,.1);color:#fff}
+.bv-idiomas button.activo{border-color:rgba(255,255,255,.35);background:rgba(255,255,255,.14);color:#fff}
+.bv-entrar{display:inline-flex;align-items:center;gap:7px;border:2px solid rgba(255,255,255,.6);background:transparent;color:#fff;
+  border-radius:6px;padding:7px 14px;font:700 14.5px var(--font-head);text-decoration:none;white-space:nowrap}
+.bv-entrar:hover{background:rgba(255,255,255,.12)}
+.bv-idiomas button:focus-visible,.bv-entrar:focus-visible,.bv-btn:focus-visible{outline:3px solid #fff;outline-offset:2px}
+
+/* la entrada, con el degradado de la portada */
+.bv-hola{position:relative;overflow:hidden;background:linear-gradient(135deg,#3A4570 0%,#4b5894 55%,#6a5fc0 100%);color:#fff;
+  border-radius:6px;padding:36px 44px 150px;margin-top:16px}
+[data-theme="dark"] .bv-hola{background:linear-gradient(135deg,#2c3560 0%,#3d4a82 55%,#55499e 100%)}
+.bv-hola .bv-mano{font-family:'Caveat',cursive;font-weight:700;font-size:54px;line-height:1;color:#ffc94f;
+  transform:rotate(-1.5deg);transform-origin:left center;margin:0 0 14px}
+.bv-hola h1{font-family:var(--font-head);font-weight:800;font-size:40px;line-height:1.15;margin:0 0 16px;max-width:20ch;color:#fff}
+.bv-hola p{font-size:18.5px;line-height:1.55;color:rgba(255,255,255,.9);max-width:56ch;margin:0 0 24px}
+.bv-botones{display:flex;flex-wrap:wrap;gap:12px}
+.bv-btn{display:inline-flex;align-items:center;gap:8px;border-radius:6px;padding:13px 22px;font:700 16px var(--font-head);text-decoration:none;cursor:pointer}
+.bv-btn-oro{background:var(--gold);color:#232220;border:2px solid var(--gold)}
+.bv-btn-oro:hover{background:#f7bd45;border-color:#f7bd45}
+.bv-btn-linea{background:transparent;color:#fff;border:2px solid rgba(255,255,255,.6)}
+.bv-btn-linea:hover{background:rgba(255,255,255,.12)}
+.bv-globos{position:absolute;right:44px;top:150px;width:200px;height:160px}
+.bv-globos span{position:absolute;font-family:'Caveat',cursive;font-weight:700;font-size:24px;line-height:1;padding:9px 16px;border-radius:16px;white-space:nowrap}
+.bv-globos span:nth-child(1){top:0;left:0;background:var(--gold);color:#232220;transform:rotate(-6deg);border-bottom-left-radius:4px}
+.bv-globos span:nth-child(2){top:58px;right:0;background:#D6488F;color:#fff;transform:rotate(5deg);border-bottom-right-radius:4px}
+.bv-globos span:nth-child(3){bottom:0;left:18px;background:#fff;color:#3A4570;transform:rotate(-3deg);border-bottom-left-radius:4px}
+
+/* el vídeo, en una ventana de navegador, montado sobre el degradado */
+.bv-video{margin:-118px auto 0;max-width:920px;position:relative}
+.bv-ventana{background:var(--card-bg);border:1px solid var(--border);border-radius:6px;overflow:hidden;box-shadow:0 18px 44px rgba(35,44,79,.22)}
+.bv-barra{display:flex;align-items:center;gap:6px;padding:9px 12px;border-bottom:1px solid var(--border);background:var(--tint)}
+.bv-barra i{width:10px;height:10px;border-radius:50%;background:var(--border);display:block}
+.bv-barra span{margin-left:10px;font:600 12.5px var(--font-body);color:var(--muted)}
+.bv-ventana video{display:block;width:100%;height:auto;aspect-ratio:1280/800;background:var(--bg)}
+.bv-pie-video{text-align:center;color:var(--muted);font-size:14.5px;margin-top:12px}
+
+.bv-sec{margin:72px 0 0}
+.bv-sec h2{font-family:var(--font-head);font-weight:800;font-size:30px;line-height:1.2;margin:0 0 10px;color:var(--text)}
+.bv-sec .bv-intro{color:var(--muted);font-size:17.5px;max-width:62ch;margin:0 0 26px}
+
+/* cómo funciona: filas, no tarjetas */
+.bv-pasos{border-top:1px solid var(--border)}
+.bv-paso{display:grid;grid-template-columns:56px 1fr;gap:18px;padding:22px 0;border-bottom:1px solid var(--border);align-items:start}
+.bv-paso-ico{width:48px;height:48px;border-radius:6px;display:grid;place-items:center;background:var(--card-bg);border:1px solid var(--border);font-size:26px;color:var(--c)}
+.bv-paso h3{font-family:var(--font-head);font-size:20px;margin:2px 0 6px;color:var(--text)}
+.bv-paso p{margin:0;color:var(--text-secondary);font-size:16.5px;max-width:66ch}
+
+/* la clase de muestra */
+.bv-muestra{background:var(--card-bg);border:1px solid var(--border);border-radius:6px;padding:28px 30px;display:flex;gap:28px;align-items:center;flex-wrap:wrap}
+.bv-muestra-txt{flex:1 1 360px}
+.bv-muestra-txt h3{font-family:var(--font-head);font-size:22px;margin:0 0 4px}
+.bv-muestra-txt .bv-nivel{display:inline-block;font:700 12.5px var(--font-body);color:var(--c-clases);background:var(--c-clases-t);border-radius:6px;padding:2px 8px;margin-bottom:10px}
+.bv-muestra-txt p{margin:0;color:var(--text-secondary);font-size:16.5px}
+.bv-muestra-btns{display:flex;flex-direction:column;gap:10px;flex:0 0 auto}
+.bv-btn-plano{display:inline-flex;align-items:center;gap:9px;border:1px solid var(--border);background:var(--card-bg);color:var(--text);border-radius:6px;
+  padding:11px 18px;font:700 15.5px var(--font-head);text-decoration:none}
+.bv-btn-plano:hover{background:var(--tint)}
+.bv-btn-plano i{font-size:19px}
+
+/* quién hay detrás, sin ser protagonista */
+.bv-quien{display:flex;align-items:center;gap:14px;margin:0 0 22px}
+.bv-quien img{width:56px;height:56px;border-radius:50%;object-fit:cover;flex:none}
+.bv-quien p{margin:0;color:var(--text-secondary);font-size:16.5px}
+.bv-quien a{color:var(--c-clases);font-weight:700}
+.bv-resenas{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.bv-resena{background:var(--card-bg);border:1px solid var(--border);border-radius:6px;padding:20px;margin:0}
+.bv-resena .estrellas{color:var(--gold);letter-spacing:2px;font-size:15px}
+.bv-resena blockquote{margin:8px 0 12px;font-size:15.5px;color:var(--text);line-height:1.55}
+.bv-resena figcaption{font-size:14px;color:var(--muted);display:flex;align-items:center;gap:6px}
+.bv-resena figcaption b{color:var(--text)}
+
+/* reservar */
+.bv-reserva{text-align:center}
+.bv-reserva .bv-intro{margin-left:auto;margin-right:auto}
+.bv-opciones{display:grid;grid-template-columns:1fr 1fr;gap:16px;max-width:760px;margin:0 auto;text-align:left}
+.bv-opcion{background:var(--card-bg);border:1px solid var(--border);border-radius:6px;padding:24px;display:flex;flex-direction:column;gap:8px}
+.bv-opcion h3{font-family:var(--font-head);font-size:19px;margin:0;display:flex;align-items:center;gap:9px}
+.bv-opcion h3 i{color:var(--c-clases);font-size:22px}
+.bv-opcion p{margin:0 0 10px;color:var(--text-secondary);font-size:15.5px;flex:1}
+.bv-opcion .bv-btn{justify-content:center}
+.bv-btn-violeta{background:var(--c-clases);color:#fff;border:2px solid var(--c-clases)}
+.bv-btn-violeta:hover{background:var(--c-clases-d);border-color:var(--c-clases-d)}
+.bv-ya{margin-top:26px;color:var(--muted);font-size:15.5px}
+.bv-ya a{color:var(--c-clases);font-weight:700}
+.bv-fin{margin-top:80px}
+
+@media (max-width:860px){
+  .bv-globos{display:none}
+  .bv-resenas{grid-template-columns:1fr}
+}
+@media (max-width:640px){
+  .bv{padding:0 16px}
+  .bv-cab img.bv-logo{height:36px}
+  .bv-idiomas .bv-nom{display:none}
+  .bv-entrar .bv-nom-largo{display:none}
+  .bv-hola{padding:26px 22px 96px;margin-top:0;border-radius:0;margin-left:-16px;margin-right:-16px}
+  .bv-cab{margin:-8px -6px 26px}
+  .bv-hola .bv-mano{font-size:44px}
+  .bv-hola h1{font-size:30px}
+  .bv-hola p{font-size:17px}
+  .bv-video{margin-top:-74px}
+  .bv-sec{margin-top:54px}
+  .bv-sec h2{font-size:25px}
+  .bv-muestra{padding:22px 20px}
+  .bv-muestra-btns{width:100%}
+  .bv-opciones{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<div class="bv">
+
+
+<section class="bv-hola">
+<header class="bv-cab">
+<img class="bv-logo" src="logo.svg" alt="Habla español con José" width="291" height="69">
+<div class="bv-cab-der">
+<div class="bv-idiomas">
+<button type="button" data-l="it"><img class="bandera" src="banderas/it.svg" width="21" height="14" alt=""><span class="bv-nom">Italiano</span></button>
+<button type="button" data-l="en"><img class="bandera" src="banderas/gb.svg" width="21" height="14" alt=""><span class="bv-nom">English</span></button>
+<button type="button" data-l="es"><img class="bandera" src="banderas/es.svg" width="21" height="14" alt=""><span class="bv-nom">Español</span></button>
+</div>
+<a class="bv-entrar" href="index.html"><i class="ti ti-login" aria-hidden="true"></i><span><span class="i18n bv-nom-largo" data-es="Ya soy alumno · " data-it="Sono già studente · " data-en="I’m a student · ">Ya soy alumno · </span><span class="i18n" data-es="Entrar" data-it="Entra" data-en="Sign in">Entrar</span></span></a>
+</div>
+</header>
+<p class="bv-mano">¡Hola!</p>
+<h1 class="i18n" data-es="Tus clases de español no se quedan en la videollamada." data-it="Le tue lezioni di spagnolo non finiscono con la videochiamata." data-en="Your Spanish lessons don’t end when the call does.">Tus clases de español no se quedan en la videollamada.</h1>
+<p class="i18n" data-es="Clases particulares por videollamada, hechas a tu medida. Y después, una web que sale de tus clases: lo que vimos, ejercicios que se corrigen solos, lecturas y toda la teoría." data-it="Lezioni private in videochiamata, fatte su misura per te. E dopo, un sito che nasce dalle tue lezioni: quello che abbiamo visto, esercizi che si correggono da soli, letture e tutta la teoria." data-en="One-to-one lessons by video call, built around you. And afterwards, a website made from your lessons: what we covered, exercises that mark themselves, readings and all the theory.">Clases particulares por videollamada, hechas a tu medida. Y después, una web que sale de tus clases: lo que vimos, ejercicios que se corrigen solos, lecturas y toda la teoría.</p>
+<div class="bv-botones">
+<a class="bv-btn bv-btn-oro" href="#reservar"><i class="ti ti-calendar" aria-hidden="true"></i> <span class="i18n" data-es="Reserva una clase" data-it="Prenota una lezione" data-en="Book a lesson">Reserva una clase</span></a>
+<a class="bv-btn bv-btn-linea" href="#muestra"><i class="ti ti-book" aria-hidden="true"></i> <span class="i18n" data-es="Prueba una clase" data-it="Prova una lezione" data-en="Try a lesson">Prueba una clase</span></a>
+</div>
+<div class="bv-globos" aria-hidden="true"><span>¿Qué tal?</span><span>¡Vamos!</span><span>Poco a poco</span></div>
+</section>
+
+<div class="bv-video">
+<div class="bv-ventana">
+<div class="bv-barra" aria-hidden="true"><i></i><i></i><i></i><span>hablaconjose.com</span></div>
+<video id="bv-video" autoplay muted loop playsinline preload="metadata"></video>
+</div>
+<p class="bv-pie-video i18n" data-es="Así es por dentro, con una alumna inventada." data-it="Ecco com’è dentro, con una studentessa inventata." data-en="This is what it looks like inside, with a made-up student.">Así es por dentro, con una alumna inventada.</p>
+</div>
+
+<section class="bv-sec">
+<h2 class="i18n" data-es="Cómo funciona" data-it="Come funziona" data-en="How it works">Cómo funciona</h2>
+<p class="bv-intro i18n" data-es="La clase y la web son una sola cosa: lo que vemos juntos es lo que luego practicas." data-it="La lezione e il sito sono una cosa sola: quello che vediamo insieme è quello che poi eserciti." data-en="The lesson and the website are one thing: what we cover together is what you practise afterwards.">La clase y la web son una sola cosa: lo que vemos juntos es lo que luego practicas.</p>
+<div class="bv-pasos">
+<div class="bv-paso" style="--c:var(--c-clases)"><span class="bv-paso-ico"><i class="ti ti-chalkboard-teacher" aria-hidden="true"></i></span><div>
+<h3 class="i18n" data-es="La clase, contigo" data-it="La lezione, con te" data-en="The lesson, with you">La clase, contigo</h3>
+<p class="i18n" data-es="Por videollamada, a tu ritmo y sobre lo que necesitas: el trabajo, un viaje, un examen o simplemente hablar mejor. Te lo explico en tu idioma cuando hace falta." data-it="In videochiamata, al tuo ritmo e su quello che ti serve: il lavoro, un viaggio, un esame o semplicemente parlare meglio. Te lo spiego nella tua lingua quando serve." data-en="By video call, at your pace and on what you need: work, a trip, an exam or simply speaking better. I explain things in your language when it helps.">Por videollamada, a tu ritmo y sobre lo que necesitas: el trabajo, un viaje, un examen o simplemente hablar mejor. Te lo explico en tu idioma cuando hace falta.</p>
+</div></div>
+<div class="bv-paso" style="--c:var(--c-ejer)"><span class="bv-paso-ico"><i class="ti ti-pencil" aria-hidden="true"></i></span><div>
+<h3 class="i18n" data-es="Después, en tu cuaderno" data-it="Dopo, nel tuo quaderno" data-en="Afterwards, in your notebook">Después, en tu cuaderno</h3>
+<p class="i18n" data-es="Cada clase queda en la web con su explicación, su repaso y una lectura escrita para ella. Los ejercicios se corrigen solos, y «Cinco minutos de tus clases» te ayuda a repasar en un rato. Lo que escribes, lo corrijo en la clase siguiente." data-it="Ogni lezione resta sul sito con la sua spiegazione, il suo ripasso e una lettura scritta apposta. Gli esercizi si correggono da soli, e «Cinque minuti delle tue lezioni» ti fa ripassare in un attimo. Quello che scrivi, lo correggo nella lezione dopo." data-en="Every lesson stays on the site with its explanation, its review and a reading written just for it. The exercises mark themselves, and “Five minutes of your classes” lets you review in no time. Whatever you write, I correct in the next lesson.">Cada clase queda en la web con su explicación, su repaso y una lectura escrita para ella. Los ejercicios se corrigen solos, y «Cinco minutos de tus clases» te ayuda a repasar en un rato. Lo que escribes, lo corrijo en la clase siguiente.</p>
+</div></div>
+<div class="bv-paso" style="--c:var(--c-teoria)"><span class="bv-paso-ico"><i class="ti ti-brain" aria-hidden="true"></i></span><div>
+<h3 class="i18n" data-es="Y toda la teoría, cuando quieras" data-it="E tutta la teoria, quando vuoi" data-en="And all the theory, whenever you like">Y toda la teoría, cuando quieras</h3>
+<p class="i18n" data-es="Verbos, gramática, vocabulario, expresiones y español para el trabajo, con cursos paso a paso para practicar por tu cuenta." data-it="Verbi, grammatica, vocabolario, espressioni e spagnolo per il lavoro, con corsi passo passo per esercitarti da solo." data-en="Verbs, grammar, vocabulary, expressions and Spanish for work, with step-by-step courses to practise on your own.">Verbos, gramática, vocabulario, expresiones y español para el trabajo, con cursos paso a paso para practicar por tu cuenta.</p>
+</div></div>
+</div>
+</section>
+
+<section class="bv-sec" id="muestra">
+<h2 class="i18n" data-es="Prueba una clase entera" data-it="Prova una lezione intera" data-en="Try a whole lesson">Prueba una clase entera</h2>
+<p class="bv-intro i18n" data-es="Sin registrarte: una clase tal cual la ve un alumno." data-it="Senza registrarti: una lezione così come la vede uno studente." data-en="No sign-up needed: a lesson exactly as a student sees it.">Sin registrarte: una clase tal cual la ve un alumno.</p>
+<div class="bv-muestra">
+<div class="bv-muestra-txt">
+<h3>Si tuviera dinero…</h3>
+<span class="bv-nivel">B1–B2</span>
+<p class="i18n" data-es="Cómo hablar de lo que harías si las cosas fueran distintas. Con la explicación, doce ejercicios y la lectura «El décimo», con sus preguntas." data-it="Come parlare di quello che faresti se le cose fossero diverse. Con la spiegazione, dodici esercizi e la lettura «El décimo», con le sue domande." data-en="How to talk about what you would do if things were different. With the explanation, twelve exercises and the reading “El décimo”, with its questions.">Cómo hablar de lo que harías si las cosas fueran distintas. Con la explicación, doce ejercicios y la lectura «El décimo», con sus preguntas.</p>
+</div>
+<div class="bv-muestra-btns">
+<a class="bv-btn-plano" data-pag="clase-si-tuviera" href="clase-si-tuviera-es.html"><i class="ti ti-chalkboard-teacher" style="color:var(--c-clases)" aria-hidden="true"></i> <span class="i18n" data-es="Abrir la clase" data-it="Apri la lezione" data-en="Open the lesson">Abrir la clase</span></a>
+<a class="bv-btn-plano" data-pag="lectura" data-q="?clase=si-tuviera" href="lectura-es.html?clase=si-tuviera"><i class="ti ti-book" style="color:var(--c-ejer)" aria-hidden="true"></i> <span class="i18n" data-es="Leer «El décimo»" data-it="Leggi «El décimo»" data-en="Read “El décimo”">Leer «El décimo»</span></a>
+</div>
+</div>
+</section>
+
+<section class="bv-sec">
+<div class="bv-quien">
+<img src="profile.jpg" alt="" width="340" height="340">
+<p><span class="i18n" data-es="Soy José, profesor de español. Doy clases a alumnos de todo el mundo, y esto dicen algunos." data-it="Sono José, insegnante di spagnolo. Faccio lezione a studenti di tutto il mondo, ed ecco cosa dicono alcuni." data-en="I’m José, a Spanish teacher. I teach students from all over the world, and this is what some of them say.">Soy José, profesor de español. Doy clases a alumnos de todo el mundo, y esto dicen algunos.</span> <a href="sobre-mi.html"><span class="i18n" data-es="Sobre mí" data-it="Chi sono" data-en="About me">Sobre mí</span> →</a></p>
+</div>
+<div class="bv-resenas">
+<figure class="bv-resena"><span class="estrellas" aria-label="5/5">★★★★★</span>
+<blockquote class="i18n" data-es="Siempre preparado, con muy buen material para repasar en casa y ejercicios útiles. Adapta cada clase a mis necesidades y objetivos." data-it="Sempre preparato, con ottimi materiali da ripassare a casa ed esercizi utili. Adatta ogni lezione alle mie esigenze e ai miei obiettivi." data-en="Always prepared, with great materials to review at home and useful exercises. He adapts each class to my needs and goals.">Siempre preparado, con muy buen material para repasar en casa y ejercicios útiles. Adapta cada clase a mis necesidades y objetivos.</blockquote>
+<figcaption><b>Anna</b> <img class="bandera" src="banderas/ch.svg" width="21" height="14" alt=""> · <span class="i18n" data-es="Preply" data-it="Preply" data-en="Preply">Preply</span></figcaption></figure>
+<figure class="bv-resena"><span class="estrellas" aria-label="5/5">★★★★★</span>
+<blockquote class="i18n" data-es="En nuestras clases me ha preparado un plan de estudio profesional y a medida, que me ha ayudado muchísimo a hablar y a aprender la teoría." data-it="Durante le nostre lezioni mi ha preparato un piano di studio professionale e su misura, che mi ha aiutato tantissimo a parlare e a imparare la teoria." data-en="During our meetings, he has brought me a professionally tailored lesson plan that has only helped the way I speak and learn theory.">En nuestras clases me ha preparado un plan de estudio profesional y a medida, que me ha ayudado muchísimo a hablar y a aprender la teoría.</blockquote>
+<figcaption><b>Conner</b> <img class="bandera" src="banderas/us.svg" width="21" height="14" alt=""> · Preply</figcaption></figure>
+<figure class="bv-resena"><span class="estrellas" aria-label="5/5">★★★★★</span>
+<blockquote class="i18n" data-es="José sabe cómo adaptarse a tu nivel y prepara clases a medida." data-it="José sa come adattarsi al tuo livello e prepara lezioni su misura." data-en="José knows how to adapt to your level and prepares tailor-made lessons.">José sabe cómo adaptarse a tu nivel y prepara clases a medida.</blockquote>
+<figcaption><b>Marco</b> <img class="bandera" src="banderas/it.svg" width="21" height="14" alt=""> · Preply</figcaption></figure>
+</div>
+</section>
+
+<section class="bv-sec bv-reserva" id="reservar">
+<h2 class="i18n" data-es="¿Quieres ver más? Reserva una clase y se abre todo." data-it="Vuoi vedere di più? Prenota una lezione e si apre tutto." data-en="Want to see more? Book a lesson and it all opens up.">¿Quieres ver más? Reserva una clase y se abre todo.</h2>
+<p class="bv-intro i18n" data-es="Desde tu primera clase tienes tu cuaderno: tus clases, todos los ejercicios y toda la teoría. Elige dónde reservar." data-it="Dalla prima lezione hai il tuo quaderno: le tue lezioni, tutti gli esercizi e tutta la teoria. Scegli dove prenotare." data-en="From your first lesson you have your notebook: your lessons, all the exercises and all the theory. Choose where to book.">Desde tu primera clase tienes tu cuaderno: tus clases, todos los ejercicios y toda la teoría. Elige dónde reservar.</p>
+<div class="bv-opciones">
+<div class="bv-opcion">
+<h3><i class="ti ti-school" aria-hidden="true"></i> <span class="i18n" data-es="En Preply" data-it="Su Preply" data-en="On Preply">En Preply</span></h3>
+<p class="i18n" data-es="Si ya usas Preply o prefieres reservar y pagar allí." data-it="Se usi già Preply o preferisci prenotare e pagare lì." data-en="If you already use Preply or prefer to book and pay there.">Si ya usas Preply o prefieres reservar y pagar allí.</p>
+<a class="bv-btn bv-btn-violeta" href="https://preply.in/JOSE7IT3614462510?ts=17846445" target="_blank" rel="noopener noreferrer"><span class="i18n" data-es="Reservar en Preply" data-it="Prenota su Preply" data-en="Book on Preply">Reservar en Preply</span> <i class="ti ti-arrow-right" aria-hidden="true"></i></a>
+</div>
+<div class="bv-opcion">
+<h3><i class="ti ti-calendar" aria-hidden="true"></i> <span class="i18n" data-es="Directamente conmigo" data-it="Direttamente con me" data-en="Directly with me">Directamente conmigo</span></h3>
+<p class="i18n" data-es="Eliges día y hora en mi calendario." data-it="Scegli giorno e ora nel mio calendario." data-en="Pick a day and time in my calendar.">Eliges día y hora en mi calendario.</p>
+<a class="bv-btn bv-btn-violeta" href="https://tidycal.com/josenogues" target="_blank" rel="noopener noreferrer"><span class="i18n" data-es="Reservar conmigo" data-it="Prenota con me" data-en="Book with me">Reservar conmigo</span> <i class="ti ti-arrow-right" aria-hidden="true"></i></a>
+</div>
+</div>
+<p class="bv-ya"><span class="i18n" data-es="¿Ya eres alumno?" data-it="Sei già studente?" data-en="Already a student?">¿Ya eres alumno?</span> <a href="index.html"><span class="i18n" data-es="Entra en tu cuaderno" data-it="Entra nel tuo quaderno" data-en="Go to your notebook">Entra en tu cuaderno</span> →</a></p>
+</section>
+
+</div>
+<footer class="bv-fin">© 2026 José N. · <span class="i18n" data-es="Profesor de español" data-it="Insegnante di spagnolo" data-en="Spanish teacher">Profesor de español</span> · <a href="sobre-mi.html"><span class="i18n" data-es="Sobre mí" data-it="Chi sono" data-en="About me">Sobre mí</span></a> · <a href="privacidad.html"><span class="i18n" data-es="Privacidad" data-it="Privacy" data-en="Privacy">Privacidad</span></a></footer>
+
+<script>
+// El idioma: el que eligió la última vez; si no, el del navegador (italiano o
+// inglés; el español, a quien lo tenga puesto). Se guarda en jn_track para
+// que, si luego entra como alumno, la web ya esté en su pista.
+(function(){
+  var guardado = null;
+  try { guardado = localStorage.getItem('jn_track'); } catch(e){}
+  var nav = (navigator.language || '').slice(0, 2).toLowerCase();
+  var l = /^(es|it|en)$/.test(guardado || '') ? guardado : (nav === 'it' || nav === 'es' ? nav : 'en');
+  function pon(nuevo){
+    l = nuevo;
+    document.documentElement.lang = l;
+    document.querySelectorAll('.i18n').forEach(function(e){
+      var t = e.getAttribute('data-' + l); if(t != null) e.textContent = t;
+    });
+    document.querySelectorAll('[data-pag]').forEach(function(a){
+      a.href = a.dataset.pag + '-' + l + '.html' + (a.dataset.q || '');
+    });
+    document.querySelectorAll('.bv-idiomas button').forEach(function(b){
+      var si = b.dataset.l === l; b.classList.toggle('activo', si); b.setAttribute('aria-pressed', si);
+    });
+    // el vídeo y su primera imagen, en su idioma
+    var v = document.getElementById('bv-video'), src = 'bienvenida/recorrido-' + l + '.mp4';
+    if(v.getAttribute('src') !== src){
+      v.setAttribute('poster', 'bienvenida/portada-' + l + '.jpg');
+      v.setAttribute('src', src);
+      var va = v.play && v.play(); if(va && va.catch) va.catch(function(){});
+    }
+  }
+  document.querySelectorAll('.bv-idiomas button').forEach(function(b){
+    b.addEventListener('click', function(){
+      pon(b.dataset.l);
+      try { localStorage.setItem('jn_track', l); } catch(e){}
+    });
+  });
+  pon(l);
+})();
+</script>
+</body>
+</html>
