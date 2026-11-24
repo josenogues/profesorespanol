@@ -101,31 +101,33 @@ bueno; lo pequeño y claro, hacerlo.
 - Tiene el **marco de la web** (columna azul con botones para el visitante:
   Cómo funciona, Pruébalo, Reservar y abajo Entrar; fondo de cuaderno). Orden
   (24–25 nov, ideas de José): el degradado con «¡Hola!» y la ventana con el
-  **vídeo** entera dentro del violeta (los dos botones, del mismo tamaño);
-  la **presentación**: la frase «Lo mejor de una plataforma online, con la
-  conversación de un profesor nativo» **alineada a la izquierda y a todo lo
-  ancho**, y debajo, apareciendo **una después de otra al bajar**: la
-  plataforma (pantalla + texto) y luego el profesor (texto + **foto de José
-  tipo polaroid con «¡Hola, soy José! :)»**, los globos y el enlace a «Sobre
-  mí», donde están las reseñas).
-- **«¿Cómo funciona?»**: cada paso con **su propia pantalla al lado** (nada
-  de una pantalla fija que cambia: José se perdía). **Títulos breves** («1
-  Reserva una clase») y todo lo demás en la descripción, con las **palabras
-  clave resaltadas en nuestro amarillo**. Cuatro **tramos** con título a
-  mano y una raya discontinua larga que se dibuja al llegar (sin pantalla:
-  marcan el cambio): *La clase, por videollamada* (1 reserva · 2 entra en
-  clase · 3 teoría a tu medida, no al viejo estilo, y pocos ejercicios
-  guiados · 4 toma notas: se guardan solas, se pueden descargar) · *Cuando
-  termina la clase…* (5 practica tu clase, y generar más · 6 lee; los dos se
-  ven en la clase siguiente) · *Y en tu móvil* (7 cinco minutos: un
-  **teléfono solo**, sin navegador alrededor; sin presiones, sin premios
-  por rachas, sin agobios: lo contrario de Duolingo) · *Y además…* (un solo
-  tramo con dos: **Ponte a prueba**, con tres botones —por nivel, por tema
-  de teoría, por temática— que cambian la foto; y **Repasa la teoría**, a
-  tu ritmo, desde la web o el móvil, con un vídeo de teoría largo).
-- Después **«¡Pruébalo gratis!» en violeta**, para que se distinga de la
-  explicación (la 540 y su lectura, abiertas sin entrar, con una franja que
-  lleva a reservar), y el cierre «¿Empezamos?».
+  **vídeo** entera dentro del violeta (los dos botones, del mismo tamaño).
+- La **presentación**, en el ordenador con **fondo fijo**: la frase «Lo mejor
+  de una plataforma online, con la conversación de un profesor nativo»
+  (alineada a la izquierda, a todo lo ancho) y, al seguir bajando sin que
+  la página se mueva, aparecen **en una línea** la plataforma (izquierda),
+  el «+» (centro) y José (derecha: **polaroid «¡Hola, soy José! :)»**,
+  globos y enlace a «Sobre mí», donde están las reseñas).
+- **«¿Cómo funciona?»**, también con **fondo fijo** en el ordenador: a la
+  izquierda un paso cada vez con su **número grande**, a la derecha su
+  pantalla **con el mismo número en la esquina**; al bajar cambian juntos
+  (la pantalla nueva entra como una página). Debajo, un **recorrido** con
+  los números para saber dónde estás (y saltar). Los cuatro **tramos**
+  ocupan la escena solos, sin pantalla, con título a mano y raya
+  discontinua larga: *La clase, por videollamada* (1 reserva · 2 entra en
+  clase · 3 teoría a tu medida · 4 toma notas) · *Cuando termina la clase…*
+  (5 practica tu clase · 6 lee) · *Y en tu móvil* (7 cinco minutos: un
+  **teléfono solo**, sin navegador; sin presiones ni rachas: lo contrario de
+  Duolingo) · *Y además…* (**Ponte a prueba**, con tres botones que cambian
+  la foto; **Repasa la teoría**). **Títulos breves** y lo demás en la
+  descripción, con **palabras clave en nuestro amarillo**. En el móvil y en
+  pantallas pequeñas, sin fondo fijo: cada paso con su pantalla debajo.
+- **«¡Pruébalo gratis!»** en el cuadro violeta con degradado y globos (el
+  que antes tenía «¿Empezamos?»): la 540 y su lectura, abiertas sin entrar.
+- El cierre **«¿Empezamos?»**: estrecho, **sin fondo**, con **Lucía y Javi**
+  contentos (los bocadillos con cara de los vídeos, sacados de
+  `estudio-profesorespanol/src/personajes.tsx`: `bienvenida/lucia.svg` y
+  `javi.svg`).
 - **Reservar, solo en TidyCal** (su calendario). **Preply ya no es para
   reservar**: queda como perfil con las reseñas, en «Sobre mí». José quizá añada también su
   perfil de **Superprof** (él pasará el enlace). Sin precio en la web.

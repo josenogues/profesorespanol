@@ -123,6 +123,8 @@ with sync_playwright() as p:
     comprueba(pg.locator(".bv-cap").count() == 9 and pg.locator(".bv-cap .bv-cap-media > *").count() == 9,
               "nueve pasos, cada uno con su pantalla al lado")
     comprueba(pg.locator(".bv-tramo").count() == 4, "cuatro tramos: la clase, después, el móvil y «y además»")
+    comprueba(pg.locator('#reservar img[src$="lucia.svg"]').count() == 1 and pg.locator('#reservar img[src$="javi.svg"]').count() == 1,
+              "el cierre lleva a Lucía y Javi")
     comprueba(pg.locator('.bv-cap[data-escena="cinco"] .bv-telefono video').count() == 1
               and pg.locator('.bv-cap[data-escena="cinco"] .bv-ventana').count() == 0,
               "cinco minutos: un teléfono solo, sin navegador alrededor")
@@ -131,15 +133,33 @@ with sync_playwright() as p:
     comprueba(pg.locator(".bv-cap mark.bv-m").count() >= 9, "palabras clave resaltadas en amarillo")
     escenas = pg.locator(".bv-cap video")
     comprueba(all(s.endswith("-it.mp4") for s in escenas.evaluate_all("v => v.map(x => x.getAttribute('src'))")), "  vídeos en el idioma de la página")
-    for i in range(pg.locator(".bv-cap").count()):
-        cap = pg.locator(".bv-cap").nth(i)
-        if cap.get_attribute("data-tipo") == "fotos":
-            continue
-        y = cap.evaluate("e => e.getBoundingClientRect().top + scrollY + e.offsetHeight/2 - innerHeight/2")
-        pg.evaluate("y => scrollTo(0, y)", y); pg.wait_for_timeout(900)
-        nombre = cap.get_attribute("data-escena")
-        suenan = pg.evaluate("() => [...document.querySelectorAll('.bv-cap video')].filter(v => !v.paused).map(v => v.dataset.escena)")
-        comprueba(suenan == [nombre], "al llegar a «%s», se mueve su pantalla y solo esa (%s)" % (nombre, suenan))
+    # fondo fijo: al bajar, cada paso entra con su pantalla y solo esa se mueve
+    comprueba(pg.evaluate("document.documentElement.classList.contains('bv-fijo')"), "en el ordenador, la historia va con el fondo fijo")
+    pista = pg.evaluate("document.querySelector('.bv-pista').getBoundingClientRect().top + scrollY")
+    paso = pg.evaluate("Math.round(innerHeight * 0.6)")
+    slots = pg.locator(".bv-caps > li")
+    for i in range(slots.count()):
+        pg.evaluate("y => scrollTo(0, y)", pista + i * paso + paso * 0.4); pg.wait_for_timeout(500)
+        li = slots.nth(i)
+        comprueba("actual" in (li.get_attribute("class") or "") and pg.locator(".bv-caps > li.actual").count() == 1,
+                  "al bajar, el %dº de la historia ocupa la escena" % (i + 1))
+        if li.get_attribute("data-tipo") in ("video", "movil"):
+            nombre = li.get_attribute("data-escena")
+            suenan = pg.evaluate("() => [...document.querySelectorAll('.bv-cap video')].filter(v => !v.paused).map(v => v.dataset.escena)")
+            comprueba(suenan == [nombre], "  y se mueve su pantalla, y solo esa (%s)" % suenan)
+            comprueba(li.locator(".bv-cap-media").get_attribute("data-num") == li.locator(".bv-num").inner_text().strip(),
+                      "  la pantalla lleva el mismo número que el paso")
+    # el recorrido de abajo lleva a cada paso
+    pg.locator(".bv-progreso button").nth(2).click(); pg.wait_for_timeout(1500)
+    comprueba(pg.locator(".bv-caps > li.actual .bv-num").inner_text().strip() == "3", "el recorrido de abajo lleva al paso pulsado")
+    # dos mundos: con el fondo fijo, la plataforma, el «+» y el profesor salen uno detrás de otro
+    dt = pg.evaluate("document.querySelector('.bv-dos-pista').getBoundingClientRect().top + scrollY")
+    dh = pg.evaluate("document.querySelector('.bv-dos-pista').offsetHeight - innerHeight")
+    vistos = []
+    for f in (0.02, 0.25, 0.5, 0.8):
+        pg.evaluate("y => scrollTo(0, y)", dt + f * dh); pg.wait_for_timeout(300)
+        vistos.append(pg.locator(".bv-dos [data-desde].visto").count())
+    comprueba(vistos == [0, 1, 2, 3], "presentación: la plataforma, luego el «+», luego José (%s)" % vistos)
     for f in ["bienvenida/escena-%s-%s.%s" % (n, l, e) for n in ("reserva", "portada", "clase", "notas", "repaso", "lectura", "movil-cinco", "teoria")
               for l in ("es", "it", "en") for e in ("mp4", "jpg")] + \
              ["bienvenida/escena-practica-%s.jpg" % l for l in ("es", "it", "en")] + \
@@ -149,8 +169,8 @@ with sync_playwright() as p:
     comprueba(pg.evaluate("document.documentElement.scrollWidth") <= 1440, "nada se sale por los lados")
     # la práctica libre: los botones cambian la foto de la pantalla
     cap = pg.locator('.bv-cap[data-escena="practica"]')
-    y = cap.evaluate("e => e.getBoundingClientRect().top + scrollY + e.offsetHeight/2 - innerHeight/2")
-    pg.evaluate("y => scrollTo(0, y)", y); pg.wait_for_timeout(700)
+    k = pg.evaluate("[...document.querySelectorAll('.bv-caps > li')].findIndex(x => x.dataset.escena === 'practica')")
+    pg.evaluate("y => scrollTo(0, y)", pista + k * paso + paso * 0.4); pg.wait_for_timeout(700)
     cap.locator('button[data-foto="tema"]').click(); pg.wait_for_timeout(300)
     vista = pg.evaluate("() => document.querySelector('.bv-cap .bv-fotos img.vista').dataset.foto")
     comprueba(vista == "tema" and cap.locator('button[data-foto="tema"]').get_attribute("aria-pressed") == "true",

@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-4 -8 74 72" width="148" height="144">
+<!-- Lucía, el bocadillo violeta del logo, contenta (la misma de los vídeos) -->
+<defs><clipPath id="c"><path d="M18 4H46Q60 4 60 18V34Q60 48 46 48H28L15 59L17 48Q4 47 4 34V18Q4 4 18 4Z"/></clipPath></defs>
+<path d="M18 4H46Q60 4 60 18V34Q60 48 46 48H28L15 59L17 48Q4 47 4 34V18Q4 4 18 4Z" fill="#4A3FA0"/>
+<g clip-path="url(#c)"><path d="M18 4H46Q60 4 60 18V34Q60 48 46 48H28L15 59L17 48Q4 47 4 34V18Q4 4 18 4Z" fill="#5B4FB8" transform="translate(0 -2.4)"/></g>
+<g transform="translate(0 -1.2)" fill="none" stroke="#232C4F" stroke-width="2.4" stroke-linecap="round">
+<path d="M21.5 26.5 Q26.1 20.5 30.7 26.5"/><path d="M36.5 26.5 Q41.1 20.5 45.7 26.5"/>
+<path d="M27.6 35 Q33.6 40.5 39.6 35"/>
+<path d="M18.5 15 Q24.5 8.5 31 13.5 T44.5 11.5" stroke="#FF86BE" stroke-width="3.4" transform="translate(1.6 0)"/>
+</g>
+</svg>
