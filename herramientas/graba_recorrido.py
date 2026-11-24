@@ -274,12 +274,17 @@ with sync_playwright() as p:
         clic('#panel-ejer a[data-q="modo=curso"]', 20, 250); corta(False); sigue(900)
         baja(320, 1300); espera(1900)
     # 6 · la teoría
-    rot(None); cierra(); marca("teoria")
+    rot(None); cierra()
+    if not ORDENADOR: marca("teoria")
     clic('.riel-btn[data-sec="teoria"]', 30, 250); espera(700)
     grupo = pg.locator("#panel-teoria .panel-grupo").first
     clic(grupo.locator("button.panel-mat"), 20, 250); espera(600)
     clic(grupo.locator('a[data-base="subjuntivo"]'), 20, 250); corta(False); sigue()
+    if ORDENADOR: marca("teoria")  # en la bienvenida, la teoría empieza ya en su página
     rot(6); espera(1200); baja(420, 1600); espera(2200)
+    if ORDENADOR:
+        # la teoría, más larga: se lee bajando con calma
+        baja(520, 1800); espera(1800); baja(560, 1800); espera(2000)
     rot(None); espera(500)
     fin_tramo[tramo["n"]] = time.time(); cierra()
     cdp.send("Page.stopScreencast")

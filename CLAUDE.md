@@ -100,27 +100,32 @@ bueno; lo pequeño y claro, hacerlo.
   videollamada»), no «teoría y ejercicios como cualquier web».
 - Tiene el **marco de la web** (columna azul con botones para el visitante:
   Cómo funciona, Pruébalo, Reservar y abajo Entrar; fondo de cuaderno). Orden
-  (24 nov, ideas de José): el degradado con «¡Hola!» y la ventana con el
+  (24–25 nov, ideas de José): el degradado con «¡Hola!» y la ventana con el
   **vídeo** entera dentro del violeta (los dos botones, del mismo tamaño);
-  la **presentación** a todo lo ancho, que aparece al bajar (título, luego
-  los dos lados): «una plataforma» + «un profesor nativo» que resuelve dudas
-  y enseña a hablar, «nada de teoría aburrida», con **la foto de José**, los
-  globos de conversación y el enlace a «Sobre mí» (ahí están las reseñas: en
-  la bienvenida ya no). Luego **«¿Cómo funciona?»** con una pantalla fija a
-  la derecha que enseña cada paso (en el móvil, debajo de cada uno):
-  1 reservas y la encuentras preparada en tu sección · 2 la clase es por
-  videollamada · 3 teoría pensada para ti, no al viejo estilo, y pocos
-  ejercicios guiados conmigo · 4 tus notas (siempre a mano, se guardan
-  solas, se pueden descargar) · *corte: «Aquí termina la clase… y empieza tu
-  parte online»* · 5 ejercicios sobre tu clase (y generar más) · 6 una
-  lectura (los dos se ven en la clase siguiente) · 7 cinco minutos desde el
-  móvil (vídeo de móvil; sin presiones, sin premios por rachas, sin agobios,
-  a tu ritmo: lo contrario de Duolingo) · *«Y además…»* + si eres curioso,
-  ejercicios por nivel, por tema de teoría o por temática (tres botones que
-  cambian la foto de la pantalla) · *«Y además…»* + la teoría ordenada para
-  quien prefiere el estilo clásico. Después la **clase de muestra** (la 540
-  y su lectura, abiertas sin entrar, con una franja que lleva a reservar) y
-  el cierre en violeta «¿Empezamos?».
+  la **presentación**: la frase «Lo mejor de una plataforma online, con la
+  conversación de un profesor nativo» **alineada a la izquierda y a todo lo
+  ancho**, y debajo, apareciendo **una después de otra al bajar**: la
+  plataforma (pantalla + texto) y luego el profesor (texto + **foto de José
+  tipo polaroid con «¡Hola, soy José! :)»**, los globos y el enlace a «Sobre
+  mí», donde están las reseñas).
+- **«¿Cómo funciona?»**: cada paso con **su propia pantalla al lado** (nada
+  de una pantalla fija que cambia: José se perdía). **Títulos breves** («1
+  Reserva una clase») y todo lo demás en la descripción, con las **palabras
+  clave resaltadas en nuestro amarillo**. Cuatro **tramos** con título a
+  mano y una raya discontinua larga que se dibuja al llegar (sin pantalla:
+  marcan el cambio): *La clase, por videollamada* (1 reserva · 2 entra en
+  clase · 3 teoría a tu medida, no al viejo estilo, y pocos ejercicios
+  guiados · 4 toma notas: se guardan solas, se pueden descargar) · *Cuando
+  termina la clase…* (5 practica tu clase, y generar más · 6 lee; los dos se
+  ven en la clase siguiente) · *Y en tu móvil* (7 cinco minutos: un
+  **teléfono solo**, sin navegador alrededor; sin presiones, sin premios
+  por rachas, sin agobios: lo contrario de Duolingo) · *Y además…* (un solo
+  tramo con dos: **Ponte a prueba**, con tres botones —por nivel, por tema
+  de teoría, por temática— que cambian la foto; y **Repasa la teoría**, a
+  tu ritmo, desde la web o el móvil, con un vídeo de teoría largo).
+- Después **«¡Pruébalo gratis!» en violeta**, para que se distinga de la
+  explicación (la 540 y su lectura, abiertas sin entrar, con una franja que
+  lleva a reservar), y el cierre «¿Empezamos?».
 - **Reservar, solo en TidyCal** (su calendario). **Preply ya no es para
   reservar**: queda como perfil con las reseñas, en «Sobre mí». José quizá añada también su
   perfil de **Superprof** (él pasará el enlace). Sin precio en la web.
