@@ -38,7 +38,7 @@ def db(pista):
 
 
 if len(sys.argv) == 1:
-    for modo in ("", "movil", "escenas"):
+    for modo in ("", "movil", "escenas", "movil-escenas", "fotos"):
         for l in ("it", "en", "es"):
             subprocess.run([sys.executable, __file__, l] + ([modo] if modo else []), check=True)
     sys.exit(0)
@@ -46,10 +46,15 @@ if len(sys.argv) == 1:
 P = sys.argv[1] if len(sys.argv) > 1 else "it"
 B = os.environ.get("BASE", "http://127.0.0.1:8947") + "/"
 OUT = os.path.join(os.path.dirname(AQUI), "bienvenida")
-MOVIL = len(sys.argv) > 2 and sys.argv[2] == "movil"
+MODO = sys.argv[2] if len(sys.argv) > 2 else ""
+MOVIL = MODO in ("movil", "movil-escenas")
 # «escenas»: el mismo recorrido en el ordenador, sin rótulos (el texto lo pone
 # la página), cortado en un vídeo por capítulo: escena-<nombre>-XX.mp4
-ESCENAS = len(sys.argv) > 2 and sys.argv[2] == "escenas"
+# «movil-escenas»: lo mismo en el móvil (escena-movil-<nombre>-XX.mp4).
+# «fotos»: fotos fijas de la práctica libre por nivel, por tema y cursos
+# (practica-<modo>-XX.jpg).
+ESCENAS = MODO in ("escenas", "movil-escenas")
+ORDENADOR = ESCENAS and not MOVIL
 W, H = (390, 844) if MOVIL else (1280, 800)
 DSF = 2 if MOVIL else 1
 SUF = ("movil-" if MOVIL else "") + P
@@ -111,6 +116,27 @@ INIT = r"""
   });
 })();
 """ % P
+
+if MODO == "fotos":
+    from PIL import Image
+    with sync_playwright() as p:
+        br = p.chromium.launch(executable_path="/opt/pw-browsers/chromium")
+        c = br.new_context(viewport={"width": 1280, "height": 800})
+        monta(c, db(P))
+        c.add_init_script("localStorage.setItem('__falso_usuario','sara@demo.com');localStorage.setItem('jn_access_granted','true');"
+                          "localStorage.setItem('jn_student_email','sara@demo.com');localStorage.setItem('jn_nombre','Sara');"
+                          "localStorage.setItem('jn_track','%s');" % P)
+        pg = c.new_page()
+        for modo in ("nivel", "tema", "curso"):
+            pg.goto(B + "ejercicios-%s.html?modo=%s" % (P, modo)); pg.wait_for_timeout(1500)
+            pg.add_style_tag(content=".apu-boton{visibility:hidden!important}")
+            pg.evaluate("scrollTo(0, 150)"); pg.wait_for_timeout(300)
+            tmp = os.path.join(OUT, "_foto.png"); pg.screenshot(path=tmp)
+            Image.open(tmp).convert("RGB").save(os.path.join(OUT, "practica-%s-%s.jpg" % (modo, P)), quality=78, optimize=True)
+            os.remove(tmp)
+        br.close()
+    print("ok fotos", P)
+    sys.exit(0)
 
 with sync_playwright() as p:
     br = p.chromium.launch(executable_path="/opt/pw-browsers/chromium")
@@ -181,9 +207,12 @@ with sync_playwright() as p:
     pg.goto(B + "index.html"); espera(1300)
     empieza(); espera(200); marca("portada")
     m.move(*((200, 420) if MOVIL else (700, 330))); espera(200); rot(0); espera(2200)
+    if ORDENADOR:
+        # la clase es por videollamada: el botón para entrar
+        ve(".hola-btn-linea", 30); espera(1500)
     # 2 · Mis clases
-    clic('.riel-btn[data-sec="clases"]'); corta(); sigue(); marca("reserva" if ESCENAS else "clases")
-    if ESCENAS:
+    clic('.riel-btn[data-sec="clases"]'); corta(); sigue(); marca("reserva" if ORDENADOR else "clases")
+    if ORDENADOR:
         # reservar: el botón de la agenda
         ve(".cita-barra", 30); espera(1900); cierra(); marca("clases")
     rot(1); espera(400)
@@ -200,7 +229,7 @@ with sync_playwright() as p:
     clic(blk.locator(".exercise-check"), 18, 150); espera(1100)
     blk3 = pg.locator('.exercise-block[data-exid="si3"]')
     clic(blk3.locator('.option-btn[data-value="fuera"]'), 26, 200); espera(1500)
-    if ESCENAS:
+    if ORDENADOR:
         # los apuntes de la clase
         cierra(); marca("notas")
         clic(".apu-boton", 30, 250); espera(700)
@@ -208,6 +237,19 @@ with sync_playwright() as p:
         pg.keyboard.type("Si tuviera tiempo, leería más.", delay=70); espera(1600)
     # 4 · la lectura (desde Mis clases)
     corta(); pg.go_back(); pg.wait_for_load_state("load"); pg.wait_for_timeout(450); pg.evaluate("scrollTo(0,0)"); sigue(); rot(None)
+    if ORDENADOR:
+        # los ejercicios de la clase, en el botón dorado de su fila
+        clic(pg.locator('a.cl-hija[href*="repaso=si-tuviera"]'), 30, 300); corta(); sigue(900); marca("repaso")
+        for _ in range(2):
+            b = pg.locator("#ex-hub-container .exercise-block:visible").first
+            r = (b.get_attribute("data-answer") or "").split("|")[0]
+            if b.locator('.option-btn[data-value="%s"]' % r).count():
+                clic(b.locator('.option-btn[data-value="%s"]' % r), 30, 300)
+            elif b.locator(".exercise-input").count():
+                clic(b.locator(".exercise-input"), 30, 200); pg.keyboard.type(r, delay=90); espera(200)
+                clic(b.locator(".exercise-check"), 16, 150)
+            espera(1500)
+        corta(); pg.go_back(); pg.wait_for_load_state("load"); pg.wait_for_timeout(450); pg.evaluate("scrollTo(0,0)"); sigue(); rot(None)
     clic(pg.locator('a.cl-hija[href*="lectura"]'), 30, 300); corta(); sigue(); marca("lectura")
     rot(4); espera(900)
     clic(".lec-pal", 30, 250); espera(1600)
@@ -225,7 +267,7 @@ with sync_playwright() as p:
         clic(b0.locator(".exercise-input"), 30, 200); pg.keyboard.type(ans, delay=100); espera(250)
         clic(b0.locator(".exercise-check"), 16, 150)
     espera(1800)
-    if ESCENAS:
+    if ORDENADOR:
         # práctica libre: cursos, por nivel, por tema
         cierra(); marca("practica")
         clic('.riel-btn[data-sec="ejer"]', 30, 250); espera(700)
@@ -268,13 +310,13 @@ with sync_playwright() as p:
             return reloj[-1] + 0.5
         for nombre, desde, hasta in escenas:
             a, b = en_video(desde), en_video(hasta)
-            sal = os.path.join(OUT, "escena-%s-%s.mp4" % (nombre, P))
+            sal = os.path.join(OUT, "escena-%s%s-%s.mp4" % ("movil-" if MOVIL else "", nombre, P))
             subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-ss", "%.3f" % a, "-i", entero, "-t", "%.3f" % (b - a),
                             "-vf", "format=yuv420p", "-c:v", "libx264", "-preset", "slow", "-crf", "26",
                             "-movflags", "+faststart", "-an", sal], check=True)
             img = os.path.join(tmp, "e.png")
             subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-i", sal, "-frames:v", "1", img], check=True)
-            Image.open(img).convert("RGB").save(os.path.join(OUT, "escena-%s-%s.jpg" % (nombre, P)), quality=76, optimize=True)
+            Image.open(img).convert("RGB").save(os.path.join(OUT, "escena-%s%s-%s.jpg" % ("movil-" if MOVIL else "", nombre, P)), quality=76, optimize=True)
             print("  %-8s %.1f s" % (nombre, b - a))
         shutil.rmtree(tmp, ignore_errors=True)
         print("ok escenas", P)

@@ -102,24 +102,31 @@ bueno; lo pequeño y claro, hacerlo.
   Cómo funciona, Pruébalo, Reservar y abajo Entrar; fondo de cuaderno). Orden
   (24 nov, ideas de José): el degradado con «¡Hola!» y la ventana con el
   **vídeo** entera dentro del violeta (los dos botones, del mismo tamaño);
-  la **presentación**: lo mejor de una plataforma online + la conversación
-  de un profesor nativo que resuelve dudas y enseña a hablar, «nada de
-  teoría aburrida»; **«¿Cómo funciona?»** en nueve pasos numerados con una
-  pantalla fija a la derecha que enseña la escena de cada uno (en el móvil,
-  debajo): reservas → tu clase te espera en tu sección → damos la clase
-  (hablamos, exploramos, comprendemos, resuelvo dudas, practicas en vivo) →
-  tomas notas → ejercicios y lectura (y deberes si quieres) → cinco minutos
-  → práctica libre (cursos, por nivel, por tema) → la teoría → otra clase;
-  la **clase de muestra** (la 540 y su lectura, abiertas sin entrar, con una
-  franja que lleva a reservar); la foto de José **pequeña, no
-  protagonista**, y **todas las reseñas** de «Sobre mí» pasando de lado; y
-  cierre en violeta «¿Empezamos?».
+  la **presentación** a todo lo ancho, que aparece al bajar (título, luego
+  los dos lados): «una plataforma» + «un profesor nativo» que resuelve dudas
+  y enseña a hablar, «nada de teoría aburrida», con **la foto de José**, los
+  globos de conversación y el enlace a «Sobre mí» (ahí están las reseñas: en
+  la bienvenida ya no). Luego **«¿Cómo funciona?»** con una pantalla fija a
+  la derecha que enseña cada paso (en el móvil, debajo de cada uno):
+  1 reservas y la encuentras preparada en tu sección · 2 la clase es por
+  videollamada · 3 teoría pensada para ti, no al viejo estilo, y pocos
+  ejercicios guiados conmigo · 4 tus notas (siempre a mano, se guardan
+  solas, se pueden descargar) · *corte: «Aquí termina la clase… y empieza tu
+  parte online»* · 5 ejercicios sobre tu clase (y generar más) · 6 una
+  lectura (los dos se ven en la clase siguiente) · 7 cinco minutos desde el
+  móvil (vídeo de móvil; sin presiones, sin premios por rachas, sin agobios,
+  a tu ritmo: lo contrario de Duolingo) · *«Y además…»* + si eres curioso,
+  ejercicios por nivel, por tema de teoría o por temática (tres botones que
+  cambian la foto de la pantalla) · *«Y además…»* + la teoría ordenada para
+  quien prefiere el estilo clásico. Después la **clase de muestra** (la 540
+  y su lectura, abiertas sin entrar, con una franja que lleva a reservar) y
+  el cierre en violeta «¿Empezamos?».
 - **Reservar, solo en TidyCal** (su calendario). **Preply ya no es para
-  reservar**: queda como perfil con las reseñas. José quizá añada también su
+  reservar**: queda como perfil con las reseñas, en «Sobre mí». José quizá añada también su
   perfil de **Superprof** (él pasará el enlace). Sin precio en la web.
 - Los vídeos salen de una alumna inventada (Sara; nunca datos reales), en
-  los tres idiomas (`bienvenida/`: recorrido de ordenador y de móvil, y una
-  escena por paso).
+  los tres idiomas (`bienvenida/`: recorrido de ordenador y de móvil, una
+  escena por paso y fotos de la práctica libre).
 - «Sobre mí» y «Privacidad» se ven sin entrar (la bienvenida enlaza con
   ellas).
 - La puerta enlaza con la bienvenida («¿Todavía no eres alumno?»).

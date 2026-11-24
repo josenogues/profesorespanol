@@ -98,8 +98,10 @@ with sync_playwright() as p:
               "cambiar de idioma cambia la página y se recuerda")
     comprueba(pg.locator("#bv-video").get_attribute("src") == "bienvenida/recorrido-en.mp4", "y el vídeo")
     comprueba(pg.locator("html").get_attribute("lang") == "en", "y el idioma declarado")
-    comprueba(pg.locator('a[href*="preply"]').count() == 1 and pg.locator('a[href="https://tidycal.com/josenogues"]').count() == 1,
-              "reservar: en Preply y en TidyCal")
+    comprueba(pg.locator('a[href*="preply"]').count() == 0 and pg.locator('a[href="https://tidycal.com/josenogues"]').count() == 1,
+              "reservar: solo en mi calendario (Preply queda en «Sobre mí», con las reseñas)")
+    comprueba(pg.locator('#dos a[href="sobre-mi.html"]').count() == 1 and pg.locator("#dos img.bv-foto").count() == 1,
+              "la presentación lleva mi foto y el enlace a «Sobre mí»")
     comprueba(all(h == "index.html?entrar" for h in pg.locator('a[href^="index"]').evaluate_all("a => a.map(x => x.getAttribute('href'))")),
               "«Entrar» lleva a la puerta")
     for f in ["bienvenida/recorrido-%s%s.mp4" % (m, l) for m in ("", "movil-") for l in ("es", "it", "en")] + \
@@ -118,23 +120,31 @@ with sync_playwright() as p:
     print("\n═══ la historia, en el ordenador ═══")
     c = br.new_context(viewport={"width": 1440, "height": 900}, locale="it-IT"); pg = pagina(c)
     pg.goto(B + "/bienvenida.html", wait_until="load"); pg.wait_for_timeout(600)
+    comprueba(pg.locator("#bv-escenas > *").count() == pg.locator(".bv-cap").count() == 9, "nueve pasos, cada uno con su escena")
     escenas = pg.locator("#bv-escenas video")
-    comprueba(escenas.count() == pg.locator(".bv-cap").count() == 9, "nueve pasos, cada uno con su escena")
     comprueba(all(s.endswith("-it.mp4") for s in escenas.evaluate_all("v => v.map(x => x.getAttribute('src'))")), "  en el idioma de la página")
     for i in range(pg.locator(".bv-cap").count()):
         cap = pg.locator(".bv-cap").nth(i)
         y = cap.evaluate("e => e.getBoundingClientRect().top + scrollY + e.offsetHeight/2 - innerHeight/2")
         pg.evaluate("y => scrollTo(0, y)", y); pg.wait_for_timeout(700)
         nombre = cap.get_attribute("data-escena")
-        activo = pg.evaluate("() => [...document.querySelectorAll('#bv-escenas video.activo')].map(v => v.dataset.escena)")
+        activo = pg.evaluate("() => [...document.querySelectorAll('#bv-escenas > .activo')].map(v => v.dataset.escena)")
         comprueba(activo == [nombre] and "activo" in (cap.get_attribute("class") or ""),
                   "al leer «%s», la pantalla enseña su escena" % nombre)
-    for f in ["bienvenida/escena-%s-%s.%s" % (n, l, e) for n in ("reserva", "portada", "clase", "notas", "lectura", "cinco", "practica", "teoria", "clases")
-              for l in ("es", "it", "en") for e in ("mp4", "jpg")]:
+    for f in ["bienvenida/escena-%s-%s.%s" % (n, l, e) for n in ("reserva", "portada", "clase", "notas", "repaso", "lectura", "movil-cinco", "practica", "teoria")
+              for l in ("es", "it", "en") for e in ("mp4", "jpg")] + \
+             ["bienvenida/practica-%s-%s.jpg" % (m, l) for m in ("nivel", "tema", "curso") for l in ("es", "it", "en")]:
         if not pg.request.get(B + "/" + f).ok:
             comprueba(False, "falta %s" % f)
     comprueba(pg.evaluate("document.documentElement.scrollWidth") <= 1440, "nada se sale por los lados")
-    comprueba(pg.locator(".bv-pista .bv-resena:not([aria-hidden])").count() == 7, "las siete reseñas de «Sobre mí»")
+    # la práctica libre: los botones cambian la foto de la pantalla
+    cap = pg.locator('.bv-cap[data-escena="practica"]')
+    y = cap.evaluate("e => e.getBoundingClientRect().top + scrollY + e.offsetHeight/2 - innerHeight/2")
+    pg.evaluate("y => scrollTo(0, y)", y); pg.wait_for_timeout(700)
+    cap.locator('button[data-foto="tema"]').click(); pg.wait_for_timeout(300)
+    vista = pg.evaluate("() => document.querySelector('#bv-escenas .bv-fotos img.vista').dataset.foto")
+    comprueba(vista == "tema" and cap.locator('button[data-foto="tema"]').get_attribute("aria-pressed") == "true",
+              "«por tema» cambia la foto de la pantalla")
     comprueba(pg.locator('a[href^="https://tidycal.com"]').count() == 1 and "Preply" not in pg.locator("#reservar").inner_text(),
               "reservar: solo en mi calendario (Preply queda como perfil con reseñas)")
     anchos = pg.locator(".bv-hola .bv-btn").evaluate_all("b => b.map(x => Math.round(x.getBoundingClientRect().width))")
