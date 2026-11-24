@@ -83,11 +83,13 @@ html:not([data-theme="dark"]) .bv-cap{--c-ejer:#b8760b}
 .bv-fija{position:sticky;top:max(24px, calc(50vh - 17vw))}
 .bv-fija .bv-ventana{box-shadow:0 18px 44px rgba(20,22,32,.16);border:1px solid var(--border)}
 .bv-escenas{position:relative;aspect-ratio:1280/800;background:var(--bg)}
-/* la escena nueva entra de abajo arriba, como cuando se pasa una página */
-.bv-escenas video{position:absolute;inset:0;width:100%;height:100%;clip-path:inset(100% 0 0 0);
-  transition:clip-path .55s cubic-bezier(.16,1,.3,1)}
-.bv-escenas video.activo{clip-path:inset(0 0 0 0);z-index:1}
-.bv-escenas video.antes{clip-path:inset(0 0 0 0)}
+/* la escena nueva entra de abajo arriba, como cuando se pasa una página (de
+   arriba abajo si se vuelve atrás). Solo se anima la que entra: las que se
+   quedan atrás siguen enteras debajo hasta que la nueva ha terminado. */
+.bv-escenas video{position:absolute;inset:0;width:100%;height:100%;clip-path:inset(100% 0 0 0)}
+.bv-escenas.sube video{clip-path:inset(0 0 100% 0)}
+.bv-escenas video.antes{clip-path:inset(0 0 0 0);z-index:1}
+.bv-escenas video.activo{clip-path:inset(0 0 0 0);z-index:2;transition:clip-path .55s cubic-bezier(.16,1,.3,1)}
 
 /* ── pruébalo ── */
 .bv-sec{margin:120px 0 0}
@@ -135,7 +137,7 @@ html:not([data-theme="dark"]) .bv-cap{--c-ejer:#b8760b}
 
 @media (prefers-reduced-motion:reduce){
   html{scroll-behavior:auto}
-  .bv-cap,.bv-escenas video,.bv-muestra-img{transition:none}
+  .bv-cap,.bv-escenas video,.bv-escenas video.activo,.bv-muestra-img{transition:none}
 }
 @media (max-width:1180px){
   .bv-hola{grid-template-columns:1fr;gap:44px;padding:48px 44px 56px}
@@ -359,18 +361,32 @@ html:not([data-theme="dark"]) .bv-cap{--c-ejer:#b8760b}
   }
 
   // la escena del capítulo que se está leyendo entra en la pantalla
+  var limpia = null;
   function enciende(nombre, otraVez){
     if(nombre === actual && !otraVez) return;
     var antes = actual; actual = nombre;
     caps.forEach(function(c){ c.classList.toggle('activo', c.dataset.escena === nombre); });
+    var nuevo = fijos[nombre];
+    // la que estaba se queda entera debajo; la nueva parte del lado por el que se llega
+    if(antes && antes !== nombre){ fijos[antes].classList.remove('activo'); fijos[antes].classList.add('antes'); }
+    caja.classList.toggle('sube', antes != null && ESCENAS.indexOf(nombre) < ESCENAS.indexOf(antes));
+    void caja.offsetWidth;
+    nuevo.classList.remove('antes');
+    nuevo.classList.add('activo');
     ESCENAS.forEach(function(n){
       var v = fijos[n];
-      v.classList.toggle('antes', n === antes && n !== nombre);
-      v.classList.toggle('activo', n === nombre);
       if(n === nombre){ v.preload = 'auto'; try { v.currentTime = 0; } catch(e){} if(ancho.matches) juega(v); }
       else para(v);
     });
-    setTimeout(function(){ if(fijos[antes] && antes !== actual) fijos[antes].classList.remove('antes'); }, 600);
+    // cuando la nueva ya tapa todo, las de debajo se recogen (sin animarse)
+    clearTimeout(limpia);
+    var fin = function(){
+      clearTimeout(limpia); nuevo.removeEventListener('transitionend', fin);
+      if(actual !== nombre) return;
+      ESCENAS.forEach(function(n){ if(n !== nombre) fijos[n].classList.remove('antes'); });
+    };
+    nuevo.addEventListener('transitionend', fin);
+    limpia = setTimeout(fin, 700);
   }
 
   function pon(nuevo){
