@@ -310,7 +310,10 @@ with sync_playwright() as p:
             return reloj[-1] + 0.5
         for nombre, desde, hasta in escenas:
             if MOVIL and nombre != "cinco": continue  # del móvil solo se usa «cinco minutos»
+            # al cambiar de página, el navegador a veces manda aún una foto de la
+            # anterior: se empieza un poco más tarde para que no se cuele
             a, b = en_video(desde), en_video(hasta)
+            a = min(a + 0.35, max(a, b - 1.0))
             sal = os.path.join(OUT, "escena-%s%s-%s.mp4" % ("movil-" if MOVIL else "", nombre, P))
             subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-ss", "%.3f" % a, "-i", entero, "-t", "%.3f" % (b - a),
                             "-vf", "format=yuv420p", "-c:v", "libx264", "-preset", "slow", "-crf", "26",
