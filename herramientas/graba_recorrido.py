@@ -182,7 +182,10 @@ with sync_playwright() as p:
     empieza(); espera(200); marca("portada")
     m.move(*((200, 420) if MOVIL else (700, 330))); espera(200); rot(0); espera(2200)
     # 2 · Mis clases
-    clic('.riel-btn[data-sec="clases"]'); corta(); sigue(); marca("clases")
+    clic('.riel-btn[data-sec="clases"]'); corta(); sigue(); marca("reserva" if ESCENAS else "clases")
+    if ESCENAS:
+        # reservar: el botón de la agenda
+        ve(".cita-barra", 30); espera(1900); cierra(); marca("clases")
     rot(1); espera(400)
     ve(pg.locator(".cl-enlace", has_text="Si tuviera"), 30); espera(1500)
     # 3 · la clase
@@ -197,6 +200,12 @@ with sync_playwright() as p:
     clic(blk.locator(".exercise-check"), 18, 150); espera(1100)
     blk3 = pg.locator('.exercise-block[data-exid="si3"]')
     clic(blk3.locator('.option-btn[data-value="fuera"]'), 26, 200); espera(1500)
+    if ESCENAS:
+        # los apuntes de la clase
+        cierra(); marca("notas")
+        clic(".apu-boton", 30, 250); espera(700)
+        clic(pg.locator(".apu-panel textarea").first, 24, 200)
+        pg.keyboard.type("Si tuviera tiempo, leería más.", delay=70); espera(1600)
     # 4 · la lectura (desde Mis clases)
     corta(); pg.go_back(); pg.wait_for_load_state("load"); pg.wait_for_timeout(450); pg.evaluate("scrollTo(0,0)"); sigue(); rot(None)
     clic(pg.locator('a.cl-hija[href*="lectura"]'), 30, 300); corta(); sigue(); marca("lectura")
@@ -216,6 +225,12 @@ with sync_playwright() as p:
         clic(b0.locator(".exercise-input"), 30, 200); pg.keyboard.type(ans, delay=100); espera(250)
         clic(b0.locator(".exercise-check"), 16, 150)
     espera(1800)
+    if ESCENAS:
+        # práctica libre: cursos, por nivel, por tema
+        cierra(); marca("practica")
+        clic('.riel-btn[data-sec="ejer"]', 30, 250); espera(700)
+        clic('#panel-ejer a[data-q="modo=curso"]', 20, 250); corta(False); sigue(900)
+        baja(320, 1300); espera(1900)
     # 6 · la teoría
     rot(None); cierra(); marca("teoria")
     clic('.riel-btn[data-sec="teoria"]', 30, 250); espera(700)

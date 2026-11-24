@@ -45,6 +45,11 @@ html{scroll-behavior:smooth}
 .bv-hola h1{font-family:var(--font-head);font-weight:800;font-size:44px;line-height:1.1;letter-spacing:-.015em;margin:0 0 18px;color:#fff;text-wrap:balance}
 .bv-hola-sub{font-size:19px;line-height:1.5;color:rgba(255,255,255,.88);max-width:34ch;margin:0 0 30px}
 .bv-botones{display:flex;flex-wrap:wrap;gap:12px}
+/* los dos botones de arriba, del mismo tamaño */
+.bv-hola-txt{container-type:inline-size}
+.bv-hola .bv-botones{display:inline-grid;grid-template-columns:1fr}
+@container (min-width:500px){.bv-hola .bv-botones{grid-template-columns:1fr 1fr}}
+.bv-hola .bv-btn{justify-content:center;white-space:nowrap;padding-left:18px;padding-right:18px}
 .bv-pantalla{position:relative}
 .bv-ventana{position:relative;background:var(--card-bg);border-radius:6px;overflow:hidden;box-shadow:0 22px 50px rgba(12,14,24,.32)}
 .bv-barra{display:flex;align-items:center;gap:6px;padding:9px 12px;border-bottom:1px solid var(--border);background:var(--tint)}
@@ -56,7 +61,7 @@ html{scroll-behavior:smooth}
   box-shadow:0 8px 18px rgba(12,14,24,.22)}
 .bv-globo-1{top:-22px;left:-26px;background:var(--gold);color:#232220;transform:rotate(-7deg);border-bottom-left-radius:4px}
 .bv-globo-2{top:38%;right:-30px;background:#D6488F;color:#fff;transform:rotate(6deg);border-bottom-right-radius:4px}
-.bv-globo-3{bottom:18px;left:12%;background:#fff;color:#3A4570;transform:rotate(-3deg);border-bottom-left-radius:4px}
+.bv-globo-3{bottom:-24px;right:-18px;background:#fff;color:#3A4570;transform:rotate(-3deg);border-bottom-left-radius:4px}
 .bv-pie-video{margin:16px 0 0;color:rgba(255,255,255,.72);font-size:14px;text-align:center}
 /* en el móvil, el vídeo grabado en un móvil, dentro de un teléfono */
 .bv-pantalla.es-movil .bv-ventana{max-width:270px;margin:0 auto;border:9px solid #232C4F;border-radius:30px}
@@ -64,21 +69,39 @@ html{scroll-behavior:smooth}
 .bv-pantalla.es-movil video{aspect-ratio:390/844}
 .bv-pantalla.es-movil .bv-globo{display:none}
 
-/* ── la historia: capítulos a la izquierda, la web a la derecha ── */
-.bv-historia{margin:112px 0 0}
-.bv-historia > h2,.bv-sec h2{font-family:var(--font-head);font-weight:800;font-size:38px;line-height:1.15;letter-spacing:-.01em;margin:0 0 8px;color:var(--text);text-wrap:balance}
-.bv-historia > h2 .bv-mano{font-size:1.3em;color:var(--c-clases);letter-spacing:0}
+/* ── dos mundos: la plataforma y el profesor ── */
+.bv-dos{margin:112px 0 0}
+.bv-dos > h2{font-family:var(--font-head);font-weight:800;font-size:40px;line-height:1.15;letter-spacing:-.01em;margin:0 0 48px;color:var(--text);text-wrap:balance;max-width:24ch}
+.bv-dos > h2 .bv-mano{font-size:1.25em;letter-spacing:0;color:var(--c)}
+.bv-dos-in{display:grid;grid-template-columns:minmax(0,1fr) 64px minmax(0,1fr);gap:24px;align-items:center}
+.bv-mas{font-size:84px;line-height:1;color:var(--gold);text-align:center}
+.bv-lado h3{font-family:var(--font-head);font-weight:800;font-size:24px;margin:22px 0 6px;color:var(--text)}
+.bv-lado p{margin:0;font-size:18px;line-height:1.55;color:var(--text-secondary);max-width:38ch}
+.bv-lado .bv-ventana{border:1px solid var(--border);box-shadow:0 14px 34px rgba(20,22,32,.14);transform:rotate(-1deg)}
+/* la conversación: los globos de siempre, uno detrás de otro */
+.bv-charla{position:relative;display:flex;flex-direction:column;gap:12px;padding:8px 0;min-height:250px;justify-content:center}
+.bv-charla span{position:static;align-self:flex-start;font-size:27px;line-height:1.1;padding:12px 20px;border-radius:16px;box-shadow:0 8px 18px rgba(12,14,24,.12);white-space:normal;max-width:90%}
+.bv-charla .yo{background:#fff;color:#3A4570;border:1px solid var(--border);border-bottom-left-radius:4px;transform:rotate(-1.5deg)}
+.bv-charla .el{align-self:flex-end;background:var(--c-clases);color:#fff;border-bottom-right-radius:4px;transform:rotate(1.5deg)}
+.bv-charla .oro{background:var(--gold);color:#232220}
+
+/* ── cómo funciona: pasos a la izquierda, la web a la derecha ── */
+.bv-historia{margin:120px 0 0}
+.bv-historia > h2,.bv-sec h2{font-family:var(--font-head);font-weight:800;font-size:40px;line-height:1.15;letter-spacing:-.01em;margin:0 0 8px;color:var(--text);text-wrap:balance}
 .bv-historia-in{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:56px;align-items:start}
 .bv-caps{list-style:none;margin:0;padding:0}
-.bv-cap{min-height:64vh;display:flex;flex-direction:column;justify-content:center;padding:28px 0;opacity:.3;transition:opacity .45s cubic-bezier(.16,1,.3,1)}
+.bv-cap{min-height:46vh;display:grid;grid-template-columns:76px minmax(0,1fr);align-content:center;padding:24px 0;opacity:.3;transition:opacity .45s cubic-bezier(.16,1,.3,1)}
 .bv-cap.activo{opacity:1}
-.bv-cap:first-child{min-height:50vh}
-.bv-cap h3{font-family:var(--font-head);font-weight:800;font-size:34px;line-height:1.15;letter-spacing:-.01em;margin:0 0 12px;color:var(--text);text-wrap:balance}
-.bv-cap h3 .bv-mano{display:block;font-size:1.3em;line-height:1;margin-bottom:6px;color:var(--c);transform:rotate(-1.5deg);transform-origin:left center;letter-spacing:0}
+.bv-cap:first-child{min-height:40vh}
+.bv-num{font-size:78px;line-height:.85;color:var(--c);transform:rotate(-4deg);transform-origin:left top}
+.bv-cap h3{font-family:var(--font-head);font-weight:800;font-size:32px;line-height:1.15;letter-spacing:-.01em;margin:4px 0 10px;color:var(--text);text-wrap:balance}
 /* el dorado de los ejercicios, un punto más oscuro sobre el papel claro para que se lea */
 html:not([data-theme="dark"]) .bv-cap{--c-ejer:#b8760b}
 [data-theme="dark"] .bv-hola,[data-theme="dark"] .bv-fin-cta{box-shadow:0 10px 26px rgba(0,0,0,.4)}
-.bv-cap p{margin:0;font-size:19px;line-height:1.55;color:var(--text-secondary);max-width:36ch}
+.bv-cap p{margin:0;font-size:19px;line-height:1.55;color:var(--text-secondary);max-width:38ch}
+.bv-chips{list-style:none;display:flex;flex-wrap:wrap;gap:8px;margin:16px 0 0;padding:0}
+.bv-chips li{font:700 14.5px var(--font-body);padding:6px 12px;border-radius:6px;color:var(--text);
+  background:color-mix(in srgb, var(--c) 13%, var(--card-bg));border:1px solid color-mix(in srgb, var(--c) 30%, var(--card-bg))}
 .bv-cap .bv-cap-video{display:none}
 .bv-fija{position:sticky;top:max(24px, calc(50vh - 17vw))}
 .bv-fija .bv-ventana{box-shadow:0 18px 44px rgba(20,22,32,.16);border:1px solid var(--border)}
@@ -107,18 +130,24 @@ html:not([data-theme="dark"]) .bv-cap{--c-ejer:#b8760b}
 .bv-nivel{display:inline-block;font:800 13px var(--font-body);color:var(--c-clases-d);background:var(--c-clases-t);border-radius:6px;padding:3px 9px;margin:0 0 14px}
 [data-theme="dark"] .bv-nivel{color:#cfc9ff;background:#2a2850}
 
-/* ── lo que dicen ── */
-.bv-quien{display:flex;align-items:center;gap:14px;margin:14px 0 44px}
+/* ── lo que dicen: todas las reseñas, pasando de lado ── */
+.bv-quien{display:flex;align-items:center;gap:14px;margin:14px 0 36px}
 .bv-quien img{width:52px;height:52px;border-radius:50%;object-fit:cover;flex:none}
 .bv-quien p{margin:0;color:var(--text-secondary);font-size:17px}
-.bv-quien a{color:var(--c-clases);font-weight:800;text-decoration:none}
-.bv-quien a:hover{text-decoration:underline;text-underline-offset:3px}
-.bv-resenas{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:40px}
-.bv-resena{margin:0;position:relative;padding-top:40px}
-.bv-resena::before{content:"“";position:absolute;top:-18px;left:-4px;font:700 92px/1 'Caveat',cursive;color:var(--gold)}
-.bv-resena blockquote{margin:0 0 16px;font-size:19px;line-height:1.5;color:var(--text);font-weight:600}
-.bv-resena figcaption{font-size:15px;color:var(--muted);display:flex;align-items:center;gap:7px}
+.bv-quien a,.bv-preply a{color:var(--c-clases);font-weight:800;text-decoration:none}
+.bv-quien a:hover,.bv-preply a:hover{text-decoration:underline;text-underline-offset:3px}
+.bv-cinta{overflow:hidden;margin:0 -40px 0 -74px;padding:10px 0 18px;
+  -webkit-mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent);mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent)}
+.bv-pista{display:flex;gap:20px;width:max-content;animation:bv-pasa 70s linear infinite}
+.bv-cinta:hover .bv-pista,.bv-cinta:focus-within .bv-pista{animation-play-state:paused}
+@keyframes bv-pasa{to{transform:translateX(calc(-50% - 10px))}}
+.bv-resena{flex:none;width:340px;margin:0;background:var(--card-bg);border:1px solid var(--border);border-radius:6px;padding:22px 22px 18px;
+  display:flex;flex-direction:column;box-shadow:0 6px 16px rgba(20,22,32,.06)}
+.bv-resena .estrellas{color:var(--gold);letter-spacing:2px;font-size:15px}
+.bv-resena blockquote{margin:8px 0 14px;font-size:16px;line-height:1.55;color:var(--text);flex:1}
+.bv-resena figcaption{font-size:14.5px;color:var(--muted);display:flex;align-items:center;gap:7px}
 .bv-resena figcaption b{color:var(--text)}
+.bv-preply{margin:18px 0 0;font-size:15.5px;color:var(--muted)}
 
 /* ── el cierre: otra vez violeta ── */
 .bv-fin-cta{position:relative;margin:128px 0 40px;border-radius:6px;padding:64px 56px;text-align:center;color:#fff;
@@ -133,21 +162,25 @@ html:not([data-theme="dark"]) .bv-cap{--c-ejer:#b8760b}
 .bv-fin-cta .bv-ya{margin:44px 0 0;color:rgba(255,255,255,.78);font-size:15.5px}
 .bv-ya a{color:#fff;font-weight:800;text-underline-offset:3px}
 .bv-fin-cta .bv-globo-2{top:34px;right:48px}
-.bv-fin-cta .bv-globo-3{bottom:36px;left:48px}
+.bv-fin-cta .bv-globo-3{top:34px;left:48px;bottom:auto;right:auto}
 
 @media (prefers-reduced-motion:reduce){
   html{scroll-behavior:auto}
   .bv-cap,.bv-escenas video,.bv-escenas video.activo,.bv-muestra-img{transition:none}
+  .bv-pista{animation:none}
+  .bv-cinta{overflow-x:auto;-webkit-mask-image:none;mask-image:none}
 }
 @media (max-width:1180px){
   .bv-hola{grid-template-columns:1fr;gap:44px;padding:48px 44px 56px}
   .bv-hola-sub{max-width:52ch}
   .bv-historia-in,.bv-muestra{grid-template-columns:1fr;gap:28px}
   .bv-fija{display:none}
-  .bv-cap{min-height:0;opacity:1;padding:34px 0}
   .bv-cap:first-child{min-height:0}
   .bv-cap .bv-cap-video{display:block;width:100%;height:auto;aspect-ratio:1280/800;margin-top:22px;border:1px solid var(--border);border-radius:6px;background:var(--bg)}
-  .bv-resenas{grid-template-columns:1fr;gap:34px}
+  .bv-dos-in{grid-template-columns:1fr;gap:8px}
+  .bv-mas{font-size:64px}
+  .bv-cap{min-height:0;opacity:1;padding:30px 0}
+  .bv-cap .bv-cap-video{grid-column:1 / -1}
 }
 @media (max-width:900px){
   /* en el móvil, las banderas suben a la barra azul de arriba */
@@ -164,7 +197,15 @@ html:not([data-theme="dark"]) .bv-cap{--c-ejer:#b8760b}
   .bv-hola-sub{font-size:17.5px}
   .bv-historia{margin-top:64px}
   .bv-historia > h2,.bv-sec h2{font-size:29px}
-  .bv-cap h3{font-size:26px}
+  .bv-cap h3{font-size:25px}
+  .bv-cap{grid-template-columns:52px minmax(0,1fr)}
+  .bv-num{font-size:60px}
+  .bv-dos{margin-top:64px}
+  .bv-dos > h2{font-size:29px;margin-bottom:28px}
+  .bv-charla span{font-size:23px}
+  .bv-cinta{margin:0 -22px}
+  .bv-resena{width:290px}
+  .bv-hola .bv-botones{display:grid;grid-template-columns:1fr}
   .bv-cap p,.bv-muestra-txt p{font-size:17.5px}
   .bv-sec{margin-top:72px}
   .bv-fin-cta{margin:80px -22px 0;border-radius:0;padding:48px 22px;box-shadow:none}
@@ -181,7 +222,7 @@ html:not([data-theme="dark"]) .bv-cap{--c-ejer:#b8760b}
 </div>
 <nav class="riel">
 <a href="bienvenida.html" class="riel-logo"><img src="icono.png" alt="" width="62" height="62"><span class="riel-nombre">Habla<br>español<b>con José</b></span></a>
-<a class="riel-btn" href="#historia"><i class="ti ti-bulb" aria-hidden="true"></i> <span class="i18n" data-es="Cómo funciona" data-it="Come funziona" data-en="How it works">Cómo funciona</span></a>
+<a class="riel-btn" href="#dos"><i class="ti ti-bulb" aria-hidden="true"></i> <span class="i18n" data-es="Cómo funciona" data-it="Come funziona" data-en="How it works">Cómo funciona</span></a>
 <a class="riel-btn" href="#muestra"><i class="ti ti-book" aria-hidden="true"></i> <span class="i18n" data-es="Pruébalo" data-it="Prova" data-en="Try it">Pruébalo</span></a>
 <a class="riel-btn" href="#reservar"><i class="ti ti-calendar" aria-hidden="true"></i> <span class="i18n" data-es="Reservar" data-it="Prenota" data-en="Book">Reservar</span></a>
 <a class="riel-btn bv-riel-entrar" href="index.html?entrar"><i class="ti ti-login" aria-hidden="true"></i> <span class="i18n" data-es="Entrar" data-it="Entra" data-en="Sign in">Entrar</span></a>
@@ -218,33 +259,92 @@ html:not([data-theme="dark"]) .bv-cap{--c-ejer:#b8760b}
 </div>
 </section>
 
+<section class="bv-dos" id="dos" style="--c:var(--c-clases)">
+<h2><span class="i18n" data-es="Lo mejor de una " data-it="Il meglio di una " data-en="The best of an ">Lo mejor de una </span><span class="bv-mano"><span class="i18n" data-es="plataforma online" data-it="piattaforma online" data-en="online platform">plataforma online</span></span><span class="i18n" data-es=", con la conversación de un " data-it=", con la conversazione di un " data-en=", with real conversation with a ">, con la conversación de un </span><span class="bv-mano"><span class="i18n" data-es="profesor nativo" data-it="insegnante madrelingua" data-en="native teacher">profesor nativo</span></span>.</h2>
+<div class="bv-dos-in">
+<div class="bv-lado">
+<div class="bv-ventana"><div class="bv-barra" aria-hidden="true"><i></i><i></i><i></i><span>hablaconjose.com</span></div>
+<img id="bv-dos-img" src="bienvenida/escena-practica-es.jpg" alt="" width="1280" height="800" loading="lazy"></div>
+<h3><span class="i18n" data-es="Una plataforma" data-it="Una piattaforma" data-en="A platform">Una plataforma</span></h3>
+<p><span class="i18n" data-es="Tus clases, ejercicios que se corrigen solos, lecturas y cursos, siempre a mano." data-it="Le tue lezioni, esercizi che si correggono da soli, letture e corsi, sempre a portata di mano." data-en="Your lessons, self-marking exercises, readings and courses, always at hand.">Tus clases, ejercicios que se corrigen solos, lecturas y cursos, siempre a mano.</span></p>
+</div>
+<span class="bv-mas bv-mano" aria-hidden="true">+</span>
+<div class="bv-lado">
+<div class="bv-charla" aria-hidden="true"><span class="bv-mano yo">¿Por qué se dice «si tuviera»?</span><span class="bv-mano el">¡Buena pregunta! Mira…</span><span class="bv-mano yo oro">¡Ahora lo entiendo!</span></div>
+<h3><span class="i18n" data-es="Un profesor nativo" data-it="Un insegnante madrelingua" data-en="A native teacher">Un profesor nativo</span></h3>
+<p><span class="i18n" data-es="Hablamos de verdad, resuelvo tus dudas y te enseño a hablar: nada de teoría aburrida." data-it="Parliamo davvero, risolvo i tuoi dubbi e ti insegno a parlare: niente teoria noiosa." data-en="We really talk, I clear up your doubts and teach you to speak: no boring theory.">Hablamos de verdad, resuelvo tus dudas y te enseño a hablar: nada de teoría aburrida.</span></p>
+</div>
+</div>
+</section>
+
 <section class="bv-historia" id="historia">
-<h2><span class="i18n" data-es="Una semana con " data-it="Una settimana con " data-en="A week with ">Una semana con </span><span class="bv-mano">José</span></h2>
+<h2><span class="i18n" data-es="¿Cómo funciona?" data-it="Come funziona?" data-en="How does it work?">¿Cómo funciona?</span></h2>
 <div class="bv-historia-in">
 <ol class="bv-caps">
+<li class="bv-cap" data-escena="reserva" style="--c:var(--c-clases)">
+<span class="bv-num bv-mano" aria-hidden="true">1</span>
+<div class="bv-cap-txt">
+<h3><span class="i18n" data-es="Reservas una clase." data-it="Prenoti una lezione." data-en="You book a lesson.">Reservas una clase.</span></h3>
+<p><span class="i18n" data-es="Eliges día y hora en mi calendario." data-it="Scegli giorno e ora nel mio calendario." data-en="You pick a day and time in my calendar.">Eliges día y hora en mi calendario.</span></p>
+</div>
+</li>
 <li class="bv-cap" data-escena="portada" style="--c:var(--c-clases)">
-<h3><span class="bv-mano i18n" data-es="En clase," data-it="A lezione," data-en="In class,">En clase,</span> <span class="i18n" data-es="hablamos." data-it="parliamo." data-en="we talk.">hablamos.</span></h3>
-<p class="i18n" data-es="Por videollamada, de lo que tú necesitas: el trabajo, un viaje o simplemente hablar mejor." data-it="In videochiamata, di quello che ti serve: il lavoro, un viaggio o semplicemente parlare meglio." data-en="By video call, about what you need: work, a trip or simply speaking better.">Por videollamada, de lo que tú necesitas: el trabajo, un viaje o simplemente hablar mejor.</p>
+<span class="bv-num bv-mano" aria-hidden="true">2</span>
+<div class="bv-cap-txt">
+<h3><span class="i18n" data-es="Tu clase te espera en tu sección." data-it="La tua lezione ti aspetta nella tua sezione." data-en="Your lesson is waiting in your section.">Tu clase te espera en tu sección.</span></h3>
+<p><span class="i18n" data-es="Preparada para ti, con su fecha y el botón para entrar." data-it="Preparata per te, con la sua data e il pulsante per entrare." data-en="Prepared for you, with its date and the button to join.">Preparada para ti, con su fecha y el botón para entrar.</span></p>
+</div>
 </li>
-<li class="bv-cap" data-escena="clases" style="--c:var(--c-clases)">
-<h3><span class="bv-mano i18n" data-es="Esa misma tarde," data-it="Quella sera stessa," data-en="That same evening,">Esa misma tarde,</span> <span class="i18n" data-es="tu clase ya está aquí." data-it="la tua lezione è già qui." data-en="your lesson is already here.">tu clase ya está aquí.</span></h3>
-<p class="i18n" data-es="Con su fecha, en tu cuaderno. Todas, una detrás de otra." data-it="Con la sua data, nel tuo quaderno. Tutte, una dopo l’altra." data-en="Dated, in your notebook. All of them, one after another.">Con su fecha, en tu cuaderno. Todas, una detrás de otra.</p>
+<li class="bv-cap" data-escena="clase" style="--c:var(--c-clases)">
+<span class="bv-num bv-mano" aria-hidden="true">3</span>
+<div class="bv-cap-txt">
+<h3><span class="i18n" data-es="Damos la clase." data-it="Facciamo lezione." data-en="We have the lesson.">Damos la clase.</span></h3>
+<p><span class="i18n" data-es="Por videollamada, a tu medida." data-it="In videochiamata, su misura per te." data-en="By video call, built around you.">Por videollamada, a tu medida.</span></p>
+<ul class="bv-chips"><li><span class="i18n" data-es="Hablamos" data-it="Parliamo" data-en="We talk">Hablamos</span></li><li><span class="i18n" data-es="Exploramos" data-it="Esploriamo" data-en="We explore">Exploramos</span></li><li><span class="i18n" data-es="Comprendemos" data-it="Capiamo" data-en="We understand">Comprendemos</span></li><li><span class="i18n" data-es="Resuelvo tus dudas" data-it="Risolvo i tuoi dubbi" data-en="I clear up your doubts">Resuelvo tus dudas</span></li><li><span class="i18n" data-es="Practicas en vivo" data-it="Ti eserciti dal vivo" data-en="You practise live">Practicas en vivo</span></li></ul>
+</div>
 </li>
-<li class="bv-cap" data-escena="clase" style="--c:var(--c-ejer)">
-<h3><span class="bv-mano i18n" data-es="Al día siguiente," data-it="Il giorno dopo," data-en="The next day,">Al día siguiente,</span> <span class="i18n" data-es="la repasas." data-it="la ripassi." data-en="you go over it.">la repasas.</span></h3>
-<p class="i18n" data-es="La explicación en tu idioma, y ejercicios que se corrigen solos." data-it="La spiegazione nella tua lingua, ed esercizi che si correggono da soli." data-en="The explanation in your language, and exercises that mark themselves.">La explicación en tu idioma, y ejercicios que se corrigen solos.</p>
+<li class="bv-cap" data-escena="notas" style="--c:var(--c-clases)">
+<span class="bv-num bv-mano" aria-hidden="true">4</span>
+<div class="bv-cap-txt">
+<h3><span class="i18n" data-es="Tomas tus notas." data-it="Prendi i tuoi appunti." data-en="You take your notes.">Tomas tus notas.</span></h3>
+<p><span class="i18n" data-es="Junto a cada clase, para cuando las necesites." data-it="Accanto a ogni lezione, per quando ti servono." data-en="Next to each lesson, for when you need them.">Junto a cada clase, para cuando las necesites.</span></p>
+</div>
 </li>
 <li class="bv-cap" data-escena="lectura" style="--c:var(--c-ejer)">
-<h3><span class="bv-mano i18n" data-es="Otro día," data-it="Un altro giorno," data-en="Another day,">Otro día,</span> <span class="i18n" data-es="lees." data-it="leggi." data-en="you read.">lees.</span></h3>
-<p class="i18n" data-es="Un texto escrito para tu clase. Lo que escribes, lo corregimos juntos." data-it="Un testo scritto per la tua lezione. Quello che scrivi, lo correggiamo insieme." data-en="A text written for your lesson. Whatever you write, we correct together.">Un texto escrito para tu clase. Lo que escribes, lo corregimos juntos.</p>
+<span class="bv-num bv-mano" aria-hidden="true">5</span>
+<div class="bv-cap-txt">
+<h3><span class="i18n" data-es="Luego, ejercicios y una lectura." data-it="Poi, esercizi e una lettura." data-en="Then, exercises and a reading.">Luego, ejercicios y una lectura.</span></h3>
+<p><span class="i18n" data-es="Te los añado para asimilar lo que hemos visto. Y si quieres, cada clase tiene sus deberes." data-it="Te li aggiungo per assimilare quello che abbiamo visto. E se vuoi, ogni lezione ha i suoi compiti." data-en="I add them so you take in what we covered. And if you like, every lesson has its homework.">Te los añado para asimilar lo que hemos visto. Y si quieres, cada clase tiene sus deberes.</span></p>
+</div>
 </li>
 <li class="bv-cap" data-escena="cinco" style="--c:var(--c-ejer)">
-<h3><span class="bv-mano i18n" data-es="Con cinco minutos" data-it="Cinque minuti" data-en="Five minutes">Con cinco minutos</span> <span class="i18n" data-es="basta." data-it="bastano." data-en="is enough.">basta.</span></h3>
-<p class="i18n" data-es="Un repaso rápido, solo de lo que hemos visto tú y yo." data-it="Un ripasso veloce, solo di quello che abbiamo visto io e te." data-en="A quick review of only what you and I have covered.">Un repaso rápido, solo de lo que hemos visto tú y yo.</p>
+<span class="bv-num bv-mano" aria-hidden="true">6</span>
+<div class="bv-cap-txt">
+<h3><span class="i18n" data-es="Repasas en cinco minutos." data-it="Ripassi in cinque minuti." data-en="You review in five minutes.">Repasas en cinco minutos.</span></h3>
+<p><span class="i18n" data-es="Solo de lo que hemos visto tú y yo." data-it="Solo quello che abbiamo visto io e te." data-en="Only what you and I have covered.">Solo de lo que hemos visto tú y yo.</span></p>
+</div>
+</li>
+<li class="bv-cap" data-escena="practica" style="--c:var(--c-ejer)">
+<span class="bv-num bv-mano" aria-hidden="true">7</span>
+<div class="bv-cap-txt">
+<h3><span class="i18n" data-es="Y practicas cuando quieras." data-it="E ti eserciti quando vuoi." data-en="And you practise whenever you like.">Y practicas cuando quieras.</span></h3>
+<p><span class="i18n" data-es="Por tu cuenta, a tu ritmo." data-it="Per conto tuo, al tuo ritmo." data-en="On your own, at your pace.">Por tu cuenta, a tu ritmo.</span></p>
+<ul class="bv-chips"><li><span class="i18n" data-es="Cursos paso a paso" data-it="Corsi passo passo" data-en="Step-by-step courses">Cursos paso a paso</span></li><li><span class="i18n" data-es="Por nivel" data-it="Per livello" data-en="By level">Por nivel</span></li><li><span class="i18n" data-es="Por tema" data-it="Per argomento" data-en="By topic">Por tema</span></li></ul>
+</div>
 </li>
 <li class="bv-cap" data-escena="teoria" style="--c:var(--c-teoria)">
-<h3><span class="bv-mano i18n" data-es="Y si dudas," data-it="E se hai un dubbio," data-en="And when in doubt,">Y si dudas,</span> <span class="i18n" data-es="la teoría." data-it="la teoria." data-en="the theory.">la teoría.</span></h3>
-<p class="i18n" data-es="Verbos, gramática, vocabulario y español para el trabajo, siempre a mano." data-it="Verbi, grammatica, vocabolario e spagnolo per il lavoro, sempre a portata di mano." data-en="Verbs, grammar, vocabulary and Spanish for work, always at hand.">Verbos, gramática, vocabulario y español para el trabajo, siempre a mano.</p>
+<span class="bv-num bv-mano" aria-hidden="true">8</span>
+<div class="bv-cap-txt">
+<h3><span class="i18n" data-es="Si dudas, la teoría." data-it="Se hai un dubbio, la teoria." data-en="If in doubt, the theory.">Si dudas, la teoría.</span></h3>
+<p><span class="i18n" data-es="Para consultar, no para memorizar." data-it="Da consultare, non da memorizzare." data-en="To look things up, not to memorise.">Para consultar, no para memorizar.</span></p>
+</div>
+</li>
+<li class="bv-cap" data-escena="clases" style="--c:var(--c-clases)">
+<span class="bv-num bv-mano" aria-hidden="true">9</span>
+<div class="bv-cap-txt">
+<h3><span class="i18n" data-es="¿Y lo siguiente? Otra clase." data-it="E poi? Un’altra lezione." data-en="What’s next? Another lesson.">¿Y lo siguiente? Otra clase.</span></h3>
+<p><span class="i18n" data-es="Aparece en tu sección, y sigue tu camino para hablar español con seguridad." data-it="Compare nella tua sezione, e continua il tuo percorso per parlare spagnolo con sicurezza." data-en="It appears in your section, and your path to speaking Spanish with confidence goes on.">Aparece en tu sección, y sigue tu camino para hablar español con seguridad.</span></p>
+</div>
 </li>
 </ol>
 <div class="bv-fija" aria-hidden="true">
@@ -280,32 +380,36 @@ html:not([data-theme="dark"]) .bv-cap{--c-ejer:#b8760b}
 <img src="profile.jpg" alt="" width="340" height="340">
 <p><span class="i18n" data-es="Soy José, profesor de español para alumnos de todo el mundo." data-it="Sono José, insegnante di spagnolo per studenti di tutto il mondo." data-en="I’m José, a Spanish teacher for students all over the world.">Soy José, profesor de español para alumnos de todo el mundo.</span> <a href="sobre-mi.html"><span class="i18n" data-es="Sobre mí" data-it="Chi sono" data-en="About me">Sobre mí</span> →</a></p>
 </div>
-<div class="bv-resenas">
-<figure class="bv-resena">
-<blockquote class="i18n" data-es="Siempre preparado, con muy buen material para repasar en casa y ejercicios útiles." data-it="Sempre preparato, con ottimi materiali da ripassare a casa ed esercizi utili." data-en="Always prepared, with great materials to review at home and useful exercises.">Siempre preparado, con muy buen material para repasar en casa y ejercicios útiles.</blockquote>
-<figcaption><b>Anna</b> <img class="bandera" src="banderas/ch.svg" width="21" height="14" alt=""> · Preply</figcaption></figure>
-<figure class="bv-resena">
-<blockquote class="i18n" data-es="Me ha preparado un plan de estudio a medida, que me ha ayudado muchísimo a hablar." data-it="Mi ha preparato un piano di studio su misura, che mi ha aiutato tantissimo a parlare." data-en="He has brought me a tailored lesson plan that has really helped the way I speak.">Me ha preparado un plan de estudio a medida, que me ha ayudado muchísimo a hablar.</blockquote>
-<figcaption><b>Conner</b> <img class="bandera" src="banderas/us.svg" width="21" height="14" alt=""> · Preply</figcaption></figure>
-<figure class="bv-resena">
-<blockquote class="i18n" data-es="José sabe cómo adaptarse a tu nivel y prepara clases a medida." data-it="José sa come adattarsi al tuo livello e prepara lezioni su misura." data-en="José knows how to adapt to your level and prepares tailor-made lessons.">José sabe cómo adaptarse a tu nivel y prepara clases a medida.</blockquote>
-<figcaption><b>Marco</b> <img class="bandera" src="banderas/it.svg" width="21" height="14" alt=""> · Preply</figcaption></figure>
+<div class="bv-cinta" tabindex="0">
+<div class="bv-pista">
+<figure class="bv-resena"><span class="estrellas" aria-label="5/5">★★★★★</span><blockquote class="i18n" data-es="Aprendiendo con José, mi español ha mejorado muchísimo. Quería crecer profesionalmente y poder comunicarme con mi familia y mis amigos que solo hablaban español. En nuestras clases me ha preparado un plan de estudio profesional y a medida, que me ha ayudado muchísimo a hablar y a aprender la teoría. ¡Gracias, José!" data-it="Studiando con José, il mio spagnolo è migliorato tantissimo. Volevo crescere professionalmente e riuscire a comunicare con la mia famiglia e i miei amici che parlavano solo spagnolo. Durante le nostre lezioni mi ha preparato un piano di studio professionale e su misura, che mi ha aiutato tantissimo a parlare e a imparare la teoria. Grazie, José!" data-en="By learning from José, my Spanish has improved dramatically. I wanted to learn to grow professionally and communicate with my family and friends who spoke only Spanish. During our meetings, he has brought me a professionally tailored lesson plan that has only helped the way I speak and learn theory. Thank you, José!">Aprendiendo con José, mi español ha mejorado muchísimo. Quería crecer profesionalmente y poder comunicarme con mi familia y mis amigos que solo hablaban español. En nuestras clases me ha preparado un plan de estudio profesional y a medida, que me ha ayudado muchísimo a hablar y a aprender la teoría. ¡Gracias, José!</blockquote><figcaption><b>Conner</b> <img class="bandera" src="banderas/us.svg" width="21" height="14" alt="Estados Unidos"></figcaption></figure>
+<figure class="bv-resena"><span class="estrellas" aria-label="5/5">★★★★★</span><blockquote class="i18n" data-es="Fue mi primera clase con José y estoy muy satisfecha. José explica con mucha claridad y está abierto a cualquier pregunta." data-it="È stata la mia prima lezione con José e sono molto soddisfatta. José spiega molto chiaramente ed è aperto a ogni domanda." data-en="It was my first lesson with José and I am very satisfied. José explains very clearly and is open to any question.">Fue mi primera clase con José y estoy muy satisfecha. José explica con mucha claridad y está abierto a cualquier pregunta.</blockquote><figcaption><b>Violetta</b> <img class="bandera" src="banderas/de.svg" width="21" height="14" alt="Alemania"></figcaption></figure>
+<figure class="bv-resena"><span class="estrellas" aria-label="5/5">★★★★★</span><blockquote class="i18n" data-es="José sabe cómo adaptarse a tu nivel y prepara clases a medida." data-it="José sa come adattarsi al tuo livello e prepara lezioni su misura." data-en="José knows how to adapt to your level and prepares tailor-made lessons.">José sabe cómo adaptarse a tu nivel y prepara clases a medida.</blockquote><figcaption><b>Marco</b> <img class="bandera" src="banderas/it.svg" width="21" height="14" alt="Italia"></figcaption></figure>
+<figure class="bv-resena"><span class="estrellas" aria-label="5/5">★★★★★</span><blockquote class="i18n" data-es="Estoy estudiando español porque pronto me mudaré por trabajo. José ha creado un itinerario a medida, perfectamente adaptado a mis necesidades, sobre todo desde el punto de vista comercial. Estoy seguro de que, gracias a sus clases, mi nivel de español mejorará notablemente." data-it="Sto studiando spagnolo perché presto mi trasferirò per lavoro. José ha creato un percorso su misura, perfettamente adattato alle mie esigenze, soprattutto dal punto di vista commerciale. Sono sicuro che, grazie alle sue lezioni, il mio livello di spagnolo migliorerà notevolmente." data-en="I'm studying Spanish because I'll soon be relocating for work. José created a tailor-made path, perfectly adapted to my needs, especially from a business point of view. I'm confident that, thanks to his lessons, my Spanish will improve significantly.">Estoy estudiando español porque pronto me mudaré por trabajo. José ha creado un itinerario a medida, perfectamente adaptado a mis necesidades, sobre todo desde el punto de vista comercial. Estoy seguro de que, gracias a sus clases, mi nivel de español mejorará notablemente.</blockquote><figcaption><b>Davide</b> <img class="bandera" src="banderas/it.svg" width="21" height="14" alt="Italia"></figcaption></figure>
+<figure class="bv-resena"><span class="estrellas" aria-label="5/5">★★★★★</span><blockquote class="i18n" data-es="José es un profesor excelente, adapta cada clase a tu nivel actual de español, pero también te anima a seguir progresando constantemente." data-it="José è un insegnante fantastico, adatta ogni lezione al tuo livello attuale di spagnolo, ma ti spinge anche a fare progressi costanti." data-en="José is a great teacher, tailors each lesson to your current understanding of Spanish but will also keep pushing you along to make constant progress!">José es un profesor excelente, adapta cada clase a tu nivel actual de español, pero también te anima a seguir progresando constantemente.</blockquote><figcaption><b>Edward</b> <img class="bandera" src="banderas/gb.svg" width="21" height="14" alt="Reino Unido"></figcaption></figure>
+<figure class="bv-resena"><span class="estrellas" aria-label="5/5">★★★★★</span><blockquote class="i18n" data-es="¡Un profesor de español fantástico! Siempre preparado, con muy buen material para repasar en casa y ejercicios útiles. Adapta cada clase a mis necesidades y objetivos, y es muy flexible. Estoy aprendiendo y divirtiéndome a la vez. ¡Espero que él disfrute de nuestras clases tanto como yo! 😄" data-it="Un insegnante di spagnolo fantastico! Sempre preparato, con ottimi materiali da ripassare a casa ed esercizi utili. Adatta ogni lezione alle mie esigenze e ai miei obiettivi, ed è molto flessibile. Sto imparando e mi diverto allo stesso tempo. Spero che si diverta con le nostre lezioni quanto me! 😄" data-en="A fantastic Spanish teacher! Always prepared, with great materials to review at home and useful exercises. He adapts each class to my needs and goals, and he is very flexible. I'm learning and having fun at the same time. I hope he enjoys our lessons as much as I do! 😄">¡Un profesor de español fantástico! Siempre preparado, con muy buen material para repasar en casa y ejercicios útiles. Adapta cada clase a mis necesidades y objetivos, y es muy flexible. Estoy aprendiendo y divirtiéndome a la vez. ¡Espero que él disfrute de nuestras clases tanto como yo! 😄</blockquote><figcaption><b>Anna</b> <img class="bandera" src="banderas/ch.svg" width="21" height="14" alt="Suiza"></figcaption></figure>
+<figure class="bv-resena"><span class="estrellas" aria-label="5/5">★★★★★</span><blockquote class="i18n" data-es="José es un profesor cercano, muy preparado y competente. Necesitaba retomar el estudio del español y me está ayudando a hacerlo de una forma realmente eficaz. Prepara las clases a medida de mis necesidades y me ayuda paso a paso. ¡Lo recomiendo muchísimo como profesor!" data-it="José è un insegnante alla mano, molto preparato e competente! Avevo bisogno di riprendere lo studio dello spagnolo e lui mi sta aiutando a farlo in maniera davvero efficace. Prepara le lezioni su misura per le mie necessità e mi aiuta passo dopo passo. Lo consiglio vivamente come insegnante!" data-en="José is an approachable teacher, very well prepared and knowledgeable! I needed to get back to studying Spanish and he is helping me do it really effectively. He prepares lessons tailored to my needs and helps me step by step. I highly recommend him as a teacher!">José es un profesor cercano, muy preparado y competente. Necesitaba retomar el estudio del español y me está ayudando a hacerlo de una forma realmente eficaz. Prepara las clases a medida de mis necesidades y me ayuda paso a paso. ¡Lo recomiendo muchísimo como profesor!</blockquote><figcaption><b>Florentina</b> <img class="bandera" src="banderas/it.svg" width="21" height="14" alt="Italia"></figcaption></figure>
+<figure class="bv-resena" aria-hidden="true"><span class="estrellas" aria-label="5/5">★★★★★</span><blockquote class="i18n" data-es="Aprendiendo con José, mi español ha mejorado muchísimo. Quería crecer profesionalmente y poder comunicarme con mi familia y mis amigos que solo hablaban español. En nuestras clases me ha preparado un plan de estudio profesional y a medida, que me ha ayudado muchísimo a hablar y a aprender la teoría. ¡Gracias, José!" data-it="Studiando con José, il mio spagnolo è migliorato tantissimo. Volevo crescere professionalmente e riuscire a comunicare con la mia famiglia e i miei amici che parlavano solo spagnolo. Durante le nostre lezioni mi ha preparato un piano di studio professionale e su misura, che mi ha aiutato tantissimo a parlare e a imparare la teoria. Grazie, José!" data-en="By learning from José, my Spanish has improved dramatically. I wanted to learn to grow professionally and communicate with my family and friends who spoke only Spanish. During our meetings, he has brought me a professionally tailored lesson plan that has only helped the way I speak and learn theory. Thank you, José!">Aprendiendo con José, mi español ha mejorado muchísimo. Quería crecer profesionalmente y poder comunicarme con mi familia y mis amigos que solo hablaban español. En nuestras clases me ha preparado un plan de estudio profesional y a medida, que me ha ayudado muchísimo a hablar y a aprender la teoría. ¡Gracias, José!</blockquote><figcaption><b>Conner</b> <img class="bandera" src="banderas/us.svg" width="21" height="14" alt="Estados Unidos"></figcaption></figure>
+<figure class="bv-resena" aria-hidden="true"><span class="estrellas" aria-label="5/5">★★★★★</span><blockquote class="i18n" data-es="Fue mi primera clase con José y estoy muy satisfecha. José explica con mucha claridad y está abierto a cualquier pregunta." data-it="È stata la mia prima lezione con José e sono molto soddisfatta. José spiega molto chiaramente ed è aperto a ogni domanda." data-en="It was my first lesson with José and I am very satisfied. José explains very clearly and is open to any question.">Fue mi primera clase con José y estoy muy satisfecha. José explica con mucha claridad y está abierto a cualquier pregunta.</blockquote><figcaption><b>Violetta</b> <img class="bandera" src="banderas/de.svg" width="21" height="14" alt="Alemania"></figcaption></figure>
+<figure class="bv-resena" aria-hidden="true"><span class="estrellas" aria-label="5/5">★★★★★</span><blockquote class="i18n" data-es="José sabe cómo adaptarse a tu nivel y prepara clases a medida." data-it="José sa come adattarsi al tuo livello e prepara lezioni su misura." data-en="José knows how to adapt to your level and prepares tailor-made lessons.">José sabe cómo adaptarse a tu nivel y prepara clases a medida.</blockquote><figcaption><b>Marco</b> <img class="bandera" src="banderas/it.svg" width="21" height="14" alt="Italia"></figcaption></figure>
+<figure class="bv-resena" aria-hidden="true"><span class="estrellas" aria-label="5/5">★★★★★</span><blockquote class="i18n" data-es="Estoy estudiando español porque pronto me mudaré por trabajo. José ha creado un itinerario a medida, perfectamente adaptado a mis necesidades, sobre todo desde el punto de vista comercial. Estoy seguro de que, gracias a sus clases, mi nivel de español mejorará notablemente." data-it="Sto studiando spagnolo perché presto mi trasferirò per lavoro. José ha creato un percorso su misura, perfettamente adattato alle mie esigenze, soprattutto dal punto di vista commerciale. Sono sicuro che, grazie alle sue lezioni, il mio livello di spagnolo migliorerà notevolmente." data-en="I'm studying Spanish because I'll soon be relocating for work. José created a tailor-made path, perfectly adapted to my needs, especially from a business point of view. I'm confident that, thanks to his lessons, my Spanish will improve significantly.">Estoy estudiando español porque pronto me mudaré por trabajo. José ha creado un itinerario a medida, perfectamente adaptado a mis necesidades, sobre todo desde el punto de vista comercial. Estoy seguro de que, gracias a sus clases, mi nivel de español mejorará notablemente.</blockquote><figcaption><b>Davide</b> <img class="bandera" src="banderas/it.svg" width="21" height="14" alt="Italia"></figcaption></figure>
+<figure class="bv-resena" aria-hidden="true"><span class="estrellas" aria-label="5/5">★★★★★</span><blockquote class="i18n" data-es="José es un profesor excelente, adapta cada clase a tu nivel actual de español, pero también te anima a seguir progresando constantemente." data-it="José è un insegnante fantastico, adatta ogni lezione al tuo livello attuale di spagnolo, ma ti spinge anche a fare progressi costanti." data-en="José is a great teacher, tailors each lesson to your current understanding of Spanish but will also keep pushing you along to make constant progress!">José es un profesor excelente, adapta cada clase a tu nivel actual de español, pero también te anima a seguir progresando constantemente.</blockquote><figcaption><b>Edward</b> <img class="bandera" src="banderas/gb.svg" width="21" height="14" alt="Reino Unido"></figcaption></figure>
+<figure class="bv-resena" aria-hidden="true"><span class="estrellas" aria-label="5/5">★★★★★</span><blockquote class="i18n" data-es="¡Un profesor de español fantástico! Siempre preparado, con muy buen material para repasar en casa y ejercicios útiles. Adapta cada clase a mis necesidades y objetivos, y es muy flexible. Estoy aprendiendo y divirtiéndome a la vez. ¡Espero que él disfrute de nuestras clases tanto como yo! 😄" data-it="Un insegnante di spagnolo fantastico! Sempre preparato, con ottimi materiali da ripassare a casa ed esercizi utili. Adatta ogni lezione alle mie esigenze e ai miei obiettivi, ed è molto flessibile. Sto imparando e mi diverto allo stesso tempo. Spero che si diverta con le nostre lezioni quanto me! 😄" data-en="A fantastic Spanish teacher! Always prepared, with great materials to review at home and useful exercises. He adapts each class to my needs and goals, and he is very flexible. I'm learning and having fun at the same time. I hope he enjoys our lessons as much as I do! 😄">¡Un profesor de español fantástico! Siempre preparado, con muy buen material para repasar en casa y ejercicios útiles. Adapta cada clase a mis necesidades y objetivos, y es muy flexible. Estoy aprendiendo y divirtiéndome a la vez. ¡Espero que él disfrute de nuestras clases tanto como yo! 😄</blockquote><figcaption><b>Anna</b> <img class="bandera" src="banderas/ch.svg" width="21" height="14" alt="Suiza"></figcaption></figure>
+<figure class="bv-resena" aria-hidden="true"><span class="estrellas" aria-label="5/5">★★★★★</span><blockquote class="i18n" data-es="José es un profesor cercano, muy preparado y competente. Necesitaba retomar el estudio del español y me está ayudando a hacerlo de una forma realmente eficaz. Prepara las clases a medida de mis necesidades y me ayuda paso a paso. ¡Lo recomiendo muchísimo como profesor!" data-it="José è un insegnante alla mano, molto preparato e competente! Avevo bisogno di riprendere lo studio dello spagnolo e lui mi sta aiutando a farlo in maniera davvero efficace. Prepara le lezioni su misura per le mie necessità e mi aiuta passo dopo passo. Lo consiglio vivamente come insegnante!" data-en="José is an approachable teacher, very well prepared and knowledgeable! I needed to get back to studying Spanish and he is helping me do it really effectively. He prepares lessons tailored to my needs and helps me step by step. I highly recommend him as a teacher!">José es un profesor cercano, muy preparado y competente. Necesitaba retomar el estudio del español y me está ayudando a hacerlo de una forma realmente eficaz. Prepara las clases a medida de mis necesidades y me ayuda paso a paso. ¡Lo recomiendo muchísimo como profesor!</blockquote><figcaption><b>Florentina</b> <img class="bandera" src="banderas/it.svg" width="21" height="14" alt="Italia"></figcaption></figure>
 </div>
+</div>
+<p class="bv-preply"><span class="i18n" data-es="Todas mis reseñas están en " data-it="Tutte le mie recensioni sono sul " data-en="All my reviews are on ">Todas mis reseñas están en </span> <a href="https://preply.in/JOSE7IT3614462510?ts=17846445" target="_blank" rel="noopener noreferrer"><span class="i18n" data-es="mi perfil de Preply" data-it="mio profilo Preply" data-en="my Preply profile">mi perfil de Preply</span> →</a></p>
 </section>
 
 <section class="bv-fin-cta" id="reservar">
 <span class="bv-globo bv-globo-2 bv-mano" aria-hidden="true">¡Vamos!</span>
 <span class="bv-globo bv-globo-3 bv-mano" aria-hidden="true">Poco a poco</span>
 <h2 class="bv-mano i18n" data-es="¿Empezamos?" data-it="Cominciamo?" data-en="Shall we start?">¿Empezamos?</h2>
-<p class="i18n" data-es="Reserva una clase y se abre todo: tus clases, todos los ejercicios y toda la teoría." data-it="Prenota una lezione e si apre tutto: le tue lezioni, tutti gli esercizi e tutta la teoria." data-en="Book a lesson and it all opens up: your lessons, all the exercises and all the theory.">Reserva una clase y se abre todo: tus clases, todos los ejercicios y toda la teoría.</p>
+<p class="i18n" data-es="Reserva tu primera clase y se abre todo: tus clases, todos los ejercicios y toda la teoría." data-it="Prenota la tua prima lezione e si apre tutto: le tue lezioni, tutti gli esercizi e tutta la teoria." data-en="Book your first lesson and it all opens up: your lessons, all the exercises and all the theory.">Reserva tu primera clase y se abre todo: tus clases, todos los ejercicios y toda la teoría.</p>
 <div class="bv-botones">
 <div class="bv-cta-opcion">
-<a class="bv-btn bv-btn-oro" href="https://tidycal.com/josenogues" target="_blank" rel="noopener noreferrer"><i class="ti ti-calendar" aria-hidden="true"></i> <span class="i18n" data-es="Reservar conmigo" data-it="Prenota con me" data-en="Book with me">Reservar conmigo</span></a>
+<a class="bv-btn bv-btn-oro" href="https://tidycal.com/josenogues" target="_blank" rel="noopener noreferrer"><i class="ti ti-calendar" aria-hidden="true"></i> <span class="i18n" data-es="Reserva tu primera clase" data-it="Prenota la tua prima lezione" data-en="Book your first lesson">Reserva tu primera clase</span></a>
 <span class="bv-donde i18n" data-es="Eliges día y hora en mi calendario" data-it="Scegli giorno e ora nel mio calendario" data-en="Pick a day and time in my calendar">Eliges día y hora en mi calendario</span>
-</div>
-<div class="bv-cta-opcion">
-<a class="bv-btn bv-btn-blanco" href="https://preply.in/JOSE7IT3614462510?ts=17846445" target="_blank" rel="noopener noreferrer"><i class="ti ti-school" aria-hidden="true"></i> <span class="i18n" data-es="Reservar en Preply" data-it="Prenota su Preply" data-en="Book on Preply">Reservar en Preply</span></a>
-<span class="bv-donde i18n" data-es="Si prefieres reservar y pagar allí" data-it="Se preferisci prenotare e pagare lì" data-en="If you’d rather book and pay there">Si prefieres reservar y pagar allí</span>
 </div>
 </div>
 <p class="bv-ya"><span class="i18n" data-es="¿Ya eres alumno?" data-it="Sei già studente?" data-en="Already a student?">¿Ya eres alumno?</span> <a href="index.html?entrar"><span class="i18n" data-es="Entra en tu cuaderno" data-it="Entra nel tuo quaderno" data-en="Go to your notebook">Entra en tu cuaderno</span> →</a></p>
@@ -327,8 +431,8 @@ html:not([data-theme="dark"]) .bv-cap{--c-ejer:#b8760b}
   var ancho = window.matchMedia('(min-width:1181px)');
   var quieto = window.matchMedia('(prefers-reduced-motion: reduce)');
   var l = /^(es|it|en)$/.test(guardado || '') ? guardado : (nav === 'it' || nav === 'es' ? nav : 'en');
-  var ESCENAS = ['portada', 'clases', 'clase', 'lectura', 'cinco', 'teoria'];
   var caps = [].slice.call(document.querySelectorAll('.bv-cap'));
+  var ESCENAS = caps.map(function(c){ return c.dataset.escena; });
   var caja = document.getElementById('bv-escenas');
   var fijos = {};     // los vídeos de la pantalla que acompaña (ordenador)
   var sueltos = {};   // uno debajo de cada capítulo (pantallas estrechas)
@@ -399,6 +503,7 @@ html:not([data-theme="dark"]) .bv-cap{--c-ejer:#b8760b}
       a.href = a.dataset.pag + '-' + l + '.html' + (a.dataset.q || '');
     });
     document.getElementById('bv-muestra-img').src = 'bienvenida/escena-lectura-' + l + '.jpg';
+    document.getElementById('bv-dos-img').src = 'bienvenida/escena-practica-' + l + '.jpg';
     document.querySelectorAll('.bv-idiomas button').forEach(function(b){
       var si = b.dataset.l === l; b.classList.toggle('active', si); b.setAttribute('aria-pressed', si);
     });

@@ -970,6 +970,8 @@ document.addEventListener("jn-modo", e => marcaModo(e.detail));
   const pag = location.pathname.split('/').pop() || '';
   const esMuestra = new RegExp('^clase-' + MUESTRA + '-(es|it|en)(\\.html)?$').test(pag) ||
     (/^lectura-(es|it|en)(\.html)?$/.test(pag) && new URLSearchParams(location.search).get('clase') === MUESTRA);
+  // «Sobre mí» y la privacidad son para todos: la bienvenida enlaza con ellas
+  if(/^(sobre-mi|privacidad)(\.html)?$/.test(pag) && !pista && !/[?&]oobCode=/.test(location.search)) return;
   if(esMuestra && !pista && !/[?&]oobCode=/.test(location.search)){
     const pon = function(){
       const main = document.querySelector('main');

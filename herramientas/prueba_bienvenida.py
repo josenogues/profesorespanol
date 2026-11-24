@@ -119,9 +119,9 @@ with sync_playwright() as p:
     c = br.new_context(viewport={"width": 1440, "height": 900}, locale="it-IT"); pg = pagina(c)
     pg.goto(B + "/bienvenida.html", wait_until="load"); pg.wait_for_timeout(600)
     escenas = pg.locator("#bv-escenas video")
-    comprueba(escenas.count() == 6, "seis escenas, una por capítulo")
+    comprueba(escenas.count() == pg.locator(".bv-cap").count() == 9, "nueve pasos, cada uno con su escena")
     comprueba(all(s.endswith("-it.mp4") for s in escenas.evaluate_all("v => v.map(x => x.getAttribute('src'))")), "  en el idioma de la página")
-    for i in range(6):
+    for i in range(pg.locator(".bv-cap").count()):
         cap = pg.locator(".bv-cap").nth(i)
         y = cap.evaluate("e => e.getBoundingClientRect().top + scrollY + e.offsetHeight/2 - innerHeight/2")
         pg.evaluate("y => scrollTo(0, y)", y); pg.wait_for_timeout(700)
@@ -129,11 +129,16 @@ with sync_playwright() as p:
         activo = pg.evaluate("() => [...document.querySelectorAll('#bv-escenas video.activo')].map(v => v.dataset.escena)")
         comprueba(activo == [nombre] and "activo" in (cap.get_attribute("class") or ""),
                   "al leer «%s», la pantalla enseña su escena" % nombre)
-    for f in ["bienvenida/escena-%s-%s.%s" % (n, l, e) for n in ("portada", "clases", "clase", "lectura", "cinco", "teoria")
+    for f in ["bienvenida/escena-%s-%s.%s" % (n, l, e) for n in ("reserva", "portada", "clase", "notas", "lectura", "cinco", "practica", "teoria", "clases")
               for l in ("es", "it", "en") for e in ("mp4", "jpg")]:
         if not pg.request.get(B + "/" + f).ok:
             comprueba(False, "falta %s" % f)
     comprueba(pg.evaluate("document.documentElement.scrollWidth") <= 1440, "nada se sale por los lados")
+    comprueba(pg.locator(".bv-pista .bv-resena:not([aria-hidden])").count() == 7, "las siete reseñas de «Sobre mí»")
+    comprueba(pg.locator('a[href^="https://tidycal.com"]').count() == 1 and "Preply" not in pg.locator("#reservar").inner_text(),
+              "reservar: solo en mi calendario (Preply queda como perfil con reseñas)")
+    anchos = pg.locator(".bv-hola .bv-btn").evaluate_all("b => b.map(x => Math.round(x.getBoundingClientRect().width))")
+    comprueba(len(set(anchos)) == 1, "los dos botones de arriba miden lo mismo: %s" % anchos)
     c.close()
 
     print("\n═══ en el móvil ═══")
@@ -175,6 +180,12 @@ with sync_playwright() as p:
     comprueba(pg.locator('.access-gate-nuevo a[href="bienvenida.html"]').is_visible(), "y su puerta enlaza con la bienvenida")
     comprueba("Non sei ancora studente" in pg.locator(".access-gate-nuevo").inner_text(), "  en el idioma del visitante")
     c.close()
+
+    for pag in ("/sobre-mi.html", "/privacidad.html"):
+        c = nuevo(br); pg = pagina(c)
+        pg.goto(B + pag, wait_until="load"); pg.wait_for_timeout(900)
+        comprueba(pg.locator(".access-gate-overlay").count() == 0, "%s se ve sin entrar" % pag.strip("/"))
+        c.close()
 
     c = nuevo(br, init=ALUMNA); pg = pagina(c)
     pg.goto(B + "/clase-si-tuviera-it.html", wait_until="load"); pg.wait_for_timeout(1500)

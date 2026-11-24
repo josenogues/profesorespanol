@@ -99,21 +99,29 @@ bueno; lo pequeño y claro, hacerlo.
   **la web sale de las clases** («tus clases no se quedan en la
   videollamada»), no «teoría y ejercicios como cualquier web».
 - Tiene el **marco de la web** (columna azul con botones para el visitante:
-  Cómo funciona, Pruébalo, Reservar y abajo Entrar; fondo de cuaderno) y va
-  **contada como una historia** (24 nov, pedido de José: «más vida, menos
-  texto»): el degradado con «¡Hola!» y la ventana con el **vídeo** entera
-  dentro del violeta; «Una semana con José» en seis capítulos de una frase
-  (*En clase,* hablamos / *Esa misma tarde,*… / *Al día siguiente,*… / *Otro
-  día,* lees / *Con cinco minutos* basta / *Y si dudas,* la teoría) con una
+  Cómo funciona, Pruébalo, Reservar y abajo Entrar; fondo de cuaderno). Orden
+  (24 nov, ideas de José): el degradado con «¡Hola!» y la ventana con el
+  **vídeo** entera dentro del violeta (los dos botones, del mismo tamaño);
+  la **presentación**: lo mejor de una plataforma online + la conversación
+  de un profesor nativo que resuelve dudas y enseña a hablar, «nada de
+  teoría aburrida»; **«¿Cómo funciona?»** en nueve pasos numerados con una
   pantalla fija a la derecha que enseña la escena de cada uno (en el móvil,
-  debajo de cada capítulo); y cierre en violeta «¿Empezamos?». Los vídeos
-  salen de una alumna inventada (Sara; nunca datos reales), en los tres
-  idiomas (`bienvenida/`: recorrido de ordenador y de móvil, y una escena
-  por capítulo). También lleva la **clase
-  de muestra** (la 540 y su lectura, abiertas sin entrar, con una franja que
-  lleva a reservar), la foto de José **pequeña, no protagonista**, tres
-  reseñas, y reservar **en Preply o directamente (TidyCal)**: que elija el
-  alumno. Sin precio en la web.
+  debajo): reservas → tu clase te espera en tu sección → damos la clase
+  (hablamos, exploramos, comprendemos, resuelvo dudas, practicas en vivo) →
+  tomas notas → ejercicios y lectura (y deberes si quieres) → cinco minutos
+  → práctica libre (cursos, por nivel, por tema) → la teoría → otra clase;
+  la **clase de muestra** (la 540 y su lectura, abiertas sin entrar, con una
+  franja que lleva a reservar); la foto de José **pequeña, no
+  protagonista**, y **todas las reseñas** de «Sobre mí» pasando de lado; y
+  cierre en violeta «¿Empezamos?».
+- **Reservar, solo en TidyCal** (su calendario). **Preply ya no es para
+  reservar**: queda como perfil con las reseñas. José quizá añada también su
+  perfil de **Superprof** (él pasará el enlace). Sin precio en la web.
+- Los vídeos salen de una alumna inventada (Sara; nunca datos reales), en
+  los tres idiomas (`bienvenida/`: recorrido de ordenador y de móvil, y una
+  escena por paso).
+- «Sobre mí» y «Privacidad» se ven sin entrar (la bienvenida enlaza con
+  ellas).
 - La puerta enlaza con la bienvenida («¿Todavía no eres alumno?»).
 - Si cambia el aspecto de la web, los vídeos se vuelven a grabar con
   `herramientas/graba_recorrido.py` (sin nada: los recorridos y las escenas).
