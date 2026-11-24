@@ -110,7 +110,7 @@ with sync_playwright() as p:
     comprueba("clase-si-tuviera-en" in pg.url and pg.locator('.riel-btn[data-sec="clases"]').inner_text().strip() == "My classes",
               "la clase de muestra se abre con el menú en el idioma elegido")
     pg.goto(B + "/bienvenida.html", wait_until="load"); pg.wait_for_timeout(300)
-    pg.locator(".bv-entrar").click(); pg.wait_for_load_state("load"); pg.wait_for_timeout(900)
+    pg.locator(".bv-riel-entrar").click(); pg.wait_for_load_state("load"); pg.wait_for_timeout(900)
     comprueba("bienvenida" not in pg.url and pg.locator(".access-gate-overlay").is_visible(),
               "pulsar «Entrar» abre la puerta, sin volver a la bienvenida")
     c.close()

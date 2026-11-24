@@ -14,23 +14,19 @@
 <style>
 /* Bienvenida: la página para quien todavía no es alumno. A ella lleva la portada
    (index.html) a quien no ha entrado nunca, y la puerta con «Mira cómo funciona». */
-.bv{max-width:1040px;margin:0 auto;padding:0 24px}
-.bv-cab{display:flex;align-items:center;justify-content:space-between;gap:16px;margin:-20px -16px 34px}
-.bv-cab img.bv-logo{height:46px;width:auto;display:block}
-.bv-cab-der{display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:flex-end}
-.bv-idiomas{display:flex;gap:4px}
-.bv-idiomas button{display:inline-flex;align-items:center;gap:6px;background:transparent;border:1px solid transparent;border-radius:6px;
-  padding:6px 10px;font:600 14px var(--font-body);color:rgba(255,255,255,.78);cursor:pointer}
-.bv-idiomas button:hover{background:rgba(255,255,255,.1);color:#fff}
-.bv-idiomas button.activo{border-color:rgba(255,255,255,.35);background:rgba(255,255,255,.14);color:#fff}
-.bv-entrar{display:inline-flex;align-items:center;gap:7px;border:2px solid rgba(255,255,255,.6);background:transparent;color:#fff;
-  border-radius:6px;padding:7px 14px;font:700 14.5px var(--font-head);text-decoration:none;white-space:nowrap}
-.bv-entrar:hover{background:rgba(255,255,255,.12)}
-.bv-idiomas button:focus-visible,.bv-entrar:focus-visible,.bv-btn:focus-visible{outline:3px solid #fff;outline-offset:2px}
+html{scroll-behavior:smooth}
+.bv-sec,.bv-hola{scroll-margin-top:20px}
+.bv-arriba{display:flex;justify-content:flex-end;margin:0 0 22px}
+.bv-arriba .language-selector{margin:0;padding:0;border:0}
+/* en la columna, «Entrar» va abajo, donde las demás páginas tienen la lupa */
+.bv-pag .riel{padding-bottom:22px}
+.bv-pag .riel-btn{text-align:center;line-height:1.2}
+.bv-riel-entrar{margin-top:auto}
+.bv-hola .bv-btn:focus-visible{outline:3px solid #fff;outline-offset:2px}
 
 /* la entrada, con el degradado de la portada */
 .bv-hola{position:relative;overflow:hidden;background:linear-gradient(135deg,#3A4570 0%,#4b5894 55%,#6a5fc0 100%);color:#fff;
-  border-radius:6px;padding:36px 44px 150px;margin-top:16px}
+  border-radius:6px;padding:44px 48px 150px}
 [data-theme="dark"] .bv-hola{background:linear-gradient(135deg,#2c3560 0%,#3d4a82 55%,#55499e 100%)}
 .bv-hola .bv-mano{font-family:'Caveat',cursive;font-weight:700;font-size:54px;line-height:1;color:#ffc94f;
   transform:rotate(-1.5deg);transform-origin:left center;margin:0 0 14px}
@@ -42,14 +38,14 @@
 .bv-btn-oro:hover{background:#f7bd45;border-color:#f7bd45}
 .bv-btn-linea{background:transparent;color:#fff;border:2px solid rgba(255,255,255,.6)}
 .bv-btn-linea:hover{background:rgba(255,255,255,.12)}
-.bv-globos{position:absolute;right:44px;top:150px;width:200px;height:160px}
+.bv-globos{position:absolute;right:56px;top:56px;width:200px;height:160px}
 .bv-globos span{position:absolute;font-family:'Caveat',cursive;font-weight:700;font-size:24px;line-height:1;padding:9px 16px;border-radius:16px;white-space:nowrap}
 .bv-globos span:nth-child(1){top:0;left:0;background:var(--gold);color:#232220;transform:rotate(-6deg);border-bottom-left-radius:4px}
 .bv-globos span:nth-child(2){top:58px;right:0;background:#D6488F;color:#fff;transform:rotate(5deg);border-bottom-right-radius:4px}
 .bv-globos span:nth-child(3){bottom:0;left:18px;background:#fff;color:#3A4570;transform:rotate(-3deg);border-bottom-left-radius:4px}
 
 /* el vídeo, en una ventana de navegador, montado sobre el degradado */
-.bv-video{margin:-118px auto 0;max-width:920px;position:relative}
+.bv-video{margin:-118px auto 0;max-width:1000px;position:relative;padding:0 24px}
 .bv-ventana{background:var(--card-bg);border:1px solid var(--border);border-radius:6px;overflow:hidden;box-shadow:0 18px 44px rgba(35,44,79,.22)}
 .bv-barra{display:flex;align-items:center;gap:6px;padding:9px 12px;border-bottom:1px solid var(--border);background:var(--tint)}
 .bv-barra i{width:10px;height:10px;border-radius:50%;background:var(--border);display:block}
@@ -109,19 +105,23 @@
 .bv-btn-violeta:hover{background:var(--c-clases-d);border-color:var(--c-clases-d)}
 .bv-ya{margin-top:26px;color:var(--muted);font-size:15.5px}
 .bv-ya a{color:var(--c-clases);font-weight:700}
-.bv-fin{margin-top:80px}
+.bv-fin{margin-top:0}
 
 @media (max-width:860px){
   .bv-globos{display:none}
   .bv-resenas{grid-template-columns:1fr}
 }
+@media (max-width:900px){
+  /* en el móvil, las banderas suben a la barra azul de arriba */
+  .bv-arriba{position:absolute;top:18px;right:12px;z-index:63;margin:0}
+  .bv-arriba .language-selector button{background:transparent;padding:7px 8px;margin-left:2px}
+  .bv-arriba .language-selector button.active{background:rgba(255,255,255,.18)}
+  .bv-riel-entrar{margin-top:0}
+}
 @media (max-width:640px){
-  .bv{padding:0 16px}
-  .bv-cab img.bv-logo{height:36px}
   .bv-idiomas .bv-nom{display:none}
-  .bv-entrar .bv-nom-largo{display:none}
-  .bv-hola{padding:26px 22px 96px;margin-top:0;border-radius:0;margin-left:-16px;margin-right:-16px}
-  .bv-cab{margin:-8px -6px 26px}
+  .bv-hola{padding:26px 22px 96px;border-radius:0;margin:-22px -22px 0}
+  .bv-video{padding:0}
   .bv-hola .bv-mano{font-size:44px}
   .bv-hola h1{font-size:30px}
   .bv-hola p{font-size:17px}
@@ -134,22 +134,29 @@
 }
 </style>
 </head>
-<body>
-<div class="bv">
-
+<body class="bv-pag">
+<aside class="menu">
+<div class="menu-movil">
+<a href="bienvenida.html" class="logo-header"><img src="logo.svg" alt="Habla español con José" class="logo-img" width="291" height="69"></a>
+</div>
+<nav class="riel">
+<a href="bienvenida.html" class="riel-logo"><img src="icono.png" alt="" width="62" height="62"><span class="riel-nombre">Habla<br>español<b>con José</b></span></a>
+<a class="riel-btn" href="#como"><i class="ti ti-bulb" aria-hidden="true"></i> <span class="i18n" data-es="Cómo funciona" data-it="Come funziona" data-en="How it works">Cómo funciona</span></a>
+<a class="riel-btn" href="#muestra"><i class="ti ti-book" aria-hidden="true"></i> <span class="i18n" data-es="Pruébalo" data-it="Prova" data-en="Try it">Pruébalo</span></a>
+<a class="riel-btn" href="#reservar"><i class="ti ti-calendar" aria-hidden="true"></i> <span class="i18n" data-es="Reservar" data-it="Prenota" data-en="Book">Reservar</span></a>
+<a class="riel-btn bv-riel-entrar" href="index.html?entrar"><i class="ti ti-login" aria-hidden="true"></i> <span class="i18n" data-es="Entrar" data-it="Entra" data-en="Sign in">Entrar</span></a>
+</nav>
+</aside>
+<main class="main bv">
+<div class="bv-arriba">
+<div class="language-selector bv-idiomas">
+<button type="button" data-l="es"><img class="bandera" src="banderas/es.svg" width="21" height="14" alt=""> <span class="bv-nom">Español</span></button>
+<button type="button" data-l="it"><img class="bandera" src="banderas/it.svg" width="21" height="14" alt=""> <span class="bv-nom">Italiano</span></button>
+<button type="button" data-l="en"><img class="bandera" src="banderas/gb.svg" width="21" height="14" alt=""> <span class="bv-nom">English</span></button>
+</div>
+</div>
 
 <section class="bv-hola">
-<header class="bv-cab">
-<img class="bv-logo" src="logo.svg" alt="Habla español con José" width="291" height="69">
-<div class="bv-cab-der">
-<div class="bv-idiomas">
-<button type="button" data-l="it"><img class="bandera" src="banderas/it.svg" width="21" height="14" alt=""><span class="bv-nom">Italiano</span></button>
-<button type="button" data-l="en"><img class="bandera" src="banderas/gb.svg" width="21" height="14" alt=""><span class="bv-nom">English</span></button>
-<button type="button" data-l="es"><img class="bandera" src="banderas/es.svg" width="21" height="14" alt=""><span class="bv-nom">Español</span></button>
-</div>
-<a class="bv-entrar" href="index.html?entrar"><i class="ti ti-login" aria-hidden="true"></i><span><span class="i18n bv-nom-largo" data-es="Ya soy alumno · " data-it="Sono già studente · " data-en="I’m a student · ">Ya soy alumno · </span><span class="i18n" data-es="Entrar" data-it="Entra" data-en="Sign in">Entrar</span></span></a>
-</div>
-</header>
 <p class="bv-mano">¡Hola!</p>
 <h1 class="i18n" data-es="Tus clases de español no se quedan en la videollamada." data-it="Le tue lezioni di spagnolo non finiscono con la videochiamata." data-en="Your Spanish lessons don’t end when the call does.">Tus clases de español no se quedan en la videollamada.</h1>
 <p class="i18n" data-es="Clases particulares por videollamada, hechas a tu medida. Y después, una web que sale de tus clases: lo que vimos, ejercicios que se corrigen solos, lecturas y toda la teoría." data-it="Lezioni private in videochiamata, fatte su misura per te. E dopo, un sito che nasce dalle tue lezioni: quello che abbiamo visto, esercizi che si correggono da soli, letture e tutta la teoria." data-en="One-to-one lessons by video call, built around you. And afterwards, a website made from your lessons: what we covered, exercises that mark themselves, readings and all the theory.">Clases particulares por videollamada, hechas a tu medida. Y después, una web que sale de tus clases: lo que vimos, ejercicios que se corrigen solos, lecturas y toda la teoría.</p>
@@ -168,7 +175,7 @@
 <p class="bv-pie-video i18n" data-es="Así es por dentro, con una alumna inventada." data-it="Ecco com’è dentro, con una studentessa inventata." data-en="This is what it looks like inside, with a made-up student.">Así es por dentro, con una alumna inventada.</p>
 </div>
 
-<section class="bv-sec">
+<section class="bv-sec" id="como">
 <h2 class="i18n" data-es="Cómo funciona" data-it="Come funziona" data-en="How it works">Cómo funciona</h2>
 <p class="bv-intro i18n" data-es="La clase y la web son una sola cosa: lo que vemos juntos es lo que luego practicas." data-it="La lezione e il sito sono una cosa sola: quello che vediamo insieme è quello che poi eserciti." data-en="The lesson and the website are one thing: what we cover together is what you practise afterwards.">La clase y la web son una sola cosa: lo que vemos juntos es lo que luego practicas.</p>
 <div class="bv-pasos">
@@ -239,7 +246,7 @@
 <p class="bv-ya"><span class="i18n" data-es="¿Ya eres alumno?" data-it="Sei già studente?" data-en="Already a student?">¿Ya eres alumno?</span> <a href="index.html?entrar"><span class="i18n" data-es="Entra en tu cuaderno" data-it="Entra nel tuo quaderno" data-en="Go to your notebook">Entra en tu cuaderno</span> →</a></p>
 </section>
 
-</div>
+</main>
 <footer class="bv-fin">© 2026 José N. · <span class="i18n" data-es="Profesor de español" data-it="Insegnante di spagnolo" data-en="Spanish teacher">Profesor de español</span> · <a href="sobre-mi.html"><span class="i18n" data-es="Sobre mí" data-it="Chi sono" data-en="About me">Sobre mí</span></a> · <a href="privacidad.html"><span class="i18n" data-es="Privacidad" data-it="Privacy" data-en="Privacy">Privacidad</span></a></footer>
 
 <script>
@@ -262,7 +269,7 @@
       a.href = a.dataset.pag + '-' + l + '.html' + (a.dataset.q || '');
     });
     document.querySelectorAll('.bv-idiomas button').forEach(function(b){
-      var si = b.dataset.l === l; b.classList.toggle('activo', si); b.setAttribute('aria-pressed', si);
+      var si = b.dataset.l === l; b.classList.toggle('active', si); b.setAttribute('aria-pressed', si);
     });
     // el vídeo y su primera imagen, en su idioma; en el móvil, el grabado en un móvil
     var v = document.getElementById('bv-video'), movil = estrecho.matches;
@@ -285,6 +292,18 @@
   document.querySelectorAll('[data-pag], a[href^="index.html"]').forEach(function(a){
     a.addEventListener('click', function(){ try { localStorage.setItem('jn_track', l); } catch(e){} });
   });
+  // en la columna se enciende el botón de la parte que se está viendo
+  if('IntersectionObserver' in window){
+    var botones = {};
+    document.querySelectorAll('.riel-btn[href^="#"]').forEach(function(b){ botones[b.getAttribute('href').slice(1)] = b; });
+    var mira = new IntersectionObserver(function(es){
+      es.forEach(function(e){
+        if(!e.isIntersecting) return;
+        Object.keys(botones).forEach(function(k){ botones[k].classList.toggle('actual', k === e.target.id); });
+      });
+    }, {rootMargin: '-45% 0px -50% 0px'});
+    Object.keys(botones).forEach(function(k){ var sec = document.getElementById(k); if(sec) mira.observe(sec); });
+  }
   pon(l);
   var otra = function(){ pon(l); };
   if(estrecho.addEventListener) estrecho.addEventListener('change', otra); else if(estrecho.addListener) estrecho.addListener(otra);
