@@ -309,6 +309,7 @@ with sync_playwright() as p:
                 if t >= w: return reloj[i]
             return reloj[-1] + 0.5
         for nombre, desde, hasta in escenas:
+            if MOVIL and nombre != "cinco": continue  # del móvil solo se usa «cinco minutos»
             a, b = en_video(desde), en_video(hasta)
             sal = os.path.join(OUT, "escena-%s%s-%s.mp4" % ("movil-" if MOVIL else "", nombre, P))
             subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-ss", "%.3f" % a, "-i", entero, "-t", "%.3f" % (b - a),

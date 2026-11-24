@@ -131,8 +131,9 @@ with sync_playwright() as p:
         activo = pg.evaluate("() => [...document.querySelectorAll('#bv-escenas > .activo')].map(v => v.dataset.escena)")
         comprueba(activo == [nombre] and "activo" in (cap.get_attribute("class") or ""),
                   "al leer «%s», la pantalla enseña su escena" % nombre)
-    for f in ["bienvenida/escena-%s-%s.%s" % (n, l, e) for n in ("reserva", "portada", "clase", "notas", "repaso", "lectura", "movil-cinco", "practica", "teoria")
+    for f in ["bienvenida/escena-%s-%s.%s" % (n, l, e) for n in ("reserva", "portada", "clase", "notas", "repaso", "lectura", "movil-cinco", "teoria")
               for l in ("es", "it", "en") for e in ("mp4", "jpg")] + \
+             ["bienvenida/escena-practica-%s.jpg" % l for l in ("es", "it", "en")] + \
              ["bienvenida/practica-%s-%s.jpg" % (m, l) for m in ("nivel", "tema", "curso") for l in ("es", "it", "en")]:
         if not pg.request.get(B + "/" + f).ok:
             comprueba(False, "falta %s" % f)

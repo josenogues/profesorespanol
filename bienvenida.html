@@ -443,7 +443,7 @@ video.telefono{object-fit:contain;background:linear-gradient(135deg,#3A4570 0%,#
   function fotos(){
     var d = document.createElement('div'); d.className = 'bv-fotos';
     FOTOS.forEach(function(f, i){
-      var im = document.createElement('img'); im.alt = ''; im.loading = 'lazy'; im.dataset.foto = f;
+      var im = document.createElement('img'); im.alt = ''; im.dataset.foto = f;
       if(i === 0) im.className = 'vista';
       d.appendChild(im);
     });
