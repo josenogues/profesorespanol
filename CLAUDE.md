@@ -98,16 +98,25 @@ bueno; lo pequeño y claro, hacerlo.
   correo o esperándolo, no). Es para captar alumnos: la idea que vende es que
   **la web sale de las clases** («tus clases no se quedan en la
   videollamada»), no «teoría y ejercicios como cualquier web».
-- Lleva: el degradado con «¡Hola!», un **vídeo** de la web por dentro con una
-  alumna inventada (Sara; nunca datos reales) en los tres idiomas y en versión
-  ordenador y móvil (`bienvenida/`), cómo funciona en tres filas, la **clase
+- Tiene el **marco de la web** (columna azul con botones para el visitante:
+  Cómo funciona, Pruébalo, Reservar y abajo Entrar; fondo de cuaderno) y va
+  **contada como una historia** (24 nov, pedido de José: «más vida, menos
+  texto»): el degradado con «¡Hola!» y la ventana con el **vídeo** entera
+  dentro del violeta; «Una semana con José» en seis capítulos de una frase
+  (*En clase,* hablamos / *Esa misma tarde,*… / *Al día siguiente,*… / *Otro
+  día,* lees / *Con cinco minutos* basta / *Y si dudas,* la teoría) con una
+  pantalla fija a la derecha que enseña la escena de cada uno (en el móvil,
+  debajo de cada capítulo); y cierre en violeta «¿Empezamos?». Los vídeos
+  salen de una alumna inventada (Sara; nunca datos reales), en los tres
+  idiomas (`bienvenida/`: recorrido de ordenador y de móvil, y una escena
+  por capítulo). También lleva la **clase
   de muestra** (la 540 y su lectura, abiertas sin entrar, con una franja que
   lleva a reservar), la foto de José **pequeña, no protagonista**, tres
   reseñas, y reservar **en Preply o directamente (TidyCal)**: que elija el
   alumno. Sin precio en la web.
 - La puerta enlaza con la bienvenida («¿Todavía no eres alumno?»).
 - Si cambia el aspecto de la web, los vídeos se vuelven a grabar con
-  `herramientas/graba_recorrido.py`.
+  `herramientas/graba_recorrido.py` (sin nada: los recorridos y las escenas).
 - Pendiente de decidir: un contacto («escríbeme»). El número de WhatsApp no se
   puede esconder.
 
