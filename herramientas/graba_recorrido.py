@@ -38,15 +38,18 @@ def db(pista):
 
 
 if len(sys.argv) == 1:
-    for movil in ("", "movil"):
+    for modo in ("", "movil", "escenas"):
         for l in ("it", "en", "es"):
-            subprocess.run([sys.executable, __file__, l] + ([movil] if movil else []), check=True)
+            subprocess.run([sys.executable, __file__, l] + ([modo] if modo else []), check=True)
     sys.exit(0)
 
 P = sys.argv[1] if len(sys.argv) > 1 else "it"
 B = os.environ.get("BASE", "http://127.0.0.1:8947") + "/"
 OUT = os.path.join(os.path.dirname(AQUI), "bienvenida")
 MOVIL = len(sys.argv) > 2 and sys.argv[2] == "movil"
+# «escenas»: el mismo recorrido en el ordenador, sin rótulos (el texto lo pone
+# la página), cortado en un vídeo por capítulo: escena-<nombre>-XX.mp4
+ESCENAS = len(sys.argv) > 2 and sys.argv[2] == "escenas"
 W, H = (390, 844) if MOVIL else (1280, 800)
 DSF = 2 if MOVIL else 1
 SUF = ("movil-" if MOVIL else "") + P
@@ -151,6 +154,7 @@ with sync_playwright() as p:
         return loc
 
     def rot(i):
+        if ESCENAS: return
         pg.evaluate("t => window.vxRot && window.vxRot(t)", ROT[i] if i is not None else None)
 
     def baja(px, ms=900):
@@ -162,21 +166,27 @@ with sync_playwright() as p:
 
     import time
     fin_tramo = {}
-    def corta(): tramo["on"] = False; fin_tramo[tramo["n"]] = time.time()
+    escenas = []  # [nombre, desde, hasta]
+    def marca(nombre): escenas.append([nombre, time.time(), None])
+    def cierra():
+        if escenas and escenas[-1][2] is None: escenas[-1][2] = time.time()
+    def corta(cerrar=True):
+        if cerrar: cierra()
+        tramo["on"] = False; fin_tramo[tramo["n"]] = time.time()
     def sigue(ms=650):
         pg.wait_for_load_state("load"); pg.wait_for_timeout(ms)
         tramo["n"] += 1; tramo["on"] = True
 
     # 1 · portada
     pg.goto(B + "index.html"); espera(1300)
-    empieza(); espera(200)
+    empieza(); espera(200); marca("portada")
     m.move(*((200, 420) if MOVIL else (700, 330))); espera(200); rot(0); espera(2200)
     # 2 · Mis clases
-    clic('.riel-btn[data-sec="clases"]'); corta(); sigue()
+    clic('.riel-btn[data-sec="clases"]'); corta(); sigue(); marca("clases")
     rot(1); espera(400)
     ve(pg.locator(".cl-enlace", has_text="Si tuviera"), 30); espera(1500)
     # 3 · la clase
-    clic(pg.locator(".cl-enlace", has_text="Si tuviera"), 8, 200); corta(); sigue()
+    clic(pg.locator(".cl-enlace", has_text="Si tuviera"), 8, 200); corta(); sigue(); marca("clase")
     rot(2); espera(1500); baja(330, 1200); espera(1300)
     rot(3)
     blk = pg.locator('.exercise-block[data-exid="si1"]')
@@ -189,14 +199,14 @@ with sync_playwright() as p:
     clic(blk3.locator('.option-btn[data-value="fuera"]'), 26, 200); espera(1500)
     # 4 · la lectura (desde Mis clases)
     corta(); pg.go_back(); pg.wait_for_load_state("load"); pg.wait_for_timeout(450); pg.evaluate("scrollTo(0,0)"); sigue(); rot(None)
-    clic(pg.locator('a.cl-hija[href*="lectura"]'), 30, 300); corta(); sigue()
+    clic(pg.locator('a.cl-hija[href*="lectura"]'), 30, 300); corta(); sigue(); marca("lectura")
     rot(4); espera(900)
     clic(".lec-pal", 30, 250); espera(1600)
     q1 = pg.locator(".exercise-block").first
     clic(q1.locator(".option-btn", has_text="No, nunca"), 30, 300); espera(1600)
     # 5 · cinco minutos
     corta(); pg.go_back(); pg.wait_for_load_state("load"); pg.wait_for_timeout(450); pg.evaluate("scrollTo(0,0)"); sigue(); rot(None)
-    clic("a.cl-hoy", 30, 300); corta(); sigue(1300)
+    clic("a.cl-hoy", 30, 300); corta(); sigue(1300); marca("cinco")
     rot(5); espera(800)
     b0 = pg.locator("#ex-hub-container .exercise-block:visible").first
     ans = (b0.get_attribute("data-answer") or "").split("|")[0]
@@ -207,32 +217,56 @@ with sync_playwright() as p:
         clic(b0.locator(".exercise-check"), 16, 150)
     espera(1800)
     # 6 · la teoría
-    rot(None)
+    rot(None); cierra(); marca("teoria")
     clic('.riel-btn[data-sec="teoria"]', 30, 250); espera(700)
     grupo = pg.locator("#panel-teoria .panel-grupo").first
     clic(grupo.locator("button.panel-mat"), 20, 250); espera(600)
-    clic(grupo.locator('a[data-base="subjuntivo"]'), 20, 250); corta(); sigue()
+    clic(grupo.locator('a[data-base="subjuntivo"]'), 20, 250); corta(False); sigue()
     rot(6); espera(1200); baja(420, 1600); espera(2200)
     rot(None); espera(500)
-    fin_tramo[tramo["n"]] = time.time()
+    fin_tramo[tramo["n"]] = time.time(); cierra()
     cdp.send("Page.stopScreencast")
     c.close(); br.close()
     # cada foto dura hasta la siguiente; ffmpeg las junta a 30 por segundo
     lista = []
+    reloj, acum = [], 0.0  # en qué segundo del vídeo sale cada foto
     for i, (t, d, tr) in enumerate(fotos):
         n = os.path.join(tmp, "f%05d.jpg" % i)
         open(n, "wb").write(base64.b64decode(d))
         if i + 1 < len(fotos) and fotos[i + 1][2] == tr: dur = fotos[i + 1][0] - t
         else: dur = max(0.04, fin_tramo.get(tr, t + 0.5) - t)  # corte: la página nueva entra ya pintada
         if i == 0: open(os.path.join(tmp, "portada.jpg"), "wb").write(base64.b64decode(d))
+        reloj.append(acum); acum += dur
         lista.append("file '%s'\nduration %.4f" % (n, dur))
     lista.append("file '%s'" % n)
     open(os.path.join(tmp, "lista.txt"), "w").write("\n".join(lista) + "\n")
     print(len(fotos), "fotos,", round(fotos[-1][0] - fotos[0][0], 1), "s")
+    from PIL import Image
+    if ESCENAS:
+        # todo junto con buena calidad, y de ahí un vídeo por escena
+        entero = os.path.join(tmp, "entero.mp4")
+        subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-f", "concat", "-safe", "0", "-i", os.path.join(tmp, "lista.txt"),
+                        "-vf", "fps=30,format=yuv420p", "-c:v", "libx264", "-crf", "14", "-an", entero], check=True)
+        def en_video(w):
+            for i, (t, _, _) in enumerate(fotos):
+                if t >= w: return reloj[i]
+            return reloj[-1] + 0.5
+        for nombre, desde, hasta in escenas:
+            a, b = en_video(desde), en_video(hasta)
+            sal = os.path.join(OUT, "escena-%s-%s.mp4" % (nombre, P))
+            subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-ss", "%.3f" % a, "-i", entero, "-t", "%.3f" % (b - a),
+                            "-vf", "format=yuv420p", "-c:v", "libx264", "-preset", "slow", "-crf", "26",
+                            "-movflags", "+faststart", "-an", sal], check=True)
+            img = os.path.join(tmp, "e.png")
+            subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-i", sal, "-frames:v", "1", img], check=True)
+            Image.open(img).convert("RGB").save(os.path.join(OUT, "escena-%s-%s.jpg" % (nombre, P)), quality=76, optimize=True)
+            print("  %-8s %.1f s" % (nombre, b - a))
+        shutil.rmtree(tmp, ignore_errors=True)
+        print("ok escenas", P)
+        sys.exit(0)
     subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-f", "concat", "-safe", "0", "-i", os.path.join(tmp, "lista.txt"),
                     "-vf", "fps=30,format=yuv420p", "-c:v", "libx264", "-preset", "slow", "-crf", "27" if MOVIL else "26",
                     "-movflags", "+faststart", "-an", os.path.join(OUT, "recorrido-%s.mp4" % SUF)], check=True)
-    from PIL import Image
     Image.open(os.path.join(tmp, "portada.jpg")).save(os.path.join(OUT, "portada-%s.jpg" % SUF), quality=78, optimize=True)
     shutil.rmtree(tmp, ignore_errors=True)
     print("ok", SUF)

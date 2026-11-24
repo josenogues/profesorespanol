@@ -1,2 +1,5 @@
 __pycache__/
 *.pyc
+
+# revisiones de impeccable: herramientas de trabajo, no se publican
+.impeccable/
