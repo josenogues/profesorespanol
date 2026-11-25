@@ -215,7 +215,10 @@ José pide algo de otro frente, decírselo y mandarlo a la que toca.
   cuentas @hablaconjose (YouTube, TikTok; Instagram pendiente) y el plan de
   marketing. No toca este repositorio.
 - **PM · gestión del proyecto**: lleva el orden y las prioridades y hace los
-  resúmenes. No cambia la web; como mucho, este CLAUDE.md.
+  resúmenes. No cambia la web; como mucho, este CLAUDE.md. Lleva también la
+  tabla de servicios, canales y costes (en el Drive de José, no aquí: este
+  repositorio es público). Si cambia un servicio, un plan o un coste, decirle
+  a José que se lo cuente a la de gestión.
 
 **Una conversación activa por frente, y una nueva por cada tarea grande.**
 Las conversaciones largas gastan más: cada mensaje carga toda la historia.
