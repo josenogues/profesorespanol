@@ -118,11 +118,23 @@ mark.bv-m{background:linear-gradient(transparent 55%, rgba(242,171,39,.42) 55%);
 /* (lo que asoma de una hoja al pasarla no puede ensanchar la página) */
 .bv-historia{margin:96px 0 0;overflow-x:clip;overflow-clip-margin:22px;
   --anillas:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='42' viewBox='0 0 24 42'%3E%3Cdefs%3E%3ClinearGradient id='m' x1='0' x2='1'%3E%3Cstop offset='0' stop-color='%23575c70'/%3E%3Cstop offset='.45' stop-color='%23eef0f5'/%3E%3Cstop offset='.7' stop-color='%23a7acbd'/%3E%3Cstop offset='1' stop-color='%23535869'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cpath d='M13 39L13 10.5C13 4 5 4 5 10.5L5 18' fill='none' stroke='%23000' stroke-opacity='.16' stroke-width='5' stroke-linecap='round' transform='translate(1 1.4)'/%3E%3Cpath d='M13 39L13 10.5C13 4 5 4 5 10.5L5 18' fill='none' stroke='%233b4052' stroke-width='4.8' stroke-linecap='round'/%3E%3Cpath d='M13 39L13 10.5C13 4 5 4 5 10.5L5 18' fill='none' stroke='url(%23m)' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E");
-  --papel:#FCFCFA;--raya:#EFEEEA;--agujero:#2a2e3f;--dorso:#ecebe6;--carton:#232C4F}
+  --papel:#FCFCFA;--raya:#EFEEEA;--agujero:#2a2e3f;--dorso:#ecebe6;--carton:#232C4F;
+  /* la tapa, dorada: sobre el violeta, una tapa azul no se distinguía */
+  --tapa:#f2ab27;--tapa-tinta:rgba(35,34,32,.75);--tapa-agujero:#6b4508;--tapa-doblez:#c98a14;--tapa-doblez-2:#e9a420}
 [data-theme="dark"] .bv-historia{--papel:#1b2028;--raya:#212731;--agujero:#07090c;--dorso:#161a21}
 /* el dorado de los ejercicios, un punto más oscuro sobre el papel claro para que se lea */
 html:not([data-theme="dark"]) .bv-hoja{--c-ejer:#b8760b}
 [data-theme="dark"] .bv-hola,[data-theme="dark"] .bv-gratis{box-shadow:0 10px 26px rgba(0,0,0,.4)}
+/* el bloc, sobre el degradado violeta de siempre (el de «Cinco minutos» y el
+   saludo), no sobre el papel de la página. Con el scroll, la caja es la escena
+   que se queda quieta; con el dedo o sin el bloc vivo, toda la pista (también
+   las flechas de debajo). */
+.bv-bloc-pista,.bv-vivo:not(.bv-toque) .bv-bloc-escena{border-radius:6px;
+  background:linear-gradient(135deg,#3A4570 0%,#4b5894 55%,#6a5fc0 100%);box-shadow:0 12px 28px rgba(20,22,32,.2)}
+[data-theme="dark"] .bv-bloc-pista,[data-theme="dark"].bv-vivo:not(.bv-toque) .bv-bloc-escena{
+  background:linear-gradient(135deg,#2c3560 0%,#3d4a82 55%,#55499e 100%);box-shadow:0 10px 26px rgba(0,0,0,.4)}
+.bv-bloc-pista{padding:62px 48px 34px}
+.bv-vivo:not(.bv-toque) .bv-bloc-pista{background:none;box-shadow:none;border-radius:0;padding:0}
 .bv-bloc{position:relative;max-width:1180px;margin:0 auto;container-type:inline-size;isolation:isolate}
 .bv-hojas{list-style:none;margin:0;padding:0}
 .bv-hoja{position:relative;margin:0 0 30px}
@@ -142,16 +154,16 @@ html:not([data-theme="dark"]) .bv-hoja{--c-ejer:#b8760b}
 .bv-vivo .bv-hoja::before{display:none}
 .bv-vivo .bv-espiral{display:block}
 
-/* la tapa: cartón azul con su etiqueta escrita a mano y Lucía de pegatina */
-.bv-tapa .bv-cara{background:var(--carton);color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:34px;min-height:420px;
+/* la tapa: cartón dorado con su etiqueta escrita a mano y Lucía de pegatina */
+.bv-tapa .bv-cara{background:var(--tapa);color:#232220;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:34px;min-height:420px;
   box-shadow:inset 0 0 0 1px rgba(255,255,255,.06),0 18px 40px rgba(20,22,32,.22)}
-.bv-tapa .bv-cara::before{--agujero:#121726}
+.bv-tapa .bv-cara::before{--agujero:var(--tapa-agujero)}
 .bv-etiqueta{position:relative;background:#FCFCFA;border-radius:4px;padding:26px 64px 30px;transform:rotate(-1.5deg);
   background-image:repeating-linear-gradient(#FCFCFA 0 37px, #E9E7E1 37px 38px);background-position:0 18px;
   box-shadow:0 10px 24px rgba(0,0,0,.25)}
 .bv-etiqueta h2{margin:0;font-size:96px;line-height:1;color:#3A4570;letter-spacing:0;white-space:nowrap}
 .bv-pj-tapa{position:absolute;right:-58px;top:-52px;width:108px;height:auto;transform:rotate(10deg);filter:drop-shadow(0 8px 12px rgba(0,0,0,.3))}
-.bv-baja{display:none;margin:0;font-size:17px;color:rgba(255,255,255,.75)}
+.bv-baja{display:none;margin:0;font-size:17px;color:var(--tapa-tinta)}
 .bv-baja .ti{font-size:18px;vertical-align:-2px;margin-right:4px}
 
 /* los separadores: una hoja de color por tramo, con lo que trae */
@@ -202,7 +214,7 @@ html:not([data-theme="dark"]) .bv-hoja{--c-ejer:#b8760b}
   border-top:1px solid rgba(255,255,255,.5);border-bottom:1px solid rgba(0,0,0,.05)}
 .bv-hoja-media > .bv-posit{display:none}
 .bv-lema{position:absolute;right:7%;bottom:13%;margin:0;max-width:12ch;font-size:62px;line-height:1.05;color:var(--c);text-align:center;transform:rotate(-4deg)}
-.bv-tapa-logo{position:absolute;right:72px;bottom:36px;width:58px;height:auto;filter:brightness(0) invert(1);opacity:.22}
+.bv-tapa-logo{position:absolute;right:72px;bottom:36px;width:58px;height:auto;filter:brightness(0);opacity:.13}
 /* el móvil, solo: un teléfono de verdad, sin navegador */
 /* (el marco, la curva y la isla de arriba van en proporción a su alto: en
    pequeño también parece un teléfono) */
@@ -252,7 +264,7 @@ html:not([data-theme="dark"]) .bv-hoja{--c-ejer:#b8760b}
 
 /* ── el bloc vivo (con JavaScript y pantalla de sobra) ── */
 .bv-vivo .bv-bloc-pista{height:calc(100vh + var(--largo, 520) * 1vh)}
-.bv-vivo .bv-bloc-escena{position:sticky;top:0;height:100vh;display:flex;flex-direction:column;justify-content:center;padding:34px 0 52px}
+.bv-vivo .bv-bloc-escena{position:sticky;top:12px;height:calc(100vh - 24px);display:flex;flex-direction:column;justify-content:center;padding:40px 48px 56px}
 .bv-vivo .bv-bloc{width:100%;height:min(100%, 640px)}
 /* el cartón de atrás y el canto de las hojas que quedan */
 .bv-vivo .bv-bloc::before{content:"";position:absolute;z-index:-1;inset:10px 0 -12px;border-radius:6px;background:var(--carton);box-shadow:0 22px 46px rgba(20,22,32,.24)}
@@ -268,7 +280,7 @@ html:not([data-theme="dark"]) .bv-hoja{--c-ejer:#b8760b}
   background:linear-gradient(315deg, var(--dorso) 0 49%, color-mix(in srgb, var(--dorso) 80%, #000) 50%, var(--papel) 100%);
   box-shadow:-3px -3px 6px rgba(20,22,32,.08);transition:width .25s,height .25s}
 .bv-vivo .bv-hoja.actual .bv-cara:hover::after{width:46px;height:46px}
-.bv-vivo .bv-tapa.actual .bv-cara::after{background:linear-gradient(315deg, var(--dorso) 0 49%, #1a2140 50%, #2c3760 100%)}
+.bv-vivo .bv-tapa.actual .bv-cara::after{background:linear-gradient(315deg, var(--dorso) 0 49%, var(--tapa-doblez) 50%, var(--tapa-doblez-2) 100%)}
 /* la hoja que se pasa: sube por encima de la espiral y se va */
 .bv-vivo .bv-hoja.pasada{transform:rotateX(178deg);pointer-events:none}
 .bv-vivo .bv-hoja.pasada .bv-cara{visibility:hidden;transition:visibility 0s calc(var(--tras,0s) + .42s)}
@@ -318,16 +330,17 @@ html:not([data-theme="dark"]) .bv-hoja{--c-ejer:#b8760b}
 .bv-toca,.bv-bloc-nav{display:none}
 .bv-oculto{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 .bv-toque .bv-bloc-pista{height:auto}
-.bv-toque .bv-bloc-escena{position:relative;top:auto;height:max(560px, min(calc(100svh - var(--barra, 0px) - var(--abajo, 0px) - 64px), 760px));padding:26px 0 44px}
+.bv-toque .bv-bloc-pista{padding:0 16px 16px}
+.bv-toque .bv-bloc-escena{position:relative;top:auto;height:max(560px, min(calc(100svh - var(--barra, 0px) - var(--abajo, 0px) - 88px), 760px));padding:30px 0 44px}
 .bv-toque .bv-tapa .bv-baja{display:none}
-.bv-toque .bv-tapa .bv-toca{display:block;margin:0;font-size:16px;color:rgba(255,255,255,.75);text-align:center;padding:0 12px}
+.bv-toque .bv-tapa .bv-toca{display:block;margin:0;font-size:16px;color:var(--tapa-tinta);text-align:center;padding:0 12px}
 .bv-toque .bv-toca .ti{font-size:17px;vertical-align:-2px;margin-right:4px}
 .bv-toque .bv-bloc-nav{display:flex;align-items:center;justify-content:center;gap:22px;margin:4px 0 0}
 .bv-bloc-nav button{width:46px;height:46px;border-radius:50%;display:grid;place-items:center;border:1px solid var(--border);background:var(--card-bg);color:var(--text);
   font-size:22px;cursor:pointer;box-shadow:0 4px 12px rgba(20,22,32,.1)}
-.bv-bloc-nav button:disabled{opacity:.35;cursor:default}
-.bv-bloc-nav button:focus-visible{outline:3px solid var(--c-clases);outline-offset:2px}
-.bv-cuenta{min-width:64px;text-align:center;font-size:26px;color:var(--text-secondary)}
+.bv-bloc-nav button:disabled{opacity:.45;cursor:default}
+.bv-bloc-nav button:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+.bv-cuenta{min-width:64px;text-align:center;font-size:26px;color:#fff}
 .bv-toque .bv-hoja{-webkit-tap-highlight-color:transparent}
 @media (prefers-reduced-motion:reduce){
   .bv-vivo .bv-hoja,.bv-vivo .bv-dorso,.bv-vivo .bv-hoja.pasada .bv-cara{transition:none!important}
@@ -422,6 +435,9 @@ html:not([data-theme="dark"]) .bv-hoja{--c-ejer:#b8760b}
   .bv-charla .oro{display:none}
   .bv-lado p,.bv-gratis p{font-size:17.5px}
   .bv-gratis{margin:72px -22px 0;border-radius:0;padding:48px 22px 0;box-shadow:none}
+  /* (el margen va en la sección, que es la que recorta lo que asoma al pasar las hojas) */
+  .bv-historia{margin-left:-22px;margin-right:-22px}
+  .bv-bloc-pista{border-radius:0;box-shadow:none}
   .bv-gratis-txt{padding-bottom:0}
   .bv-gratis h2{font-size:56px}
   .bv-gratis .bv-globo{display:none}
