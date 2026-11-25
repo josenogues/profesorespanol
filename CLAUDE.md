@@ -174,6 +174,13 @@ bueno; lo pequeño y claro, hacerlo.
   escena por paso y fotos de la práctica libre).
 - «Sobre mí» y «Privacidad» se ven sin entrar (la bienvenida enlaza con
   ellas).
+- **Google** (25 nov 2026): José dio de alta hablaconjose.com en Search
+  Console (propiedad de dominio) y envió `sitemap.xml` («Correcto»).
+  `robots.txt` solo deja ver la bienvenida, «Sobre mí» y la privacidad (y lo
+  que necesitan para pintarse); las tres llevan `rel="canonical"` a
+  hablaconjose.com. **Si se hace pública otra página, añadirla a los dos.**
+  AdSense, descartado (céntimos, y anuncios de la competencia). Google solo
+  ve la bienvenida en español: una versión it/en propia queda por hablar.
 - La puerta enlaza con la bienvenida («¿Todavía no eres alumno?»).
 - Si cambia el aspecto de la web, los vídeos se vuelven a grabar con
   `herramientas/graba_recorrido.py` (sin nada: los recorridos y las escenas;
