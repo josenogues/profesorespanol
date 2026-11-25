@@ -108,20 +108,24 @@ bueno; lo pequeño y claro, hacerlo.
   la página se mueva, aparecen **en una línea** la plataforma (izquierda),
   el «+» (centro) y José (derecha: **polaroid «¡Hola, soy José! :)»**, grande y con proporciones de polaroid,
   globos y enlace a «Sobre mí», donde están las reseñas).
-- **«¿Cómo funciona?»** (25–26 nov): en el ordenador, **la pantalla se queda
-  fija a la derecha y el texto pasa** a la izquierda; el paso que cruza el
-  centro trae su pantalla. **Nunca hay dos pantallas a la vez**: la de antes
-  se apaga en un instante y la nueva entra justo después, como una página.
-  **Sin números en las pantallas** (solo junto al texto). **Zoom solo en 1, 2
-  y 4**, quieto (la pantalla ya entra acercada: el zoom animado «temblaba» y
+- **«¿Cómo funciona?»** es un **bloc de notas con la espiral arriba** que
+  pasa una hoja por paso (idea de José: el scroll con la pantalla fija no le
+  convencía). La **tapa** azul con «¿Cómo funciona?» a mano y Lucía de
+  pegatina; un **separador de color** por tramo, con su lista de pasos y su
+  **pestaña** asomando por abajo (lleva a ese tramo); y una **hoja por paso**:
+  número y título, la descripción y su pantalla pegada con cinta. Al bajar, el
+  bloc se queda quieto y las hojas se levantan por encima de la espiral (al
+  subir, vuelven); también pasan pulsando en la hoja. **Solo se ve una hoja**
+  y solo se mueve su pantalla. **Sin números en las pantallas** (solo junto
+  al texto). **Zoom solo en 1, 2 y 4**, quieto (el zoom animado «temblaba» y
   daba ansia), y en el 4 suave para que se vea el botón de los apuntes; en
-  los demás, la pantalla baja por la página (la lectura se grabó bajando).
-  Los **tramos** vacían la pantalla y su título va en la columna del texto:
-  *La clase* (1 Reserva · 2 Entra en clase · 3 Damos la clase · 4 Toma
-  notas) · *Al terminar la clase* (5 Practica · 6 Lee · 7 Repasa: «Cinco
-  minutos», con el **teléfono solo**) · *Y además…* (+ Ponte a prueba, con
-  tres botones en columna que cambian la foto; + Repasa la teoría). En el
-  móvil, cada paso con su pantalla debajo.
+  los demás, la pantalla baja por la página. Tramos: *La clase* (1 Reserva ·
+  2 Entra en clase · 3 Damos la clase · 4 Toma notas) · *Al terminar la
+  clase* (5 Practica · 6 Lee · 7 Repasa: «Cinco minutos», con el **teléfono
+  solo**) · *Y además…* (+ Ponte a prueba, con tres botones que cambian la
+  foto; + Repasa la teoría). En el móvil, igual, con el texto arriba y la
+  pantalla debajo en cada hoja; sin JavaScript o en una pantalla muy baja,
+  las hojas van una debajo de otra.
 - **Reglas de José para los textos de los pasos**: títulos **breves**;
   descripción de **3 a 5 líneas**, con palabras clave en nuestro amarillo;
   y al leerlo todo tienen que quedar claras dos cosas: **clases online con

@@ -9,12 +9,15 @@ Qué mira:
     vuelve con el enlace del correo y quien lo está esperando, no;
   · la bienvenida sale en el idioma del navegador (o en el elegido), con su
     vídeo —el de móvil en el móvil— y la clase de muestra en ese idioma;
-  · los botones de reservar llevan a Preply y a TidyCal, y «Entrar» a la puerta;
+  · reservar lleva a TidyCal (Preply solo en «Sobre mí»), y «Entrar» a la puerta;
   · la clase de muestra y su lectura se ven sin entrar, con la franja de
     reservar; cualquier otra página sigue cerrada, y su puerta enlaza con la
     bienvenida;
   · al alumno, la clase de muestra le sale como siempre (sin franja);
-  · nada se sale por los lados en el móvil.
+  · «¿Cómo funciona?» es un bloc de notas: al bajar se pasan las hojas una a
+    una (y vuelven al subir), solo se ve una cada vez y solo se mueve su
+    pantalla; también se pasan pulsando, y las pestañas llevan a cada tramo;
+  · nada se sale por los lados, tampoco en el móvil, donde todo cabe en su hoja.
 """
 import json
 import os
@@ -117,45 +120,62 @@ with sync_playwright() as p:
               "pulsar «Entrar» abre la puerta, sin volver a la bienvenida")
     c.close()
 
-    print("\n═══ la historia, en el ordenador ═══")
+    print("\n═══ cómo funciona: el bloc de notas, en el ordenador ═══")
     c = br.new_context(viewport={"width": 1440, "height": 900}, locale="it-IT"); pg = pagina(c)
     pg.goto(B + "/bienvenida.html", wait_until="load"); pg.wait_for_timeout(600)
-    comprueba(pg.locator(".bv-cap").count() == 9 and pg.locator("#bv-escenas > .bv-pantalla-paso").count() == 9,
-              "nueve pasos, cada uno con su pantalla en la pantalla fija de la derecha")
-    comprueba(pg.locator(".bv-tramo").count() == 3, "tres tramos: la clase, al terminar la clase y «y además»")
+    comprueba(pg.locator(".bv-hoja").count() == 13 and pg.locator(".bv-tapa").count() == 1
+              and pg.locator(".bv-separa").count() == 3 and pg.locator(".bv-paso").count() == 9,
+              "un bloc: la tapa, tres separadores (la clase, al terminar la clase y «y además») y nueve pasos")
+    comprueba(pg.locator(".bv-paso .bv-hoja-media .bv-marco").count() == 9, "cada paso, con su pantalla en su hoja")
+    comprueba(pg.evaluate("document.documentElement.classList.contains('bv-vivo')"), "con pantalla de sobra, el bloc pasa las hojas")
     comprueba(pg.locator('#reservar img[src$="lucia.svg"]').count() == 1 and pg.locator('#reservar img[src$="javi.svg"]').count() == 1,
               "el cierre lleva a Lucía y Javi")
     comprueba("25" in pg.locator("#reservar .bv-precio").inner_text() and "19" in pg.locator("#reservar .bv-precio-sub").inner_text()
               and pg.locator("#reservar .bv-pago li").count() == 3, "el cierre dice el precio (25 €, luego 19 €) y cómo se paga")
-    comprueba(pg.evaluate("getComputedStyle(document.querySelector('#bv-escenas .bv-marco'), '::before').content") in ("none", "normal"),
+    comprueba(pg.locator(".bv-hoja-media").evaluate_all(
+        "ms => ms.every(m => !/\\d/.test(m.textContent + getComputedStyle(m.querySelector('.bv-marco'), '::before').content))"),
               "las pantallas no llevan número (solo el texto)")
-    comprueba(pg.locator('#bv-escenas [data-escena="cinco"] .bv-telefono video').count() == 1
-              and pg.locator('#bv-escenas [data-escena="cinco"] .bv-ventana').count() == 0,
+    comprueba(pg.locator('.bv-paso[data-escena="cinco"] .bv-telefono video').count() == 1
+              and pg.locator('.bv-paso[data-escena="cinco"] .bv-ventana').count() == 0,
               "cinco minutos: un teléfono solo, sin navegador alrededor")
-    alto = pg.evaluate("document.querySelector('#bv-escenas [data-escena=\"cinco\"] .bv-telefono').getBoundingClientRect().height")
-    comprueba(alto <= 900 * 0.7, "el teléfono cabe entero en la pantalla (%d px)" % alto)
-    comprueba(pg.locator(".bv-cap h3").evaluate_all("h => h.every(x => x.textContent.split(' ').length <= 4)"),
+    comprueba(pg.locator(".bv-paso h3").evaluate_all("h => h.every(x => x.textContent.trim().split(' ').length <= 4)"),
               "títulos de los pasos breves")
-    lineas = pg.locator(".bv-cap p").evaluate_all("ps => ps.map(p => Math.round(p.getBoundingClientRect().height / parseFloat(getComputedStyle(p).lineHeight)))")
+    lineas = pg.locator(".bv-paso p").evaluate_all("ps => ps.map(p => Math.round(p.getBoundingClientRect().height / parseFloat(getComputedStyle(p).lineHeight)))")
     comprueba(all(3 <= n <= 5 for n in lineas), "descripciones de 3 a 5 líneas: %s" % lineas)
-    comprueba(pg.locator(".bv-cap mark.bv-m").count() >= 9, "palabras clave resaltadas en amarillo")
-    comprueba(pg.locator(".bv-progreso").count() == 0, "sin la tira de números de abajo")
-    escenas = pg.locator("#bv-escenas video")
-    comprueba(all(s.endswith("-it.mp4") for s in escenas.evaluate_all("v => v.map(x => x.getAttribute('src'))")), "  vídeos en el idioma de la página")
-    # la pantalla se queda fija y pasa el texto: el paso que cruza el centro trae su pantalla
-    for i in range(pg.locator(".bv-caps > li").count()):
-        li = pg.locator(".bv-caps > li").nth(i)
-        y = li.evaluate("e => e.getBoundingClientRect().top + scrollY + e.offsetHeight/2 - innerHeight/2")
-        pg.evaluate("y => scrollTo(0, y)", y); pg.wait_for_timeout(800)
-        activo = pg.evaluate("() => [...document.querySelectorAll('#bv-escenas > .activo')].map(v => v.dataset.escena)")
-        if "bv-tramo" in (li.get_attribute("class") or ""):
-            comprueba(activo == [], "en el tramo %d, la pantalla se vacía" % (i + 1))
-            continue
-        nombre = li.get_attribute("data-escena")
-        comprueba(activo == [nombre], "al leer «%s», la pantalla enseña su escena" % nombre)
-        if li.get_attribute("data-tipo") in ("video", "movil"):
-            suenan = pg.evaluate("() => [...document.querySelectorAll('#bv-escenas video')].filter(v => !v.paused).map(v => v.dataset.escena)")
-            comprueba(suenan == [nombre], "  y solo se mueve esa (%s)" % suenan)
+    comprueba(pg.locator(".bv-paso mark.bv-m").count() >= 9, "palabras clave resaltadas en amarillo")
+    comprueba(all(s.endswith("-it.mp4") for s in pg.locator(".bv-hoja-media video").evaluate_all("v => v.map(x => x.getAttribute('src'))")),
+              "  vídeos en el idioma de la página")
+    # dónde hay que estar para ver la hoja i (lo mismo que calcula la página)
+    PARADA = """i => { const p=document.querySelector('.bv-bloc-pista'), e=document.querySelector('.bv-bloc-escena');
+        const hs=[...document.querySelectorAll('.bv-hoja')], w=h=>h.classList.contains('bv-paso')?0.5:0.32;
+        let t=0.08+0.3; hs.slice(0,-1).forEach(h=>t+=w(h));
+        const u=(p.offsetHeight-e.offsetHeight)/t; let a=0.08; for(let k=0;k<i;k++) a+=w(hs[k]);
+        return p.getBoundingClientRect().top+scrollY+a*u+u*0.1; }"""
+    ESTADO = "() => [...document.querySelectorAll('.bv-hoja')].map(h => h.classList.contains('pasada') ? 'p' : h.classList.contains('actual') ? 'a' : '-').join('')"
+    ARRIBA = """() => { const b=document.querySelector('.bv-bloc').getBoundingClientRect();
+        const el=document.elementFromPoint(b.left+b.width*0.3, b.top+b.height*0.5); return [...document.querySelectorAll('.bv-hoja')].indexOf(el && el.closest('.bv-hoja')); }"""
+    nombres = pg.locator(".bv-hoja").evaluate_all("hs => hs.map(h => h.dataset.escena || (h.classList.contains('bv-tapa') ? 'tapa' : 'separador'))")
+    # al bajar, las hojas se pasan una a una: siempre una sola arriba
+    for i, nombre in enumerate(nombres):
+        pg.evaluate("y => scrollTo({top: y, behavior: 'instant'})", pg.evaluate(PARADA, i)); pg.wait_for_timeout(1300)
+        estado, arriba = pg.evaluate(ESTADO), pg.evaluate(ARRIBA)
+        comprueba(estado == "p" * i + "a" + "-" * (len(nombres) - i - 1) and arriba == i,
+                  "hoja %d (%s): las de antes pasadas, esta arriba y a la vista" % (i, nombre))
+        if pg.locator(".bv-hoja").nth(i).get_attribute("data-tipo") in ("video", "movil"):
+            suenan = pg.evaluate("() => [...document.querySelectorAll('.bv-hoja-media video')].filter(v => !v.paused).map(v => v.dataset.escena)")
+            comprueba(suenan == [nombre], "  y solo se mueve su pantalla (%s)" % suenan)
+    # al subir, vuelven
+    pg.evaluate("y => scrollTo({top: y, behavior: 'instant'})", pg.evaluate(PARADA, 3)); pg.wait_for_timeout(1500)
+    comprueba(pg.evaluate(ESTADO) == "ppp" + "a" + "-" * 9 and pg.evaluate(ARRIBA) == 3, "al subir, las hojas vuelven")
+    # a media vuelta, nada ensancha la página
+    pg.evaluate("y => scrollTo({top: y, behavior: 'instant'})", pg.evaluate(PARADA, 4)); pg.wait_for_timeout(350)
+    comprueba(pg.evaluate("document.documentElement.scrollWidth") <= 1440, "al pasar una hoja, nada se sale por los lados")
+    pg.wait_for_timeout(1200)
+    # pulsar en la hoja la pasa; las pestañas llevan a su tramo
+    pg.locator(".bv-hoja.actual .bv-hoja-txt").click(); pg.wait_for_timeout(1800)
+    comprueba(pg.evaluate(ARRIBA) == 5, "pulsar en la hoja pasa a la siguiente")
+    pg.locator(".bv-pestana-3").click(); pg.wait_for_timeout(2200)
+    comprueba(pg.evaluate(ARRIBA) == nombres.index("practica") - 1, "la pestaña «e in più» lleva a su separador")
     # dos mundos: con el fondo fijo, la plataforma, el «+» y el profesor salen uno detrás de otro
     dt = pg.evaluate("document.querySelector('.bv-dos-pista').getBoundingClientRect().top + scrollY")
     dh = pg.evaluate("document.querySelector('.bv-dos-pista').offsetHeight - innerHeight")
@@ -172,13 +192,12 @@ with sync_playwright() as p:
             comprueba(False, "falta %s" % f)
     comprueba(pg.evaluate("document.documentElement.scrollWidth") <= 1440, "nada se sale por los lados")
     # la práctica libre: los botones cambian la foto de la pantalla
-    cap = pg.locator('.bv-cap[data-escena="practica"]')
-    y = cap.evaluate("e => e.getBoundingClientRect().top + scrollY + e.offsetHeight/2 - innerHeight/2")
-    pg.evaluate("y => scrollTo(0, y)", y); pg.wait_for_timeout(700)
-    cap.locator('button[data-foto="tema"]').click(); pg.wait_for_timeout(300)
-    vista = pg.evaluate("() => document.querySelector('#bv-escenas .bv-fotos img.vista').dataset.foto")
-    comprueba(vista == "tema" and cap.locator('button[data-foto="tema"]').get_attribute("aria-pressed") == "true",
-              "«por tema» cambia la foto de la pantalla")
+    pg.evaluate("y => scrollTo({top: y, behavior: 'instant'})", pg.evaluate(PARADA, nombres.index("practica"))); pg.wait_for_timeout(1300)
+    hoja = pg.locator('.bv-paso[data-escena="practica"]')
+    hoja.locator('button[data-foto="tema"]').click(); pg.wait_for_timeout(300)
+    vista = hoja.evaluate("h => h.querySelector('.bv-fotos img.vista').dataset.foto")
+    comprueba(vista == "tema" and hoja.locator('button[data-foto="tema"]').get_attribute("aria-pressed") == "true"
+              and pg.evaluate(ARRIBA) == nombres.index("practica"), "«per argomento» cambia la foto, sin pasar la hoja")
     comprueba(pg.locator("#muestra.bv-gratis").count() == 1, "«¡Pruébalo gratis!» va aparte, en violeta")
     comprueba(pg.locator('a[href^="https://tidycal.com"]').count() == 1 and "Preply" not in pg.locator("#reservar").inner_text(),
               "reservar: solo en mi calendario (Preply queda como perfil con reseñas)")
@@ -192,6 +211,16 @@ with sync_playwright() as p:
     comprueba(pg.locator("#bv-video").get_attribute("src") == "bienvenida/recorrido-movil-it.mp4", "el vídeo de móvil")
     comprueba(pg.locator(".bv-pantalla.es-movil").count() == 1, "dentro del teléfono")
     comprueba(pg.evaluate("document.documentElement.scrollWidth") <= 390, "nada se sale por los lados")
+    for ancho, altura in ((390, 844), (375, 667)):
+        c2 = br.new_context(viewport={"width": ancho, "height": altura}, locale="it-IT", is_mobile=True, has_touch=True)
+        pg2 = pagina(c2); pg2.goto(B + "/bienvenida.html", wait_until="load"); pg2.wait_for_timeout(500)
+        pg2.evaluate("document.querySelector('.bv-bloc-pista').scrollIntoView()"); pg2.wait_for_timeout(500)
+        cabe = pg2.evaluate("""() => [...document.querySelectorAll('.bv-cara')].every(c => c.scrollWidth <= c.clientWidth + 1
+            && [...c.children].every(x => x.classList.contains('bv-pestana') || x.getBoundingClientRect().bottom <= c.getBoundingClientRect().bottom + 1))""")
+        comprueba(pg2.evaluate("document.documentElement.classList.contains('bv-vivo')") and cabe
+                  and pg2.evaluate("document.documentElement.scrollWidth") <= ancho,
+                  "móvil %d×%d: el bloc pasa las hojas y todo cabe en cada una" % (ancho, altura))
+        c2.close()
     c.close()
 
     print("\n═══ la clase de muestra, sin entrar ═══")

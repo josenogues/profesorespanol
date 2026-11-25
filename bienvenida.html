@@ -13,9 +13,9 @@
 <script>if(localStorage.getItem('jn_theme')==='dark')document.documentElement.setAttribute('data-theme','dark');</script>
 <style>
 /* Bienvenida: la página para quien todavía no es alumno. A ella lleva la portada
-   (index.html) a quien no ha entrado nunca, y la puerta con «Mira cómo funciona».
-   Cuenta una semana con José: la clase y lo que pasa después, capítulo a
-   capítulo, con la web a la derecha enseñando justo lo que dice cada uno. */
+   (index.html) a quien no ha entrado nunca, y la puerta («¿Todavía no eres
+   alumno?»). La presentación, cómo funciona (un bloc de notas que pasa las
+   hojas), la clase de muestra y el precio. */
 html{scroll-behavior:smooth}
 .bv-pag ::selection{background:var(--c-clases-t);color:var(--c-clases-d)}
 .bv-pag section{scroll-margin-top:20px}
@@ -106,29 +106,75 @@ html{scroll-behavior:smooth}
 mark.bv-m{background:linear-gradient(transparent 55%, rgba(242,171,39,.42) 55%);color:inherit;padding:0 .08em;border-radius:2px}
 [data-theme="dark"] mark.bv-m{background:linear-gradient(transparent 55%, rgba(242,171,39,.32) 55%)}
 
-/* ── cómo funciona ──
-   En el ordenador, la pantalla se queda fija a la derecha y el texto pasa a
-   la izquierda: el paso que cruza el centro trae su pantalla, que entra como
-   una página y lleva su número en la esquina. En los tramos la pantalla se
-   vacía un momento, para que se note el salto. En pantallas estrechas, cada
-   paso con su pantalla debajo. */
-.bv-historia{margin:24px 0 0}
-.bv-historia > h2{position:relative;display:inline-block;font-family:var(--font-head);font-weight:800;font-size:56px;line-height:1.1;letter-spacing:-.015em;margin:0 0 8px;color:var(--text)}
-.bv-historia > h2 .bv-mano{font-size:1.3em;color:var(--c-clases);letter-spacing:0}
-.bv-historia > h2 .bv-pj-h{position:absolute;right:-118px;top:-14px;width:92px;height:auto;transform:rotate(8deg);filter:drop-shadow(0 10px 16px rgba(20,24,50,.22))}
-.bv-historia-in{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:64px;align-items:start}
-.bv-caps{list-style:none;margin:0;padding:0}
-.bv-cap{min-height:58vh;display:flex;flex-direction:column;justify-content:center;padding:24px 0;opacity:.28;transition:opacity .45s cubic-bezier(.16,1,.3,1)}
-.bv-cap.activo{opacity:1}
-.bv-cap-txt{display:grid;grid-template-columns:84px minmax(0,1fr);align-items:start}
-.bv-num{font-size:92px;line-height:.8;color:var(--c);transform:rotate(-4deg);transform-origin:left top}
-.bv-cap h3{font-family:var(--font-head);font-weight:800;font-size:40px;line-height:1.1;letter-spacing:-.015em;margin:2px 0 14px;color:var(--text)}
+/* ── cómo funciona: un bloc de notas que pasa las hojas ──
+   Un bloc con la espiral arriba: la tapa, un separador de color por tramo
+   (con su pestaña abajo) y una hoja por paso, con su pantalla pegada con
+   cinta. Al bajar, el bloc se queda quieto y las hojas se levantan por
+   encima de la espiral, una a una; al subir, vuelven. También pasan
+   pulsando en la hoja, y las pestañas llevan a su tramo. Solo se ve una
+   hoja cada vez, así que nada se pisa. Sin JavaScript, o en una pantalla
+   muy baja, las hojas van una debajo de otra. */
+/* (lo que asoma de una hoja al pasarla no puede ensanchar la página) */
+.bv-historia{margin:96px 0 0;overflow-x:clip;overflow-clip-margin:22px;
+  --anillas:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='42' viewBox='0 0 24 42'%3E%3Cdefs%3E%3ClinearGradient id='m' x1='0' x2='1'%3E%3Cstop offset='0' stop-color='%23575c70'/%3E%3Cstop offset='.45' stop-color='%23eef0f5'/%3E%3Cstop offset='.7' stop-color='%23a7acbd'/%3E%3Cstop offset='1' stop-color='%23535869'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cpath d='M13 39L13 10.5C13 4 5 4 5 10.5L5 18' fill='none' stroke='%23000' stroke-opacity='.16' stroke-width='5' stroke-linecap='round' transform='translate(1 1.4)'/%3E%3Cpath d='M13 39L13 10.5C13 4 5 4 5 10.5L5 18' fill='none' stroke='%233b4052' stroke-width='4.8' stroke-linecap='round'/%3E%3Cpath d='M13 39L13 10.5C13 4 5 4 5 10.5L5 18' fill='none' stroke='url(%23m)' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E");
+  --papel:#FCFCFA;--raya:#EFEEEA;--agujero:#2a2e3f;--dorso:#ecebe6;--carton:#232C4F}
+[data-theme="dark"] .bv-historia{--papel:#1b2028;--raya:#212731;--agujero:#07090c;--dorso:#161a21}
 /* el dorado de los ejercicios, un punto más oscuro sobre el papel claro para que se lea */
-html:not([data-theme="dark"]) .bv-cap,html:not([data-theme="dark"]) .bv-tramo,html:not([data-theme="dark"]) .bv-escenas{--c-ejer:#b8760b}
+html:not([data-theme="dark"]) .bv-hoja{--c-ejer:#b8760b}
 [data-theme="dark"] .bv-hola,[data-theme="dark"] .bv-gratis{box-shadow:0 10px 26px rgba(0,0,0,.4)}
-.bv-cap p{margin:0;font-size:19px;line-height:1.6;color:var(--text-secondary);max-width:40ch}
+.bv-bloc{position:relative;max-width:1180px;margin:0 auto;container-type:inline-size;isolation:isolate}
+.bv-hojas{list-style:none;margin:0;padding:0}
+.bv-hoja{position:relative;margin:0 0 30px}
+.bv-cara{position:relative;border-radius:6px;padding:58px 52px 44px;
+  background:repeating-linear-gradient(var(--papel) 0 27px, var(--raya) 27px 28px);
+  box-shadow:0 1px 2px rgba(20,22,32,.08),0 16px 36px rgba(20,22,32,.13)}
+[data-theme="dark"] .bv-cara{box-shadow:0 0 0 1px #2b3038,0 16px 36px rgba(0,0,0,.4)}
+/* los agujeros de la espiral, en el papel (pasan con la hoja) */
+.bv-cara::before{content:"";position:absolute;top:13px;left:26px;right:26px;height:18px;
+  background:radial-gradient(circle at 12px 9px, var(--agujero) 0 4.6px, transparent 5.2px) 50% 0/24px 18px repeat-x}
+.bv-dorso{display:none}
+/* la espiral, encima de todo: cada anilla sale de su agujero y pasa por arriba */
+.bv-espiral{position:absolute;z-index:40;top:-18px;left:26px;right:26px;height:42px;pointer-events:none;
+  background:var(--anillas) 50% 0/24px 42px repeat-x;display:none}
+/* sin el bloc vivo, cada hoja lleva sus anillas */
+.bv-hoja::before{content:"";position:absolute;z-index:2;top:-18px;left:26px;right:26px;height:42px;pointer-events:none;background:var(--anillas) 50% 0/24px 42px repeat-x}
+.bv-vivo .bv-hoja::before{display:none}
+.bv-vivo .bv-espiral{display:block}
+
+/* la tapa: cartón azul con su etiqueta escrita a mano y Lucía de pegatina */
+.bv-tapa .bv-cara{background:var(--carton);color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:34px;min-height:420px;
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.06),0 18px 40px rgba(20,22,32,.22)}
+.bv-tapa .bv-cara::before{--agujero:#121726}
+.bv-etiqueta{position:relative;background:#FCFCFA;border-radius:4px;padding:26px 64px 30px;transform:rotate(-1.5deg);
+  background-image:repeating-linear-gradient(#FCFCFA 0 37px, #E9E7E1 37px 38px);background-position:0 18px;
+  box-shadow:0 10px 24px rgba(0,0,0,.25)}
+.bv-etiqueta h2{margin:0;font-size:96px;line-height:1;color:#3A4570;letter-spacing:0;white-space:nowrap}
+.bv-pj-tapa{position:absolute;right:-58px;top:-52px;width:108px;height:auto;transform:rotate(10deg);filter:drop-shadow(0 8px 12px rgba(0,0,0,.3))}
+.bv-baja{display:none;margin:0;font-size:17px;color:rgba(255,255,255,.75)}
+.bv-baja .ti{font-size:18px;vertical-align:-2px;margin-right:4px}
+
+/* los separadores: una hoja de color por tramo, con lo que trae */
+.bv-separa .bv-cara{background:color-mix(in srgb, var(--c) 13%, var(--papel));display:flex;flex-direction:column;justify-content:center;padding-left:96px;min-height:420px}
+[data-theme="dark"] .bv-separa .bv-cara{background:color-mix(in srgb, var(--c) 17%, var(--papel))}
+.bv-separa h3{margin:0;font-size:104px;line-height:1;color:var(--c);transform:rotate(-1.5deg);transform-origin:left center}
+.bv-raya{display:block;width:min(560px,80%);height:5px;margin:22px 0 30px;border-radius:3px;opacity:.6;
+  background:repeating-linear-gradient(90deg,var(--c) 0 34px,transparent 34px 54px)}
+.bv-indice{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.bv-indice li{font:800 23px/1.25 var(--font-head);color:var(--text-secondary);display:flex;align-items:baseline;gap:14px}
+.bv-indice .bv-mano{display:inline-block;min-width:26px;font-size:36px;line-height:.8;color:var(--c)}
+.bv-pestana{display:none}
+
+/* las hojas de los pasos: el texto a la izquierda, su pantalla pegada a la derecha */
+/* (la pantalla, con todo el ancho que se pueda: el número va en la línea del título) */
+.bv-paso .bv-cara{display:grid;grid-template-columns:minmax(0,2fr) minmax(0,3fr);gap:44px;align-items:center;padding:58px 40px 40px 48px}
+.bv-hoja-txt > div{display:contents}
+.bv-hoja-txt{display:grid;grid-template-columns:auto minmax(0,1fr);column-gap:16px;align-items:baseline}
+.bv-hoja-txt > div > :not(h3){grid-column:1 / -1}
+.bv-num{font-size:80px;line-height:.8;color:var(--c);transform:rotate(-4deg);transform-origin:left bottom}
+.bv-paso h3{font-family:var(--font-head);font-weight:800;font-size:36px;line-height:1.1;letter-spacing:-.015em;margin:0 0 16px;color:var(--text)}
+.bv-paso p{margin:0;font-size:18.5px;line-height:1.6;color:var(--text-secondary);max-width:42ch}
 /* «ponte a prueba»: tres botones en columna, todos del mismo ancho */
-.bv-fotos-btns{display:inline-grid;grid-template-columns:1fr;gap:8px;margin:20px 0 0}
+.bv-fotos-btns{display:inline-grid;grid-template-columns:1fr;gap:8px;margin:20px 0 0;justify-self:start}
 .bv-fotos-btns button{display:flex;align-items:center;gap:10px;text-align:left;font:700 16px var(--font-body);padding:11px 16px;border-radius:6px;color:var(--text);cursor:pointer;
   background:color-mix(in srgb, var(--c) 12%, var(--card-bg));border:1px solid color-mix(in srgb, var(--c) 30%, var(--card-bg));transition:background .15s,border-color .15s,color .15s}
 .bv-fotos-btns button .ti{font-size:19px;color:var(--c)}
@@ -136,49 +182,120 @@ html:not([data-theme="dark"]) .bv-cap,html:not([data-theme="dark"]) .bv-tramo,ht
 .bv-fotos-btns button[aria-pressed="true"]{background:var(--c);border-color:var(--c);color:#fff}
 .bv-fotos-btns button[aria-pressed="true"] .ti{color:#fff}
 .bv-fotos-btns button:focus-visible{outline:3px solid var(--c);outline-offset:2px}
-/* la pantalla fija: una encima de otra, la del paso que toca encima */
-.bv-fija{position:sticky;top:calc(50vh - min(34vh, 290px));height:min(68vh,580px)}
-.bv-escenas{position:relative;height:100%}
-.bv-escenas > .bv-pantalla-paso{position:absolute;inset:0;display:grid;place-items:center;opacity:0;visibility:hidden;
-  transition:opacity .22s ease,visibility 0s linear .22s}
-/* la de antes se apaga en un instante y la nueva entra justo después, de
-   abajo arriba como una página (de arriba abajo si se vuelve): nunca hay dos
-   a la vez. En 1, 2 y 4 la pantalla ya entra acercada a lo que cuenta el paso */
-.bv-escenas > .activo{opacity:1;visibility:visible;z-index:2;transition:none}
-.bv-escenas > .activo .bv-marco{animation:bv-entra .55s cubic-bezier(.16,1,.3,1) .22s both}
-.bv-escenas.sube > .activo .bv-marco{animation-name:bv-entra-sube}
-@keyframes bv-entra{from{clip-path:inset(100% 0 0 0);transform:translateY(26px)}to{clip-path:inset(-70px);transform:none}}
-@keyframes bv-entra-sube{from{clip-path:inset(0 0 100% 0);transform:translateY(-26px)}to{clip-path:inset(-70px);transform:none}}
-.bv-lente{overflow:hidden}
-.bv-pantalla-paso video{transform-origin:0 0}
-.bv-pantalla-paso video[data-zoom]{transform:var(--zoom);backface-visibility:hidden}
-.bv-pantalla-paso .bv-ventana{width:100%;border:1px solid var(--border);box-shadow:0 18px 44px rgba(20,22,32,.16)}
-.bv-pantalla-paso video,.bv-pantalla-paso .bv-fotos{display:block;width:100%;aspect-ratio:1280/800;background:var(--bg)}
-/* el número del paso en la esquina de su pantalla */
+/* la pantalla de cada hoja, pegada con un trozo de cinta */
+.bv-hoja-media{position:relative;display:grid;place-items:center}
 .bv-marco{position:relative;width:100%}
-
-/* el móvil, solo: un teléfono de verdad, sin navegador, que cabe entero en la pantalla */
+.bv-marco:not(.es-telefono)::before{content:"";position:absolute;z-index:3;top:-13px;left:50%;width:116px;height:26px;margin-left:-58px;transform:rotate(-2.5deg);
+  background:rgba(255,236,170,.62);box-shadow:0 1px 3px rgba(0,0,0,.08);
+  clip-path:polygon(3% 0,97% 0,100% 18%,97% 36%,100% 54%,97% 72%,100% 90%,97% 100%,3% 100%,0 82%,3% 64%,0 46%,3% 28%,0 10%)}
+[data-theme="dark"] .bv-marco:not(.es-telefono)::before{background:rgba(242,171,39,.38)}
+.bv-hoja-media .bv-ventana{width:100%;border:1px solid var(--border);box-shadow:0 10px 26px rgba(20,22,32,.15)}
+.bv-lente{overflow:hidden}
+.bv-hoja-media video,.bv-hoja-media .bv-fotos{display:block;width:100%;aspect-ratio:1280/800;background:var(--bg)}
+.bv-hoja-media video{transform-origin:0 0}
+/* en 1, 2 y 4 la pantalla ya viene acercada a lo que cuenta el paso, quieta */
+.bv-hoja-media video[data-zoom]{transform:var(--zoom);backface-visibility:hidden}
+/* el móvil, solo: un teléfono de verdad, sin navegador */
 .bv-marco.es-telefono{width:auto}
-.bv-telefono{position:relative;height:min(68vh,580px);aspect-ratio:390/844;border:12px solid #232C4F;border-radius:44px;overflow:hidden;background:#232C4F;
-  box-shadow:0 24px 50px rgba(20,22,32,.28)}
+.bv-telefono{position:relative;height:min(68vh,560px);aspect-ratio:390/844;border:12px solid #232C4F;border-radius:44px;overflow:hidden;background:#232C4F;
+  box-shadow:0 18px 40px rgba(20,22,32,.26)}
 .bv-telefono video{display:block;width:100%;height:100%;object-fit:cover;border-radius:32px;background:var(--bg)}
 /* las fotos de «ponte a prueba»: una sobre otra, la elegida se acerca */
 .bv-fotos{position:relative;overflow:hidden}
 .bv-fotos img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:top;opacity:0;transform:scale(1.05);
   transition:opacity .6s cubic-bezier(.16,1,.3,1),transform 1.4s cubic-bezier(.16,1,.3,1)}
 .bv-fotos img.vista{opacity:1;transform:none}
-/* debajo de cada paso, su pantalla (solo en pantallas estrechas) */
-.bv-cap-media{display:none}
-.bv-cap-media .bv-ventana{border:1px solid var(--border);box-shadow:0 14px 34px rgba(20,22,32,.14)}
-.bv-cap-media video,.bv-cap-media .bv-fotos{display:block;width:100%;aspect-ratio:1280/800;background:var(--bg)}
-/* los tramos: la clase, después de la clase, en el móvil, y además */
-.bv-tramo{min-height:34vh;display:flex;flex-direction:column;justify-content:center;padding:24px 0}
-.bv-tramo:first-child{min-height:24vh}
-.bv-tramo h3{margin:0;font:700 66px/1.02 'Caveat',cursive;color:var(--c);transform:rotate(-1.5deg);transform-origin:left center}
-.bv-raya{display:block;height:5px;margin:22px 0 0;border-radius:3px;transform-origin:left center;
-  background:repeating-linear-gradient(90deg,var(--c) 0 34px,transparent 34px 54px);opacity:.6}
-.js-aparece .bv-tramo .bv-raya{transform:scaleX(0);transition:transform 1.1s cubic-bezier(.16,1,.3,1) .1s}
-.js-aparece .bv-tramo.visto .bv-raya{transform:none}
+
+/* hojas estrechas (móvil): el texto arriba y la pantalla debajo */
+@container (max-width:760px){
+  .bv-cara{padding:48px 22px 26px}
+  .bv-paso .bv-cara{display:flex;flex-direction:column;align-items:stretch;gap:18px}
+  .bv-paso .bv-cara{padding:48px 20px 24px}
+  .bv-hoja-txt{column-gap:10px}
+  .bv-num{font-size:52px}
+  .bv-paso h3{font-size:25px;margin:0 0 8px}
+  .bv-paso p{font-size:16px;line-height:1.5}
+  .bv-fotos-btns{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
+  .bv-fotos-btns button{font-size:13.5px;padding:7px 10px;gap:6px}
+  .bv-fotos-btns button .ti{font-size:16px}
+  .bv-hoja-media .bv-telefono{height:420px}
+  .bv-tapa .bv-cara{min-height:340px;gap:26px}
+  .bv-etiqueta{padding:14px 20px 18px}
+  .bv-etiqueta h2{font-size:min(58px, 11.5cqw)}
+  .bv-pj-tapa{width:70px;right:-12px;top:-50px}
+  .bv-separa .bv-cara{padding-left:30px;min-height:340px}
+  .bv-separa h3{font-size:64px}
+  .bv-raya{margin:16px 0 22px}
+  .bv-indice li{font-size:18px;gap:10px}
+  .bv-indice .bv-mano{font-size:29px;min-width:20px}
+}
+
+/* ── el bloc vivo (con JavaScript y pantalla de sobra) ── */
+.bv-vivo .bv-bloc-pista{height:calc(100vh + var(--largo, 520) * 1vh)}
+.bv-vivo .bv-bloc-escena{position:sticky;top:0;height:100vh;display:flex;flex-direction:column;justify-content:center;padding:34px 0 52px}
+.bv-vivo .bv-bloc{width:100%;height:min(100%, 640px)}
+/* el cartón de atrás y el canto de las hojas que quedan */
+.bv-vivo .bv-bloc::before{content:"";position:absolute;z-index:-1;inset:10px 0 -12px;border-radius:6px;background:var(--carton);box-shadow:0 22px 46px rgba(20,22,32,.24)}
+.bv-vivo .bv-hojas{position:absolute;inset:0;perspective:3200px;perspective-origin:50% 45%}
+.bv-vivo .bv-hojas::before{content:"";position:absolute;inset:4px 0 -6px;border-radius:6px;background:var(--dorso);box-shadow:0 3px 0 -1px color-mix(in srgb, var(--dorso) 85%, #000)}
+.bv-vivo .bv-hoja{position:absolute;inset:0;margin:0;transform-origin:50% 0;transform-style:preserve-3d;
+  transition:transform .8s cubic-bezier(.55,.05,.3,1) var(--tras,0s)}
+.bv-sin-anim .bv-hoja,.bv-sin-anim .bv-hoja *{transition:none!important}
+.bv-vivo .bv-cara{position:absolute;inset:0;min-height:0;box-shadow:none;backface-visibility:hidden;-webkit-backface-visibility:hidden}
+.bv-vivo .bv-hoja.actual .bv-cara{cursor:pointer}
+/* la esquina doblada de la hoja de arriba: invita a pasarla */
+.bv-vivo .bv-hoja.actual .bv-cara::after{content:"";position:absolute;right:0;bottom:0;width:34px;height:34px;border-radius:0 0 6px 0;
+  background:linear-gradient(315deg, var(--dorso) 0 49%, color-mix(in srgb, var(--dorso) 80%, #000) 50%, var(--papel) 100%);
+  box-shadow:-3px -3px 6px rgba(20,22,32,.08);transition:width .25s,height .25s}
+.bv-vivo .bv-hoja.actual .bv-cara:hover::after{width:46px;height:46px}
+.bv-vivo .bv-tapa.actual .bv-cara::after{background:linear-gradient(315deg, var(--dorso) 0 49%, #1a2140 50%, #2c3760 100%)}
+/* la hoja que se pasa: sube por encima de la espiral y se va */
+.bv-vivo .bv-hoja.pasada{transform:rotateX(178deg);pointer-events:none}
+.bv-vivo .bv-hoja.pasada .bv-cara{visibility:hidden;transition:visibility 0s calc(var(--tras,0s) + .42s)}
+.bv-vivo .bv-dorso{display:block;position:absolute;inset:0;border-radius:6px;background:var(--dorso);transform:rotateX(180deg);
+  backface-visibility:hidden;-webkit-backface-visibility:hidden;transition:opacity .25s linear var(--tras,0s)}
+.bv-vivo .bv-hoja.pasada .bv-dorso{opacity:0;transition:opacity .3s linear calc(var(--tras,0s) + .42s)}
+.bv-vivo .bv-dorso::before{content:"";position:absolute;bottom:13px;left:26px;right:26px;height:18px;
+  background:radial-gradient(circle at 12px 9px, var(--agujero) 0 4.6px, transparent 5.2px) 50% 0/24px 18px repeat-x}
+/* con la hoja así de alta, la tapa y los separadores llenan su sitio */
+.bv-vivo .bv-tapa .bv-baja{display:block}
+@media (prefers-reduced-motion:no-preference){
+  .bv-vivo .bv-tapa .bv-baja .ti{display:inline-block;animation:bv-baja 1.8s ease-in-out infinite}
+}
+@keyframes bv-baja{0%,100%{transform:none}50%{transform:translateY(5px)}}
+/* las pestañas de los separadores asoman por debajo del bloc */
+.bv-vivo .bv-pestana{display:block;position:absolute;top:100%;height:36px;padding:9px 18px 0;border:0;border-radius:0 0 6px 6px;cursor:pointer;
+  background:var(--c);color:#fff;font:800 14.5px/1 var(--font-head);white-space:nowrap;box-shadow:0 6px 12px rgba(20,22,32,.14);
+  transition:height .2s}
+.bv-vivo .bv-pestana:hover{height:42px}
+.bv-vivo .bv-pestana:focus-visible{outline:3px solid var(--c);outline-offset:3px}
+.bv-vivo .bv-pestana-1{left:calc(50% - 300px)}
+.bv-vivo .bv-pestana-2{left:calc(50% - 90px)}
+.bv-vivo .bv-pestana-3{left:calc(50% + 120px)}
+/* los colores de siempre también en el modo oscuro, para que se lean */
+.bv-vivo .bv-pestana-1{background:#5B4FB8}
+.bv-vivo .bv-pestana-2{background:var(--gold);color:#232220}
+.bv-vivo .bv-pestana-3{background:#C93C82}
+/* la pantalla, del tamaño que deje la hoja */
+.bv-vivo .bv-hoja-media{container-type:size;height:100%;min-height:0}
+.bv-vivo .bv-hoja-media .bv-marco:not(.es-telefono){width:min(100cqw, calc((100cqh - 36px) * 1.6))}
+.bv-vivo .bv-hoja-media .bv-telefono{height:min(100cqh, 100cqw * 2.164)}
+@container (max-width:760px){
+  .bv-vivo .bv-paso .bv-cara{display:flex}
+  .bv-vivo .bv-hoja-media{flex:1}
+  .bv-vivo .bv-tapa .bv-cara,.bv-vivo .bv-separa .bv-cara{min-height:0}
+  .bv-vivo .bv-pestana{width:29%;font-size:12.5px;padding:9px 6px 0;height:32px;text-align:center;overflow:hidden;text-overflow:ellipsis}
+  .bv-vivo .bv-pestana-1{left:3%}
+  .bv-vivo .bv-pestana-2{left:35.5%}
+  .bv-vivo .bv-pestana-3{left:68%}
+}
+@media (max-width:900px){
+  .bv-vivo .bv-bloc-escena{height:calc(100svh - var(--barra, 0px) - var(--abajo, 0px));padding:26px 0 46px}
+}
+@media (prefers-reduced-motion:reduce){
+  .bv-vivo .bv-hoja,.bv-vivo .bv-dorso,.bv-vivo .bv-hoja.pasada .bv-cara{transition:none!important}
+  .bv-vivo .bv-dorso{display:none}
+}
 
 /* ── ¡pruébalo gratis!: el cuadro violeta, aparte de la explicación ── */
 .bv-gratis{position:relative;margin:110px 0 0;border-radius:6px;padding:56px 0 0 56px;color:#fff;overflow:hidden;
@@ -230,21 +347,14 @@ html:not([data-theme="dark"]) .bv-cap,html:not([data-theme="dark"]) .bv-tramo,ht
 
 @media (prefers-reduced-motion:reduce){
   html{scroll-behavior:auto}
-  .bv-muestra-img,.bv-fotos img,.bv-cap,.bv-escenas > *,.bv-escenas video{transition:none!important}
-  .bv-escenas > .activo .bv-marco{animation:none!important}
-  .js-aparece .bv-aparece,.js-aparece .bv-tramo .bv-raya{opacity:1;transform:none;transition:none}
+  .bv-muestra-img,.bv-fotos img{transition:none!important}
+  .js-aparece .bv-aparece{opacity:1;transform:none;transition:none}
 }
 @media (max-width:1180px){
   .bv-hola{grid-template-columns:1fr;gap:44px;padding:48px 44px 56px}
   .bv-hola-sub{max-width:52ch}
-  .bv-dos-in,.bv-historia-in,.bv-gratis{grid-template-columns:1fr;gap:28px}
+  .bv-dos-in,.bv-gratis{grid-template-columns:1fr;gap:28px}
   .bv-gratis{padding:48px 40px 0}
-  .bv-fija{display:none}
-  .bv-cap,.bv-tramo,.bv-tramo:first-child{min-height:0;opacity:1;padding:36px 0}
-  .bv-cap-media{display:block;margin-top:26px}
-  .bv-cap-media .bv-marco.es-telefono{width:min(290px,76%);margin:0 auto}
-  .bv-cap-media .bv-telefono{height:auto;width:100%}
-  .bv-historia > h2 .bv-pj-h{right:-80px;width:64px}
   .bv-mas{margin:0}
   .bv-dos h2{font-size:38px}
   .bv-charla{max-width:460px}
@@ -273,15 +383,7 @@ html:not([data-theme="dark"]) .bv-cap,html:not([data-theme="dark"]) .bv-tramo,ht
   .bv-charla .yo{top:0;left:0}
   .bv-charla .el{top:30%;right:0}
   .bv-charla .oro{display:none}
-  .bv-historia > h2{font-size:36px}
-  .bv-historia > h2 .bv-pj-h{right:-66px;width:52px;top:-6px}
-  .bv-tramo h3{font-size:46px}
-  .bv-tramo{padding-top:56px}
-  .bv-tramo h3{font-size:46px}
-  .bv-cap-txt{grid-template-columns:52px minmax(0,1fr)}
-  .bv-num{font-size:62px}
-  .bv-cap h3{font-size:29px}
-  .bv-cap p,.bv-lado p,.bv-gratis p{font-size:17.5px}
+  .bv-lado p,.bv-gratis p{font-size:17.5px}
   .bv-gratis{margin:72px -22px 0;border-radius:0;padding:48px 22px 0;box-shadow:none}
   .bv-gratis-txt{padding-bottom:0}
   .bv-gratis h2{font-size:56px}
@@ -368,78 +470,154 @@ html:not([data-theme="dark"]) .bv-cap,html:not([data-theme="dark"]) .bv-tramo,ht
 </section>
 
 <section class="bv-historia" id="historia">
-<h2><span class="i18n" data-es="¿Cómo " data-it="Come " data-en="How does it ">¿Cómo </span><span class="bv-mano"><span class="i18n" data-es="funciona" data-it="funziona" data-en="work">funciona</span></span><span class="i18n" data-es="?" data-it="?" data-en="?">?</span><img class="bv-pj-h" src="bienvenida/lucia.svg" alt="" width="148" height="144"></h2>
-<div class="bv-historia-in">
-<ol class="bv-caps">
-<li class="bv-tramo bv-aparece" style="--c:var(--c-clases)"><h3 class="i18n" data-es="La clase" data-it="La lezione" data-en="The lesson">La clase</h3><span class="bv-raya" aria-hidden="true"></span></li>
-<li class="bv-cap" data-escena="reserva" data-foco="43 34 1.7" data-tipo="video" data-num="1" style="--c:var(--c-clases)">
-<div class="bv-cap-txt"><span class="bv-num bv-mano" aria-hidden="true">1</span><div>
+<div class="bv-bloc-pista">
+<div class="bv-bloc-escena">
+<div class="bv-bloc">
+<ol class="bv-hojas">
+<li class="bv-hoja bv-tapa">
+<div class="bv-cara">
+<div class="bv-etiqueta">
+<h2 class="bv-mano"><span class="i18n" data-es="¿Cómo " data-it="Come " data-en="How does it ">¿Cómo </span><span class="i18n" data-es="funciona" data-it="funziona" data-en="work">funciona</span><span class="i18n" data-es="?" data-it="?" data-en="?">?</span></h2>
+<img class="bv-pj-tapa" src="bienvenida/lucia.svg" alt="" width="148" height="144">
+</div>
+<p class="bv-baja"><i class="ti ti-arrow-down" aria-hidden="true"></i> <span class="i18n" data-es="Baja para pasar las hojas" data-it="Scorri in giù per sfogliare" data-en="Scroll down to turn the pages">Baja para pasar las hojas</span></p>
+</div>
+<div class="bv-dorso" aria-hidden="true"></div>
+</li>
+<li class="bv-hoja bv-separa" style="--c:var(--c-clases)">
+<div class="bv-cara">
+<h3 class="i18n bv-mano" data-es="La clase" data-it="La lezione" data-en="The lesson">La clase</h3>
+<span class="bv-raya" aria-hidden="true"></span>
+<ol class="bv-indice">
+<li><span class="bv-mano" aria-hidden="true">1</span> <span class="i18n" data-es="Reserva" data-it="Prenota" data-en="Book">Reserva</span></li>
+<li><span class="bv-mano" aria-hidden="true">2</span> <span class="i18n" data-es="Entra en clase" data-it="Entra in aula" data-en="Join the lesson">Entra en clase</span></li>
+<li><span class="bv-mano" aria-hidden="true">3</span> <span class="i18n" data-es="Damos la clase" data-it="Facciamo lezione" data-en="We have the lesson">Damos la clase</span></li>
+<li><span class="bv-mano" aria-hidden="true">4</span> <span class="i18n" data-es="Toma notas" data-it="Prendi appunti" data-en="Take notes">Toma notas</span></li>
+</ol>
+<button type="button" class="bv-pestana bv-pestana-1"><span class="i18n" data-es="La clase" data-it="La lezione" data-en="The lesson">La clase</span></button>
+</div>
+<div class="bv-dorso" aria-hidden="true"></div>
+</li>
+<li class="bv-hoja bv-paso" data-escena="reserva" data-foco="43 34 1.7" data-tipo="video" data-num="1" style="--c:var(--c-clases)">
+<div class="bv-cara">
+<div class="bv-hoja-txt"><span class="bv-num bv-mano" aria-hidden="true">1</span><div>
 <h3><span class="i18n" data-es="Reserva" data-it="Prenota" data-en="Book">Reserva</span></h3>
 <p class="i18n" data-html data-es="Eliges el día y la hora que te van bien en &lt;mark class=&quot;bv-m&quot;&gt;mi calendario&lt;/mark&gt;. Antes de vernos preparo la clase &lt;mark class=&quot;bv-m&quot;&gt;pensando en ti&lt;/mark&gt;, y te la encuentras esperándote &lt;mark class=&quot;bv-m&quot;&gt;en tu sección&lt;/mark&gt;, con su fecha." data-it="Scegli giorno e ora che ti vanno bene nel &lt;mark class=&quot;bv-m&quot;&gt;mio calendario&lt;/mark&gt;. Prima di vederci preparo la lezione &lt;mark class=&quot;bv-m&quot;&gt;pensando a te&lt;/mark&gt;, e la trovi che ti aspetta &lt;mark class=&quot;bv-m&quot;&gt;nella tua sezione&lt;/mark&gt;, con la sua data." data-en="Pick a day and time that suit you in &lt;mark class=&quot;bv-m&quot;&gt;my calendar&lt;/mark&gt;. Before we meet I prepare the lesson &lt;mark class=&quot;bv-m&quot;&gt;with you in mind&lt;/mark&gt;, and you’ll find it waiting &lt;mark class=&quot;bv-m&quot;&gt;in your section&lt;/mark&gt;, with its date.">Eliges el día y la hora que te van bien en <mark class="bv-m">mi calendario</mark>. Antes de vernos preparo la clase <mark class="bv-m">pensando en ti</mark>, y te la encuentras esperándote <mark class="bv-m">en tu sección</mark>, con su fecha.</p>
 </div></div>
-<div class="bv-cap-media"></div>
+<div class="bv-hoja-media"></div>
+</div>
+<div class="bv-dorso" aria-hidden="true"></div>
 </li>
-<li class="bv-cap" data-escena="portada" data-foco="45 40 1.5" data-tipo="video" data-num="2" style="--c:var(--c-clases)">
-<div class="bv-cap-txt"><span class="bv-num bv-mano" aria-hidden="true">2</span><div>
+<li class="bv-hoja bv-paso" data-escena="portada" data-foco="45 40 1.5" data-tipo="video" data-num="2" style="--c:var(--c-clases)">
+<div class="bv-cara">
+<div class="bv-hoja-txt"><span class="bv-num bv-mano" aria-hidden="true">2</span><div>
 <h3><span class="i18n" data-es="Entra en clase" data-it="Entra in aula" data-en="Join the lesson">Entra en clase</span></h3>
 <p class="i18n" data-html data-es="Un clic desde tu sección y estamos &lt;mark class=&quot;bv-m&quot;&gt;cara a cara por videollamada&lt;/mark&gt;. Hablamos de lo que te interesa, te corrijo con calma y &lt;mark class=&quot;bv-m&quot;&gt;resuelvo tus dudas en el momento&lt;/mark&gt;, sin guiones fijos." data-it="Un clic dalla tua sezione e siamo &lt;mark class=&quot;bv-m&quot;&gt;faccia a faccia in videochiamata&lt;/mark&gt;. Parliamo di quello che ti interessa, ti correggo con calma e &lt;mark class=&quot;bv-m&quot;&gt;risolvo i tuoi dubbi sul momento&lt;/mark&gt;, senza copioni fissi." data-en="One click from your section and we’re &lt;mark class=&quot;bv-m&quot;&gt;face to face on a video call&lt;/mark&gt;. We talk about what interests you, I correct you calmly and &lt;mark class=&quot;bv-m&quot;&gt;clear up your doubts on the spot&lt;/mark&gt;, with no fixed script.">Un clic desde tu sección y estamos <mark class="bv-m">cara a cara por videollamada</mark>. Hablamos de lo que te interesa, te corrijo con calma y <mark class="bv-m">resuelvo tus dudas en el momento</mark>, sin guiones fijos.</p>
 </div></div>
-<div class="bv-cap-media"></div>
+<div class="bv-hoja-media"></div>
+</div>
+<div class="bv-dorso" aria-hidden="true"></div>
 </li>
-<li class="bv-cap" data-escena="clase" data-tipo="video" data-num="3" style="--c:var(--c-clases)">
-<div class="bv-cap-txt"><span class="bv-num bv-mano" aria-hidden="true">3</span><div>
+<li class="bv-hoja bv-paso" data-escena="clase" data-tipo="video" data-num="3" style="--c:var(--c-clases)">
+<div class="bv-cara">
+<div class="bv-hoja-txt"><span class="bv-num bv-mano" aria-hidden="true">3</span><div>
 <h3><span class="i18n" data-es="Damos la clase" data-it="Facciamo lezione" data-en="We have the lesson">Damos la clase</span></h3>
 <p class="i18n" data-html data-es="Te explico solo lo que necesitas, &lt;mark class=&quot;bv-m&quot;&gt;con ejemplos de tu vida&lt;/mark&gt; y tu idioma como apoyo: &lt;mark class=&quot;bv-m&quot;&gt;nada de la gramática de siempre&lt;/mark&gt;. Luego hacemos juntos &lt;mark class=&quot;bv-m&quot;&gt;unos pocos ejercicios guiados&lt;/mark&gt; para comprobar que lo has entendido." data-it="Ti spiego solo quello che ti serve, &lt;mark class=&quot;bv-m&quot;&gt;con esempi della tua vita&lt;/mark&gt; e la tua lingua come appoggio: &lt;mark class=&quot;bv-m&quot;&gt;niente grammatica di una volta&lt;/mark&gt;. Poi facciamo insieme &lt;mark class=&quot;bv-m&quot;&gt;pochi esercizi guidati&lt;/mark&gt; per verificare che hai capito." data-en="I explain only what you need, &lt;mark class=&quot;bv-m&quot;&gt;with examples from your life&lt;/mark&gt; and your language as support: &lt;mark class=&quot;bv-m&quot;&gt;none of the old-school grammar&lt;/mark&gt;. Then we do &lt;mark class=&quot;bv-m&quot;&gt;a few guided exercises&lt;/mark&gt; together to check you’ve got it.">Te explico solo lo que necesitas, <mark class="bv-m">con ejemplos de tu vida</mark> y tu idioma como apoyo: <mark class="bv-m">nada de la gramática de siempre</mark>. Luego hacemos juntos <mark class="bv-m">unos pocos ejercicios guiados</mark> para comprobar que lo has entendido.</p>
 </div></div>
-<div class="bv-cap-media"></div>
+<div class="bv-hoja-media"></div>
+</div>
+<div class="bv-dorso" aria-hidden="true"></div>
 </li>
-<li class="bv-cap" data-escena="notas" data-foco="64 60 1.3" data-tipo="video" data-num="4" style="--c:var(--c-clases)">
-<div class="bv-cap-txt"><span class="bv-num bv-mano" aria-hidden="true">4</span><div>
+<li class="bv-hoja bv-paso" data-escena="notas" data-foco="64 60 1.3" data-tipo="video" data-num="4" style="--c:var(--c-clases)">
+<div class="bv-cara">
+<div class="bv-hoja-txt"><span class="bv-num bv-mano" aria-hidden="true">4</span><div>
 <h3><span class="i18n" data-es="Toma notas" data-it="Prendi appunti" data-en="Take notes">Toma notas</span></h3>
 <p class="i18n" data-html data-es="Mientras hablamos, apuntas lo que quieras &lt;mark class=&quot;bv-m&quot;&gt;junto a la clase&lt;/mark&gt;. Se guarda solo, lo tienes siempre a mano para repasar y hasta puedes &lt;mark class=&quot;bv-m&quot;&gt;descargarlo&lt;/mark&gt; cuando lo necesites." data-it="Mentre parliamo, annoti quello che vuoi &lt;mark class=&quot;bv-m&quot;&gt;accanto alla lezione&lt;/mark&gt;. Si salva da solo, lo hai sempre a portata di mano per ripassare e puoi perfino &lt;mark class=&quot;bv-m&quot;&gt;scaricarlo&lt;/mark&gt; quando ti serve." data-en="While we talk, you jot down whatever you like &lt;mark class=&quot;bv-m&quot;&gt;next to the lesson&lt;/mark&gt;. It saves itself, it’s always at hand to review, and you can even &lt;mark class=&quot;bv-m&quot;&gt;download it&lt;/mark&gt; whenever you need.">Mientras hablamos, apuntas lo que quieras <mark class="bv-m">junto a la clase</mark>. Se guarda solo, lo tienes siempre a mano para repasar y hasta puedes <mark class="bv-m">descargarlo</mark> cuando lo necesites.</p>
 </div></div>
-<div class="bv-cap-media"></div>
+<div class="bv-hoja-media"></div>
+</div>
+<div class="bv-dorso" aria-hidden="true"></div>
 </li>
-<li class="bv-tramo bv-aparece" style="--c:var(--c-ejer)"><h3 class="i18n" data-es="Al terminar la clase" data-it="Finita la lezione" data-en="After the lesson">Al terminar la clase</h3><span class="bv-raya" aria-hidden="true"></span></li>
-<li class="bv-cap" data-escena="repaso" data-tipo="video" data-num="5" style="--c:var(--c-ejer)">
-<div class="bv-cap-txt"><span class="bv-num bv-mano" aria-hidden="true">5</span><div>
+<li class="bv-hoja bv-separa" style="--c:var(--c-ejer)">
+<div class="bv-cara">
+<h3 class="i18n bv-mano" data-es="Al terminar la clase" data-it="Finita la lezione" data-en="After the lesson">Al terminar la clase</h3>
+<span class="bv-raya" aria-hidden="true"></span>
+<ol class="bv-indice">
+<li><span class="bv-mano" aria-hidden="true">5</span> <span class="i18n" data-es="Practica" data-it="Esercitati" data-en="Practise">Practica</span></li>
+<li><span class="bv-mano" aria-hidden="true">6</span> <span class="i18n" data-es="Lee" data-it="Leggi" data-en="Read">Lee</span></li>
+<li><span class="bv-mano" aria-hidden="true">7</span> <span class="i18n" data-es="Repasa" data-it="Ripassa" data-en="Review">Repasa</span></li>
+</ol>
+<button type="button" class="bv-pestana bv-pestana-2"><span class="i18n" data-es="Después" data-it="Dopo" data-en="Afterwards">Después</span></button>
+</div>
+<div class="bv-dorso" aria-hidden="true"></div>
+</li>
+<li class="bv-hoja bv-paso" data-escena="repaso" data-tipo="video" data-num="5" style="--c:var(--c-ejer)">
+<div class="bv-cara">
+<div class="bv-hoja-txt"><span class="bv-num bv-mano" aria-hidden="true">5</span><div>
 <h3><span class="i18n" data-es="Practica" data-it="Esercitati" data-en="Practise">Practica</span></h3>
 <p class="i18n" data-html data-es="Encuentras &lt;mark class=&quot;bv-m&quot;&gt;ejercicios hechos sobre lo que hemos visto&lt;/mark&gt;, que se corrigen solos. Los haces &lt;mark class=&quot;bv-m&quot;&gt;cuando te venga bien&lt;/mark&gt;, sin fecha de entrega, y si te quedas con ganas, generas más." data-it="Trovi &lt;mark class=&quot;bv-m&quot;&gt;esercizi fatti su quello che abbiamo visto&lt;/mark&gt;, che si correggono da soli. Li fai &lt;mark class=&quot;bv-m&quot;&gt;quando ti va bene&lt;/mark&gt;, senza scadenze, e se ne vuoi ancora, ne generi altri." data-en="You’ll find &lt;mark class=&quot;bv-m&quot;&gt;exercises built on what we covered&lt;/mark&gt;, which mark themselves. Do them &lt;mark class=&quot;bv-m&quot;&gt;whenever it suits you&lt;/mark&gt;, with no deadline, and if you want more, generate some more.">Encuentras <mark class="bv-m">ejercicios hechos sobre lo que hemos visto</mark>, que se corrigen solos. Los haces <mark class="bv-m">cuando te venga bien</mark>, sin fecha de entrega, y si te quedas con ganas, generas más.</p>
 </div></div>
-<div class="bv-cap-media"></div>
+<div class="bv-hoja-media"></div>
+</div>
+<div class="bv-dorso" aria-hidden="true"></div>
 </li>
-<li class="bv-cap" data-escena="lectura" data-tipo="video" data-num="6" style="--c:var(--c-ejer)">
-<div class="bv-cap-txt"><span class="bv-num bv-mano" aria-hidden="true">6</span><div>
+<li class="bv-hoja bv-paso" data-escena="lectura" data-tipo="video" data-num="6" style="--c:var(--c-ejer)">
+<div class="bv-cara">
+<div class="bv-hoja-txt"><span class="bv-num bv-mano" aria-hidden="true">6</span><div>
 <h3><span class="i18n" data-es="Lee" data-it="Leggi" data-en="Read">Lee</span></h3>
 <p class="i18n" data-html data-es="Un texto &lt;mark class=&quot;bv-m&quot;&gt;escrito para tu clase&lt;/mark&gt;, con preguntas para comprobar que lo entiendes y un hueco para escribir lo que quieras. Lo que hagas &lt;mark class=&quot;bv-m&quot;&gt;lo comentamos juntos&lt;/mark&gt; en la clase siguiente." data-it="Un testo &lt;mark class=&quot;bv-m&quot;&gt;scritto per la tua lezione&lt;/mark&gt;, con domande per verificare che lo capisci e uno spazio per scrivere quello che vuoi. Quello che fai &lt;mark class=&quot;bv-m&quot;&gt;lo commentiamo insieme&lt;/mark&gt; nella lezione successiva." data-en="A text &lt;mark class=&quot;bv-m&quot;&gt;written for your lesson&lt;/mark&gt;, with questions to check you understand it and a space to write whatever you like. Whatever you do, &lt;mark class=&quot;bv-m&quot;&gt;we go over it together&lt;/mark&gt; in the next lesson.">Un texto <mark class="bv-m">escrito para tu clase</mark>, con preguntas para comprobar que lo entiendes y un hueco para escribir lo que quieras. Lo que hagas <mark class="bv-m">lo comentamos juntos</mark> en la clase siguiente.</p>
 </div></div>
-<div class="bv-cap-media"></div>
+<div class="bv-hoja-media"></div>
+</div>
+<div class="bv-dorso" aria-hidden="true"></div>
 </li>
-<li class="bv-cap" data-escena="cinco" data-tipo="movil" data-num="7" style="--c:var(--c-ejer)">
-<div class="bv-cap-txt"><span class="bv-num bv-mano" aria-hidden="true">7</span><div>
+<li class="bv-hoja bv-paso" data-escena="cinco" data-tipo="movil" data-num="7" style="--c:var(--c-ejer)">
+<div class="bv-cara">
+<div class="bv-hoja-txt"><span class="bv-num bv-mano" aria-hidden="true">7</span><div>
 <h3><span class="i18n" data-es="Repasa" data-it="Ripassa" data-en="Review">Repasa</span></h3>
 <p class="i18n" data-html data-es="Entra en &lt;mark class=&quot;bv-m&quot;&gt;«Cinco minutos»&lt;/mark&gt;, también desde el móvil: ejercicios al azar de &lt;mark class=&quot;bv-m&quot;&gt;todas las clases que hemos visto&lt;/mark&gt;, para que lo aprendido &lt;mark class=&quot;bv-m&quot;&gt;siga vivo&lt;/mark&gt;. Sin rachas que mantener: lo haces cuando quieres." data-it="Entra in &lt;mark class=&quot;bv-m&quot;&gt;«Cinque minuti»&lt;/mark&gt;, anche dal telefono: esercizi a caso da &lt;mark class=&quot;bv-m&quot;&gt;tutte le lezioni che abbiamo fatto&lt;/mark&gt;, perché quello che hai imparato &lt;mark class=&quot;bv-m&quot;&gt;resti vivo&lt;/mark&gt;. Nessuna serie da mantenere: lo fai quando vuoi." data-en="Open &lt;mark class=&quot;bv-m&quot;&gt;“Five minutes”&lt;/mark&gt;, on your phone too: random exercises from &lt;mark class=&quot;bv-m&quot;&gt;all the lessons we’ve done&lt;/mark&gt;, so what you’ve learnt &lt;mark class=&quot;bv-m&quot;&gt;stays alive&lt;/mark&gt;. No streaks to keep: you do it when you want.">Entra en <mark class="bv-m">«Cinco minutos»</mark>, también desde el móvil: ejercicios al azar de <mark class="bv-m">todas las clases que hemos visto</mark>, para que lo aprendido <mark class="bv-m">siga vivo</mark>. Sin rachas que mantener: lo haces cuando quieres.</p>
 </div></div>
-<div class="bv-cap-media"></div>
+<div class="bv-hoja-media"></div>
+</div>
+<div class="bv-dorso" aria-hidden="true"></div>
 </li>
-<li class="bv-tramo bv-aparece" style="--c:var(--c-teoria)"><h3 class="i18n" data-es="Y además…" data-it="E in più…" data-en="And what’s more…">Y además…</h3><span class="bv-raya" aria-hidden="true"></span></li>
-<li class="bv-cap" data-escena="practica" data-tipo="fotos" data-num="+" style="--c:var(--c-ejer)">
-<div class="bv-cap-txt"><span class="bv-num bv-mano" aria-hidden="true">+</span><div>
+<li class="bv-hoja bv-separa" style="--c:var(--c-teoria)">
+<div class="bv-cara">
+<h3 class="i18n bv-mano" data-es="Y además…" data-it="E in più…" data-en="And what’s more…">Y además…</h3>
+<span class="bv-raya" aria-hidden="true"></span>
+<ol class="bv-indice">
+<li><span class="bv-mano" aria-hidden="true">+</span> <span class="i18n" data-es="Ponte a prueba" data-it="Mettiti alla prova" data-en="Test yourself">Ponte a prueba</span></li>
+<li><span class="bv-mano" aria-hidden="true">+</span> <span class="i18n" data-es="Repasa la teoría" data-it="Ripassa la teoria" data-en="Brush up on theory">Repasa la teoría</span></li>
+</ol>
+<button type="button" class="bv-pestana bv-pestana-3"><span class="i18n" data-es="Y además…" data-it="E in più…" data-en="And more…">Y además…</span></button>
+</div>
+<div class="bv-dorso" aria-hidden="true"></div>
+</li>
+<li class="bv-hoja bv-paso" data-escena="practica" data-tipo="fotos" data-num="+" style="--c:var(--c-ejer)">
+<div class="bv-cara">
+<div class="bv-hoja-txt"><span class="bv-num bv-mano" aria-hidden="true">+</span><div>
 <h3><span class="i18n" data-es="Ponte a prueba" data-it="Mettiti alla prova" data-en="Test yourself">Ponte a prueba</span></h3>
 <p class="i18n" data-html data-es="Para los más curiosos, &lt;mark class=&quot;bv-m&quot;&gt;cientos de ejercicios&lt;/mark&gt; ordenados de tres maneras. Eliges tú qué practicar y &lt;mark class=&quot;bv-m&quot;&gt;hasta dónde llegar&lt;/mark&gt;, sin que nadie te marque el camino." data-it="Per i più curiosi, &lt;mark class=&quot;bv-m&quot;&gt;centinaia di esercizi&lt;/mark&gt; ordinati in tre modi. Scegli tu cosa esercitare e &lt;mark class=&quot;bv-m&quot;&gt;fin dove arrivare&lt;/mark&gt;, senza che nessuno ti imponga la strada." data-en="For the curious, &lt;mark class=&quot;bv-m&quot;&gt;hundreds of exercises&lt;/mark&gt; organised three ways. You choose what to practise and &lt;mark class=&quot;bv-m&quot;&gt;how far to go&lt;/mark&gt;, with nobody setting the path for you.">Para los más curiosos, <mark class="bv-m">cientos de ejercicios</mark> ordenados de tres maneras. Eliges tú qué practicar y <mark class="bv-m">hasta dónde llegar</mark>, sin que nadie te marque el camino.</p>
 <div class="bv-fotos-btns" role="group"><button type="button" data-foto="nivel" aria-pressed="true"><i class="ti ti-list-check" aria-hidden="true"></i> <span class="i18n" data-es="Por nivel" data-it="Per livello" data-en="By level">Por nivel</span></button><button type="button" data-foto="tema" aria-pressed="false"><i class="ti ti-book-2" aria-hidden="true"></i> <span class="i18n" data-es="Por tema de teoría" data-it="Per argomento di teoria" data-en="By grammar topic">Por tema de teoría</span></button><button type="button" data-foto="curso" aria-pressed="false"><i class="ti ti-route" aria-hidden="true"></i> <span class="i18n" data-es="Por temática" data-it="Per tematica" data-en="By theme">Por temática</span></button></div>
 </div></div>
-<div class="bv-cap-media"></div>
+<div class="bv-hoja-media"></div>
+</div>
+<div class="bv-dorso" aria-hidden="true"></div>
 </li>
-<li class="bv-cap" data-escena="teoria" data-tipo="video" data-num="+" style="--c:var(--c-teoria)">
-<div class="bv-cap-txt"><span class="bv-num bv-mano" aria-hidden="true">+</span><div>
+<li class="bv-hoja bv-paso" data-escena="teoria" data-tipo="video" data-num="+" style="--c:var(--c-teoria)">
+<div class="bv-cara">
+<div class="bv-hoja-txt"><span class="bv-num bv-mano" aria-hidden="true">+</span><div>
 <h3><span class="i18n" data-es="Repasa la teoría" data-it="Ripassa la teoria" data-en="Brush up on theory">Repasa la teoría</span></h3>
 <p class="i18n" data-html data-es="Toda la teoría ordenada, &lt;mark class=&quot;bv-m&quot;&gt;para consultar cuando te surja una duda&lt;/mark&gt; o para leer tranquilamente. Desde el ordenador o desde el móvil, &lt;mark class=&quot;bv-m&quot;&gt;cuando y como quieras&lt;/mark&gt;." data-it="Tutta la teoria in ordine, &lt;mark class=&quot;bv-m&quot;&gt;da consultare quando ti viene un dubbio&lt;/mark&gt; o da leggere con calma. Dal computer o dal telefono, &lt;mark class=&quot;bv-m&quot;&gt;quando e come vuoi&lt;/mark&gt;." data-en="All the theory, neatly organised, &lt;mark class=&quot;bv-m&quot;&gt;to look up when a doubt comes up&lt;/mark&gt; or to read at leisure. On your computer or your phone, &lt;mark class=&quot;bv-m&quot;&gt;whenever and however you like&lt;/mark&gt;.">Toda la teoría ordenada, <mark class="bv-m">para consultar cuando te surja una duda</mark> o para leer tranquilamente. Desde el ordenador o desde el móvil, <mark class="bv-m">cuando y como quieras</mark>.</p>
 </div></div>
-<div class="bv-cap-media"></div>
+<div class="bv-hoja-media"></div>
+</div>
+<div class="bv-dorso" aria-hidden="true"></div>
 </li>
 </ol>
-<div class="bv-fija" aria-hidden="true"><div class="bv-escenas" id="bv-escenas"></div></div>
+<div class="bv-espiral" aria-hidden="true"></div>
+</div>
+</div>
 </div>
 </section>
 
@@ -493,18 +671,14 @@ html:not([data-theme="dark"]) .bv-cap,html:not([data-theme="dark"]) .bv-tramo,ht
   try { guardado = localStorage.getItem('jn_track'); } catch(e){}
   var nav = (navigator.language || '').slice(0, 2).toLowerCase();
   var estrecho = window.matchMedia('(max-width:640px)');
-  // en el ordenador con pantalla de sobra: la presentación con fondo fijo y la
-  // pantalla de los pasos fija a la derecha
+  // en el ordenador con pantalla de sobra: la presentación con fondo fijo
   var grande = window.matchMedia('(min-width:1181px) and (min-height:640px)');
+  // el bloc pasa las hojas si la pantalla tiene alto para una hoja entera
+  var alto = window.matchMedia('(min-height:560px)');
   var quieto = window.matchMedia('(prefers-reduced-motion: reduce)');
   var l = /^(es|it|en)$/.test(guardado || '') ? guardado : (nav === 'it' || nav === 'es' ? nav : 'en');
   var raiz = document.documentElement;
-  var slots = [].slice.call(document.querySelector('.bv-caps').children);   // tramos y pasos, en orden
-  var caps = slots.filter(function(x){ return x.classList.contains('bv-cap'); });
-  var caja = document.getElementById('bv-escenas');
   var FOTOS = ['nivel', 'tema', 'curso'];
-  var fijos = {};    // la pantalla fija de la derecha (ordenador), una por paso
-  var sueltos = {};  // la pantalla debajo de cada paso (pantallas estrechas)
 
   function juega(v){ if(quieto.matches || !v || !v.play) return; var p = v.play(); if(p && p.catch) p.catch(function(){}); }
   function para(v){ if(v && v.pause) v.pause(); }
@@ -514,11 +688,10 @@ html:not([data-theme="dark"]) .bv-cap,html:not([data-theme="dark"]) .bv-tramo,ht
     v.setAttribute('muted', ''); v.setAttribute('playsinline', '');
     return v;
   }
-  // una pantalla: el vídeo en su ventana, el teléfono solo o las fotos; con su número
+  // la pantalla de una hoja: el vídeo en su ventana, el teléfono solo o las fotos
   function pantalla(c){
     var tipo = c.dataset.tipo, marco = document.createElement('div'), m;
-    marco.className = 'bv-marco'; marco.dataset.num = c.dataset.num;
-    marco.style.setProperty('--c', c.style.getPropertyValue('--c'));
+    marco.className = 'bv-marco';
     if(tipo === 'movil'){
       m = video(); var t = document.createElement('div'); t.className = 'bv-telefono'; t.appendChild(m);
       marco.classList.add('es-telefono'); marco.appendChild(t);
@@ -547,21 +720,36 @@ html:not([data-theme="dark"]) .bv-cap,html:not([data-theme="dark"]) .bv-tramo,ht
     }
     return {marco: marco, m: m};
   }
-  caps.forEach(function(c){
-    var n = c.dataset.escena;
-    var a = pantalla(c), hueco = document.createElement('div');
-    hueco.className = 'bv-pantalla-paso'; hueco.dataset.escena = n; hueco.appendChild(a.marco); caja.appendChild(hueco);
-    fijos[n] = {hueco: hueco, m: a.m};
-    var b = pantalla(c); c.querySelector('.bv-cap-media').appendChild(b.marco); sueltos[n] = b.m;
+
+  // ── el bloc de notas ──
+  var pista = document.querySelector('.bv-bloc-pista');
+  var escena = document.querySelector('.bv-bloc-escena');
+  var hojas = [].slice.call(document.querySelectorAll('.bv-hoja'));
+  var pasos = hojas.filter(function(h){ return h.classList.contains('bv-paso'); });
+  var medios = {};   // la pantalla de cada paso: su vídeo o sus fotos
+  pasos.forEach(function(c){
+    var a = pantalla(c); c.querySelector('.bv-hoja-media').appendChild(a.marco); medios[c.dataset.escena] = a.m;
   });
+  // la de arriba, encima: cada hoja tapa a las que vienen detrás
+  hojas.forEach(function(h, i){ h.style.zIndex = hojas.length - i; });
+  // cuánto hay que bajar para pasar cada hoja (en pantallas de alto): las de
+  // los pasos se quedan más que la tapa y los separadores
+  function peso(h){ return h.classList.contains('bv-paso') ? 0.5 : 0.32; }
+  var ENTRA = 0.08, SALE = 0.3;
+  var total = ENTRA + SALE;
+  hojas.slice(0, -1).forEach(function(h){ total += peso(h); });
+  pista.style.setProperty('--largo', Math.round(total * 100));
+  function umbral(j){   // lo que se ha bajado dentro de la pista cuando se pasa la hoja j
+    var u = (pista.offsetHeight - escena.offsetHeight) / total, a = ENTRA;
+    for(var k = 0; k <= j; k++) a += peso(hojas[k]);
+    return a * u;
+  }
 
   // ponte a prueba: los tres botones cambian la foto, y si nadie toca, van pasando solas
   var foto = 0, gira = null, tocado = false;
   function ponFoto(k){
     foto = k;
-    [fijos.practica && fijos.practica.m, sueltos.practica].forEach(function(d){
-      if(d) [].forEach.call(d.children, function(im, i){ im.classList.toggle('vista', i === k); });
-    });
+    if(medios.practica) [].forEach.call(medios.practica.children, function(im, i){ im.classList.toggle('vista', i === k); });
     document.querySelectorAll('.bv-fotos-btns button').forEach(function(b, i){ b.setAttribute('aria-pressed', i === k); });
   }
   function giraFotos(si){
@@ -573,55 +761,101 @@ html:not([data-theme="dark"]) .bv-cap,html:not([data-theme="dark"]) .bv-tramo,ht
   });
 
   function fuentes(){
-    caps.forEach(function(c){
-      var n = c.dataset.escena, tipo = c.dataset.tipo;
-      [fijos[n].m, sueltos[n]].forEach(function(m){
-        if(tipo === 'fotos'){
-          [].forEach.call(m.children, function(im){ im.src = 'bienvenida/practica-' + im.dataset.foto + '-' + l + '.jpg'; });
-          return;
-        }
-        var base = 'bienvenida/escena-' + (tipo === 'movil' ? 'movil-' : '') + n + '-' + l;
-        if(m.getAttribute('src') === base + '.mp4') return;
-        m.setAttribute('poster', base + '.jpg');
-        m.setAttribute('src', base + '.mp4');
-      });
+    pasos.forEach(function(c){
+      var n = c.dataset.escena, tipo = c.dataset.tipo, m = medios[n];
+      if(tipo === 'fotos'){
+        [].forEach.call(m.children, function(im){ im.src = 'bienvenida/practica-' + im.dataset.foto + '-' + l + '.jpg'; });
+        return;
+      }
+      var base = 'bienvenida/escena-' + (tipo === 'movil' ? 'movil-' : '') + n + '-' + l;
+      if(m.getAttribute('src') === base + '.mp4') return;
+      m.setAttribute('poster', base + '.jpg');
+      m.setAttribute('src', base + '.mp4');
     });
   }
 
-  // el paso que cruza el centro trae su pantalla; en un tramo, la pantalla se vacía
-  var actual;
-  function enciende(slot){
-    if(slot === actual) return;
-    var antes = actual; actual = slot;
-    slots.forEach(function(x){ x.classList.toggle('activo', x === slot); });
-    var n = slot && slot.classList.contains('bv-cap') ? slot.dataset.escena : null;
-    var orden = function(x){ return slots.indexOf(x); };
-    caja.classList.toggle('sube', antes != null && orden(slot) < orden(antes));
-    caja.classList.toggle('vacia', !n);
-    // la que estaba se apaga enseguida; la nueva entra sola
-    Object.keys(fijos).forEach(function(k){ fijos[k].hueco.classList.toggle('activo', k === n); });
-    Object.keys(fijos).forEach(function(k){
-      var m = fijos[k].m;
-      if(m.tagName !== 'VIDEO') return;
-      if(k === n && grande.matches){ m.preload = 'auto'; try { m.currentTime = 0; } catch(x){} juega(m); } else para(m);
+  // la hoja que se ve: las de antes, pasadas; si se saltan varias, van una detrás de otra
+  var actual = null;
+  var bloc = document.querySelector('.bv-bloc');
+  function ponHoja(i){
+    if(i === actual) return;
+    // la primera vez (al cargar a media página), sin animación
+    if(actual == null){ bloc.classList.add('bv-sin-anim'); requestAnimationFrame(function(){ requestAnimationFrame(function(){ bloc.classList.remove('bv-sin-anim'); }); }); }
+    var antes = actual == null ? i : actual;
+    actual = i;
+    var cambian = [];
+    hojas.forEach(function(h, j){
+      var pasa = j < i;
+      if(h.classList.contains('pasada') !== pasa) cambian.push(h);
     });
-    if(grande.matches) giraFotos(n === 'practica');
+    if(i < antes) cambian.reverse();   // al volver, primero la última que se pasó
+    cambian.forEach(function(h, k){
+      h.style.setProperty('--tras', (k * 0.09) + 's');
+      h.classList.toggle('pasada', hojas.indexOf(h) < i);
+    });
+    hojas.forEach(function(h, j){ h.classList.toggle('actual', j === i); });
+    enciende(hojas[i]);
   }
+  // solo se mueve la pantalla de la hoja de arriba, y empieza desde el principio
+  function enciende(h){
+    var n = h && h.classList.contains('bv-paso') ? h.dataset.escena : null;
+    Object.keys(medios).forEach(function(k){
+      var m = medios[k];
+      if(m.tagName !== 'VIDEO') return;
+      if(k === n){ m.preload = 'auto'; try { m.currentTime = 0; } catch(x){} juega(m); } else para(m);
+    });
+    // la siguiente, ya preparada
+    var sig = hojas[hojas.indexOf(h) + 1];
+    if(sig && sig.dataset.escena && medios[sig.dataset.escena].tagName === 'VIDEO') medios[sig.dataset.escena].preload = 'auto';
+    giraFotos(n === 'practica');
+  }
+  function vivo(){ return raiz.classList.contains('bv-vivo'); }
+  function lee(){
+    if(!vivo()) return;
+    var s = -pista.getBoundingClientRect().top, i = 0;
+    while(i < hojas.length - 1 && s >= umbral(i)) i++;
+    ponHoja(i);
+  }
+  // ir a una hoja: se baja (o se sube) hasta ella, y el bloc pasa las hojas solo
+  function vaA(i){
+    var y = pista.getBoundingClientRect().top + scrollY;
+    y += i <= 0 ? 0 : (i >= hojas.length ? pista.offsetHeight - escena.offsetHeight + 2 : umbral(i - 1) + 2);
+    scrollTo({top: Math.ceil(y), behavior: quieto.matches ? 'auto' : 'smooth'});
+  }
+  hojas.forEach(function(h, j){
+    h.addEventListener('click', function(e){
+      if(!vivo() || j !== actual || e.target.closest('button, a')) return;
+      vaA(j + 1);
+    });
+    // con el teclado: si el foco cae en una hoja de debajo, el bloc va a ella
+    h.addEventListener('focusin', function(){ if(vivo() && j !== actual) vaA(j); });
+  });
+  document.querySelectorAll('.bv-pestana').forEach(function(b){
+    b.addEventListener('click', function(){ vaA(hojas.indexOf(b.closest('.bv-hoja'))); });
+  });
 
   // ── la presentación con fondo fijo (ordenador) ──
   var dosPista = document.querySelector('.bv-dos-pista');
   var dosPartes = [].slice.call(document.querySelectorAll('.bv-dos [data-desde]'));
-  function medir(){ raiz.classList.toggle('bv-fijo', grande.matches); mueve(); }
+  function medir(){
+    raiz.classList.toggle('bv-fijo', grande.matches);
+    var era = vivo();
+    raiz.classList.toggle('bv-vivo', alto.matches && 'IntersectionObserver' in window);
+    if(era && !vivo()){ hojas.forEach(function(h){ h.classList.remove('pasada', 'actual'); }); actual = null; }
+    mueve();
+  }
   var pedido = false;
   function mueve(){
     pedido = false;
+    lee();
     if(!raiz.classList.contains('bv-fijo')) return;
     var d = dosPista.getBoundingClientRect();
     var p = Math.max(0, Math.min(1, -d.top / Math.max(1, d.height - innerHeight)));
     dosPartes.forEach(function(x){ x.classList.toggle('visto', p >= parseFloat(x.dataset.desde)); });
   }
   addEventListener('scroll', function(){ if(!pedido){ pedido = true; requestAnimationFrame(mueve); } }, {passive: true});
-  if(grande.addEventListener) grande.addEventListener('change', medir);
+  addEventListener('resize', function(){ if(!pedido){ pedido = true; requestAnimationFrame(mueve); } });
+  [grande, alto].forEach(function(q){ if(q.addEventListener) q.addEventListener('change', medir); });
 
   function pon(nuevo){
     l = nuevo;
@@ -649,7 +883,7 @@ html:not([data-theme="dark"]) .bv-cap,html:not([data-theme="dark"]) .bv-tramo,ht
       if(quieto.matches) v.removeAttribute('autoplay'); else juega(v);
     }
     fuentes();
-    if(actual){ var s = actual; actual = null; enciende(s); }
+    if(actual != null) enciende(hojas[actual]);
   }
   document.querySelectorAll('.bv-idiomas button').forEach(function(b){
     b.addEventListener('click', function(){
@@ -663,7 +897,7 @@ html:not([data-theme="dark"]) .bv-cap,html:not([data-theme="dark"]) .bv-tramo,ht
 
   if('IntersectionObserver' in window){
     // en la columna se enciende el botón de la parte que se está viendo
-    // («Cómo funciona» vale para la presentación y para los pasos)
+    // («Cómo funciona» vale para la presentación y para el bloc)
     var botones = {};
     document.querySelectorAll('.riel-btn[href^="#"]').forEach(function(b){ botones[b.getAttribute('href').slice(1)] = b; });
     botones.historia = botones.dos;
@@ -675,21 +909,16 @@ html:not([data-theme="dark"]) .bv-cap,html:not([data-theme="dark"]) .bv-tramo,ht
       });
     }, {rootMargin: '-45% 0px -50% 0px'});
     Object.keys(botones).forEach(function(k){ var sec = document.getElementById(k); if(sec) mira.observe(sec); });
-    // el paso (o el tramo) que cruza el centro de la pantalla manda
-    var lee = new IntersectionObserver(function(es){
-      es.forEach(function(e){ if(e.isIntersecting) enciende(e.target); });
-    }, {rootMargin: '-48% 0px -48% 0px'});
-    slots.forEach(function(x){ lee.observe(x); });
-    // pantallas estrechas: cada pantalla de debajo se mueve solo mientras se ve
+    // sin el bloc vivo (hojas una debajo de otra): cada pantalla se mueve solo mientras se ve
     var ve = new IntersectionObserver(function(es){
-      if(grande.matches) return;
+      if(vivo()) return;
       es.forEach(function(e){
-        var c = e.target, n = c.dataset.escena;
+        var c = e.target, m = medios[c.dataset.escena];
         if(c.dataset.tipo === 'fotos'){ giraFotos(e.isIntersecting); return; }
-        if(e.isIntersecting){ sueltos[n].preload = 'auto'; try { sueltos[n].currentTime = 0; } catch(x){} juega(sueltos[n]); } else para(sueltos[n]);
+        if(e.isIntersecting){ m.preload = 'auto'; try { m.currentTime = 0; } catch(x){} juega(m); } else para(m);
       });
     }, {threshold: 0.45});
-    caps.forEach(function(c){ ve.observe(c); });
+    pasos.forEach(function(c){ ve.observe(c); });
     // lo que aparece al llegar (en el ordenador, la presentación va con el fondo fijo)
     raiz.classList.add('js-aparece');
     var aparece = new IntersectionObserver(function(es){
