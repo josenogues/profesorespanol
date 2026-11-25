@@ -110,9 +110,14 @@ bueno; lo pequeño y claro, hacerlo.
   globos y enlace a «Sobre mí», donde están las reseñas).
 - **«¿Cómo funciona?»** (25 nov): en el ordenador, **la pantalla se queda
   fija a la derecha y el texto pasa** a la izquierda; el paso que cruza el
-  centro trae su pantalla (entra como una página) con **su número en la
-  esquina**. En los **tramos** la pantalla se vacía y el título a mano, con
-  su raya discontinua, ocupa todo el ancho: *La clase, por videollamada* (1
+  centro trae su pantalla con **su número en la esquina**. Cómo cambia (25
+  nov, tras quejarse José de que «se pisaban»): **nunca hay dos pantallas a
+  la vez** (la de antes desaparece en seco), la nueva entra como una página,
+  luego sale el número y después la **cámara se acerca** a lo que cuenta el
+  paso (`data-foco` de cada paso: centro y zoom), para que cada pantalla se
+  distinga de la anterior. En los **tramos** la pantalla se vacía; el título
+  a mano, con su raya discontinua, va en la columna del texto (si pasa por
+  encima de la pantalla, se pisan): *La clase, por videollamada* (1
   Reserva una clase · 2 Entra en clase · 3 Teoría a tu medida · 4 Toma
   notas) · *Cuando termina la clase…* (5 **Haz ejercicios** · 6 Lee) · *Y
   en tu móvil* (7 Cinco minutos: un **teléfono solo**, que cabe entero) ·
