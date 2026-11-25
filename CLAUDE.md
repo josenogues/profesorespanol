@@ -106,34 +106,33 @@ bueno; lo pequeño y claro, hacerlo.
   de una plataforma online, con la conversación de un profesor nativo»
   (alineada a la izquierda, a todo lo ancho) y, al seguir bajando sin que
   la página se mueva, aparecen **en una línea** la plataforma (izquierda),
-  el «+» (centro) y José (derecha: **polaroid «¡Hola, soy José! :)»**,
+  el «+» (centro) y José (derecha: **polaroid «¡Hola, soy José! :)»**, grande y con proporciones de polaroid,
   globos y enlace a «Sobre mí», donde están las reseñas).
-- **«¿Cómo funciona?»** (25 nov): en el ordenador, **la pantalla se queda
+- **«¿Cómo funciona?»** (25–26 nov): en el ordenador, **la pantalla se queda
   fija a la derecha y el texto pasa** a la izquierda; el paso que cruza el
-  centro trae su pantalla con **su número en la esquina**. Cómo cambia (25
-  nov, tras quejarse José de que «se pisaban»): **nunca hay dos pantallas a
-  la vez** (la de antes desaparece en seco), la nueva entra como una página,
-  luego sale el número y después la **cámara se acerca** a lo que cuenta el
-  paso (`data-foco` de cada paso: centro y zoom), para que cada pantalla se
-  distinga de la anterior. En los **tramos** la pantalla se vacía; el título
-  a mano, con su raya discontinua, va en la columna del texto (si pasa por
-  encima de la pantalla, se pisan): *La clase, por videollamada* (1
-  Reserva una clase · 2 Entra en clase · 3 Teoría a tu medida · 4 Toma
-  notas) · *Cuando termina la clase…* (5 **Haz ejercicios** · 6 Lee) · *Y
-  en tu móvil* (7 Cinco minutos: un **teléfono solo**, que cabe entero) ·
-  *Y además…* (Ponte a prueba, con tres botones en columna que cambian la
-  foto; Repasa la teoría). Sin tira de números. En el móvil, cada paso con
-  su pantalla debajo.
+  centro trae su pantalla. **Nunca hay dos pantallas a la vez**: la de antes
+  se apaga en un instante y la nueva entra justo después, como una página.
+  **Sin números en las pantallas** (solo junto al texto). **Zoom solo en 1, 2
+  y 4**, quieto (la pantalla ya entra acercada: el zoom animado «temblaba» y
+  daba ansia), y en el 4 suave para que se vea el botón de los apuntes; en
+  los demás, la pantalla baja por la página (la lectura se grabó bajando).
+  Los **tramos** vacían la pantalla y su título va en la columna del texto:
+  *La clase* (1 Reserva · 2 Entra en clase · 3 Damos la clase · 4 Toma
+  notas) · *Al terminar la clase* (5 Practica · 6 Lee · 7 Repasa: «Cinco
+  minutos», con el **teléfono solo**) · *Y además…* (+ Ponte a prueba, con
+  tres botones en columna que cambian la foto; + Repasa la teoría). En el
+  móvil, cada paso con su pantalla debajo.
 - **Reglas de José para los textos de los pasos**: títulos **breves**;
   descripción de **3 a 5 líneas**, con palabras clave en nuestro amarillo;
   y al leerlo todo tienen que quedar claras dos cosas: **clases online con
   el apoyo del profesor y adaptadas**, y **sin presión ni rachas, al ritmo
   del alumno**. Sin repetir (las rachas se nombran una sola vez).
-- **«¡Pruébalo gratis!»** en el cuadro violeta con degradado y globos (el
-  que antes tenía «¿Empezamos?»): la 540 y su lectura, abiertas sin entrar.
+- **«¡Pruébalo gratis!»** en el cuadro violeta con degradado y globos, a dos
+  columnas (texto y botones a la izquierda, la pantalla a la derecha, sin
+  aire de más): la 540 y su lectura, abiertas sin entrar.
 - El cierre **«¿Empezamos?»**: estrecho, **sin fondo**, con el **precio**
-  (25 nov): **19 € la clase**; con la primera se abre toda la plataforma.
-  Cómo se paga: reservas sin pagar, damos la clase y te abro tu sección, y
+  (26 nov), lo primero: **«Desbloquea todo el contenido por 25 €, con tu
+  primera videoclase incluida. Luego, 19 € por clase.»** Cómo se paga: reservas sin pagar, damos la clase y te abro tu sección, y
   al terminar me pagas (las siguientes, como se acuerde). Con **Lucía y Javi**
   contentos (los bocadillos con cara de los vídeos, sacados de
   `estudio-profesorespanol/src/personajes.tsx`: `bienvenida/lucia.svg` y
