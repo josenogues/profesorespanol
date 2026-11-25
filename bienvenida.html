@@ -124,15 +124,19 @@ mark.bv-m{background:linear-gradient(transparent 55%, rgba(242,171,39,.42) 55%);
 html:not([data-theme="dark"]) .bv-hoja{--c-ejer:#b8760b}
 [data-theme="dark"] .bv-hola,[data-theme="dark"] .bv-gratis{box-shadow:0 10px 26px rgba(0,0,0,.4)}
 /* el bloc, sobre el degradado violeta de siempre (el de «Cinco minutos» y el
-   saludo), no sobre el papel de la página. Con el scroll, la caja es la escena
-   que se queda quieta; con el dedo o sin el bloc vivo, toda la pista (también
-   las flechas de debajo). */
-.bv-bloc-pista,.bv-vivo:not(.bv-toque) .bv-bloc-escena{border-radius:6px;
+   saludo), no sobre el papel de la página. El violeta solo asoma alrededor
+   del bloc, como un borde (José: una caja violeta de toda la pantalla era
+   demasiado). Con el scroll, va pegado al bloc; con el dedo o sin el bloc
+   vivo, es toda la pista (también las flechas de debajo). */
+.bv-bloc-pista,.bv-vivo:not(.bv-toque) .bv-bloc::after{border-radius:6px;
   background:linear-gradient(135deg,#3A4570 0%,#4b5894 55%,#6a5fc0 100%);box-shadow:0 12px 28px rgba(20,22,32,.2)}
-[data-theme="dark"] .bv-bloc-pista,[data-theme="dark"].bv-vivo:not(.bv-toque) .bv-bloc-escena{
+[data-theme="dark"] .bv-bloc-pista,[data-theme="dark"].bv-vivo:not(.bv-toque) .bv-bloc::after{
   background:linear-gradient(135deg,#2c3560 0%,#3d4a82 55%,#55499e 100%);box-shadow:0 10px 26px rgba(0,0,0,.4)}
 .bv-bloc-pista{padding:62px 48px 34px}
 .bv-vivo:not(.bv-toque) .bv-bloc-pista{background:none;box-shadow:none;border-radius:0;padding:0}
+/* (arriba deja sitio a la espiral y abajo a las pestañas; a los lados llega
+   justo al ancho del saludo y de «¡Pruébalo gratis!») */
+.bv-vivo:not(.bv-toque) .bv-bloc::after{content:"";position:absolute;z-index:-2;inset:-44px -30px -64px}
 .bv-bloc{position:relative;max-width:1180px;margin:0 auto;container-type:inline-size;isolation:isolate}
 .bv-hojas{list-style:none;margin:0;padding:0}
 .bv-hoja{position:relative;margin:0 0 30px}
@@ -262,7 +266,7 @@ html:not([data-theme="dark"]) .bv-hoja{--c-ejer:#b8760b}
 
 /* ── el bloc vivo (con JavaScript y pantalla de sobra) ── */
 .bv-vivo .bv-bloc-pista{height:calc(100vh + var(--largo, 520) * 1vh)}
-.bv-vivo .bv-bloc-escena{position:sticky;top:12px;height:calc(100vh - 24px);display:flex;flex-direction:column;justify-content:center;padding:40px 48px 56px}
+.bv-vivo .bv-bloc-escena{position:sticky;top:0;height:100vh;display:flex;flex-direction:column;justify-content:center;padding:60px 30px 80px}
 .bv-vivo .bv-bloc{width:100%;height:min(100%, 640px)}
 /* el cartón de atrás y el canto de las hojas que quedan */
 .bv-vivo .bv-bloc::before{content:"";position:absolute;z-index:-1;inset:10px 0 -12px;border-radius:6px;background:var(--carton);box-shadow:0 22px 46px rgba(20,22,32,.24)}

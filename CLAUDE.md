@@ -110,7 +110,12 @@ bueno; lo pequeño y claro, hacerlo.
   globos y enlace a «Sobre mí», donde están las reseñas).
 - **«¿Cómo funciona?»** es un **bloc de notas con la espiral arriba** que
   pasa una hoja por paso (idea de José: el scroll con la pantalla fija no le
-  convencía). La **tapa** azul con «¿Cómo funciona?» a mano y Lucía de
+  convencía). Va **sobre el degradado violeta** (el de «Cinco minutos», para
+  que no sean hojas blancas sobre papel blanco): en el ordenador, solo como
+  un **borde alrededor del bloc**, del ancho del saludo (una caja violeta de
+  toda la pantalla era «exagerada»); en el móvil, de lado a lado con las
+  flechas dentro. La **tapa** sigue azul (José probó dorada y rosa y se quedó
+  con la azul), con «¿Cómo funciona?» a mano y Lucía de
   pegatina; un **separador de color** por tramo, con su lista de pasos y su
   **pestaña** asomando por abajo (lleva a ese tramo); y una **hoja por paso**:
   número y título, la descripción y su pantalla pegada con cinta. Al bajar, el
