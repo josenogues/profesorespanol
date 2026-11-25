@@ -141,7 +141,7 @@ bueno; lo pequeño y claro, hacerlo.
   el texto arriba y la pantalla debajo. El **teléfono** del 7 va con el marco,
   las curvas y la isla en proporción a su tamaño, y sus botones al lado: en
   pequeño también tiene que parecer un teléfono. El **vídeo 1**, con calma
-  (unos 8 s): la pantalla entera, el ratón pasa por la próxima clase, se
+  (unos 10 s): la pantalla entera, el ratón pasa por la próxima clase, se
   acerca despacio y luego el clic. Sin JavaScript o en una pantalla muy
   baja, las hojas van una debajo de otra.
 - **Reglas de José para los textos de los pasos**: títulos **breves**;
