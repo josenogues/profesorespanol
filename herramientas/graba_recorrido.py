@@ -3,6 +3,8 @@
 
     python3 herramientas/graba_recorrido.py            # los seis vídeos
     python3 herramientas/graba_recorrido.py it movil   # solo uno
+    SOLO=reserva,portada,notas python3 herramientas/graba_recorrido.py it escenas
+                                                       # rehace solo esas escenas
 
 Necesita el sitio servido en local (python3 -m http.server 8947) y ffmpeg.
 Sale una alumna inventada (Sara) con un Firebase de mentira: ningún dato real.
@@ -10,6 +12,8 @@ Recorre portada → Mis clases → la clase 540 con dos ejercicios → su lectur
 «Cinco minutos» → la teoría, con un rótulo en cada paso. Se graba con capturas
 del navegador y se quitan los momentos de carga entre páginas. Deja
 bienvenida/recorrido-[movil-]XX.mp4 y su primera imagen, portada-[movil-]XX.jpg.
+En las escenas 1, 2 y 4 (reserva, portada, notas) la pantalla empieza entera
+y luego se acerca al botón que se pulsa, y se queda así (ACERCA).
 Si cambia el aspecto de la web, se vuelve a pasar.
 """
 import subprocess
@@ -58,6 +62,13 @@ ORDENADOR = ESCENAS and not MOVIL
 W, H = (390, 844) if MOVIL else (1280, 800)
 DSF = 2 if MOVIL else 1
 SUF = ("movil-" if MOVIL else "") + P
+# en las escenas 1, 2 y 4 la pantalla empieza entera y luego se acerca a lo que
+# cuenta el paso (el botón que se pulsa), y se queda así: dónde (x e y, en %
+# del vídeo) y cuánto. El acercamiento va dentro del vídeo, no en la página:
+# hecho por el navegador «temblaba».
+ACERCA = {"reserva": (43, 34, 1.7), "portada": (45, 40, 1.5), "notas": (64, 60, 1.3)}
+# SOLO=reserva,portada: rehace solo esas escenas (las demás no se tocan)
+SOLO = [x for x in os.environ.get("SOLO", "").split(",") if x]
 
 ROT = {
   "it": ["Il quaderno delle tue lezioni", "Ogni lezione che hai fatto, con la sua data",
@@ -144,6 +155,10 @@ with sync_playwright() as p:
     c = br.new_context(viewport={"width": W, "height": H}, device_scale_factor=DSF, has_touch=False)
     monta(c, db(P))
     c.add_init_script(INIT)
+    # en las escenas se pulsan «Reservar clase» y «Entrar a clase»: que se vea el
+    # clic, pero sin irse a TidyCal ni a Meet
+    c.add_init_script("document.addEventListener('click', e => { if(e.target.closest && e.target.closest('.cita-barra, .hola-btn-linea'))"
+                      " { e.preventDefault(); e.stopPropagation(); } }, true);")
     pg = c.new_page()
     pg.on("pageerror", lambda e: print("JS", e))
     import base64
@@ -165,7 +180,9 @@ with sync_playwright() as p:
         loc = loc.first
         loc.wait_for(state="visible")
         b = loc.bounding_box()
-        fijo = loc.evaluate("e => !!e.closest('.menu, .panel-menu, aside')")
+        # lo que va fijo en la pantalla (el menú, el botón de los apuntes…) no hace bajar
+        fijo = loc.evaluate("e => { if (e.closest('.menu, .panel-menu, aside')) return true;"
+                            " for (let x = e; x; x = x.parentElement) if (getComputedStyle(x).position === 'fixed') return true; return false; }")
         if not fijo and (b["y"] < 90 or b["y"] + b["height"] > H - 150):
             baja(b["y"] + b["height"] / 2 - H * 0.45, 700); pg.wait_for_timeout(150)
             b = loc.bounding_box()
@@ -194,6 +211,8 @@ with sync_playwright() as p:
     fin_tramo = {}
     escenas = []  # [nombre, desde, hasta]
     def marca(nombre): escenas.append([nombre, time.time(), None])
+    acercas = {}  # cuándo empieza a acercarse cada escena
+    def acerca(): acercas[escenas[-1][0]] = time.time()
     def cierra():
         if escenas and escenas[-1][2] is None: escenas[-1][2] = time.time()
     def corta(cerrar=True):
@@ -202,19 +221,22 @@ with sync_playwright() as p:
     def sigue(ms=650):
         pg.wait_for_load_state("load"); pg.wait_for_timeout(ms)
         tramo["n"] += 1; tramo["on"] = True
+        # un píxel de ratón para que llegue ya la primera foto de la página
+        # nueva (si no, el rato quieto del principio no saldría en el vídeo)
+        estado["x"] += 1; m.move(estado["x"], estado["y"])
 
     # 1 · portada
     pg.goto(B + "index.html"); espera(1300)
     empieza(); espera(200); marca("portada")
     m.move(*((200, 420) if MOVIL else (700, 330))); espera(200); rot(0); espera(2200)
     if ORDENADOR:
-        # la clase es por videollamada: el botón para entrar
-        ve(".hola-btn-linea", 30); espera(1500)
+        # la clase es por videollamada: se acerca al botón para entrar y lo pulsa
+        acerca(); espera(500); clic(".hola-btn-linea", 30, 500); espera(1600)
     # 2 · Mis clases
     clic('.riel-btn[data-sec="clases"]'); corta(); sigue(); marca("reserva" if ORDENADOR else "clases")
     if ORDENADOR:
-        # reservar: el botón de la agenda
-        ve(".cita-barra", 30); espera(1900); cierra(); marca("clases")
+        # reservar: la pantalla entera, luego se acerca al botón de la agenda y lo pulsa
+        espera(1300); acerca(); espera(500); clic(".cita-barra", 30, 500); espera(1600); cierra(); marca("clases")
     rot(1); espera(400)
     ve(pg.locator(".cl-enlace", has_text="Si tuviera"), 30); espera(1500)
     # 3 · la clase
@@ -232,7 +254,8 @@ with sync_playwright() as p:
     if ORDENADOR:
         # los apuntes de la clase
         cierra(); marca("notas")
-        clic(".apu-boton", 30, 250); espera(700)
+        espera(1300); acerca(); espera(500)
+        clic(".apu-boton", 30, 400); espera(700)
         clic(pg.locator(".apu-panel textarea").first, 24, 200)
         pg.keyboard.type("Si tuviera tiempo, leería más.", delay=70); espera(1600)
     # 4 · la lectura (desde Mis clases)
@@ -314,19 +337,53 @@ with sync_playwright() as p:
         subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-f", "concat", "-safe", "0", "-i", os.path.join(tmp, "lista.txt"),
                         "-vf", "fps=30,format=yuv420p", "-c:v", "libx264", "-crf", "14", "-an", entero], check=True)
         def en_video(w):
+            # el navegador solo manda foto cuando algo cambia: un rato quieto es
+            # la foto de antes que dura más, así que se cuenta dentro de ella
+            k = None
             for i, (t, _, _) in enumerate(fotos):
-                if t >= w: return reloj[i]
-            return reloj[-1] + 0.5
+                if t > w: break
+                k = i
+            if k is None: return 0.0
+            hasta = reloj[k + 1] if k + 1 < len(reloj) else reloj[k] + 0.5
+            return min(reloj[k] + (w - fotos[k][0]), hasta)
+        def acercar(src, dst, t0, foco, dur=1.2):
+            # la cámara se acerca a un punto fijo (sin barrer), con suavidad y a
+            # trozos de píxel: cada fotograma se recorta y se agranda aquí
+            fx, fy, Z = foco
+            l1 = max(0.0, min(W - W / Z, W * fx / 100 - W / Z / 2))
+            t1 = max(0.0, min(H - H / Z, H * fy / 100 - H / Z / 2))
+            Fx, Fy = l1 / (1 - 1 / Z), t1 / (1 - 1 / Z)
+            lee = subprocess.Popen(["ffmpeg", "-loglevel", "error", "-i", src, "-f", "rawvideo", "-pix_fmt", "rgb24", "-"], stdout=subprocess.PIPE)
+            esc = subprocess.Popen(["ffmpeg", "-y", "-loglevel", "error", "-f", "rawvideo", "-pix_fmt", "rgb24", "-s", "%dx%d" % (W, H), "-r", "30",
+                                    "-i", "-", "-vf", "format=yuv420p", "-c:v", "libx264", "-preset", "slow", "-crf", "26",
+                                    "-movflags", "+faststart", "-an", dst], stdin=subprocess.PIPE)
+            i = 0
+            while True:
+                b = lee.stdout.read(W * H * 3)
+                if len(b) < W * H * 3: break
+                u = max(0.0, min(1.0, (i / 30 - t0) / dur))
+                e = 4 * u ** 3 if u < .5 else 1 - (-2 * u + 2) ** 3 / 2
+                z = Z ** e
+                if z > 1.0005:
+                    im = Image.frombytes("RGB", (W, H), b)
+                    l, t = Fx * (1 - 1 / z), Fy * (1 - 1 / z)
+                    b = im.transform((W, H), Image.Transform.EXTENT, (l, t, l + W / z, t + H / z), Image.Resampling.BICUBIC).tobytes()
+                esc.stdin.write(b); i += 1
+            esc.stdin.close(); esc.wait(); lee.wait()
         for nombre, desde, hasta in escenas:
             if MOVIL and nombre != "cinco": continue  # del móvil solo se usa «cinco minutos»
+            if SOLO and nombre not in SOLO: continue
             # al cambiar de página, el navegador a veces manda aún una foto de la
             # anterior: se empieza un poco más tarde para que no se cuele
             a, b = en_video(desde), en_video(hasta)
             a = min(a + 0.35, max(a, b - 1.0))
             sal = os.path.join(OUT, "escena-%s%s-%s.mp4" % ("movil-" if MOVIL else "", nombre, P))
+            acercada = ORDENADOR and nombre in ACERCA and nombre in acercas
             subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-ss", "%.3f" % a, "-i", entero, "-t", "%.3f" % (b - a),
-                            "-vf", "format=yuv420p", "-c:v", "libx264", "-preset", "slow", "-crf", "26",
-                            "-movflags", "+faststart", "-an", sal], check=True)
+                            "-vf", "format=yuv420p", "-c:v", "libx264", "-preset", "slow", "-crf", "14" if acercada else "26",
+                            "-movflags", "+faststart", "-an", os.path.join(tmp, "corte.mp4") if acercada else sal], check=True)
+            if acercada:
+                acercar(os.path.join(tmp, "corte.mp4"), sal, en_video(acercas[nombre]) - a, ACERCA[nombre])
             img = os.path.join(tmp, "e.png")
             subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-i", sal, "-frames:v", "1", img], check=True)
             Image.open(img).convert("RGB").save(os.path.join(OUT, "escena-%s%s-%s.jpg" % ("movil-" if MOVIL else "", nombre, P)), quality=76, optimize=True)

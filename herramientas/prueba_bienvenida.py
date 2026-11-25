@@ -130,17 +130,21 @@ with sync_playwright() as p:
     comprueba(pg.evaluate("document.documentElement.classList.contains('bv-vivo')"), "con pantalla de sobra, el bloc pasa las hojas")
     comprueba(pg.locator('#reservar img[src$="lucia.svg"]').count() == 1 and pg.locator('#reservar img[src$="javi.svg"]').count() == 1,
               "el cierre lleva a Lucía y Javi")
-    comprueba("25" in pg.locator("#reservar .bv-precio").inner_text() and "19" in pg.locator("#reservar .bv-precio-sub").inner_text()
-              and pg.locator("#reservar .bv-pago li").count() == 3, "el cierre dice el precio (25 €, luego 19 €) y cómo se paga")
+    comprueba("18" in pg.locator("#reservar .bv-precio").inner_text() and "18" in pg.locator("#reservar .bv-precio-sub").inner_text()
+              and "25" not in pg.locator("#reservar").inner_text() and pg.locator("#reservar .bv-pago li").count() == 3,
+              "el cierre dice el precio (18 € la clase; la primera abre la web para siempre) y cómo se paga")
+    comprueba(pg.locator(".bv-paso .bv-nota").count() == 3 and pg.locator(".bv-marco > .bv-posit").count() == 5
+              and pg.locator(".bv-separa .bv-lema").count() == 3 and pg.locator(".bv-tapa .bv-tapa-logo").count() == 1,
+              "lo escrito a mano: tres notas, cinco pósits pegados a su pantalla, una frase por separador y el logo en la tapa")
     comprueba(pg.locator(".bv-hoja-media").evaluate_all(
-        "ms => ms.every(m => !/\\d/.test(m.textContent + getComputedStyle(m.querySelector('.bv-marco'), '::before').content))"),
+        "ms => ms.every(m => !/\\d/.test(m.querySelector('.bv-ventana, .bv-telefono').textContent + getComputedStyle(m.querySelector('.bv-marco'), '::before').content))"),
               "las pantallas no llevan número (solo el texto)")
     comprueba(pg.locator('.bv-paso[data-escena="cinco"] .bv-telefono video').count() == 1
               and pg.locator('.bv-paso[data-escena="cinco"] .bv-ventana').count() == 0,
               "cinco minutos: un teléfono solo, sin navegador alrededor")
     comprueba(pg.locator(".bv-paso h3").evaluate_all("h => h.every(x => x.textContent.trim().split(' ').length <= 4)"),
               "títulos de los pasos breves")
-    lineas = pg.locator(".bv-paso p").evaluate_all("ps => ps.map(p => Math.round(p.getBoundingClientRect().height / parseFloat(getComputedStyle(p).lineHeight)))")
+    lineas = pg.locator(".bv-paso p[data-html]").evaluate_all("ps => ps.map(p => Math.round(p.getBoundingClientRect().height / parseFloat(getComputedStyle(p).lineHeight)))")
     comprueba(all(3 <= n <= 5 for n in lineas), "descripciones de 3 a 5 líneas: %s" % lineas)
     comprueba(pg.locator(".bv-paso mark.bv-m").count() >= 9, "palabras clave resaltadas en amarillo")
     comprueba(all(s.endswith("-it.mp4") for s in pg.locator(".bv-hoja-media video").evaluate_all("v => v.map(x => x.getAttribute('src'))")),

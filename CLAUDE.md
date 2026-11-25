@@ -117,9 +117,20 @@ bueno; lo pequeño y claro, hacerlo.
   bloc se queda quieto y las hojas se levantan por encima de la espiral (al
   subir, vuelven); también pasan pulsando en la hoja. **Solo se ve una hoja**
   y solo se mueve su pantalla. **Sin números en las pantallas** (solo junto
-  al texto). **Zoom solo en 1, 2 y 4**, quieto (el zoom animado «temblaba» y
-  daba ansia), y en el 4 suave para que se vea el botón de los apuntes; en
-  los demás, la pantalla baja por la página. Tramos: *La clase* (1 Reserva ·
+  al texto). **Zoom solo en 1, 2 y 4**, y va **dentro del vídeo** (hecho por
+  la página «temblaba» y daba ansia): la pantalla empieza entera, se acerca
+  al botón (reservar, entrar a clase, los apuntes), se ve el clic y se queda
+  acercada (en el 4, mientras se escribe la nota); en los demás, la pantalla
+  baja por la página. **Lo escrito a mano** (aprobado por José): notas en
+  3 («¿Un día solo te apetece hablar? Conversación libre.»), 5 (no solo
+  gramática: falsos amigos —solo en it/en—, español para el trabajo,
+  vocabulario por temas) y 7 (el autobús o la cola del súper); pósits
+  amarillos pegados a la pantalla en 1 (clases de 50 minutos), 2 (normalmente
+  por Google Meet), 6 (tocar una palabra para traducirla), Ponte a prueba
+  (del A1 al C1) y Teoría (en tu idioma, con los ejemplos en español); en la 4,
+  nada (José no lee los apuntes). Cada separador, su frase: «Esto lo hacemos
+  juntos» / «Esto, tú solo, a tu ritmo» / «Solo si te apetece». En la tapa,
+  el logo sin texto, blanco y apagado, abajo a la derecha. Tramos: *La clase* (1 Reserva ·
   2 Entra en clase · 3 Damos la clase · 4 Toma notas) · *Al terminar la
   clase* (5 Practica · 6 Lee · 7 Repasa: «Cinco minutos», con el **teléfono
   solo**) · *Y además…* (+ Ponte a prueba, con tres botones que cambian la
@@ -135,8 +146,10 @@ bueno; lo pequeño y claro, hacerlo.
   columnas (texto y botones a la izquierda, la pantalla a la derecha, sin
   aire de más): la 540 y su lectura, abiertas sin entrar.
 - El cierre **«¿Empezamos?»**: estrecho, **sin fondo**, con el **precio**
-  (26 nov), lo primero: **«Desbloquea todo el contenido por 25 €, con tu
-  primera videoclase incluida. Luego, 19 € por clase.»** Cómo se paga: reservas sin pagar, damos la clase y te abro tu sección, y
+  lo primero: **18 € por clase, y la primera desbloquea todo el contenido
+  para siempre** («Desbloquea todo el contenido con tu primera clase, por
+  18 €. La web queda abierta para siempre. ¿Más clases? 18 € cada una.»; José
+  descartó los 25 € de entrada). Cómo se paga: reservas sin pagar, damos la clase y te abro tu sección, y
   al terminar me pagas (las siguientes, como se acuerde). Con **Lucía y Javi**
   contentos (los bocadillos con cara de los vídeos, sacados de
   `estudio-profesorespanol/src/personajes.tsx`: `bienvenida/lucia.svg` y
@@ -151,7 +164,8 @@ bueno; lo pequeño y claro, hacerlo.
   ellas).
 - La puerta enlaza con la bienvenida («¿Todavía no eres alumno?»).
 - Si cambia el aspecto de la web, los vídeos se vuelven a grabar con
-  `herramientas/graba_recorrido.py` (sin nada: los recorridos y las escenas).
+  `herramientas/graba_recorrido.py` (sin nada: los recorridos y las escenas;
+  con `SOLO=reserva,portada,notas … XX escenas`, solo esas escenas).
 - Pendiente de decidir: un contacto («escríbeme»). El número de WhatsApp no se
   puede esconder.
 
