@@ -1,0 +1,35 @@
+# Nota para los buscadores (Google y los demás).
+# Solo se enseña lo que ve cualquiera sin entrar: la bienvenida, «Sobre mí»
+# y la privacidad. Lo de dentro (clases, teoría, ejercicios, panel) es para
+# los alumnos, y los archivos de trabajo (CLAUDE.md, herramientas/) no son
+# páginas. Se permiten letras, estilos, imágenes y los scripts que usan esas
+# páginas, porque Google los necesita para verlas como una persona. Los que
+# llevan contenido de dentro (lecturas, buscador, ejercicios) se quedan fuera.
+
+User-agent: *
+Disallow: /
+Allow: /$
+Allow: /index
+Allow: /bienvenida
+Allow: /sobre-mi
+Allow: /privacidad
+Allow: /*.css
+Allow: /script.js
+Allow: /firebase-init.js
+Allow: /firebase-sync.js
+Allow: /inicio.js
+Allow: /clases.js
+Allow: /temas.js
+Allow: /*.svg
+Allow: /*.png
+Allow: /*.jpg
+Allow: /*.webp
+Allow: /*.mp4
+Allow: /*.webm
+Allow: /*.woff2
+Disallow: /herramientas/
+Disallow: /*.md$
+Disallow: /panel-profesor
+Disallow: /firestore.rules
+
+Sitemap: https://hablaconjose.com/sitemap.xml

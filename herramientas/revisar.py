@@ -201,7 +201,8 @@ PERMITIDOS = ("https://www.gstatic.com/firebasejs/",)
 for pag, s in CUERPO.items():
     for m in re.finditer(r'<(?:link|script)\b[^>]*?(?:href|src)="(https?://[^"]+)"[^>]*>', s):
         etiqueta, url = m.group(0), m.group(1)
-        if 'rel="preconnect"' in etiqueta or url.startswith(PERMITIDOS):
+        # rel="canonical" no carga nada: solo dice a Google cuál es la dirección buena
+        if 'rel="preconnect"' in etiqueta or 'rel="canonical"' in etiqueta or url.startswith(PERMITIDOS):
             continue
         apunta("recursos de terceros en una página", f"{pag} → {url[:70]}")
 for hoja in glob.glob(REPO + "/*.css"):
