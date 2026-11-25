@@ -108,29 +108,34 @@ bueno; lo pequeño y claro, hacerlo.
   la página se mueva, aparecen **en una línea** la plataforma (izquierda),
   el «+» (centro) y José (derecha: **polaroid «¡Hola, soy José! :)»**,
   globos y enlace a «Sobre mí», donde están las reseñas).
-- **«¿Cómo funciona?»**, también con **fondo fijo** en el ordenador: a la
-  izquierda un paso cada vez con su **número grande**, a la derecha su
-  pantalla **con el mismo número en la esquina**; al bajar cambian juntos
-  (la pantalla nueva entra como una página). Debajo, un **recorrido** con
-  los números para saber dónde estás (y saltar). Los cuatro **tramos**
-  ocupan la escena solos, sin pantalla, con título a mano y raya
-  discontinua larga: *La clase, por videollamada* (1 reserva · 2 entra en
-  clase · 3 teoría a tu medida · 4 toma notas) · *Cuando termina la clase…*
-  (5 practica tu clase · 6 lee) · *Y en tu móvil* (7 cinco minutos: un
-  **teléfono solo**, sin navegador; sin presiones ni rachas: lo contrario de
-  Duolingo) · *Y además…* (**Ponte a prueba**, con tres botones que cambian
-  la foto; **Repasa la teoría**). **Títulos breves** y lo demás en la
-  descripción, con **palabras clave en nuestro amarillo**. En el móvil y en
-  pantallas pequeñas, sin fondo fijo: cada paso con su pantalla debajo.
+- **«¿Cómo funciona?»** (25 nov): en el ordenador, **la pantalla se queda
+  fija a la derecha y el texto pasa** a la izquierda; el paso que cruza el
+  centro trae su pantalla (entra como una página) con **su número en la
+  esquina**. En los **tramos** la pantalla se vacía y el título a mano, con
+  su raya discontinua, ocupa todo el ancho: *La clase, por videollamada* (1
+  Reserva una clase · 2 Entra en clase · 3 Teoría a tu medida · 4 Toma
+  notas) · *Cuando termina la clase…* (5 **Haz ejercicios** · 6 Lee) · *Y
+  en tu móvil* (7 Cinco minutos: un **teléfono solo**, que cabe entero) ·
+  *Y además…* (Ponte a prueba, con tres botones en columna que cambian la
+  foto; Repasa la teoría). Sin tira de números. En el móvil, cada paso con
+  su pantalla debajo.
+- **Reglas de José para los textos de los pasos**: títulos **breves**;
+  descripción de **3 a 5 líneas**, con palabras clave en nuestro amarillo;
+  y al leerlo todo tienen que quedar claras dos cosas: **clases online con
+  el apoyo del profesor y adaptadas**, y **sin presión ni rachas, al ritmo
+  del alumno**. Sin repetir (las rachas se nombran una sola vez).
 - **«¡Pruébalo gratis!»** en el cuadro violeta con degradado y globos (el
   que antes tenía «¿Empezamos?»): la 540 y su lectura, abiertas sin entrar.
-- El cierre **«¿Empezamos?»**: estrecho, **sin fondo**, con **Lucía y Javi**
+- El cierre **«¿Empezamos?»**: estrecho, **sin fondo**, con el **precio**
+  (25 nov): **19 € la clase**; con la primera se abre toda la plataforma.
+  Cómo se paga: reservas sin pagar, damos la clase y te abro tu sección, y
+  al terminar me pagas (las siguientes, como se acuerde). Con **Lucía y Javi**
   contentos (los bocadillos con cara de los vídeos, sacados de
   `estudio-profesorespanol/src/personajes.tsx`: `bienvenida/lucia.svg` y
   `javi.svg`).
 - **Reservar, solo en TidyCal** (su calendario). **Preply ya no es para
   reservar**: queda como perfil con las reseñas, en «Sobre mí». José quizá añada también su
-  perfil de **Superprof** (él pasará el enlace). Sin precio en la web.
+  perfil de **Superprof** (él pasará el enlace).
 - Los vídeos salen de una alumna inventada (Sara; nunca datos reales), en
   los tres idiomas (`bienvenida/`: recorrido de ordenador y de móvil, una
   escena por paso y fotos de la práctica libre).
