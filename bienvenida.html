@@ -66,6 +66,7 @@ html{scroll-behavior:smooth}
 /* en el móvil, el vídeo grabado en un móvil, dentro de un teléfono */
 .bv-pantalla.es-movil .bv-ventana{max-width:270px;margin:0 auto;border:9px solid #232C4F;border-radius:30px}
 .bv-pantalla.es-movil .bv-barra{display:none}
+.bv-pantalla.es-movil .bv-ventana::after{content:"";position:absolute;z-index:2;top:8px;left:50%;width:30%;height:19px;transform:translateX(-50%);border-radius:99px;background:#0b0e1a}
 .bv-pantalla.es-movil video{aspect-ratio:390/844}
 .bv-pantalla.es-movil .bv-globo{display:none}
 
@@ -131,13 +132,13 @@ html:not([data-theme="dark"]) .bv-hoja{--c-ejer:#b8760b}
 [data-theme="dark"] .bv-cara{box-shadow:0 0 0 1px #2b3038,0 16px 36px rgba(0,0,0,.4)}
 /* los agujeros de la espiral, en el papel (pasan con la hoja) */
 .bv-cara::before{content:"";position:absolute;top:13px;left:26px;right:26px;height:18px;
-  background:radial-gradient(circle at 12px 9px, var(--agujero) 0 4.6px, transparent 5.2px) 50% 0/24px 18px repeat-x}
+  background:radial-gradient(circle at 12px 9px, var(--agujero) 0 4.6px, transparent 5.2px) 50% 0/24px 18px space no-repeat}
 .bv-dorso{display:none}
 /* la espiral, encima de todo: cada anilla sale de su agujero y pasa por arriba */
 .bv-espiral{position:absolute;z-index:40;top:-18px;left:26px;right:26px;height:42px;pointer-events:none;
-  background:var(--anillas) 50% 0/24px 42px repeat-x;display:none}
+  background:var(--anillas) 50% 0/24px 42px space no-repeat;display:none}
 /* sin el bloc vivo, cada hoja lleva sus anillas */
-.bv-hoja::before{content:"";position:absolute;z-index:2;top:-18px;left:26px;right:26px;height:42px;pointer-events:none;background:var(--anillas) 50% 0/24px 42px repeat-x}
+.bv-hoja::before{content:"";position:absolute;z-index:2;top:-18px;left:26px;right:26px;height:42px;pointer-events:none;background:var(--anillas) 50% 0/24px 42px space no-repeat}
 .bv-vivo .bv-hoja::before{display:none}
 .bv-vivo .bv-espiral{display:block}
 
@@ -203,10 +204,18 @@ html:not([data-theme="dark"]) .bv-hoja{--c-ejer:#b8760b}
 .bv-lema{position:absolute;right:7%;bottom:13%;margin:0;max-width:12ch;font-size:62px;line-height:1.05;color:var(--c);text-align:center;transform:rotate(-4deg)}
 .bv-tapa-logo{position:absolute;right:72px;bottom:36px;width:58px;height:auto;filter:brightness(0) invert(1);opacity:.22}
 /* el móvil, solo: un teléfono de verdad, sin navegador */
-.bv-marco.es-telefono{width:auto}
-.bv-telefono{position:relative;height:min(68vh,560px);aspect-ratio:390/844;border:12px solid #232C4F;border-radius:44px;overflow:hidden;background:#232C4F;
-  box-shadow:0 18px 40px rgba(20,22,32,.26)}
-.bv-telefono video{display:block;width:100%;height:100%;object-fit:cover;border-radius:32px;background:var(--bg)}
+/* (el marco, la curva y la isla de arriba van en proporción a su alto: en
+   pequeño también parece un teléfono) */
+.bv-marco.es-telefono{width:auto;--alto:min(68vh,560px)}
+.bv-telefono{position:relative;height:var(--alto);aspect-ratio:390/844;border:calc(var(--alto) * .021) solid #1d2442;border-radius:calc(var(--alto) * .09);
+  overflow:hidden;background:#1d2442;box-shadow:inset 0 0 0 1px #3a4570,0 0 0 1px #454f7c,0 18px 40px rgba(20,22,32,.26)}
+.bv-telefono video{display:block;width:100%;height:100%;object-fit:cover;border-radius:calc(var(--alto) * .07);background:var(--bg)}
+.bv-telefono::after{content:"";position:absolute;z-index:2;top:calc(var(--alto) * .012);left:50%;width:30%;height:calc(var(--alto) * .032);
+  transform:translateX(-50%);border-radius:99px;background:#0b0e1a}
+/* los botones del lado */
+.bv-marco.es-telefono::before{content:"";position:absolute;left:calc(var(--alto) * -.006);top:22%;width:calc(var(--alto) * .008);height:7%;border-radius:2px 0 0 2px;
+  background:#2b3460;box-shadow:0 calc(var(--alto) * .09) 0 #2b3460}
+.bv-marco.es-telefono::after{content:"";position:absolute;right:calc(var(--alto) * -.006);top:27%;width:calc(var(--alto) * .008);height:11%;border-radius:0 2px 2px 0;background:#2b3460}
 /* las fotos de «ponte a prueba»: una sobre otra, la elegida se acerca */
 .bv-fotos{position:relative;overflow:hidden}
 .bv-fotos img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:top;opacity:0;transform:scale(1.05);
@@ -225,7 +234,7 @@ html:not([data-theme="dark"]) .bv-hoja{--c-ejer:#b8760b}
   .bv-fotos-btns{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
   .bv-fotos-btns button{font-size:13.5px;padding:7px 10px;gap:6px}
   .bv-fotos-btns button .ti{font-size:16px}
-  .bv-hoja-media .bv-telefono{height:420px}
+  .bv-hoja-media .bv-marco.es-telefono{--alto:420px}
   .bv-tapa .bv-cara{min-height:340px;gap:26px}
   .bv-etiqueta{padding:14px 20px 18px}
   .bv-etiqueta h2{font-size:min(58px, 11.5cqw)}
@@ -267,7 +276,7 @@ html:not([data-theme="dark"]) .bv-hoja{--c-ejer:#b8760b}
   backface-visibility:hidden;-webkit-backface-visibility:hidden;transition:opacity .25s linear var(--tras,0s)}
 .bv-vivo .bv-hoja.pasada .bv-dorso{opacity:0;transition:opacity .3s linear calc(var(--tras,0s) + .42s)}
 .bv-vivo .bv-dorso::before{content:"";position:absolute;bottom:13px;left:26px;right:26px;height:18px;
-  background:radial-gradient(circle at 12px 9px, var(--agujero) 0 4.6px, transparent 5.2px) 50% 0/24px 18px repeat-x}
+  background:radial-gradient(circle at 12px 9px, var(--agujero) 0 4.6px, transparent 5.2px) 50% 0/24px 18px space no-repeat}
 /* con la hoja así de alta, la tapa y los separadores llenan su sitio */
 .bv-vivo .bv-tapa .bv-baja{display:block}
 @media (prefers-reduced-motion:no-preference){
@@ -290,7 +299,7 @@ html:not([data-theme="dark"]) .bv-hoja{--c-ejer:#b8760b}
 /* la pantalla, del tamaño que deje la hoja */
 .bv-vivo .bv-hoja-media{container-type:size;height:100%;min-height:0}
 .bv-vivo .bv-hoja-media .bv-marco:not(.es-telefono){width:min(100cqw, calc((100cqh - 36px) * 1.6))}
-.bv-vivo .bv-hoja-media .bv-telefono{height:min(100cqh, 100cqw * 2.164)}
+.bv-vivo .bv-hoja-media .bv-marco.es-telefono{--alto:min(100cqh, 100cqw * 2.164)}
 @container (max-width:760px){
   .bv-vivo .bv-paso .bv-cara{display:flex}
   .bv-vivo .bv-hoja-media{flex:1}
@@ -303,6 +312,23 @@ html:not([data-theme="dark"]) .bv-hoja{--c-ejer:#b8760b}
 @media (max-width:900px){
   .bv-vivo .bv-bloc-escena{height:calc(100svh - var(--barra, 0px) - var(--abajo, 0px));padding:26px 0 46px}
 }
+/* en pantallas táctiles el bloc no va con el scroll (con el dedo, las hojas se
+   pasaban de tres en tres): la página baja normal y las hojas se pasan tocando
+   la hoja, deslizando a un lado o con las flechas de debajo */
+.bv-toca,.bv-bloc-nav{display:none}
+.bv-oculto{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.bv-toque .bv-bloc-pista{height:auto}
+.bv-toque .bv-bloc-escena{position:relative;top:auto;height:max(560px, min(calc(100svh - var(--barra, 0px) - var(--abajo, 0px) - 64px), 760px));padding:26px 0 44px}
+.bv-toque .bv-tapa .bv-baja{display:none}
+.bv-toque .bv-tapa .bv-toca{display:block;margin:0;font-size:16px;color:rgba(255,255,255,.75);text-align:center;padding:0 12px}
+.bv-toque .bv-toca .ti{font-size:17px;vertical-align:-2px;margin-right:4px}
+.bv-toque .bv-bloc-nav{display:flex;align-items:center;justify-content:center;gap:22px;margin:4px 0 0}
+.bv-bloc-nav button{width:46px;height:46px;border-radius:50%;display:grid;place-items:center;border:1px solid var(--border);background:var(--card-bg);color:var(--text);
+  font-size:22px;cursor:pointer;box-shadow:0 4px 12px rgba(20,22,32,.1)}
+.bv-bloc-nav button:disabled{opacity:.35;cursor:default}
+.bv-bloc-nav button:focus-visible{outline:3px solid var(--c-clases);outline-offset:2px}
+.bv-cuenta{min-width:64px;text-align:center;font-size:26px;color:var(--text-secondary)}
+.bv-toque .bv-hoja{-webkit-tap-highlight-color:transparent}
 @media (prefers-reduced-motion:reduce){
   .bv-vivo .bv-hoja,.bv-vivo .bv-dorso,.bv-vivo .bv-hoja.pasada .bv-cara{transition:none!important}
   .bv-vivo .bv-dorso{display:none}
@@ -492,6 +518,7 @@ html:not([data-theme="dark"]) .bv-hoja{--c-ejer:#b8760b}
 <img class="bv-pj-tapa" src="bienvenida/lucia.svg" alt="" width="148" height="144">
 </div>
 <p class="bv-baja"><i class="ti ti-arrow-down" aria-hidden="true"></i> <span class="i18n" data-es="Baja para pasar las hojas" data-it="Scorri in giù per sfogliare" data-en="Scroll down to turn the pages">Baja para pasar las hojas</span></p>
+<p class="bv-toca"><i class="ti ti-arrow-right" aria-hidden="true"></i> <span class="i18n" data-es="Toca la hoja o desliza para pasarla" data-it="Tocca il foglio o scorri di lato per sfogliare" data-en="Tap the page or swipe to turn it">Toca la hoja o desliza para pasarla</span></p>
 <img class="bv-tapa-logo" src="icono.png" alt="" width="128" height="128">
 </div>
 <div class="bv-dorso" aria-hidden="true"></div>
@@ -636,6 +663,7 @@ html:not([data-theme="dark"]) .bv-hoja{--c-ejer:#b8760b}
 <div class="bv-espiral" aria-hidden="true"></div>
 </div>
 </div>
+<div class="bv-bloc-nav"><button type="button" class="bv-ant"><i class="ti ti-chevron-left" aria-hidden="true"></i><span class="bv-oculto i18n" data-es="Hoja anterior" data-it="Foglio precedente" data-en="Previous page">Hoja anterior</span></button><span class="bv-cuenta bv-mano" aria-live="polite"></span><button type="button" class="bv-sig"><i class="ti ti-chevron-right" aria-hidden="true"></i><span class="bv-oculto i18n" data-es="Hoja siguiente" data-it="Foglio successivo" data-en="Next page">Hoja siguiente</span></button></div>
 </div>
 </section>
 
@@ -693,6 +721,8 @@ html:not([data-theme="dark"]) .bv-hoja{--c-ejer:#b8760b}
   var grande = window.matchMedia('(min-width:1181px) and (min-height:640px)');
   // el bloc pasa las hojas si la pantalla tiene alto para una hoja entera
   var alto = window.matchMedia('(min-height:560px)');
+  // con el dedo (móvil, tableta) las hojas se pasan tocando o deslizando, no con el scroll
+  var dedo = window.matchMedia('(max-width:900px), (pointer:coarse)');
   var quieto = window.matchMedia('(prefers-reduced-motion: reduce)');
   var l = /^(es|it|en)$/.test(guardado || '') ? guardado : (nav === 'it' || nav === 'es' ? nav : 'en');
   var raiz = document.documentElement;
@@ -808,10 +838,14 @@ html:not([data-theme="dark"]) .bv-hoja{--c-ejer:#b8760b}
     });
     hojas.forEach(function(h, j){ h.classList.toggle('actual', j === i); });
     enciende(hojas[i]);
+    // las flechas de debajo (con el dedo)
+    cuenta.textContent = (i + 1) + ' / ' + hojas.length;
+    ant.disabled = i === 0; sig.disabled = i === hojas.length - 1;
   }
   // solo se mueve la pantalla de la hoja de arriba, y empieza desde el principio
+  var blocVisto = true;   // con el dedo, los vídeos se paran si el bloc no está en pantalla
   function enciende(h){
-    var n = h && h.classList.contains('bv-paso') ? h.dataset.escena : null;
+    var n = h && h.classList.contains('bv-paso') && (blocVisto || !toque()) ? h.dataset.escena : null;
     Object.keys(medios).forEach(function(k){
       var m = medios[k];
       if(m.tagName !== 'VIDEO') return;
@@ -823,21 +857,23 @@ html:not([data-theme="dark"]) .bv-hoja{--c-ejer:#b8760b}
     giraFotos(n === 'practica');
   }
   function vivo(){ return raiz.classList.contains('bv-vivo'); }
+  function toque(){ return raiz.classList.contains('bv-toque'); }
   function lee(){
-    if(!vivo()) return;
+    if(!vivo() || toque()) return;
     var s = -pista.getBoundingClientRect().top, i = 0;
     while(i < hojas.length - 1 && s >= umbral(i)) i++;
     ponHoja(i);
   }
   // ir a una hoja: se baja (o se sube) hasta ella, y el bloc pasa las hojas solo
   function vaA(i){
+    if(toque()){ ponHoja(Math.max(0, Math.min(hojas.length - 1, i))); return; }
     var y = pista.getBoundingClientRect().top + scrollY;
     y += i <= 0 ? 0 : (i >= hojas.length ? pista.offsetHeight - escena.offsetHeight + 2 : umbral(i - 1) + 2);
     scrollTo({top: Math.ceil(y), behavior: quieto.matches ? 'auto' : 'smooth'});
   }
   hojas.forEach(function(h, j){
     h.addEventListener('click', function(e){
-      if(!vivo() || j !== actual || e.target.closest('button, a')) return;
+      if(!vivo() || j !== actual || e.target.closest('button, a') || Date.now() - deslizado < 500) return;
       vaA(j + 1);
     });
     // con el teclado: si el foco cae en una hoja de debajo, el bloc va a ella
@@ -846,6 +882,18 @@ html:not([data-theme="dark"]) .bv-hoja{--c-ejer:#b8760b}
   document.querySelectorAll('.bv-pestana').forEach(function(b){
     b.addEventListener('click', function(){ vaA(hojas.indexOf(b.closest('.bv-hoja'))); });
   });
+  var cuenta = document.querySelector('.bv-cuenta'), ant = document.querySelector('.bv-ant'), sig = document.querySelector('.bv-sig');
+  ant.addEventListener('click', function(){ vaA(actual - 1); });
+  sig.addEventListener('click', function(){ vaA(actual + 1); });
+  // deslizar a un lado: a la izquierda, la siguiente; a la derecha, la de antes
+  var dedoEn = null, deslizado = 0;
+  bloc.addEventListener('touchstart', function(e){ var t = e.touches[0]; dedoEn = [t.clientX, t.clientY]; }, {passive: true});
+  bloc.addEventListener('touchend', function(e){
+    if(!dedoEn || !toque()) return;
+    var t = e.changedTouches[0], dx = t.clientX - dedoEn[0], dy = t.clientY - dedoEn[1]; dedoEn = null;
+    if(Math.abs(dx) < 45 || Math.abs(dx) < Math.abs(dy) * 1.3) return;
+    deslizado = Date.now(); vaA(actual + (dx < 0 ? 1 : -1));
+  }, {passive: true});
 
   // ── la presentación con fondo fijo (ordenador) ──
   var dosPista = document.querySelector('.bv-dos-pista');
@@ -853,8 +901,11 @@ html:not([data-theme="dark"]) .bv-hoja{--c-ejer:#b8760b}
   function medir(){
     raiz.classList.toggle('bv-fijo', grande.matches);
     var era = vivo();
-    raiz.classList.toggle('bv-vivo', alto.matches && 'IntersectionObserver' in window);
+    var conDedo = dedo.matches && 'IntersectionObserver' in window;
+    raiz.classList.toggle('bv-vivo', (alto.matches || conDedo) && 'IntersectionObserver' in window);
+    raiz.classList.toggle('bv-toque', conDedo);
     if(era && !vivo()){ hojas.forEach(function(h){ h.classList.remove('pasada', 'actual'); }); actual = null; }
+    if(toque() && actual == null) ponHoja(0);
     mueve();
   }
   var pedido = false;
@@ -868,7 +919,7 @@ html:not([data-theme="dark"]) .bv-hoja{--c-ejer:#b8760b}
   }
   addEventListener('scroll', function(){ if(!pedido){ pedido = true; requestAnimationFrame(mueve); } }, {passive: true});
   addEventListener('resize', function(){ if(!pedido){ pedido = true; requestAnimationFrame(mueve); } });
-  [grande, alto].forEach(function(q){ if(q.addEventListener) q.addEventListener('change', medir); });
+  [grande, alto, dedo].forEach(function(q){ if(q.addEventListener) q.addEventListener('change', medir); });
 
   function pon(nuevo){
     l = nuevo;
@@ -932,6 +983,10 @@ html:not([data-theme="dark"]) .bv-hoja{--c-ejer:#b8760b}
       });
     }, {threshold: 0.45});
     pasos.forEach(function(c){ ve.observe(c); });
+    new IntersectionObserver(function(es){
+      blocVisto = es[es.length - 1].isIntersecting;
+      if(toque() && actual != null) enciende(hojas[actual]);
+    }, {threshold: 0.3}).observe(bloc);
     // lo que aparece al llegar (en el ordenador, la presentación va con el fondo fijo)
     raiz.classList.add('js-aparece');
     var aparece = new IntersectionObserver(function(es){

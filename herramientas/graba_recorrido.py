@@ -66,7 +66,8 @@ SUF = ("movil-" if MOVIL else "") + P
 # cuenta el paso (el botón que se pulsa), y se queda así: dónde (x e y, en %
 # del vídeo) y cuánto. El acercamiento va dentro del vídeo, no en la página:
 # hecho por el navegador «temblaba».
-ACERCA = {"reserva": (43, 34, 1.7), "portada": (45, 40, 1.5), "notas": (64, 60, 1.3)}
+# (el último número: cuántos segundos tarda en acercarse)
+ACERCA = {"reserva": (43, 34, 1.7, 1.8), "portada": (45, 40, 1.5, 1.2), "notas": (64, 60, 1.3, 1.2)}
 # SOLO=reserva,portada: rehace solo esas escenas (las demás no se tocan)
 SOLO = [x for x in os.environ.get("SOLO", "").split(",") if x]
 
@@ -196,6 +197,17 @@ with sync_playwright() as p:
         m.down(); m.up()
         return loc
 
+    def desliza(sel_o_loc, ms=1200):
+        # el ratón va despacio, como una persona (ve() lo lleva casi de golpe)
+        loc = pg.locator(sel_o_loc) if isinstance(sel_o_loc, str) else sel_o_loc
+        b = loc.first.bounding_box()
+        x1, y1 = b["x"] + min(b["width"] / 2, 60), b["y"] + b["height"] / 2
+        x0, y0, n = estado["x"], estado["y"], max(2, int(ms / 20))
+        for k in range(1, n + 1):
+            u = k / n; e = u * u * (3 - 2 * u)
+            m.move(x0 + (x1 - x0) * e, y0 + (y1 - y0) * e); pg.wait_for_timeout(20)
+        estado.update(x=x1, y=y1)
+
     def rot(i):
         if ESCENAS: return
         pg.evaluate("t => window.vxRot && window.vxRot(t)", ROT[i] if i is not None else None)
@@ -235,8 +247,11 @@ with sync_playwright() as p:
     # 2 · Mis clases
     clic('.riel-btn[data-sec="clases"]'); corta(); sigue(); marca("reserva" if ORDENADOR else "clases")
     if ORDENADOR:
-        # reservar: la pantalla entera, luego se acerca al botón de la agenda y lo pulsa
-        espera(1300); acerca(); espera(500); clic(".cita-barra", 30, 500); espera(1600); cierra(); marca("clases")
+        # reservar, con calma: la pantalla entera, el ratón pasa por la próxima
+        # clase (con su fecha), se acerca al botón de la agenda y lo pulsa
+        espera(1400); desliza(".cl-prox-row .cl-tit", 1500); espera(900)
+        acerca(); espera(1000); desliza(".cita-barra", 1400); espera(800)
+        m.down(); m.up(); espera(2600); cierra(); marca("clases")
     rot(1); espera(400)
     ve(pg.locator(".cl-enlace", has_text="Si tuviera"), 30); espera(1500)
     # 3 · la clase
@@ -346,10 +361,10 @@ with sync_playwright() as p:
             if k is None: return 0.0
             hasta = reloj[k + 1] if k + 1 < len(reloj) else reloj[k] + 0.5
             return min(reloj[k] + (w - fotos[k][0]), hasta)
-        def acercar(src, dst, t0, foco, dur=1.2):
+        def acercar(src, dst, t0, foco):
             # la cámara se acerca a un punto fijo (sin barrer), con suavidad y a
             # trozos de píxel: cada fotograma se recorta y se agranda aquí
-            fx, fy, Z = foco
+            fx, fy, Z, dur = foco
             l1 = max(0.0, min(W - W / Z, W * fx / 100 - W / Z / 2))
             t1 = max(0.0, min(H - H / Z, H * fy / 100 - H / Z / 2))
             Fx, Fy = l1 / (1 - 1 / Z), t1 / (1 - 1 / Z)

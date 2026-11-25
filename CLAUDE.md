@@ -134,9 +134,16 @@ bueno; lo pequeño y claro, hacerlo.
   2 Entra en clase · 3 Damos la clase · 4 Toma notas) · *Al terminar la
   clase* (5 Practica · 6 Lee · 7 Repasa: «Cinco minutos», con el **teléfono
   solo**) · *Y además…* (+ Ponte a prueba, con tres botones que cambian la
-  foto; + Repasa la teoría). En el móvil, igual, con el texto arriba y la
-  pantalla debajo en cada hoja; sin JavaScript o en una pantalla muy baja,
-  las hojas van una debajo de otra.
+  foto; + Repasa la teoría). **Con el dedo** (móvil y tableta) el bloc **no va
+  con el scroll** (las hojas se pasaban de tres en tres y a José no le
+  funcionaba): la página baja normal y las hojas se pasan tocando la hoja,
+  deslizando a un lado o con las flechas de debajo («3 / 13»); en cada hoja,
+  el texto arriba y la pantalla debajo. El **teléfono** del 7 va con el marco,
+  las curvas y la isla en proporción a su tamaño, y sus botones al lado: en
+  pequeño también tiene que parecer un teléfono. El **vídeo 1**, con calma
+  (unos 8 s): la pantalla entera, el ratón pasa por la próxima clase, se
+  acerca despacio y luego el clic. Sin JavaScript o en una pantalla muy
+  baja, las hojas van una debajo de otra.
 - **Reglas de José para los textos de los pasos**: títulos **breves**;
   descripción de **3 a 5 líneas**, con palabras clave en nuestro amarillo;
   y al leerlo todo tienen que quedar claras dos cosas: **clases online con

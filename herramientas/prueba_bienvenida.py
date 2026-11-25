@@ -17,6 +17,7 @@ Qué mira:
   · «¿Cómo funciona?» es un bloc de notas: al bajar se pasan las hojas una a
     una (y vuelven al subir), solo se ve una cada vez y solo se mueve su
     pantalla; también se pasan pulsando, y las pestañas llevan a cada tramo;
+    con el dedo no va con el scroll: se toca, se desliza o se usan las flechas;
   · nada se sale por los lados, tampoco en el móvil, donde todo cabe en su hoja.
 """
 import json
@@ -224,6 +225,25 @@ with sync_playwright() as p:
         comprueba(pg2.evaluate("document.documentElement.classList.contains('bv-vivo')") and cabe
                   and pg2.evaluate("document.documentElement.scrollWidth") <= ancho,
                   "móvil %d×%d: el bloc pasa las hojas y todo cabe en cada una" % (ancho, altura))
+        if ancho == 390:
+            # con el dedo, el bloc no va con el scroll: se toca, se desliza o se usan las flechas
+            HOJA = "() => [...document.querySelectorAll('.bv-hoja')].findIndex(h => h.classList.contains('actual'))"
+            comprueba(pg2.evaluate("document.documentElement.classList.contains('bv-toque')") and pg2.locator(".bv-bloc-nav").is_visible(),
+                      "  con el dedo: el bloc con sus flechas, sin ir con el scroll")
+            pg2.locator(".bv-hoja.actual .bv-cara").tap(); pg2.wait_for_timeout(900)
+            pg2.locator(".bv-sig").tap(); pg2.wait_for_timeout(900)
+            a = pg2.evaluate(HOJA)
+            pg2.mouse.wheel(0, 500); pg2.wait_for_timeout(500)
+            comprueba(a == 2 and pg2.evaluate(HOJA) == 2, "  tocar la hoja y la flecha la pasan; bajar la página, no")
+            pg2.evaluate("document.querySelector('.bv-bloc-pista').scrollIntoView({behavior: 'instant'})"); pg2.wait_for_timeout(300)
+            pg2.evaluate("""() => { const el = document.querySelector('.bv-bloc'), y = el.getBoundingClientRect().top + 200;
+                const t = x => new Touch({identifier: 1, target: el, clientX: x, clientY: y});
+                el.dispatchEvent(new TouchEvent('touchstart', {touches: [t(300)], changedTouches: [t(300)], bubbles: true}));
+                el.dispatchEvent(new TouchEvent('touchend', {touches: [], changedTouches: [t(90)], bubbles: true})); }""")
+            pg2.wait_for_timeout(900); b = pg2.evaluate(HOJA)
+            pg2.locator(".bv-ant").tap(); pg2.wait_for_timeout(900)
+            comprueba(b == 3 and pg2.evaluate(HOJA) == 2 and pg2.locator(".bv-cuenta").inner_text().strip() == "3 / 13",
+                      "  deslizar a un lado pasa la hoja, y la flecha de antes vuelve")
         c2.close()
     c.close()
 
