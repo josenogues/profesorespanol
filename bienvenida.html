@@ -85,9 +85,9 @@ html{scroll-behavior:smooth}
 .bv-quien-enlace:hover{text-decoration:underline;text-underline-offset:4px}
 /* el profesor: una polaroid con su saludo, y los globos de siempre alrededor */
 .bv-charla{position:relative;display:grid;place-items:center;padding:26px 0 10px}
-.bv-polaroid{margin:0;background:#fff;padding:12px 12px 0;width:min(230px,26vh,70%);box-shadow:0 18px 40px rgba(20,22,32,.2);transform:rotate(-3deg)}
+.bv-polaroid{margin:0;background:#fff;padding:5.5% 5.5% 0;width:min(320px,34vh,78%);box-shadow:0 18px 40px rgba(20,22,32,.2);transform:rotate(-3deg)}
 .bv-polaroid img{display:block;width:100%;aspect-ratio:1;object-fit:cover}
-.bv-polaroid figcaption{font:700 26px/1 'Caveat',cursive;color:#3A4570;text-align:center;padding:13px 0 16px}
+.bv-polaroid figcaption{font:700 30px/1 'Caveat',cursive;color:#3A4570;text-align:center;padding:7% 0 9%}
 .bv-charla span{position:absolute;font-size:22px;line-height:1.1;padding:10px 16px;border-radius:16px;box-shadow:0 8px 18px rgba(12,14,24,.14);white-space:nowrap;z-index:1}
 .bv-charla .yo{top:0;left:0;background:#fff;color:#3A4570;border:1px solid var(--border);border-bottom-left-radius:4px;transform:rotate(-4deg)}
 .bv-charla .el{top:46%;right:0;background:var(--c-clases);color:#fff;border-bottom-right-radius:4px;transform:rotate(4deg)}
@@ -139,26 +139,24 @@ html:not([data-theme="dark"]) .bv-cap,html:not([data-theme="dark"]) .bv-tramo,ht
 /* la pantalla fija: una encima de otra, la del paso que toca encima */
 .bv-fija{position:sticky;top:calc(50vh - min(34vh, 290px));height:min(68vh,580px)}
 .bv-escenas{position:relative;height:100%}
-.bv-escenas > .bv-pantalla-paso{position:absolute;inset:0;display:grid;place-items:center;opacity:0;visibility:hidden}
-/* la de antes desaparece en seco (nunca hay dos a la vez); la nueva entra de
-   abajo arriba como una página (de arriba abajo si se vuelve), luego sale su
-   número y por último la cámara se acerca a lo que cuenta el paso */
+.bv-escenas > .bv-pantalla-paso{position:absolute;inset:0;display:grid;place-items:center;opacity:0;visibility:hidden;
+  transition:opacity .22s ease,visibility 0s linear .22s}
+/* la de antes se apaga en un instante y la nueva entra justo después, de
+   abajo arriba como una página (de arriba abajo si se vuelve): nunca hay dos
+   a la vez. En 1, 2 y 4 la pantalla ya entra acercada a lo que cuenta el paso */
 .bv-escenas > .activo{opacity:1;visibility:visible;z-index:2;transition:none}
-.bv-escenas > .activo .bv-marco{animation:bv-entra .5s cubic-bezier(.16,1,.3,1) .08s both}
+.bv-escenas > .activo .bv-marco{animation:bv-entra .55s cubic-bezier(.16,1,.3,1) .22s both}
 .bv-escenas.sube > .activo .bv-marco{animation-name:bv-entra-sube}
 @keyframes bv-entra{from{clip-path:inset(100% 0 0 0);transform:translateY(26px)}to{clip-path:inset(-70px);transform:none}}
 @keyframes bv-entra-sube{from{clip-path:inset(0 0 100% 0);transform:translateY(-26px)}to{clip-path:inset(-70px);transform:none}}
-.bv-escenas > .activo .bv-marco::before{animation:bv-numero .45s cubic-bezier(.34,1.56,.64,1) .42s both}
-@keyframes bv-numero{from{transform:scale(0) rotate(-30deg)}to{transform:none}}
 .bv-lente{overflow:hidden}
 .bv-pantalla-paso video{transform-origin:0 0}
-.bv-escenas > .activo video[data-zoom]{transform:var(--zoom);transition:transform 1.8s cubic-bezier(.33,0,.15,1) .7s}
+.bv-pantalla-paso video[data-zoom]{transform:var(--zoom);backface-visibility:hidden}
 .bv-pantalla-paso .bv-ventana{width:100%;border:1px solid var(--border);box-shadow:0 18px 44px rgba(20,22,32,.16)}
 .bv-pantalla-paso video,.bv-pantalla-paso .bv-fotos{display:block;width:100%;aspect-ratio:1280/800;background:var(--bg)}
 /* el número del paso en la esquina de su pantalla */
 .bv-marco{position:relative;width:100%}
-.bv-marco::before{content:attr(data-num);position:absolute;z-index:3;top:-22px;left:-22px;width:60px;height:60px;border-radius:50%;
-  display:grid;place-items:center;background:var(--c);color:#fff;font:700 40px/1 'Caveat',cursive;box-shadow:0 8px 18px rgba(20,22,32,.22)}
+
 /* el móvil, solo: un teléfono de verdad, sin navegador, que cabe entero en la pantalla */
 .bv-marco.es-telefono{width:auto}
 .bv-telefono{position:relative;height:min(68vh,580px);aspect-ratio:390/844;border:12px solid #232C4F;border-radius:44px;overflow:hidden;background:#232C4F;
@@ -183,23 +181,25 @@ html:not([data-theme="dark"]) .bv-cap,html:not([data-theme="dark"]) .bv-tramo,ht
 .js-aparece .bv-tramo.visto .bv-raya{transform:none}
 
 /* ── ¡pruébalo gratis!: el cuadro violeta, aparte de la explicación ── */
-.bv-gratis{position:relative;margin:110px 0 0;border-radius:6px;padding:64px 56px 0;text-align:center;color:#fff;overflow:hidden;
+.bv-gratis{position:relative;margin:110px 0 0;border-radius:6px;padding:56px 0 0 56px;color:#fff;overflow:hidden;
+  display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:48px;align-items:center;
   background:linear-gradient(135deg,#3A4570 0%,#4b5894 55%,#6a5fc0 100%);box-shadow:0 12px 28px rgba(20,22,32,.2)}
 [data-theme="dark"] .bv-gratis{background:linear-gradient(135deg,#2c3560 0%,#3d4a82 55%,#55499e 100%)}
-.bv-gratis h2{margin:0 0 12px;font:700 80px/1 'Caveat',cursive;color:#ffc94f;transform:rotate(-2deg)}
-.bv-gratis p{margin:0 auto 26px;font-size:19px;line-height:1.55;color:rgba(255,255,255,.9);max-width:50ch}
+.bv-gratis h2{margin:0 0 12px;font:700 80px/1 'Caveat',cursive;color:#ffc94f;transform:rotate(-2deg);transform-origin:left center}
+.bv-gratis-txt{padding-bottom:56px;position:relative;z-index:1}
+.bv-gratis p{margin:0 0 26px;font-size:19px;line-height:1.55;color:rgba(255,255,255,.9);max-width:40ch}
 .bv-nivel{display:inline-block;font:800 13px var(--font-body);color:#232C4F;background:#ffc94f;border-radius:6px;padding:3px 9px;margin:0 0 14px}
-.bv-muestra-btns{display:flex;flex-wrap:wrap;justify-content:center;gap:12px}
+.bv-muestra-btns{display:flex;flex-wrap:wrap;gap:12px}
 .bv-btn-plano{display:inline-flex;align-items:center;gap:9px;border:2px solid #fff;background:#fff;color:#232C4F;border-radius:6px;
   padding:12px 20px;font:800 16px var(--font-head);text-decoration:none;transition:background .15s,border-color .15s}
 .bv-btn-plano:hover{background:#eef0f6;border-color:#eef0f6}
 .bv-btn-plano .ti{font-size:20px}
 .bv-btn-plano:focus-visible{outline:3px solid #fff;outline-offset:2px}
-.bv-muestra-img{display:block;width:min(720px,100%);margin:44px auto 0;text-decoration:none;transform:translateY(14px);transition:transform .35s cubic-bezier(.16,1,.3,1)}
+.bv-muestra-img{display:block;align-self:end;margin-top:30px;text-decoration:none;transform:translateY(14px);transition:transform .35s cubic-bezier(.16,1,.3,1)}
 .bv-muestra-img:hover{transform:translateY(4px)}
-.bv-muestra-img .bv-ventana{border-radius:6px 6px 0 0;box-shadow:0 -10px 34px rgba(12,14,24,.25)}
-.bv-gratis .bv-globo-2{top:40px;right:48px}
-.bv-gratis .bv-globo-3{top:40px;left:48px;bottom:auto;right:auto}
+.bv-muestra-img .bv-ventana{border-radius:6px 0 0 0;box-shadow:0 -10px 34px rgba(12,14,24,.25)}
+.bv-gratis .bv-globo-2{top:24px;right:40px}
+.bv-gratis .bv-globo-3{top:auto;bottom:24px;left:calc(41.6% - 60px);right:auto}
 
 /* ── el cierre: estrecho, sin fondo, con Lucía y Javi contentos ── */
 .bv-fin-cta{position:relative;max-width:640px;margin:110px auto 72px;padding:0 120px;text-align:center}
@@ -207,10 +207,10 @@ html:not([data-theme="dark"]) .bv-cap,html:not([data-theme="dark"]) .bv-tramo,ht
 [data-theme="dark"] .bv-fin-cta h2{color:#b3a9ff}
 .bv-fin-cta p{margin:0 auto 28px;font-size:19px;line-height:1.5;color:var(--text-secondary);max-width:40ch}
 .bv-fin-cta .bv-botones{justify-content:center}
-.bv-precio{margin:6px 0 2px!important;font-size:20px!important;color:var(--text)!important;font-weight:700}
-.bv-precio .bv-mano{font-size:64px;line-height:1;color:var(--c-ejer-d);vertical-align:-6px;margin-right:4px}
-[data-theme="dark"] .bv-precio .bv-mano{color:var(--gold)}
-.bv-precio-sub{margin:0 auto 22px!important}
+.bv-precio{margin:6px auto 6px!important;font-size:23px!important;line-height:1.4!important;color:var(--text)!important;font-weight:700;max-width:26ch!important}
+.bv-precio mark.bv-m{font:700 1.7em/1 'Caveat',cursive;background:none;color:var(--c-ejer-d);padding:0 .05em;white-space:nowrap}
+[data-theme="dark"] .bv-precio mark.bv-m{color:var(--gold)}
+.bv-precio-sub{margin:0 auto 24px!important;font-size:18px!important;color:var(--muted)!important}
 .bv-pago{list-style:none;counter-reset:paso;margin:0 auto 30px;padding:0;display:grid;gap:10px;text-align:left;max-width:380px}
 .bv-pago li{counter-increment:paso;display:grid;grid-template-columns:34px 1fr;align-items:center;font-size:16.5px;color:var(--text-secondary)}
 .bv-pago li::before{content:counter(paso);width:28px;height:28px;border-radius:50%;display:grid;place-items:center;background:var(--c-clases-t);color:var(--c-clases-d);font:700 20px/1 'Caveat',cursive}
@@ -231,13 +231,14 @@ html:not([data-theme="dark"]) .bv-cap,html:not([data-theme="dark"]) .bv-tramo,ht
 @media (prefers-reduced-motion:reduce){
   html{scroll-behavior:auto}
   .bv-muestra-img,.bv-fotos img,.bv-cap,.bv-escenas > *,.bv-escenas video{transition:none!important}
-  .bv-escenas > .activo .bv-marco,.bv-escenas > .activo .bv-marco::before{animation:none!important}
+  .bv-escenas > .activo .bv-marco{animation:none!important}
   .js-aparece .bv-aparece,.js-aparece .bv-tramo .bv-raya{opacity:1;transform:none;transition:none}
 }
 @media (max-width:1180px){
   .bv-hola{grid-template-columns:1fr;gap:44px;padding:48px 44px 56px}
   .bv-hola-sub{max-width:52ch}
-  .bv-dos-in,.bv-historia-in{grid-template-columns:1fr;gap:28px}
+  .bv-dos-in,.bv-historia-in,.bv-gratis{grid-template-columns:1fr;gap:28px}
+  .bv-gratis{padding:48px 40px 0}
   .bv-fija{display:none}
   .bv-cap,.bv-tramo,.bv-tramo:first-child{min-height:0;opacity:1;padding:36px 0}
   .bv-cap-media{display:block;margin-top:26px}
@@ -247,7 +248,7 @@ html:not([data-theme="dark"]) .bv-cap,html:not([data-theme="dark"]) .bv-tramo,ht
   .bv-mas{margin:0}
   .bv-dos h2{font-size:38px}
   .bv-charla{max-width:460px}
-  .bv-polaroid{width:min(240px,62%)}
+  .bv-polaroid{width:min(300px,72%)}
 }
 @media (max-width:900px){
   /* en el móvil, las banderas suben a la barra azul de arriba */
@@ -281,8 +282,8 @@ html:not([data-theme="dark"]) .bv-cap,html:not([data-theme="dark"]) .bv-tramo,ht
   .bv-num{font-size:62px}
   .bv-cap h3{font-size:29px}
   .bv-cap p,.bv-lado p,.bv-gratis p{font-size:17.5px}
-  .bv-marco::before{width:48px;height:48px;font-size:32px;top:-16px;left:-8px}
   .bv-gratis{margin:72px -22px 0;border-radius:0;padding:48px 22px 0;box-shadow:none}
+  .bv-gratis-txt{padding-bottom:0}
   .bv-gratis h2{font-size:56px}
   .bv-gratis .bv-globo{display:none}
   .bv-fin-cta{padding:110px 0 0;margin:64px auto 56px}
@@ -370,10 +371,10 @@ html:not([data-theme="dark"]) .bv-cap,html:not([data-theme="dark"]) .bv-tramo,ht
 <h2><span class="i18n" data-es="¿Cómo " data-it="Come " data-en="How does it ">¿Cómo </span><span class="bv-mano"><span class="i18n" data-es="funciona" data-it="funziona" data-en="work">funciona</span></span><span class="i18n" data-es="?" data-it="?" data-en="?">?</span><img class="bv-pj-h" src="bienvenida/lucia.svg" alt="" width="148" height="144"></h2>
 <div class="bv-historia-in">
 <ol class="bv-caps">
-<li class="bv-tramo bv-aparece" style="--c:var(--c-clases)"><h3 class="i18n" data-es="La clase, por videollamada" data-it="La lezione, in videochiamata" data-en="The lesson, by video call">La clase, por videollamada</h3><span class="bv-raya" aria-hidden="true"></span></li>
+<li class="bv-tramo bv-aparece" style="--c:var(--c-clases)"><h3 class="i18n" data-es="La clase" data-it="La lezione" data-en="The lesson">La clase</h3><span class="bv-raya" aria-hidden="true"></span></li>
 <li class="bv-cap" data-escena="reserva" data-foco="43 34 1.7" data-tipo="video" data-num="1" style="--c:var(--c-clases)">
 <div class="bv-cap-txt"><span class="bv-num bv-mano" aria-hidden="true">1</span><div>
-<h3><span class="i18n" data-es="Reserva una clase" data-it="Prenota una lezione" data-en="Book a lesson">Reserva una clase</span></h3>
+<h3><span class="i18n" data-es="Reserva" data-it="Prenota" data-en="Book">Reserva</span></h3>
 <p class="i18n" data-html data-es="Eliges el día y la hora que te van bien en &lt;mark class=&quot;bv-m&quot;&gt;mi calendario&lt;/mark&gt;. Antes de vernos preparo la clase &lt;mark class=&quot;bv-m&quot;&gt;pensando en ti&lt;/mark&gt;, y te la encuentras esperándote &lt;mark class=&quot;bv-m&quot;&gt;en tu sección&lt;/mark&gt;, con su fecha." data-it="Scegli giorno e ora che ti vanno bene nel &lt;mark class=&quot;bv-m&quot;&gt;mio calendario&lt;/mark&gt;. Prima di vederci preparo la lezione &lt;mark class=&quot;bv-m&quot;&gt;pensando a te&lt;/mark&gt;, e la trovi che ti aspetta &lt;mark class=&quot;bv-m&quot;&gt;nella tua sezione&lt;/mark&gt;, con la sua data." data-en="Pick a day and time that suit you in &lt;mark class=&quot;bv-m&quot;&gt;my calendar&lt;/mark&gt;. Before we meet I prepare the lesson &lt;mark class=&quot;bv-m&quot;&gt;with you in mind&lt;/mark&gt;, and you’ll find it waiting &lt;mark class=&quot;bv-m&quot;&gt;in your section&lt;/mark&gt;, with its date.">Eliges el día y la hora que te van bien en <mark class="bv-m">mi calendario</mark>. Antes de vernos preparo la clase <mark class="bv-m">pensando en ti</mark>, y te la encuentras esperándote <mark class="bv-m">en tu sección</mark>, con su fecha.</p>
 </div></div>
 <div class="bv-cap-media"></div>
@@ -385,40 +386,39 @@ html:not([data-theme="dark"]) .bv-cap,html:not([data-theme="dark"]) .bv-tramo,ht
 </div></div>
 <div class="bv-cap-media"></div>
 </li>
-<li class="bv-cap" data-escena="clase" data-foco="56 50 1.2" data-tipo="video" data-num="3" style="--c:var(--c-clases)">
+<li class="bv-cap" data-escena="clase" data-tipo="video" data-num="3" style="--c:var(--c-clases)">
 <div class="bv-cap-txt"><span class="bv-num bv-mano" aria-hidden="true">3</span><div>
-<h3><span class="i18n" data-es="Teoría a tu medida" data-it="Teoria su misura" data-en="Theory made for you">Teoría a tu medida</span></h3>
+<h3><span class="i18n" data-es="Damos la clase" data-it="Facciamo lezione" data-en="We have the lesson">Damos la clase</span></h3>
 <p class="i18n" data-html data-es="Te explico solo lo que necesitas, &lt;mark class=&quot;bv-m&quot;&gt;con ejemplos de tu vida&lt;/mark&gt; y tu idioma como apoyo: &lt;mark class=&quot;bv-m&quot;&gt;nada de la gramática de siempre&lt;/mark&gt;. Luego hacemos juntos &lt;mark class=&quot;bv-m&quot;&gt;unos pocos ejercicios guiados&lt;/mark&gt; para comprobar que lo has entendido." data-it="Ti spiego solo quello che ti serve, &lt;mark class=&quot;bv-m&quot;&gt;con esempi della tua vita&lt;/mark&gt; e la tua lingua come appoggio: &lt;mark class=&quot;bv-m&quot;&gt;niente grammatica di una volta&lt;/mark&gt;. Poi facciamo insieme &lt;mark class=&quot;bv-m&quot;&gt;pochi esercizi guidati&lt;/mark&gt; per verificare che hai capito." data-en="I explain only what you need, &lt;mark class=&quot;bv-m&quot;&gt;with examples from your life&lt;/mark&gt; and your language as support: &lt;mark class=&quot;bv-m&quot;&gt;none of the old-school grammar&lt;/mark&gt;. Then we do &lt;mark class=&quot;bv-m&quot;&gt;a few guided exercises&lt;/mark&gt; together to check you’ve got it.">Te explico solo lo que necesitas, <mark class="bv-m">con ejemplos de tu vida</mark> y tu idioma como apoyo: <mark class="bv-m">nada de la gramática de siempre</mark>. Luego hacemos juntos <mark class="bv-m">unos pocos ejercicios guiados</mark> para comprobar que lo has entendido.</p>
 </div></div>
 <div class="bv-cap-media"></div>
 </li>
-<li class="bv-cap" data-escena="notas" data-foco="68 55 1.5" data-tipo="video" data-num="4" style="--c:var(--c-clases)">
+<li class="bv-cap" data-escena="notas" data-foco="64 60 1.3" data-tipo="video" data-num="4" style="--c:var(--c-clases)">
 <div class="bv-cap-txt"><span class="bv-num bv-mano" aria-hidden="true">4</span><div>
 <h3><span class="i18n" data-es="Toma notas" data-it="Prendi appunti" data-en="Take notes">Toma notas</span></h3>
 <p class="i18n" data-html data-es="Mientras hablamos, apuntas lo que quieras &lt;mark class=&quot;bv-m&quot;&gt;junto a la clase&lt;/mark&gt;. Se guarda solo, lo tienes siempre a mano para repasar y hasta puedes &lt;mark class=&quot;bv-m&quot;&gt;descargarlo&lt;/mark&gt; cuando lo necesites." data-it="Mentre parliamo, annoti quello che vuoi &lt;mark class=&quot;bv-m&quot;&gt;accanto alla lezione&lt;/mark&gt;. Si salva da solo, lo hai sempre a portata di mano per ripassare e puoi perfino &lt;mark class=&quot;bv-m&quot;&gt;scaricarlo&lt;/mark&gt; quando ti serve." data-en="While we talk, you jot down whatever you like &lt;mark class=&quot;bv-m&quot;&gt;next to the lesson&lt;/mark&gt;. It saves itself, it’s always at hand to review, and you can even &lt;mark class=&quot;bv-m&quot;&gt;download it&lt;/mark&gt; whenever you need.">Mientras hablamos, apuntas lo que quieras <mark class="bv-m">junto a la clase</mark>. Se guarda solo, lo tienes siempre a mano para repasar y hasta puedes <mark class="bv-m">descargarlo</mark> cuando lo necesites.</p>
 </div></div>
 <div class="bv-cap-media"></div>
 </li>
-<li class="bv-tramo bv-aparece" style="--c:var(--c-ejer)"><h3 class="i18n" data-es="Cuando termina la clase…" data-it="Quando finisce la lezione…" data-en="When the lesson ends…">Cuando termina la clase…</h3><span class="bv-raya" aria-hidden="true"></span></li>
-<li class="bv-cap" data-escena="repaso" data-foco="56 55 1.3" data-tipo="video" data-num="5" style="--c:var(--c-ejer)">
+<li class="bv-tramo bv-aparece" style="--c:var(--c-ejer)"><h3 class="i18n" data-es="Al terminar la clase" data-it="Finita la lezione" data-en="After the lesson">Al terminar la clase</h3><span class="bv-raya" aria-hidden="true"></span></li>
+<li class="bv-cap" data-escena="repaso" data-tipo="video" data-num="5" style="--c:var(--c-ejer)">
 <div class="bv-cap-txt"><span class="bv-num bv-mano" aria-hidden="true">5</span><div>
-<h3><span class="i18n" data-es="Haz ejercicios" data-it="Fai esercizi" data-en="Do exercises">Haz ejercicios</span></h3>
+<h3><span class="i18n" data-es="Practica" data-it="Esercitati" data-en="Practise">Practica</span></h3>
 <p class="i18n" data-html data-es="Encuentras &lt;mark class=&quot;bv-m&quot;&gt;ejercicios hechos sobre lo que hemos visto&lt;/mark&gt;, que se corrigen solos. Los haces &lt;mark class=&quot;bv-m&quot;&gt;cuando te venga bien&lt;/mark&gt;, sin fecha de entrega, y si te quedas con ganas, generas más." data-it="Trovi &lt;mark class=&quot;bv-m&quot;&gt;esercizi fatti su quello che abbiamo visto&lt;/mark&gt;, che si correggono da soli. Li fai &lt;mark class=&quot;bv-m&quot;&gt;quando ti va bene&lt;/mark&gt;, senza scadenze, e se ne vuoi ancora, ne generi altri." data-en="You’ll find &lt;mark class=&quot;bv-m&quot;&gt;exercises built on what we covered&lt;/mark&gt;, which mark themselves. Do them &lt;mark class=&quot;bv-m&quot;&gt;whenever it suits you&lt;/mark&gt;, with no deadline, and if you want more, generate some more.">Encuentras <mark class="bv-m">ejercicios hechos sobre lo que hemos visto</mark>, que se corrigen solos. Los haces <mark class="bv-m">cuando te venga bien</mark>, sin fecha de entrega, y si te quedas con ganas, generas más.</p>
 </div></div>
 <div class="bv-cap-media"></div>
 </li>
-<li class="bv-cap" data-escena="lectura" data-foco="56 52 1.2" data-tipo="video" data-num="6" style="--c:var(--c-ejer)">
+<li class="bv-cap" data-escena="lectura" data-tipo="video" data-num="6" style="--c:var(--c-ejer)">
 <div class="bv-cap-txt"><span class="bv-num bv-mano" aria-hidden="true">6</span><div>
 <h3><span class="i18n" data-es="Lee" data-it="Leggi" data-en="Read">Lee</span></h3>
 <p class="i18n" data-html data-es="Un texto &lt;mark class=&quot;bv-m&quot;&gt;escrito para tu clase&lt;/mark&gt;, con preguntas para comprobar que lo entiendes y un hueco para escribir lo que quieras. Lo que hagas &lt;mark class=&quot;bv-m&quot;&gt;lo comentamos juntos&lt;/mark&gt; en la clase siguiente." data-it="Un testo &lt;mark class=&quot;bv-m&quot;&gt;scritto per la tua lezione&lt;/mark&gt;, con domande per verificare che lo capisci e uno spazio per scrivere quello che vuoi. Quello che fai &lt;mark class=&quot;bv-m&quot;&gt;lo commentiamo insieme&lt;/mark&gt; nella lezione successiva." data-en="A text &lt;mark class=&quot;bv-m&quot;&gt;written for your lesson&lt;/mark&gt;, with questions to check you understand it and a space to write whatever you like. Whatever you do, &lt;mark class=&quot;bv-m&quot;&gt;we go over it together&lt;/mark&gt; in the next lesson.">Un texto <mark class="bv-m">escrito para tu clase</mark>, con preguntas para comprobar que lo entiendes y un hueco para escribir lo que quieras. Lo que hagas <mark class="bv-m">lo comentamos juntos</mark> en la clase siguiente.</p>
 </div></div>
 <div class="bv-cap-media"></div>
 </li>
-<li class="bv-tramo bv-aparece" style="--c:var(--c-ejer)"><h3 class="i18n" data-es="Y en tu móvil" data-it="E sul tuo telefono" data-en="And on your phone">Y en tu móvil</h3><span class="bv-raya" aria-hidden="true"></span></li>
 <li class="bv-cap" data-escena="cinco" data-tipo="movil" data-num="7" style="--c:var(--c-ejer)">
 <div class="bv-cap-txt"><span class="bv-num bv-mano" aria-hidden="true">7</span><div>
-<h3><span class="i18n" data-es="Cinco minutos" data-it="Cinque minuti" data-en="Five minutes">Cinco minutos</span></h3>
-<p class="i18n" data-html data-es="Entre clase y clase, desde el móvil: &lt;mark class=&quot;bv-m&quot;&gt;seis ejercicios al azar de todas tus clases&lt;/mark&gt;. Si te apetece más, otra tanda. &lt;mark class=&quot;bv-m&quot;&gt;Sin rachas que mantener ni premios que perseguir&lt;/mark&gt;: lo haces cuando quieres." data-it="Tra una lezione e l’altra, dal telefono: &lt;mark class=&quot;bv-m&quot;&gt;sei esercizi a caso da tutte le tue lezioni&lt;/mark&gt;. Se ti va, un altro giro. &lt;mark class=&quot;bv-m&quot;&gt;Nessuna serie da mantenere né premi da inseguire&lt;/mark&gt;: lo fai quando vuoi." data-en="Between lessons, on your phone: &lt;mark class=&quot;bv-m&quot;&gt;six random exercises from all your lessons&lt;/mark&gt;. Fancy more? Another round. &lt;mark class=&quot;bv-m&quot;&gt;No streaks to keep, no rewards to chase&lt;/mark&gt;: you do it when you want.">Entre clase y clase, desde el móvil: <mark class="bv-m">seis ejercicios al azar de todas tus clases</mark>. Si te apetece más, otra tanda. <mark class="bv-m">Sin rachas que mantener ni premios que perseguir</mark>: lo haces cuando quieres.</p>
+<h3><span class="i18n" data-es="Repasa" data-it="Ripassa" data-en="Review">Repasa</span></h3>
+<p class="i18n" data-html data-es="Entra en &lt;mark class=&quot;bv-m&quot;&gt;«Cinco minutos»&lt;/mark&gt;, también desde el móvil: ejercicios al azar de &lt;mark class=&quot;bv-m&quot;&gt;todas las clases que hemos visto&lt;/mark&gt;, para que lo aprendido &lt;mark class=&quot;bv-m&quot;&gt;siga vivo&lt;/mark&gt;. Sin rachas que mantener: lo haces cuando quieres." data-it="Entra in &lt;mark class=&quot;bv-m&quot;&gt;«Cinque minuti»&lt;/mark&gt;, anche dal telefono: esercizi a caso da &lt;mark class=&quot;bv-m&quot;&gt;tutte le lezioni che abbiamo fatto&lt;/mark&gt;, perché quello che hai imparato &lt;mark class=&quot;bv-m&quot;&gt;resti vivo&lt;/mark&gt;. Nessuna serie da mantenere: lo fai quando vuoi." data-en="Open &lt;mark class=&quot;bv-m&quot;&gt;“Five minutes”&lt;/mark&gt;, on your phone too: random exercises from &lt;mark class=&quot;bv-m&quot;&gt;all the lessons we’ve done&lt;/mark&gt;, so what you’ve learnt &lt;mark class=&quot;bv-m&quot;&gt;stays alive&lt;/mark&gt;. No streaks to keep: you do it when you want.">Entra en <mark class="bv-m">«Cinco minutos»</mark>, también desde el móvil: ejercicios al azar de <mark class="bv-m">todas las clases que hemos visto</mark>, para que lo aprendido <mark class="bv-m">siga vivo</mark>. Sin rachas que mantener: lo haces cuando quieres.</p>
 </div></div>
 <div class="bv-cap-media"></div>
 </li>
@@ -431,7 +431,7 @@ html:not([data-theme="dark"]) .bv-cap,html:not([data-theme="dark"]) .bv-tramo,ht
 </div></div>
 <div class="bv-cap-media"></div>
 </li>
-<li class="bv-cap" data-escena="teoria" data-foco="56 45 1.2" data-tipo="video" data-num="+" style="--c:var(--c-teoria)">
+<li class="bv-cap" data-escena="teoria" data-tipo="video" data-num="+" style="--c:var(--c-teoria)">
 <div class="bv-cap-txt"><span class="bv-num bv-mano" aria-hidden="true">+</span><div>
 <h3><span class="i18n" data-es="Repasa la teoría" data-it="Ripassa la teoria" data-en="Brush up on theory">Repasa la teoría</span></h3>
 <p class="i18n" data-html data-es="Toda la teoría ordenada, &lt;mark class=&quot;bv-m&quot;&gt;para consultar cuando te surja una duda&lt;/mark&gt; o para leer tranquilamente. Desde el ordenador o desde el móvil, &lt;mark class=&quot;bv-m&quot;&gt;cuando y como quieras&lt;/mark&gt;." data-it="Tutta la teoria in ordine, &lt;mark class=&quot;bv-m&quot;&gt;da consultare quando ti viene un dubbio&lt;/mark&gt; o da leggere con calma. Dal computer o dal telefono, &lt;mark class=&quot;bv-m&quot;&gt;quando e come vuoi&lt;/mark&gt;." data-en="All the theory, neatly organised, &lt;mark class=&quot;bv-m&quot;&gt;to look up when a doubt comes up&lt;/mark&gt; or to read at leisure. On your computer or your phone, &lt;mark class=&quot;bv-m&quot;&gt;whenever and however you like&lt;/mark&gt;.">Toda la teoría ordenada, <mark class="bv-m">para consultar cuando te surja una duda</mark> o para leer tranquilamente. Desde el ordenador o desde el móvil, <mark class="bv-m">cuando y como quieras</mark>.</p>
@@ -446,12 +446,14 @@ html:not([data-theme="dark"]) .bv-cap,html:not([data-theme="dark"]) .bv-tramo,ht
 <section class="bv-gratis" id="muestra">
 <span class="bv-globo bv-globo-2 bv-mano" aria-hidden="true">¡Vamos!</span>
 <span class="bv-globo bv-globo-3 bv-mano" aria-hidden="true">Poco a poco</span>
+<div class="bv-gratis-txt">
 <h2 class="bv-mano i18n" data-es="¡Pruébalo gratis!" data-it="Provalo gratis!" data-en="Try it for free!">¡Pruébalo gratis!</h2>
 <span class="bv-nivel">Si tuviera dinero… · B1–B2</span>
 <p class="i18n" data-es="Una clase entera, sin registrarte y tal cual la ve un alumno: la explicación, los ejercicios y la lectura «El décimo»." data-it="Una lezione intera, senza registrarti e così come la vede uno studente: la spiegazione, gli esercizi e la lettura «El décimo»." data-en="A whole lesson, no sign-up, exactly as a student sees it: the explanation, the exercises and the reading “El décimo”.">Una clase entera, sin registrarte y tal cual la ve un alumno: la explicación, los ejercicios y la lectura «El décimo».</p>
 <div class="bv-muestra-btns">
 <a class="bv-btn-plano" data-pag="clase-si-tuviera" href="clase-si-tuviera-es.html"><i class="ti ti-chalkboard-teacher" style="color:var(--c-clases)" aria-hidden="true"></i> <span class="i18n" data-es="Abrir la clase" data-it="Apri la lezione" data-en="Open the lesson">Abrir la clase</span></a>
 <a class="bv-btn-plano" data-pag="lectura" data-q="?clase=si-tuviera" href="lectura-es.html?clase=si-tuviera"><i class="ti ti-book" style="color:var(--c-ejer-d)" aria-hidden="true"></i> <span class="i18n" data-es="Leer «El décimo»" data-it="Leggi «El décimo»" data-en="Read “El décimo”">Leer «El décimo»</span></a>
+</div>
 </div>
 <a class="bv-muestra-img" data-pag="lectura" data-q="?clase=si-tuviera" href="lectura-es.html?clase=si-tuviera" tabindex="-1" aria-hidden="true">
 <div class="bv-ventana"><div class="bv-barra"><i></i><i></i><i></i><span>hablaconjose.com</span></div>
@@ -463,8 +465,8 @@ html:not([data-theme="dark"]) .bv-cap,html:not([data-theme="dark"]) .bv-tramo,ht
 <img class="bv-pj bv-pj-lucia" src="bienvenida/lucia.svg" alt="" width="148" height="144">
 <img class="bv-pj bv-pj-javi" src="bienvenida/javi.svg" alt="" width="152" height="148">
 <h2 class="bv-mano i18n" data-es="¿Empezamos?" data-it="Cominciamo?" data-en="Shall we start?">¿Empezamos?</h2>
-<p class="bv-precio"><span class="bv-mano">19 €</span> <span class="i18n" data-es="la clase" data-it="a lezione" data-en="per lesson">la clase</span></p>
-<p class="i18n bv-precio-sub" data-html data-es="Con la primera, &lt;mark class=&quot;bv-m&quot;&gt;toda la plataforma se abre para ti&lt;/mark&gt;." data-it="Con la prima, &lt;mark class=&quot;bv-m&quot;&gt;tutta la piattaforma si apre per te&lt;/mark&gt;." data-en="With the first one, &lt;mark class=&quot;bv-m&quot;&gt;the whole platform opens up for you&lt;/mark&gt;.">Con la primera, <mark class="bv-m">toda la plataforma se abre para ti</mark>.</p>
+<p class="i18n bv-precio" data-html data-es="Desbloquea todo el contenido por &lt;mark class=&quot;bv-m&quot;&gt;25&#160;€&lt;/mark&gt;, con tu primera videoclase incluida." data-it="Sblocca tutti i contenuti con &lt;mark class=&quot;bv-m&quot;&gt;25 €&lt;/mark&gt;, prima videolezione inclusa." data-en="Unlock all the content for &lt;mark class=&quot;bv-m&quot;&gt;€25&lt;/mark&gt;, with your first video lesson included.">Desbloquea todo el contenido por <mark class="bv-m">25 €</mark>, con tu primera videoclase incluida.</p>
+<p class="i18n bv-precio-sub" data-es="Luego, 19 € por clase." data-it="Poi, 19 € a lezione." data-en="After that, €19 per lesson.">Luego, 19 € por clase.</p>
 <ol class="bv-pago">
 <li><span class="i18n" data-es="Reservas sin pagar nada." data-it="Prenoti senza pagare nulla." data-en="You book without paying anything.">Reservas sin pagar nada.</span></li>
 <li><span class="i18n" data-es="Damos la clase y te abro tu sección." data-it="Facciamo lezione e ti apro la tua sezione." data-en="We have the lesson and I open your section.">Damos la clase y te abro tu sección.</span></li>

@@ -255,6 +255,10 @@ with sync_playwright() as p:
     clic(".lec-pal", 30, 250); espera(1600)
     q1 = pg.locator(".exercise-block").first
     clic(q1.locator(".option-btn", has_text="No, nunca"), 30, 300); espera(1600)
+    if ORDENADOR:
+        # en la bienvenida, la pantalla baja por el texto y las preguntas
+        m.move(900, 700, steps=12)
+        baja(460, 2200); espera(1300); baja(460, 2200); espera(1600)
     # 5 · cinco minutos
     corta(); pg.go_back(); pg.wait_for_load_state("load"); pg.wait_for_timeout(450); pg.evaluate("scrollTo(0,0)"); sigue(); rot(None)
     clic("a.cl-hoy", 30, 300); corta(); sigue(1300); marca("cinco")

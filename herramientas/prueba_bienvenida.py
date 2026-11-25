@@ -122,11 +122,13 @@ with sync_playwright() as p:
     pg.goto(B + "/bienvenida.html", wait_until="load"); pg.wait_for_timeout(600)
     comprueba(pg.locator(".bv-cap").count() == 9 and pg.locator("#bv-escenas > .bv-pantalla-paso").count() == 9,
               "nueve pasos, cada uno con su pantalla en la pantalla fija de la derecha")
-    comprueba(pg.locator(".bv-tramo").count() == 4, "cuatro tramos: la clase, después, el móvil y «y además»")
+    comprueba(pg.locator(".bv-tramo").count() == 3, "tres tramos: la clase, al terminar la clase y «y además»")
     comprueba(pg.locator('#reservar img[src$="lucia.svg"]').count() == 1 and pg.locator('#reservar img[src$="javi.svg"]').count() == 1,
               "el cierre lleva a Lucía y Javi")
-    comprueba("19" in pg.locator("#reservar .bv-precio").inner_text() and pg.locator("#reservar .bv-pago li").count() == 3,
-              "el cierre dice el precio y cómo se paga")
+    comprueba("25" in pg.locator("#reservar .bv-precio").inner_text() and "19" in pg.locator("#reservar .bv-precio-sub").inner_text()
+              and pg.locator("#reservar .bv-pago li").count() == 3, "el cierre dice el precio (25 €, luego 19 €) y cómo se paga")
+    comprueba(pg.evaluate("getComputedStyle(document.querySelector('#bv-escenas .bv-marco'), '::before').content") in ("none", "normal"),
+              "las pantallas no llevan número (solo el texto)")
     comprueba(pg.locator('#bv-escenas [data-escena="cinco"] .bv-telefono video').count() == 1
               and pg.locator('#bv-escenas [data-escena="cinco"] .bv-ventana').count() == 0,
               "cinco minutos: un teléfono solo, sin navegador alrededor")
@@ -151,8 +153,6 @@ with sync_playwright() as p:
             continue
         nombre = li.get_attribute("data-escena")
         comprueba(activo == [nombre], "al leer «%s», la pantalla enseña su escena" % nombre)
-        num = pg.evaluate("n => document.querySelector('#bv-escenas [data-escena=\"' + n + '\"] .bv-marco').dataset.num", nombre)
-        comprueba(num == li.locator(".bv-num").inner_text().strip(), "  con el mismo número que el paso")
         if li.get_attribute("data-tipo") in ("video", "movil"):
             suenan = pg.evaluate("() => [...document.querySelectorAll('#bv-escenas video')].filter(v => !v.paused).map(v => v.dataset.escena)")
             comprueba(suenan == [nombre], "  y solo se mueve esa (%s)" % suenan)
