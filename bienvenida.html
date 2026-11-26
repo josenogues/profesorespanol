@@ -5,6 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Habla Español con José · Clases de español por videollamada</title>
 <link rel="canonical" href="https://hablaconjose.com/bienvenida">
+<link rel="alternate" hreflang="es" href="https://hablaconjose.com/bienvenida">
+<link rel="alternate" hreflang="it" href="https://hablaconjose.com/bienvenida-it">
+<link rel="alternate" hreflang="en" href="https://hablaconjose.com/bienvenida-en">
+<link rel="alternate" hreflang="x-default" href="https://hablaconjose.com/bienvenida-en">
 <meta name="description" content="Clases particulares de español por videollamada, y después una web hecha a partir de tus clases: ejercicios, lecturas y toda la teoría.">
 <link rel="preload" href="fuentes/nunito-latin.woff2?v=76388dbfe3" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="fuentes/iconos.woff2?v=c3d28d0ee0" as="font" type="font/woff2" crossorigin>
@@ -12,6 +16,11 @@
 <link rel="apple-touch-icon" href="icono-movil.png">
 <link rel="stylesheet" href="styles.css?v=9b989d7f41">
 <script>if(localStorage.getItem('jn_theme')==='dark')document.documentElement.setAttribute('data-theme','dark');</script>
+<script>
+// Hay una bienvenida por idioma (bienvenida, -it, -en: así Google ve las
+// tres). Si el visitante ya eligió otro idioma, va a la suya.
+try{var g=localStorage.getItem('jn_track');if(/^(es|it|en)$/.test(g)&&g!==document.documentElement.lang)location.replace((g==='es'?'bienvenida':'bienvenida-'+g)+'.html'+location.search+location.hash)}catch(e){}
+</script>
 <style>
 /* Bienvenida: la página para quien todavía no es alumno. A ella lleva la portada
    (index.html) a quien no ha entrado nunca, y la puerta («¿Todavía no eres
@@ -728,13 +737,14 @@ html:not([data-theme="dark"]) .bv-hoja{--c-ejer:#b8760b}
 <footer>© 2026 José N. · <span class="i18n" data-es="Profesor de español" data-it="Insegnante di spagnolo" data-en="Spanish teacher">Profesor de español</span> · <a href="sobre-mi.html"><span class="i18n" data-es="Sobre mí" data-it="Chi sono" data-en="About me">Sobre mí</span></a> · <a href="privacidad.html"><span class="i18n" data-es="Privacidad" data-it="Privacy" data-en="Privacy">Privacidad</span></a></footer>
 
 <script>
-// El idioma: el que eligió la última vez; si no, el del navegador (italiano o
-// inglés; el español, a quien lo tenga puesto). Se guarda en jn_track solo
-// cuando lo elige o al ir a la clase de muestra, a entrar o a «Sobre mí».
+// El idioma es el de esta página: hay una por idioma (esta en español;
+// bienvenida-it y bienvenida-en las saca de ella
+// herramientas/bienvenida_idiomas.py). A ella se llega desde la portada, que
+// mira el idioma elegido o el del navegador. Se guarda en jn_track cuando lo
+// elige o al ir a la clase de muestra, a entrar o a «Sobre mí».
 (function(){
-  var guardado = null;
-  try { guardado = localStorage.getItem('jn_track'); } catch(e){}
-  var nav = (navigator.language || '').slice(0, 2).toLowerCase();
+  var raiz = document.documentElement;
+  var l = raiz.lang;
   var estrecho = window.matchMedia('(max-width:640px)');
   // en el ordenador con pantalla de sobra: la presentación con fondo fijo
   var grande = window.matchMedia('(min-width:1181px) and (min-height:640px)');
@@ -743,8 +753,6 @@ html:not([data-theme="dark"]) .bv-hoja{--c-ejer:#b8760b}
   // con el dedo (móvil, tableta) las hojas se pasan tocando o deslizando, no con el scroll
   var dedo = window.matchMedia('(max-width:900px), (pointer:coarse)');
   var quieto = window.matchMedia('(prefers-reduced-motion: reduce)');
-  var l = /^(es|it|en)$/.test(guardado || '') ? guardado : (nav === 'it' || nav === 'es' ? nav : 'en');
-  var raiz = document.documentElement;
   var FOTOS = ['nivel', 'tema', 'curso'];
 
   function juega(v){ if(quieto.matches || !v || !v.play) return; var p = v.play(); if(p && p.catch) p.catch(function(){}); }
@@ -969,9 +977,12 @@ html:not([data-theme="dark"]) .bv-hoja{--c-ejer:#b8760b}
     if(actual != null) enciende(hojas[actual]);
   }
   document.querySelectorAll('.bv-idiomas button').forEach(function(b){
+    // otro idioma es otra página (las banderas solo están arriba: se empieza por arriba)
     b.addEventListener('click', function(){
-      pon(b.dataset.l);
-      try { localStorage.setItem('jn_track', l); } catch(e){}
+      var otro = b.dataset.l;
+      if(otro === l) return;
+      try { localStorage.setItem('jn_track', otro); } catch(e){}
+      location.href = (otro === 'es' ? 'bienvenida' : 'bienvenida-' + otro) + '.html';
     });
   });
   document.querySelectorAll('[data-pag], a[href^="index.html"], a[href^="sobre-mi"]').forEach(function(a){

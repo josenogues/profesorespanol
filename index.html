@@ -16,7 +16,8 @@
 // Quien llega sin haber entrado nunca no es (todavía) alumno: ve la
 // bienvenida. Se queda aquí, con la puerta, si viene a entrar (?entrar), si
 // vuelve con el enlace del correo (oobCode) o si está esperando ese enlace.
-try{if(!(localStorage.getItem('jn_profe')==='true'||(localStorage.getItem('jn_access_granted')==='true'&&localStorage.getItem('jn_student_email')))&&!/[?&](entrar|oobCode)\b/.test(location.search)&&!localStorage.getItem('jn_email_pendiente'))location.replace('bienvenida.html')}catch(e){}
+// Hay una bienvenida por idioma: la que eligió o, si no, la de su navegador.
+try{var bvl=localStorage.getItem('jn_track');if(!/^(es|it|en)$/.test(bvl||'')){bvl=(navigator.language||'').slice(0,2).toLowerCase();if(bvl!=='es'&&bvl!=='it')bvl='en'}if(!(localStorage.getItem('jn_profe')==='true'||(localStorage.getItem('jn_access_granted')==='true'&&localStorage.getItem('jn_student_email')))&&!/[?&](entrar|oobCode)\b/.test(location.search)&&!localStorage.getItem('jn_email_pendiente'))location.replace(bvl==='es'?'bienvenida.html':'bienvenida-'+bvl+'.html')}catch(e){}
 </script>
 </head>
 <body>
@@ -176,7 +177,7 @@ try{if(!(localStorage.getItem('jn_profe')==='true'||(localStorage.getItem('jn_ac
 <script type="module" src="firebase-sync.js?v=34c910e4bb"></script>
 <script src="clases.js?v=cb7f00e3c3"></script>
 <script src="temas.js?v=29497494e8"></script>
-<script src="script.js?v=df183bccf3"></script>
+<script src="script.js?v=56c6a12e17"></script>
 <script src="inicio.js?v=a2a9512e5c"></script>
 </body>
 </html>

@@ -7,7 +7,9 @@ Qué mira:
   · quien llega a la portada sin haber entrado nunca va a la bienvenida;
     el alumno que ya entró, el profesor, quien viene a entrar (?entrar), quien
     vuelve con el enlace del correo y quien lo está esperando, no;
-  · la bienvenida sale en el idioma del navegador (o en el elegido), con su
+  · hay una bienvenida por idioma (bienvenida, -it, -en): la portada lleva a
+    la del idioma elegido o del navegador, cada una viene ya escrita en el
+    suyo (lo que lee Google) y cambiar de idioma lleva a la otra; con su
     vídeo —el de móvil en el móvil— y la clase de muestra en ese idioma;
   · reservar lleva a TidyCal (Preply solo en «Sobre mí»), y «Entrar» a la puerta;
   · la clase de muestra y su lectura se ven sin entrar, con la franja de
@@ -83,23 +85,37 @@ with sync_playwright() as p:
     comprueba(pg.locator(".access-gate-overlay").is_visible(), "con ?entrar sale la puerta")
     c.close()
 
-    print("\n═══ la bienvenida ═══")
+    print("\n═══ la bienvenida: una página por idioma ═══")
     for navegador, l, frase in (("it-IT", "it", "Le tue lezioni"), ("en-GB", "en", "Your Spanish lessons"),
                                 ("es-ES", "es", "Tus clases"), ("de-DE", "en", "Your Spanish lessons")):
         c = nuevo(br, navegador=navegador); pg = pagina(c)
-        pg.goto(B + "/bienvenida.html", wait_until="load"); pg.wait_for_timeout(400)
-        comprueba(frase in pg.locator("h1").inner_text(), "navegador %s: sale en %s" % (navegador, l))
+        pg.goto(B + "/index.html", wait_until="load"); pg.wait_for_timeout(600)
+        pag = "bienvenida.html" if l == "es" else "bienvenida-%s.html" % l
+        comprueba(pg.url.endswith("/" + pag), "navegador %s: la portada lleva a %s" % (navegador, pag))
+        comprueba(frase in pg.locator("h1").inner_text(), "  sale en %s" % l)
         comprueba(pg.locator("#bv-video").get_attribute("src") == "bienvenida/recorrido-%s.mp4" % l,
                   "  con su vídeo en %s" % l)
         comprueba(pg.locator('a[data-pag="clase-si-tuviera"]').get_attribute("href") == "clase-si-tuviera-%s.html" % l,
                   "  y la clase de muestra en %s" % l)
         c.close()
 
+    # lo que ve Google: cada dirección, en su idioma, aunque el navegador diga otro
+    c = nuevo(br, navegador="en-US"); pg = pagina(c)
+    for pag, l, frase in (("bienvenida.html", "es", "Tus clases"), ("bienvenida-it.html", "it", "Le tue lezioni")):
+        r = pg.request.get(B + "/" + pag).text()
+        comprueba(('<html lang="%s"' % l) in r and frase in r, "%s ya viene escrita en %s (sin esperar al JavaScript)" % (pag, l))
+        comprueba(r.count('hreflang=') == 4, "  y dice a Google cuáles son las otras")
+        pg.goto(B + "/" + pag, wait_until="load"); pg.wait_for_timeout(400)
+        comprueba(pg.url.endswith("/" + pag) and frase in pg.locator("h1").inner_text(),
+                  "  abierta con el navegador en inglés, se queda en %s" % l)
+    c.close()
+
     c = nuevo(br); pg = pagina(c)
     pg.goto(B + "/bienvenida.html", wait_until="load"); pg.wait_for_timeout(400)
-    pg.locator('.bv-idiomas button[data-l="en"]').click(); pg.wait_for_timeout(200)
-    comprueba("Your Spanish" in pg.locator("h1").inner_text() and pg.evaluate("localStorage.getItem('jn_track')") == "en",
-              "cambiar de idioma cambia la página y se recuerda")
+    pg.locator('.bv-idiomas button[data-l="en"]').click(); pg.wait_for_load_state("load"); pg.wait_for_timeout(500)
+    comprueba(pg.url.endswith("/bienvenida-en.html") and "Your Spanish" in pg.locator("h1").inner_text()
+              and pg.evaluate("localStorage.getItem('jn_track')") == "en",
+              "cambiar de idioma lleva a la página de ese idioma y se recuerda")
     comprueba(pg.locator("#bv-video").get_attribute("src") == "bienvenida/recorrido-en.mp4", "y el vídeo")
     comprueba(pg.locator("html").get_attribute("lang") == "en", "y el idioma declarado")
     comprueba(pg.locator('a[href*="preply"]').count() == 0 and pg.locator('a[href="https://tidycal.com/josenogues"]').count() == 1,
@@ -116,6 +132,7 @@ with sync_playwright() as p:
     comprueba("clase-si-tuviera-en" in pg.url and pg.locator('.riel-btn[data-sec="clases"]').inner_text().strip() == "My classes",
               "la clase de muestra se abre con el menú en el idioma elegido")
     pg.goto(B + "/bienvenida.html", wait_until="load"); pg.wait_for_timeout(300)
+    comprueba(pg.url.endswith("/bienvenida-en.html"), "quien eligió inglés y abre la bienvenida en español, va a la suya")
     pg.locator(".bv-riel-entrar").click(); pg.wait_for_load_state("load"); pg.wait_for_timeout(900)
     comprueba("bienvenida" not in pg.url and pg.locator(".access-gate-overlay").is_visible(),
               "pulsar «Entrar» abre la puerta, sin volver a la bienvenida")
@@ -123,7 +140,7 @@ with sync_playwright() as p:
 
     print("\n═══ cómo funciona: el bloc de notas, en el ordenador ═══")
     c = br.new_context(viewport={"width": 1440, "height": 900}, locale="it-IT"); pg = pagina(c)
-    pg.goto(B + "/bienvenida.html", wait_until="load"); pg.wait_for_timeout(600)
+    pg.goto(B + "/bienvenida-it.html", wait_until="load"); pg.wait_for_timeout(600)
     comprueba(pg.locator(".bv-hoja").count() == 13 and pg.locator(".bv-tapa").count() == 1
               and pg.locator(".bv-separa").count() == 3 and pg.locator(".bv-paso").count() == 9,
               "un bloc: la tapa, tres separadores (la clase, al terminar la clase y «y además») y nueve pasos")
@@ -212,13 +229,13 @@ with sync_playwright() as p:
 
     print("\n═══ en el móvil ═══")
     c = nuevo(br, ancho=390); pg = pagina(c)
-    pg.goto(B + "/bienvenida.html", wait_until="load"); pg.wait_for_timeout(500)
+    pg.goto(B + "/bienvenida-it.html", wait_until="load"); pg.wait_for_timeout(500)
     comprueba(pg.locator("#bv-video").get_attribute("src") == "bienvenida/recorrido-movil-it.mp4", "el vídeo de móvil")
     comprueba(pg.locator(".bv-pantalla.es-movil").count() == 1, "dentro del teléfono")
     comprueba(pg.evaluate("document.documentElement.scrollWidth") <= 390, "nada se sale por los lados")
     for ancho, altura in ((390, 844), (375, 667)):
         c2 = br.new_context(viewport={"width": ancho, "height": altura}, locale="it-IT", is_mobile=True, has_touch=True)
-        pg2 = pagina(c2); pg2.goto(B + "/bienvenida.html", wait_until="load"); pg2.wait_for_timeout(500)
+        pg2 = pagina(c2); pg2.goto(B + "/bienvenida-it.html", wait_until="load"); pg2.wait_for_timeout(500)
         pg2.evaluate("document.querySelector('.bv-bloc-pista').scrollIntoView()"); pg2.wait_for_timeout(500)
         cabe = pg2.evaluate("""() => [...document.querySelectorAll('.bv-cara')].every(c => c.scrollWidth <= c.clientWidth + 1
             && [...c.children].every(x => x.classList.contains('bv-pestana') || x.getBoundingClientRect().bottom <= c.getBoundingClientRect().bottom + 1))""")
@@ -257,7 +274,9 @@ with sync_playwright() as p:
         pg.goto(B + url, wait_until="load"); pg.wait_for_timeout(1500)
         comprueba(pg.locator(".access-gate-overlay").count() == 0, "%s se ve sin la puerta" % qué)
         comprueba(pg.locator(".muestra-franja").is_visible(), "  con la franja de muestra")
-        comprueba(pg.locator('.muestra-franja a[href="bienvenida.html#reservar"]').count() == 1, "  que lleva a reservar")
+        # la franja habla el idioma del visitante (aquí, navegador en italiano): su enlace también
+        comprueba(pg.locator('.muestra-franja a[href="bienvenida-it.html#reservar"]').count() == 1,
+                  "  que lleva a reservar (a la bienvenida en su idioma)")
         if "lectura" in url:
             comprueba(pg.locator(".lec-pal").count() > 0 and pg.locator(".exercise-block").count() >= 6,
                       "  la lectura entera, con sus palabras y sus preguntas")
@@ -275,7 +294,7 @@ with sync_playwright() as p:
     comprueba(pg.locator(".access-gate-overlay").is_visible(), "otra lectura sigue cerrada")
     pg.goto(B + "/clase-motor-it.html", wait_until="load"); pg.wait_for_timeout(900)
     comprueba(pg.locator(".access-gate-overlay").is_visible(), "otra clase sigue cerrada")
-    comprueba(pg.locator('.access-gate-nuevo a[href="bienvenida.html"]').is_visible(), "y su puerta enlaza con la bienvenida")
+    comprueba(pg.locator('.access-gate-nuevo a[href="bienvenida-it.html"]').is_visible(), "y su puerta enlaza con la bienvenida (en italiano)")
     comprueba("Non sei ancora studente" in pg.locator(".access-gate-nuevo").inner_text(), "  en el idioma del visitante")
     c.close()
 

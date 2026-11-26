@@ -179,8 +179,15 @@ bueno; lo pequeño y claro, hacerlo.
   `robots.txt` solo deja ver la bienvenida, «Sobre mí» y la privacidad (y lo
   que necesitan para pintarse); las tres llevan `rel="canonical"` a
   hablaconjose.com. **Si se hace pública otra página, añadirla a los dos.**
-  AdSense, descartado (céntimos, y anuncios de la competencia). Google solo
-  ve la bienvenida en español: una versión it/en propia queda por hablar.
+  AdSense, descartado (céntimos, y anuncios de la competencia).
+- **Una bienvenida por idioma** (26 nov 2026, para que Google vea las tres):
+  `bienvenida.html` (español), `bienvenida-it.html` y `bienvenida-en.html`.
+  **Solo se toca `bienvenida.html`**: las otras dos las saca
+  `herramientas/bienvenida_idiomas.py` (las rehace `revisar.py`; tocadas a
+  mano, se pierde el cambio). Cada una viene ya escrita en su idioma, con su
+  título, descripción y `hreflang`; la portada manda a la del idioma elegido
+  o del navegador, las banderas llevan a la otra página y, si el visitante
+  ya eligió otro idioma, va a la suya.
 - La puerta enlaza con la bienvenida («¿Todavía no eres alumno?»).
 - Si cambia el aspecto de la web, los vídeos se vuelven a grabar con
   `herramientas/graba_recorrido.py` (sin nada: los recorridos y las escenas;

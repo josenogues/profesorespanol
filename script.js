@@ -21,6 +21,11 @@ function jnEscapeHtml(s){
 // OJO: esto es para el texto que le decimos nosotros. NO sirve para decidir
 // qué contenido existe ni qué resultados enseña el buscador: ahí «no ha
 // elegido» significa «enséñalo todo», y adivinar escondería páginas.
+// La bienvenida tiene una página por idioma (así Google ve las tres)
+window.jnBienvenida = function(l){
+  return l === 'it' || l === 'en' ? 'bienvenida-' + l + '.html' : 'bienvenida.html';
+};
+
 window.jnIdioma = function(){
   const elegido = localStorage.getItem('jn_track');
   if(elegido === 'es' || elegido === 'it' || elegido === 'en') return elegido;
@@ -767,7 +772,7 @@ document.addEventListener("jn-modo", e => marcaModo(e.detail));
             '><img class="bandera" src="banderas/' + l[1] + '.svg" width="21" height="14" alt=""> ' + l[2] + '</button>';
         }).join('') +
       '</div>' +
-      '<p class="access-gate-nuevo">' + esc(t.nuevo) + ' <a href="bienvenida.html">' + esc(t.nuevoir) + ' →</a></p>';
+      '<p class="access-gate-nuevo">' + esc(t.nuevo) + ' <a href="' + jnBienvenida(T.it === t ? 'it' : T.en === t ? 'en' : 'es') + '">' + esc(t.nuevoir) + ' →</a></p>';
     input = cuerpo.querySelector('.access-gate-input');
     btn = cuerpo.querySelector('.access-gate-btn');
     errorEl = cuerpo.querySelector('.access-gate-error');
@@ -979,7 +984,7 @@ document.addEventListener("jn-modo", e => marcaModo(e.detail));
       const f = document.createElement('div');
       f.className = 'muestra-franja';
       f.innerHTML = '<i class="ti ti-eye" aria-hidden="true"></i><span>' + esc(t.muestra) + '</span>' +
-        '<a href="bienvenida.html#reservar">' + esc(t.muestrair) + ' →</a>';
+        '<a href="' + jnBienvenida(T.it === t ? 'it' : T.en === t ? 'en' : 'es') + '#reservar">' + esc(t.muestrair) + ' →</a>';
       main.insertBefore(f, main.firstChild);
     };
     if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', pon); else pon();

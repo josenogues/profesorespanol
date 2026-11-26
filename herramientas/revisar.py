@@ -21,6 +21,16 @@ def apunta(categoria, texto):
     hallazgos[categoria].append(texto)
 
 
+# ── 0. la bienvenida en italiano y en inglés, sacadas de la española ─────
+# Se rehacen antes de nada, para que lo demás revise las de verdad. Si
+# cambian, es que se tocó bienvenida.html sin rehacerlas.
+_bv = subprocess.run([sys.executable, os.path.join(REPO, "herramientas", "bienvenida_idiomas.py")],
+                     capture_output=True, text=True)
+if _bv.returncode:
+    apunta("bienvenida por idiomas", (_bv.stderr or _bv.stdout).strip()[-200:])
+elif _bv.stdout.startswith("rehechas"):
+    apunta("bienvenida por idiomas", _bv.stdout.strip() + " (estaban desfasadas; pasa herramientas/versiones.py)")
+
 PAGINAS = sorted(os.path.basename(p) for p in glob.glob(REPO + "/*.html"))
 EXISTE = set(PAGINAS)
 CUERPO = {p: open(os.path.join(REPO, p), encoding="utf-8").read() for p in PAGINAS}
@@ -201,8 +211,9 @@ PERMITIDOS = ("https://www.gstatic.com/firebasejs/",)
 for pag, s in CUERPO.items():
     for m in re.finditer(r'<(?:link|script)\b[^>]*?(?:href|src)="(https?://[^"]+)"[^>]*>', s):
         etiqueta, url = m.group(0), m.group(1)
-        # rel="canonical" no carga nada: solo dice a Google cuál es la dirección buena
-        if 'rel="preconnect"' in etiqueta or 'rel="canonical"' in etiqueta or url.startswith(PERMITIDOS):
+        # rel="canonical" y "alternate" no cargan nada: le dicen a Google cuál es la
+        # dirección buena y cuáles son la misma página en otro idioma
+        if 'rel="preconnect"' in etiqueta or 'rel="canonical"' in etiqueta or 'rel="alternate"' in etiqueta or url.startswith(PERMITIDOS):
             continue
         apunta("recursos de terceros en una página", f"{pag} → {url[:70]}")
 for hoja in glob.glob(REPO + "/*.css"):
