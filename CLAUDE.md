@@ -226,7 +226,7 @@ José pide algo de otro frente, decírselo y mandarlo a la que toca.
 - **Web**: la única que cambia este repositorio (la web de los alumnos, el
   panel del profesor y la mudanza al dominio).
 - **Redes y vídeo**: los vídeos (repositorio `estudio-profesorespanol`), las
-  cuentas @hablaconjose (YouTube, TikTok; Instagram pendiente) y el plan de
+  cuentas @hablaconjose (YouTube, TikTok e Instagram) y el plan de
   marketing. No toca este repositorio.
 - **PM · gestión del proyecto**: lleva el orden y las prioridades y hace los
   resúmenes. No cambia la web; como mucho, este CLAUDE.md. Lleva también la
