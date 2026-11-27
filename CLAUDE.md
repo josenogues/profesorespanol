@@ -84,7 +84,7 @@ bueno; lo pequeño y claro, hacerlo.
   regla B1/B2). El texto no se traduce: solo las palabras difíciles, al
   tocarlas.
 - En el panel, lo escrito por el alumno sale en un desplegable dentro de esa
-  clase. Hay dos: «El décimo», de la 540 («Si tuviera dinero…»), y «¿Qué tal el tiempo por ahí?», de la 160 («Hablar del tiempo», A1, con el glosario más amplio).
+  clase. Hay cinco: «El décimo», de la 540 («Si tuviera dinero…»); «¿Qué tal el tiempo por ahí?», de la 160 («Hablar del tiempo», A1, con el glosario más amplio); y, del 27 nov 2026, «Mis martes» (140, el presente), «El tren de las diez» (145, desde hace, ¿te ayudo?, casi) y «Ya estoy en Granada» (150, ser, estar y hay).
 - Cómo está hecha: los textos en `lecturas.js` (formato explicado arriba del
   archivo); `lectura-XX.html?clase=<id>` es una sola página por pista
   (`lectura.js`); el botón «Lectura» del panel sale solo en las clases que
