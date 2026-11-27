@@ -1,6 +1,6 @@
 # Nota para los buscadores (Google y los demás).
-# Solo se enseña lo que ve cualquiera sin entrar: la bienvenida, «Sobre mí»
-# y la privacidad. Lo de dentro (clases, teoría, ejercicios, panel) es para
+# Solo se enseña lo que ve cualquiera sin entrar: la bienvenida, «Sobre mí»,
+# la privacidad y las páginas escaparate. Lo de dentro (clases, teoría, ejercicios, panel) es para
 # los alumnos, y los archivos de trabajo (CLAUDE.md, herramientas/) no son
 # páginas. Se permiten letras, estilos, imágenes y los scripts que usan esas
 # páginas, porque Google los necesita para verlas como una persona. Los que
@@ -13,6 +13,7 @@ Allow: /index
 Allow: /bienvenida
 Allow: /sobre-mi
 Allow: /privacidad
+Allow: /falsi-amici-spagnolo-it
 Allow: /*.css
 Allow: /script.js
 Allow: /firebase-init.js

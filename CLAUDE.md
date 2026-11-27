@@ -188,6 +188,16 @@ bueno; lo pequeño y claro, hacerlo.
   título, descripción y `hreflang`; la portada manda a la del idioma elegido
   o del navegador, las banderas llevan a la otra página y, si el visitante
   ya eligió otro idioma, va a la suya.
+- **Páginas escaparate** (27 nov 2026): páginas abiertas para quien llega
+  desde Google o los vídeos, con texto nuevo (no la teoría de dentro, que
+  sigue cerrada), un ejercicio corto y al final «¿Te ha servido?» con la
+  bienvenida y la clase de prueba. La primera: `falsi-amici-spagnolo-it.html`
+  (15 falsos amigos para italianos; aprobada por José). Para una nueva:
+  enseñársela a José antes, y añadirla a la lista de abiertas de `script.js`
+  (junto a «Sobre mí»), a `robots.txt`, al `sitemap.xml`, a `SUELTAS_OK` de
+  `revisar.py` y a `FUERA` de `indexar.py` (el alumno ya tiene la teoría).
+  Idea: empezar por el italiano (menos competencia) y que cada una vaya con
+  un vídeo (los temas, con «Redes y vídeo»).
 - La puerta enlaza con la bienvenida («¿Todavía no eres alumno?»).
 - Si cambia el aspecto de la web, los vídeos se vuelven a grabar con
   `herramientas/graba_recorrido.py` (sin nada: los recorridos y las escenas;

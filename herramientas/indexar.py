@@ -28,7 +28,9 @@ import sys
 RAIZ = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # el panel es del profesor; la privacidad sí se busca, que para eso está
 # la bienvenida es para quien todavía no es alumno: no sale en el buscador
-FUERA = {"panel-profesor.html", "bienvenida.html", "bienvenida-it.html", "bienvenida-en.html"}
+FUERA = {"panel-profesor.html", "bienvenida.html", "bienvenida-it.html", "bienvenida-en.html",
+         # las páginas escaparate son para quien llega de fuera: el alumno tiene la teoría
+         "falsi-amici-spagnolo-it.html"}
 
 # el encabezado de la página —migas, botones de idioma, interruptor de tema—
 # no es contenido: si entra, buscar «Italiano» devuelve las 173 páginas

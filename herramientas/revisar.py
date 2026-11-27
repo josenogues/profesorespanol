@@ -267,6 +267,8 @@ for s in CUERPO.values():
 SUELTAS_OK = {"index.html", "panel-profesor.html"}
 # a la bienvenida lleva la portada a quien no ha entrado, y la puerta (con JavaScript)
 SUELTAS_OK.add("bienvenida.html")
+# a las páginas escaparate se llega desde Google y los vídeos
+SUELTAS_OK.add("falsi-amici-spagnolo-it.html")
 # a las clases se llega desde «Mis clases», que las pinta con JavaScript
 SUELTAS_OK |= {p for p in PAGINAS if p.startswith("clase-")}
 # y a las lecturas, desde el botón de su clase en «Mis clases» y desde el panel

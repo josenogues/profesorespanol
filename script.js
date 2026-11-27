@@ -161,7 +161,10 @@ document.addEventListener("jn-modo", e => marcaModo(e.detail));
   };
 
   function applyI18n(){
-    const t = getTrack();
+    // si aún no ha elegido idioma (quien llega de Google a una página -it o
+    // -en), el de la página: si no, el menú y el pie le salían en español
+    const dePag = (location.pathname.match(/-(it|en)(?:\.html)?$/) || [])[1];
+    const t = getTrack() || dePag;
     // las páginas comunes (portada, «Sobre mí»…) van en el idioma del alumno:
     // así un lector de pantalla no lee el italiano o el inglés con voz española.
     // Las de cada pista (-it.html, -en.html) ya lo llevan puesto.
@@ -975,8 +978,10 @@ document.addEventListener("jn-modo", e => marcaModo(e.detail));
   const pag = location.pathname.split('/').pop() || '';
   const esMuestra = new RegExp('^clase-' + MUESTRA + '-(es|it|en)(\\.html)?$').test(pag) ||
     (/^lectura-(es|it|en)(\.html)?$/.test(pag) && new URLSearchParams(location.search).get('clase') === MUESTRA);
-  // «Sobre mí» y la privacidad son para todos: la bienvenida enlaza con ellas
-  if(/^(sobre-mi|privacidad)(\.html)?$/.test(pag) && !pista && !/[?&]oobCode=/.test(location.search)) return;
+  // «Sobre mí» y la privacidad son para todos: la bienvenida enlaza con ellas.
+  // Y las páginas escaparate (falsi-amici-spagnolo-it…), hechas para quien
+  // llega desde Google o los vídeos: van también en robots.txt y el sitemap.
+  if(/^(sobre-mi|privacidad|falsi-amici-spagnolo-it)(\.html)?$/.test(pag) && !pista && !/[?&]oobCode=/.test(location.search)) return;
   if(esMuestra && !pista && !/[?&]oobCode=/.test(location.search)){
     const pon = function(){
       const main = document.querySelector('main');
