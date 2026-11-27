@@ -1409,7 +1409,7 @@ document.addEventListener("jn-modo", e => marcaModo(e.detail));
   const PARTES = {
     comun: 'search-index-comun.js?v=f3afcfaca9',
     es: 'search-index-es.js?v=b8fda19107',
-    it: 'search-index-it.js?v=3d42cdaef8',
+    it: 'search-index-it.js?v=9e3ec7dba4',
     en: 'search-index-en.js?v=174ea5cf50'
   };
   const pedidas = {};   // parte → promesa de su descarga
